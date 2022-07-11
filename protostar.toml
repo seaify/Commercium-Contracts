@@ -1,0 +1,31 @@
+["protostar.config"]
+protostar_version = "0.2.3"
+
+["protostar.project"]
+libs_path = "lib"
+
+["protostar.contracts"]
+hub = [
+    "./src/hub.cairo",
+]
+router_aggregator = [
+    "./src/router_aggregator.cairo",
+]
+incentivized_router_aggregator = [
+    "./src/incentivized_router_aggregator.cairo",
+]
+solver_registry = [
+    "./src/solver_registry.cairo",
+]
+trade_executioner = [
+    "./src/trade_executioner.cairo",
+]
+spf_solver = [
+    "./src/solvers/spf_solver.cairo",
+]
+single_swap_solver = [
+    "./src/solvers/single_swap_solver.cairo",
+]
+mock_uni_router = [
+    "./src/mocks/mock_uni_router.cairo",
+]
