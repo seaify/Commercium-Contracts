@@ -82,39 +82,44 @@
     {
         "inputs": [
             {
-                "name": "_global_prices_len",
+                "name": "_asset",
                 "type": "felt"
-            },
+            }
+        ],
+        "name": "get_global_price",
+        "outputs": [
             {
-                "name": "_global_prices",
-                "type": "Uint256*"
-            },
+                "name": "price",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
             {
                 "name": "_amount_in",
                 "type": "Uint256"
             },
             {
-                "name": "_reserve1",
-                "type": "Uint256"
-            },
-            {
-                "name": "_reserve2",
-                "type": "Uint256"
-            },
-            {
-                "name": "_fee",
+                "name": "_token1",
                 "type": "felt"
             },
             {
-                "name": "_dst",
+                "name": "_token2",
                 "type": "felt"
             },
             {
-                "name": "_src",
+                "name": "_router_address",
+                "type": "felt"
+            },
+            {
+                "name": "_router_type",
                 "type": "felt"
             }
         ],
-        "name": "get_weight",
+        "name": "get_liquidity_weight",
         "outputs": [
             {
                 "name": "weight",
@@ -131,11 +136,11 @@
                 "type": "Uint256"
             },
             {
-                "name": "token1",
+                "name": "_token1",
                 "type": "felt"
             },
             {
-                "name": "token2",
+                "name": "_token2",
                 "type": "felt"
             },
             {
@@ -147,7 +152,7 @@
                 "type": "felt"
             }
         ],
-        "name": "get_liquidity_weight",
+        "name": "get_weight",
         "outputs": [
             {
                 "name": "weight",

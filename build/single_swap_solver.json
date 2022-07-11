@@ -4040,11 +4040,19 @@
             "src.interfaces.IRouter_aggregator.IRouter_aggregator": {
                 "type": "namespace"
             },
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.ADD_ROUTER_SELECTOR": {
+                "type": "const",
+                "value": 266760456469973754300829136517780910047215400870724399958625916312746439010
+            },
             "src.interfaces.IRouter_aggregator.IRouter_aggregator.Args": {
                 "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
+            },
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.GET_GLOBAL_PRICE_SELECTOR": {
+                "type": "const",
+                "value": 639858137212369980020542604611628002799377514482132968932261698194491249907
             },
             "src.interfaces.IRouter_aggregator.IRouter_aggregator.GET_LIQUIDITY_WEIGHT_SELECTOR": {
                 "type": "const",

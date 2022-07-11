@@ -18,7 +18,7 @@ const DAI = 12347
 const ETH = 12348
 const shitcoin2 = 12349
 
-const base = 1000
+const base = 1000000000000000000
 
 @external
 func test_router_aggregator{syscall_ptr : felt*, range_check_ptr}():
@@ -57,6 +57,10 @@ func test_router_aggregator{syscall_ptr : felt*, range_check_ptr}():
     let (start: felt,stop: felt) = ISpf_solver.get_results(spf_solver_address,Uint256(10*base,0),shitcoin1, shitcoin2)
     %{ print("start: ",ids.start) %}
     %{ print("stop: ",ids.stop) %}
+
+    #let (amount_out: Uint256,_,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,10*base,ETH,_tokens[_dst_counter])
+    #%{ print("amount_out: ",ids.amount_out) %}
+
     return()
 end
 

@@ -7,6 +7,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
 from src.lib.array import Array
+from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.IERC20 import IERC20
@@ -15,11 +16,19 @@ const Vertices = 6
 const Edges = 21
 const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
+const base = 1000000000000000000
 #Token addresses
 const USDT = 12345
 const USDC = 12346
 const DAI = 12347
 const ETH = 12348
+#
+# Storage Stup
+#  src [0, 2]: 
+#  -> dst 0:[123]   -> weight [] -> pool
+#         1:[23423]
+#         2:[6423]
+#
 
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt):
@@ -50,7 +59,6 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     _token_out: felt)
     -> (
     start: felt,stop: felt):
-    
     alloc_locals
     
     let (tokens : felt*) = alloc()
@@ -70,6 +78,11 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     let (weight : felt*) = alloc()
     let (pool : felt*) = alloc()
 
+    #transform input amount to USD amount
+    let (router_aggregator_address) = router_aggregator.read()
+    let (price: Uint256) = IRouter_aggregator.get_global_price(router_aggregator_address,tokens[0])
+    let (amount_in: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
+
     #We use _dst_len to count the number of legit source to destination edges
     set_edges(_amount_in,6,tokens,Vertices,src,_dst_len=0,_dst=dst,_weight_len=0,_weight=weight,_pool_len=0,_pool=pool,_dst_counter=1,_src_counter=0,_total_counter=0)
 
@@ -78,10 +91,10 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     let (predecessors : felt*) = alloc()
     let (is_in_queue : felt*) = alloc()
     let (queue: felt*) = alloc()
-    #init_arrays(6,distances,6,predecessors,6,is_in_queue,queue)
+    init_arrays(6,distances,6,predecessors,6,is_in_queue,queue)
 
     #determine shortest path
-    #shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight)
+    shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight)
 
     return(src[3].start,src[3].stop)
 end
@@ -133,7 +146,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             assert we_are_not_advancing = 1
         else:
             assert _dst[0] = _tokens[_dst_counter]
-            let(weight:felt) = IRouter_aggregator.get_liquidity_weight(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter],router_address,router_type)
+            let(weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter],router_address,router_type)
             assert _weight[0] = weight
             assert _pool[0] = router_address
             assert we_are_not_advancing = 0
@@ -282,7 +295,7 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     #Determine if there is a shorter distance to its different destinations
     let (_,new_distances: felt*,_,new_new_queue: felt*,new_new_is_in_queue_len,new_new_is_in_queue: felt*) = determine_distances(_distances_len, _distances, new_queue_len, new_queue, _is_in_queue_len, new_is_in_queue, 0, _dst + offset, 0,_weight + offset, current_source[0].stop,0)
     
-    shortest_path_faster(_distances_len,new_distances,_is_in_queue_len,new_new_is_in_queue,new_queue_len,new_new_queue,Vertices,_src,5,_dst,0,_weight)
+    #shortest_path_faster(_distances_len,new_distances,_is_in_queue_len,new_new_is_in_queue,new_queue_len,new_new_queue,Vertices,_src,5,_dst,0,_weight)
 
     return()
 end     

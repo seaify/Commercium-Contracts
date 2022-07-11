@@ -15,20 +15,22 @@ namespace IRouter_aggregator:
         router_type:felt):
     end
 
-    func get_single_best_pool(_amount_in: Uint256, _pair: Pair) -> (amount_out: Uint256, router_address: felt, router_type: felt):
-    end
-
     func get_weight(
         _amount_in: Uint256, 
-        in_token: felt
-        , out_token: felt
+        in_token: felt, 
+        out_token: felt,
+        _router_address: felt, 
+        _router_type: felt
         ) -> (weight: felt):  
+    end
+
+    func get_global_price(token: felt)->(price: Uint256):
     end
 
     func get_liquidity_weight(
         _amount_in : Uint256, 
-        _dst: felt, 
         _src: felt, 
+        _dst: felt, 
         _router_address: felt, 
         _router_type: felt)->(weight:felt):
     end

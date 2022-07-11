@@ -2351,6 +2351,10 @@
                 "cairo_type": "()",
                 "type": "type_definition"
             },
+            "src.interfaces.IUni_router.IUni_router.SET_RESERVES_SELECTOR": {
+                "type": "const",
+                "value": 385827236906745258426684796102845689672024359440920269358901198005285598390
+            },
             "src.interfaces.IUni_router.IUni_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0

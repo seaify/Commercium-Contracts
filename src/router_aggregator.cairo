@@ -12,6 +12,13 @@ const Uni = 0
 const base = 1000000000000000000
 # 0.3% fee
 const Uni_fee = 3000000000000000 
+#Token addresses
+const shitcoin1 = 12344
+const USDT = 12345
+const USDC = 12346
+const DAI = 12347
+const ETH = 12348
+const shitcoin2 = 12349
 
 struct Pair:
     member in_token : felt
@@ -32,6 +39,10 @@ end
 func router_index_len() -> (len: felt): 
 end
 
+@storage_var
+func price_feed(asset: felt) -> (oracle_address: felt):
+end
+
 #
 #Views
 #
@@ -48,44 +59,48 @@ end
 @view
 func get_single_best_pool{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _pair: Pair) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+
+    #Transform USD value to what the token amount would be
+    let (price_in: Uint256) = get_global_price(_pair.in_token)
+    let (amount_in: Uint256) = Utils.fdiv(_amount_in,price_in,Uint256(base,0))
     
-    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(_amount_in, _pair, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
+    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(amount_in, _pair, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
 
     return(res_amount,res_router_address,res_type)
 end
 
-#Requires global prices
+#Returns price in USD
 @view
-func get_weight{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _global_prices_len:felt,_global_prices:Uint256*,_amount_in : Uint256,_reserve1:Uint256,_reserve2:Uint256,_fee:felt,_dst:felt,_src:felt)->(weight:felt):
-    alloc_locals
- 
-    let (amount_in_value) = Utils.fmul(_global_prices[_src],_amount_in,Uint256(1,0))
-
-    let (reserve2_value) = Utils.fmul(_reserve2,_global_prices[_dst],Uint256(1,0))
-
-    let (amount_in_feed) = Utils.fmul(amount_in_value,Uint256(_fee,0),Uint256(1,0))
-
-    let (numerator) = Utils.fmul(amount_in_feed,reserve2_value,Uint256(1,0))
-    
-    let (reserve1_value) = Utils.fmul(_reserve1,_global_prices[_src],Uint256(1,0)) 
-
-    let (based_reserve1_value) = Utils.fmul(reserve1_value,Uint256(1000,0),Uint256(1,0))
-
-    let (denominator,_) = uint256_add(based_reserve1_value,amount_in_feed)
-
-    let (amount_out) = Utils.fdiv(numerator,denominator,Uint256(1,0))
-
-    let (trade_cost) = uint256_sub(amount_in_value,amount_out)
-
-    #tempvar route_cost = 1000*trade_cost.low / amount_in_value.low
-
-    let (route_cost) = Utils.fdiv(trade_cost,amount_in_value,Uint256(1000,0))
-
-    return(route_cost.low)
+func get_global_price{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(_asset: felt)->(price: Uint256):
+    #Let's build this once we have real price oracles to test with
+    #price_feed.read()
+    if _asset == USDT :
+        return(Uint256(base,0))
+    end
+    if _asset == USDC :
+        return(Uint256(base,0))
+    end
+    if _asset == DAI :
+        return(Uint256(base,0))
+    end
+    if _asset == ETH :
+        return(Uint256(1000*base,0))
+    end    
+    if _asset == shitcoin1 :
+        return(Uint256(10*base,0))
+    end    
+    if _asset == shitcoin2 :
+        return(Uint256(10*base,0))
+    end    
+    #Should never happen
+    assert 9 = 8
+    return(Uint256(0,0))
 end
 
-#Calculates weights from liquidity + fees alone
+#Calculates weights from liquidity + fees alone (no global prices required)
 #Appears to not be feasible
 @view
 func get_liquidity_weight{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -122,6 +137,40 @@ func get_liquidity_weight{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
 
     return(weight)
 end
+
+@view
+func get_weight{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(
+        _amount_in : Uint256, 
+        _token1: felt, 
+        _token2: felt, 
+        _router_address: felt, 
+        _router_type: felt
+    )->(weight:felt):
+    alloc_locals
+
+    #Transform _amount_in (which is in USD value) to what the token amount would be
+    let (price_in: Uint256) = get_global_price(_token1)
+    let (amount_in: Uint256) = Utils.fdiv(_amount_in,price_in,Uint256(base,0))
+
+    #If Uni type Dex
+    if _router_type == Uni :
+
+        let (local amount_out: Uint256) = IUni_router.get_amount_out(_router_address,amount_in,_token1,_token2)
+        let (price_out: Uint256) = get_global_price(_token2)
+        let (value_out: Uint256) = Utils.fmul(amount_out,price_out,Uint256(base,0))
+
+        let (trade_cost) = uint256_sub(_amount_in,value_out)
+        let(route_cost) = Utils.fdiv(trade_cost,_amount_in,Uint256(base,0))
+
+        return(route_cost.low)
+    else:
+        #There will be more types
+        return(9999999999999999999999999)
+    end
+end    
 
 #
 #Admin (DAO)
