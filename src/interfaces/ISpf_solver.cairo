@@ -8,8 +8,7 @@ namespace ISpf_solver:
         _amount_in: Uint256,
         _token_in: felt,
         _token_out: felt)
-        -> (
-        res1: felt,res2: felt,res3: felt,res4: felt,res5: felt,res6: felt):
+        -> (path_len: felt, path: felt*):
     end
 
     func set_router_aggregator(_new_router_aggregator_address: felt):

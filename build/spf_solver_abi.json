@@ -34,28 +34,12 @@
         "name": "get_results",
         "outputs": [
             {
-                "name": "res1",
+                "name": "path_len",
                 "type": "felt"
             },
             {
-                "name": "res2",
-                "type": "felt"
-            },
-            {
-                "name": "res3",
-                "type": "felt"
-            },
-            {
-                "name": "res4",
-                "type": "felt"
-            },
-            {
-                "name": "res5",
-                "type": "felt"
-            },
-            {
-                "name": "res6",
-                "type": "felt"
+                "name": "path",
+                "type": "felt*"
             }
         ],
         "stateMutability": "view",

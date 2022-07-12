@@ -17,7 +17,7 @@ const Edges = 21
 const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
 const base = 1000000000000000000 # 1e18
-const extra_base = 10 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
+const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
 #Token addresses
 const USDT = 12345
@@ -62,8 +62,7 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     _amount_in: Uint256,
     _token_in: felt,
     _token_out: felt)
-    -> (
-    res1: felt,res2: felt,res3: felt,res4: felt,res5: felt,res6: felt):
+    -> (path_len: felt, path: felt*):
     alloc_locals
     
     let (tokens : felt*) = alloc()
@@ -98,10 +97,32 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     let (queue: felt*) = alloc()
     init_arrays(6,distances,6,predecessors,6,is_in_queue,queue)
 
-    #determine shortest path
-    let (new_distances: felt*) = shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight)
+    #Getting each tokens best predecessor
+    let (new_predecessors: felt*) = shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight,6,predecessors)
 
-    return(new_distances[0],new_distances[1],new_distances[2],new_distances[3],new_distances[4],new_distances[5])
+    #Determining the Final path we should be taking for the trade
+    let (path : felt*) = alloc()
+    assert path[0] = new_predecessors[5]
+    if path[0] == 0:
+        return(1,path)
+    end
+    assert path[1] = new_predecessors[path[0]]
+    if path[1] == 0:
+        return(2,path)
+    end
+    assert path[2] = new_predecessors[path[1]]
+    if path[2] == 0:
+        return(3,path)
+    end
+    assert path[3] = new_predecessors[path[2]]
+    if path[3] == 0:
+        return(4,path)
+    end
+    
+    #Should never happen
+    assert 0 = 1
+    return(0,path)
+    
 end
 
 #
@@ -288,13 +309,15 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     _dst_len: felt,
     _dst: felt*,
     _weight_len: felt,
-    _weight: felt*) -> (final_distances: felt*):
+    _weight: felt*,
+    _predecessors_len: felt,
+    _predecessors: felt*) -> (final_distances: felt*):
 
     alloc_locals
 
     #If there is no destination left in the queue we can stop the procedure
     if _queue_len == 0 :
-        return(_distances)
+        return(_predecessors)
     end    
 
     #Get first entry from queue
@@ -317,12 +340,43 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         0
     )
 
-    #Determine if there is a shorter distance to its different destinations
-    let (_,new_distances: felt*,new_new_queue_len,new_new_queue: felt*,new_new_is_in_queue_len: felt,new_new_is_in_queue: felt*) = determine_distances(_distances_len, _distances, new_queue_len, new_queue, _is_in_queue_len, new_is_in_queue, 0, _dst + offset, 0,_weight + offset, current_source[0].stop,current_distance)
-    
-    let (final_distances) = shortest_path_faster(_distances_len,new_distances,new_new_is_in_queue_len,new_new_is_in_queue,new_new_queue_len,new_new_queue,Vertices,_src,5,_dst,0,_weight)
+    #Our goal token should never be considered a source
+    if src_nr == 5:
+        let (predecessors) = shortest_path_faster(_distances_len,_distances,_is_in_queue_len,new_is_in_queue,new_queue_len,new_queue,Vertices,_src,5,_dst,0,_weight,_predecessors_len,_predecessors)
+        return(predecessors)
+    end
 
-    return(final_distances)
+    #Determine if there is a shorter distance to its different destinations
+    let (
+        _,
+        new_distances: felt*,
+        new_new_queue_len,
+        new_new_queue: felt*,
+        _,
+        new_new_is_in_queue: felt*,
+        _,
+        new_predecessors: felt*
+    ) = determine_distances(
+        _distances_len, 
+        _distances, 
+        new_queue_len, 
+        new_queue, 
+        _is_in_queue_len, 
+        new_is_in_queue, 
+        0, 
+        _dst + offset, 
+        0,
+        _weight + offset, 
+        _predecessors_len, 
+        _predecessors, 
+        current_source[0].stop,
+        src_nr,
+        current_distance
+    )
+    
+    let (predecessors) = shortest_path_faster(_distances_len,new_distances,_is_in_queue_len,new_new_is_in_queue,new_new_queue_len,new_new_queue,Vertices,_src,5,_dst,0,_weight,_predecessors_len,new_predecessors)
+
+    return(predecessors)
 end     
 
 func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -336,14 +390,17 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     _dst: felt*, 
     _weight_len: felt, 
     _weight: felt*, 
-    _dst_stop:felt, 
-    _current_distance: felt) -> (_distances_len: felt,_distances: felt*,_queue_len: felt,_queue: felt*,_is_in_queue_len: felt,_is_in_queue: felt*):
+    _predecessors_len: felt,
+    _predecessors: felt*,
+    _dst_stop:felt,
+    _src_nr: felt, 
+    _current_distance: felt) -> (_distances_len: felt,_distances: felt*,_queue_len: felt,_queue: felt*,_is_in_queue_len: felt,_is_in_queue: felt*,res_predecessors_len: felt,res_predecessors: felt*):
     
     alloc_locals
 
     if _dst_stop == 0:
         #We end the procedure if all destinations have been evaluated
-        return(_distances_len,_distances,_queue_len,_queue,_is_in_queue_len,_is_in_queue)
+        return(_distances_len,_distances,_queue_len,_queue,_is_in_queue_len,_is_in_queue,_predecessors_len,_predecessors)
     end
    
     let (new_distances : felt*) = alloc()
@@ -354,10 +411,10 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 
     if _dst[0] == 5 :
         #Moving towards the goal token should always improve the distance
-        assert new_distance = _current_distance / extra_base + _weight[0]
+        assert new_distance = _current_distance - extra_base + _weight[0]
     else:
         #We add an extra base, so that we can remove it again for the move to the goal vertex. (see above)
-        assert new_distance = _current_distance + (_weight[0] * extra_base)
+        assert new_distance = _current_distance + _weight[0] + extra_base
     end
 
     let (is_new_distance_better) = is_le_felt(_distances[_dst[0]], new_distance)
@@ -365,6 +422,9 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     if is_new_distance_better == 0:
         #destination vertex weight = origin vertex + edge weight
         Array.update(_distances_len,new_distances,_distances_len,_distances,_dst[0], new_distance,0)
+
+        let (new_predecessors : felt*) = alloc()
+        Array.update(_predecessors_len,new_predecessors,_predecessors_len,_predecessors,_dst[0],_src_nr,0)
 
         if _is_in_queue[_dst[0]] == 0 :
             #Add new vertex with better weight to queue
@@ -379,7 +439,9 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
                 res_queue_len,
                 res_queue,
                 res_is_in_queue_len,
-                res_is_in_queue
+                res_is_in_queue,
+                res_predecessors_len,
+                res_predecessors
             ) = determine_distances(
                 _distances_len, 
                 new_distances, 
@@ -391,10 +453,13 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
                 _dst+1, 
                 _weight_len, 
                 _weight+1, 
+                _predecessors_len,
+                new_predecessors,
                 _dst_stop-1, 
+                _src_nr,
                 _current_distance
             )
-            return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue)
+            return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue,res_predecessors_len,res_predecessors)
         else:
             let (
                 res_distance_len,
@@ -402,7 +467,9 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
                 res_queue_len,
                 res_queue,
                 res_is_in_queue_len,
-                res_is_in_queue
+                res_is_in_queue,
+                res_predecessors_len,
+                res_predecessors
             ) = determine_distances(
                 _distances_len, 
                 new_distances, 
@@ -414,10 +481,13 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
                 _dst+1, 
                 _weight_len, 
                 _weight+1, 
+                _predecessors_len,
+                new_predecessors,
                 _dst_stop-1, 
+                _src_nr,
                 _current_distance
             )
-            return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue)
+            return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue,res_predecessors_len,res_predecessors)
         end
     else:
         let (
@@ -426,7 +496,9 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
             res_queue_len,
             res_queue,
             res_is_in_queue_len,
-            res_is_in_queue
+            res_is_in_queue,
+            res_predecessors_len,
+            res_predecessors
         ) = determine_distances(
             _distances_len, 
             _distances, 
@@ -438,11 +510,14 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
             _dst+1, 
             _weight_len, 
             _weight+1, 
+            _predecessors_len,
+            _predecessors,
             _dst_stop-1,
+            _src_nr,
             _current_distance
         )
 
-        return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue)
+        return(res_distance_len,res_distance,res_queue_len,res_queue,res_is_in_queue_len,res_is_in_queue,res_predecessors_len,res_predecessors)
     end
 end
 
