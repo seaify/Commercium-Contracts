@@ -28,7 +28,7 @@ namespace Array:
             assert _new_arr[0] = _arr[0]
         end
 	
-	update(_new_arr_len,_new_arr+1,_arr_len,_arr+1,_index,_new_val,_counter+1)
+	    update(_new_arr_len,_new_arr+1,_arr_len,_arr+1,_index,_new_val,_counter+1)
 
         return()    
     end
@@ -42,21 +42,20 @@ namespace Array:
         _new_arr:felt*, 
         _arr_len: felt, 
         _arr: felt*, 
-        _new_val: felt, 
-        _counter: felt) -> ():
+        _new_val: felt) -> ():
 
 
-        if _new_arr_len == _counter:
+        if _new_arr_len == 0:
             return()
         end
 
-        if _arr_len == _counter:
+        if _new_arr_len == 1:
             assert _new_arr[0] = _new_val
         else:
             assert _new_arr[0] = _arr[0]
         end
 
-	push(_new_arr_len, _new_arr+1, _arr_len, _arr+1, _new_val, _counter+1)
+	    push(_new_arr_len-1, _new_arr+1, _arr_len, _arr+1, _new_val)
 
         return()   
     end
@@ -96,6 +95,25 @@ namespace Array:
         let (return_val) = shift(_new_arr_len,_new_arr+1,_arr_len,_arr+1,new_return_val,_counter+1)
 
         return(return_val)
+    end
+
+    #Get element at index position
+    func get_at_index{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr}(
+        _arr_len: felt, 
+        _arr: felt*,
+        _index: felt, 
+        _counter: felt)->(res: felt):
+        
+        if _index == _counter:
+            return(_arr[0])
+        end
+	
+	    let (res: felt) = get_at_index(_arr_len,_arr+1,_index,_counter+1)
+
+        return(res)    
     end
 
 end

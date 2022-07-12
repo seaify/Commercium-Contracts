@@ -54,10 +54,13 @@ func test_router_aggregator{syscall_ptr : felt*, range_check_ptr}():
 
     ISpf_solver.set_router_aggregator(spf_solver_address,router_aggregator_address)
 
-    let (start: felt,stop: felt) = ISpf_solver.get_results(spf_solver_address,Uint256(10*base,0),shitcoin1, shitcoin2)
-    %{ print("start: ",ids.start) %}
-    %{ print("stop: ",ids.stop) %}
-
+    let (res1: felt,res2: felt,res3: felt,res4: felt,res5: felt,res6: felt) = ISpf_solver.get_results(spf_solver_address,Uint256(10*base,0),shitcoin1, shitcoin2)
+    %{ print("res1: ",ids.res1) %}
+    %{ print("res2: ",ids.res2) %}
+    %{ print("res3: ",ids.res3) %}
+    %{ print("res4: ",ids.res4) %}
+    %{ print("res5: ",ids.res5) %}
+    %{ print("res6: ",ids.res6) %}
     #let (amount_out: Uint256,_,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,10*base,ETH,_tokens[_dst_counter])
     #%{ print("amount_out: ",ids.amount_out) %}
 

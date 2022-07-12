@@ -34,11 +34,27 @@
         "name": "get_results",
         "outputs": [
             {
-                "name": "start",
+                "name": "res1",
                 "type": "felt"
             },
             {
-                "name": "stop",
+                "name": "res2",
+                "type": "felt"
+            },
+            {
+                "name": "res3",
+                "type": "felt"
+            },
+            {
+                "name": "res4",
+                "type": "felt"
+            },
+            {
+                "name": "res5",
+                "type": "felt"
+            },
+            {
+                "name": "res6",
                 "type": "felt"
             }
         ],

@@ -9,9 +9,8 @@ from src.lib.constants import (uni, cow)
 from src.lib.utils import Utils
 
 const Uni = 0
-const base = 1000000000000000000
-# 0.3% fee
-const Uni_fee = 3000000000000000 
+const base = 1000000000000000000 
+const Uni_fee = 3000000000000000 # 0.3% fee 
 #Token addresses
 const shitcoin1 = 12344
 const USDT = 12345
