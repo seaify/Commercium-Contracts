@@ -1,8 +1,9 @@
 %lang starknet
 
-from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
 from starkware.cairo.common.math import assert_le, assert_nn_le, unsigned_div_rem, sqrt
 from starkware.cairo.common.math_cmp import is_le_felt
+from starkware.cairo.common.bitwise import bitwise_or
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
@@ -58,7 +59,7 @@ end
 #
 
 @view
-func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_ptr}(
+func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*,range_check_ptr}(
     _amount_in: Uint256,
     _token_in: felt,
     _token_out: felt)
@@ -100,28 +101,29 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     #Getting each tokens best predecessor
     let (new_predecessors: felt*) = shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight,6,predecessors)
 
+    return(6,new_predecessors)
+
     #Determining the Final path we should be taking for the trade
-    let (path : felt*) = alloc()
-    assert path[0] = new_predecessors[5]
-    if path[0] == 0:
-        return(1,path)
-    end
-    assert path[1] = new_predecessors[path[0]]
-    if path[1] == 0:
-        return(2,path)
-    end
-    assert path[2] = new_predecessors[path[1]]
-    if path[2] == 0:
-        return(3,path)
-    end
-    assert path[3] = new_predecessors[path[2]]
-    if path[3] == 0:
-        return(4,path)
-    end
-    
+    #let (path : felt*) = alloc()
+    #assert path[0] = new_predecessors[5]
+    #if path[0] == 0:
+    #    return(1,path)
+    #end
+    #assert path[1] = new_predecessors[path[0]]
+    #if path[1] == 0:
+    #    return(2,path)
+    #end
+    #assert path[2] = new_predecessors[path[1]]
+    #if path[2] == 0:
+    #    return(3,path)
+    #end
+    #assert path[3] = new_predecessors[path[2]]
+    #if path[3] == 0:
+    #    return(4,path)
+    #end
     #Should never happen
-    assert 0 = 1
-    return(0,path)
+    #assert 0 = 1
+    #return(0,path)
     
 end
 
@@ -297,7 +299,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     return()
 end
 
-func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func shortest_path_faster{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _distances_len:felt,
     _distances:felt*,
     _is_in_queue_len:felt,
@@ -330,7 +332,7 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     Array.update(_is_in_queue_len,new_is_in_queue,_is_in_queue_len,_is_in_queue,1,0,0)
 
     #Get Source from queue Nr
-    let current_source: Source* = _src + src_nr
+    let current_source: Source* = _src + (src_nr*2) 
     tempvar offset = current_source[0].start
 
     let (current_distance: felt) = Array.get_at_index(
@@ -339,12 +341,6 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         src_nr, 
         0
     )
-
-    #Our goal token should never be considered a source
-    if src_nr == 5:
-        let (predecessors) = shortest_path_faster(_distances_len,_distances,_is_in_queue_len,new_is_in_queue,new_queue_len,new_queue,Vertices,_src,5,_dst,0,_weight,_predecessors_len,_predecessors)
-        return(predecessors)
-    end
 
     #Determine if there is a shorter distance to its different destinations
     let (
@@ -379,7 +375,7 @@ func shortest_path_faster{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     return(predecessors)
 end     
 
-func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _distances_len: felt,
     _distances: felt*, 
     _queue_len: felt, 
@@ -409,7 +405,13 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     let (new_queue : felt*) = alloc()
     let (new_is_in_queue : felt*) = alloc()
 
-    if _dst[0] == 5 :
+    tempvar dst = _dst[0]
+    #%{ print("src: ",ids._src_nr) %}
+    #%{ print("dst: ",ids.dst) %}
+
+    let (local is_dst_end) = is_le_felt(Vertices-1,_dst[0])
+
+    if is_dst_end == 1 :
         #Moving towards the goal token should always improve the distance
         assert new_distance = _current_distance - extra_base + _weight[0]
     else:
@@ -417,16 +419,18 @@ func determine_distances{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
         assert new_distance = _current_distance + _weight[0] + extra_base
     end
 
-    let (is_new_distance_better) = is_le_felt(_distances[_dst[0]], new_distance)
+    let (is_old_distance_better) = is_le_felt(_distances[_dst[0]], new_distance)
 
-    if is_new_distance_better == 0:
+    if is_old_distance_better == 0:
         #destination vertex weight = origin vertex + edge weight
         Array.update(_distances_len,new_distances,_distances_len,_distances,_dst[0], new_distance,0)
 
         let (new_predecessors : felt*) = alloc()
         Array.update(_predecessors_len,new_predecessors,_predecessors_len,_predecessors,_dst[0],_src_nr,0)
 
-        if _is_in_queue[_dst[0]] == 0 :
+        let (already_in_queue_or_last_dst) = bitwise_or(_is_in_queue[_dst[0]],is_dst_end)
+
+        if already_in_queue_or_last_dst == 0 :
             #Add new vertex with better weight to queue
             Array.push(_queue_len+1,new_queue,_queue_len,_queue,_dst[0])
             assert new_queue_len = _queue_len + 1
