@@ -24,7 +24,6 @@ const LARGE_VALUE = 850705917302346000000000000000000000000000000
 const base = 1000000000000000000 # 1e18
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
-
 const Uni = 0
 
 const shitcoin1 = 12344
@@ -52,40 +51,23 @@ func test_router_aggregator{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, 
     IRouter_aggregator.add_router(router_aggregator_address,router_2_address,Uni)
     IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)  
 
-    #let (final_amount_out1: Uint256, router_address: felt, router_type: felt) = IRouter_aggregator.get_single_best_pool( router_aggregator_address, Uint256(10*base,0), shitcoin1, ETH)
-    #%{ print("final_amount_out1: ",ids.final_amount_out1.low) %}
-    #let (final_amount_out2: Uint256, router_address: felt, router_type: felt) = IRouter_aggregator.get_single_best_pool( router_aggregator_address, Uint256(10*base,0), shitcoin1, DAI)
-    #%{ print("final_amount_out2: ",ids.final_amount_out2.low) %}
-    #let (final_amount_out3: Uint256, router_address: felt, router_type: felt) = IRouter_aggregator.get_single_best_pool( router_aggregator_address, Uint256(10*base,0), shitcoin1, USDT)
-    #%{ print("final_amount_out3: ",ids.final_amount_out3.low) %}
-    #let (final_amount_out4: Uint256, router_address: felt, router_type: felt) = IRouter_aggregator.get_single_best_pool( router_aggregator_address, Uint256(10*base,0), shitcoin1, USDC)
-    #%{ print("final_amount_out4: ",ids.final_amount_out4.low) %}
-    #assert_eq(router_address,router_3_address)
-
     local spf_solver_address : felt
     %{ ids.spf_solver_address = deploy_contract("./src/solvers/spf_solver.cairo", []).contract_address %}
 
     ISpf_solver.set_router_aggregator(spf_solver_address,router_aggregator_address)
+    #set_router_aggregator(router_aggregator_address)
 
-
-    let (path_len: felt, path: felt*) = ISpf_solver.get_results(spf_solver_address,Uint256(10*base,0),shitcoin1, shitcoin2)
+    let (path_len: felt, path: felt*) = ISpf_solver.get_results(spf_solver_address,Uint256(100*base,0),shitcoin1, shitcoin2)
+    
     tempvar path0 = path[0]
     tempvar path1 = path[1]
     tempvar path2 = path[2]
     tempvar path3 = path[3]
-    tempvar path4 = path[4]
-    tempvar path5 = path[5]
     
-    %{ print("predecessors0: ",ids.path0) %}
-    %{ print("predecessors1: ",ids.path1) %}
-    %{ print("predecessors2: ",ids.path2) %}
-    %{ print("predecessors3: ",ids.path3) %}
-    %{ print("predecessors4: ",ids.path4) %}
-    %{ print("predecessors5: ",ids.path5) %}
-
-    #%{ print("src.path16: ",ids.path16) %}
-    #let (amount_out: Uint256,_,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,10*base,ETH,_tokens[_dst_counter])
-    #%{ print("amount_out: ",ids.amount_out) %}
+    %{ print("path0: ",ids.path0) %}
+    %{ print("path1: ",ids.path1) %}
+    %{ print("path2: ",ids.path2) %}
+    %{ print("path3: ",ids.path3) %}
 
     return()
 end
@@ -106,12 +88,12 @@ func create_router1{syscall_ptr : felt*, range_check_ptr}() -> (router_address:f
 
     IUni_router.set_reserves(router_address,shitcoin1, ETH, Uint256(5000*base,0), Uint256(50*base,0))     #50,000
     IUni_router.set_reserves(router_address,shitcoin1, USDC, Uint256(0,0), Uint256(0,0))        #0
-    IUni_router.set_reserves(router_address,shitcoin1, DAI, Uint256(0*base,0), Uint256(0*base,0))    #00,000
+    IUni_router.set_reserves(router_address,shitcoin1, DAI, Uint256(100*base,0), Uint256(1000*base,0))    #1000
     IUni_router.set_reserves(router_address,shitcoin1, USDT, Uint256(0,0), Uint256(0,0))        #0
 
     IUni_router.set_reserves(router_address,ETH, USDT, Uint256(100*base,0), Uint256(100000*base,0))       #100,000
     IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*base,0))         #10,000
-    IUni_router.set_reserves(router_address,ETH, DAI, Uint256(10,0), Uint256(10000*base,0))          #10,000
+    IUni_router.set_reserves(router_address,ETH, DAI, Uint256(10*base,0), Uint256(10000*base,0))          #10,000
     
     IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
@@ -190,11 +172,10 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}() -> (router_address:f
     
     IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
 
-    IUni_router.set_reserves(router_address,ETH, shitcoin2, Uint256(0*base,0), Uint256(0*base,0))     #0,000
+    IUni_router.set_reserves(router_address,ETH, shitcoin2, Uint256(1*base,0), Uint256(100*base,0))     #1,000
     IUni_router.set_reserves(router_address,USDT, shitcoin2, Uint256(0,0), Uint256(0,0))        #0    
     IUni_router.set_reserves(router_address,USDC, shitcoin2, Uint256(0,0), Uint256(0,0))        #0
     IUni_router.set_reserves(router_address,DAI, shitcoin2, Uint256(50000*base,0), Uint256(5000*base,0))         #50,000
 
     return(router_address)
 end
-

@@ -89,7 +89,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     let (amount_in: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
 
     #We use _dst_len to count the number of legit source to destination edges
-    set_edges(_amount_in,6,tokens,Vertices,src,_dst_len=0,_dst=dst,_weight_len=0,_weight=weight,_pool_len=0,_pool=pool,_dst_counter=1,_src_counter=0,_total_counter=0)
+    set_edges(amount_in,6,tokens,Vertices,src,_dst_len=0,_dst=dst,_weight_len=0,_weight=weight,_pool_len=0,_pool=pool,_dst_counter=1,_src_counter=0,_total_counter=0)
 
     #Initialize inQueue Array to false
     let (distances : felt*) = alloc()
@@ -101,29 +101,33 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     #Getting each tokens best predecessor
     let (new_predecessors: felt*) = shortest_path_faster(6,distances,6,is_in_queue,1,queue,Vertices,src,5,dst,0,weight,6,predecessors)
 
-    return(6,new_predecessors)
-
     #Determining the Final path we should be taking for the trade
-    #let (path : felt*) = alloc()
-    #assert path[0] = new_predecessors[5]
-    #if path[0] == 0:
-    #    return(1,path)
-    #end
-    #assert path[1] = new_predecessors[path[0]]
-    #if path[1] == 0:
-    #    return(2,path)
-    #end
-    #assert path[2] = new_predecessors[path[1]]
-    #if path[2] == 0:
-    #    return(3,path)
-    #end
-    #assert path[3] = new_predecessors[path[2]]
-    #if path[3] == 0:
-    #    return(4,path)
-    #end
+    let (path : felt*) = alloc()
+    assert path[0] = new_predecessors[5]
+    if path[0] == 0:
+        assert path[1] = 0
+        assert path[2] = 0
+        assert path[3] = 0
+        return(4,path)
+    end
+    assert path[1] = new_predecessors[path[0]]
+    if path[1] == 0:
+        assert path[2] = 0
+        assert path[3] = 0
+        return(4,path)
+    end
+    assert path[2] = new_predecessors[path[1]]
+    if path[2] == 0:
+        assert path[3] = 0
+        return(4,path)
+    end
+    assert path[3] = new_predecessors[path[2]]
+    if path[3] == 0:
+        return(4,path)
+    end
     #Should never happen
-    #assert 0 = 1
-    #return(0,path)
+    assert 0 = 1
+    return(0,path)
     
 end
 
@@ -188,7 +192,11 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         else:
             assert _dst[0] = _dst_counter
             let(weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter],router_address,router_type)
-            assert _weight[0] = weight
+            if _src_counter == 0 :
+                assert _weight[0] = weight + extra_base
+            else:
+                assert _weight[0] = weight
+            end    
             assert _pool[0] = router_address
             assert we_are_not_advancing = 0
             tempvar syscall_ptr = syscall_ptr
@@ -415,8 +423,7 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
         #Moving towards the goal token should always improve the distance
         assert new_distance = _current_distance - extra_base + _weight[0]
     else:
-        #We add an extra base, so that we can remove it again for the move to the goal vertex. (see above)
-        assert new_distance = _current_distance + _weight[0] + extra_base
+        assert new_distance = _current_distance + _weight[0]
     end
 
     let (is_old_distance_better) = is_le_felt(_distances[_dst[0]], new_distance)
