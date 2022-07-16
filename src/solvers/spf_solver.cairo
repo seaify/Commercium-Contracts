@@ -47,7 +47,7 @@ end
 #Views
 #
 
-@view
+@external
 func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*,range_check_ptr}(
     _amount_in: Uint256,
     _token_in: felt,
