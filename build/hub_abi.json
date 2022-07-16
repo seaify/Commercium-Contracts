@@ -84,7 +84,30 @@
                 "type": "felt"
             }
         ],
-        "name": "swap",
+        "name": "swap_with_solver",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "felt*"
+            },
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_min_amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "name": "swap_with_path",
         "outputs": [],
         "type": "function"
     },

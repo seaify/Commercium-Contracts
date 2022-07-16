@@ -8,6 +8,12 @@ from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.IERC20 import IERC20
 
+###################################################################################
+#                                                                                 #  
+#   THIS IS THE SIMPLEST AND MOST FLEXIBLE SOLVER FOR INTEGRATION WITH PROTOCOLS  #
+#                                                                                 #  
+###################################################################################
+
 #This should be a const, but easier like this for testing   
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt):
@@ -28,10 +34,10 @@ func execute_solver{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
     let (router_aggregator_address) = router_aggregator.read()
     let (trade_executor_address) = trade_executor.read()
 
-    let (amount_out,router_address: felt,router_type: felt) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_token_in,_token_out)
+    let (amount_out: Uint256, router_address: felt,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_token_in,_token_out)
 
     IERC20.transfer(_token_in,trade_executor_address,_amount_in)
-    ITrade_executor.swap_single(trade_executor_address,router_address,router_type,_amount_in,_token_in,_token_out,_receiver)
+    ITrade_executor.swap_single(trade_executor_address,router_address,_amount_in,_token_in,_token_out,_receiver)
 
     return(amount_out)
 end
@@ -58,6 +64,7 @@ end
 @external
 func set_executor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _executor: felt):
+    #Only Admin
     trade_executor.write(_executor)
     return()
 end

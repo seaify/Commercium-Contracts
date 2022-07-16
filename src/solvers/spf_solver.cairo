@@ -10,8 +10,6 @@ from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint25
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.ITrade_executor import ITrade_executor
-from src.interfaces.IERC20 import IERC20
 
 const Vertices = 6
 const Edges = 21
@@ -38,15 +36,6 @@ const ETH = 12348
 
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt):
-end
-
-@storage_var
-func trade_executor() -> (trade_executor_address: felt):
-end
-
-struct Trade_Pair:
-    member asset : felt
-    member pool : felt
 end
 
 struct Source:

@@ -15,6 +15,12 @@
         "type": "event"
     },
     {
+        "inputs": [],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
         "inputs": [
             {
                 "name": "_solver_id",
@@ -38,28 +44,7 @@
                 "type": "felt"
             }
         ],
-        "name": "get_id",
-        "outputs": [
-            {
-                "name": "solver_id",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_solver_id",
-                "type": "felt"
-            },
-            {
-                "name": "_solver_address",
-                "type": "felt"
-            }
-        ],
-        "name": "set_solver",
+        "name": "add_solver",
         "outputs": [],
         "type": "function"
     }
