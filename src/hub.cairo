@@ -18,8 +18,8 @@ from src.lib.hub import Hub
 
 
 struct Swap:
-    member token_in: felt,
-    member token_out: felt,
+    member token_in: felt
+    member token_out: felt
     member router: felt
 end
 

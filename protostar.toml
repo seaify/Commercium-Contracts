@@ -23,12 +23,6 @@ trade_executioner = [
 spf_solver = [
     "./src/solvers/spf_solver.cairo",
 ]
-single_swap_solver = [
-    "./src/solvers/single_swap_solver.cairo",
-]
-mock_uni_router = [
-    "./src/mocks/mock_uni_router.cairo",
-]
 
 [profile.devnet.protostar.deploy]
 gateway-url="http://127.0.0.1:5050/"
