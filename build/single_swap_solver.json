@@ -4483,6 +4483,10 @@
                 "size": 0,
                 "type": "struct"
             },
+            "src.interfaces.ITrade_executor.ITrade_executor.MULTIS_SWAP_SELECTOR": {
+                "type": "const",
+                "value": 1089019859710125943734689788466764077724851658073981894168213222392240607897
+            },
             "src.interfaces.ITrade_executor.ITrade_executor.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
@@ -4904,9 +4908,102 @@
                 ],
                 "type": "reference"
             },
+            "src.interfaces.ITrade_executor.Swap": {
+                "destination": "src.lib.hub.Swap",
+                "type": "alias"
+            },
             "src.interfaces.ITrade_executor.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
+            },
+            "src.lib.hub.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub": {
+                "type": "namespace"
+            },
+            "src.lib.hub.Hub.Args": {
+                "full_name": "src.lib.hub.Hub.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub.ImplicitArgs": {
+                "full_name": "src.lib.hub.Hub.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.lib.hub.Hub.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.lib.hub.Hub_solver_registry": {
+                "type": "namespace"
+            },
+            "src.lib.hub.Hub_solver_registry.Args": {
+                "full_name": "src.lib.hub.Hub_solver_registry.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub_solver_registry.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_solver_registry.ImplicitArgs": {
+                "full_name": "src.lib.hub.Hub_solver_registry.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub_solver_registry.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.lib.hub.Hub_solver_registry.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.lib.hub.Hub_solver_registry.hash2": {
+                "destination": "starkware.cairo.common.hash.hash2",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_solver_registry.normalize_address": {
+                "destination": "starkware.starknet.common.storage.normalize_address",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_solver_registry.storage_read": {
+                "destination": "starkware.starknet.common.syscalls.storage_read",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_solver_registry.storage_write": {
+                "destination": "starkware.starknet.common.syscalls.storage_write",
+                "type": "alias"
+            },
+            "src.lib.hub.Swap": {
+                "full_name": "src.lib.hub.Swap",
+                "members": {
+                    "router": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "token_in": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "token_out": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    }
+                },
+                "size": 3,
+                "type": "struct"
             },
             "starkware.cairo.common.alloc.alloc": {
                 "decorators": [],

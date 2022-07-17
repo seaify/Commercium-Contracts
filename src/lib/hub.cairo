@@ -2,6 +2,14 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+const multi_call_selector = 872348723
+
+struct Swap:
+    member token_in: felt
+    member token_out: felt
+    member router: felt
+end
+
 @storage_var
 func Hub_solver_registry() -> (registry_address : felt):
 end

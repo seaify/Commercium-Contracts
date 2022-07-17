@@ -5,7 +5,7 @@ from starkware.cairo.common.uint256 import Uint256, uint256_le, uint256_sub
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.math import assert_not_equal
-from starkware.starknet.common.syscalls import get_contract_address, get_caller_address
+from starkware.starknet.common.syscalls import get_contract_address, get_caller_address, library_call
 
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ITrade_executor import ITrade_executor
@@ -14,14 +14,9 @@ from src.interfaces.IERC20 import IERC20
 
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
-from src.lib.hub import Hub
+from src.lib.hub import Hub, Swap
 
-
-struct Swap:
-    member token_in: felt
-    member token_out: felt
-    member router: felt
-end
+const multi_call_selector = 872348723
 
 #
 #Storage
@@ -139,16 +134,26 @@ func swap_with_path{
 
     let (this_address) = get_contract_address()
 
-    let(original_balance: Uint256) = IERC20.balanceOf(_token_out,this_address) 
+    let(original_balance: Uint256) = IERC20.balanceOf(_path[_path_len].token_out,this_address) 
 
-    let (trade_executor_address) = trade_executor.read()
+    let (trade_executor_hash) = trade_executor.read()
 
-    #transfer tokens to the solver contract
-    IERC20.transferFrom(_path[0].token_in,caller_address,trade_executor_address,_amount_in) 
+    let (calldata : felt*) = alloc()
+    assert calldata = _path
+    assert calldata[_path_len] = _amount_in
+    assert calldata[_path_len+1] = _min_amount_out
 
-    ITrade_executor.multis_swap(trade_executor_address,_path_len,_path,trade_executor_address,this_address)
+    let (retdata_size : felt, retdata : felt*) = library_call(
+        trade_executor_hash,
+        multi_call_selector,
+        _path_len+2,
+        calldata,
+    )
+
+    #DELEGATE CALL
+    #ITrade_executor.multis_swap(trade_executor_address,_path_len,_path,trade_executor_address,this_address)
     
-    let (new_amount: Uint256) = IERC20.balanceOf(_token_out,this_address) 
+    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len-1].token_out,this_address) 
     #ToDo: underlflow check
     let (received_amount: Uint256) = uint256_sub(new_amount,original_balance)
 
@@ -157,7 +162,7 @@ func swap_with_path{
     assert min_amount_received = TRUE
 
     #Transfer _token_out back to caller
-    IERC20.transfer(_token_out,caller_address,received_amount)
+    IERC20.transfer(_path[_path_len-1].token_out,caller_address,received_amount)
 
     ReentrancyGuard._end()
 
