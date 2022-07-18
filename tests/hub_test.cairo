@@ -13,6 +13,8 @@ from src.lib.array import Array
 from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ITrade_executor import ITrade_executor
+from src.interfaces.ISolver import ISolver
+from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.ISpf_solver import ISpf_solver
@@ -33,12 +35,25 @@ const DAI = 12347
 const ETH = 12348
 const shitcoin2 = 12349
 
-#@external
-func test_spf_solver{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+@external
+func __setup__{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}():
     alloc_locals
 
+    local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+
+    #Deploy Hub
+    local hub_address : felt
+    %{ ids.hub_address = deploy_contract("./src/hub.cairo", []).contract_address %}
+
+    #Deploy Solver Registry
+    local solver_registry_address : felt
+    %{ ids.solver_registry_address = deploy_contract("./src/solver_registry.cairo", []).contract_address %}    
+
+    #Deploy Router Aggregator
     local router_aggregator_address : felt
-    # We deploy contract and put its address into a local variable. Second argument is calldata array
     %{ ids.router_aggregator_address = deploy_contract("./src/router_aggregator.cairo", []).contract_address %}
     
     # Set routers
@@ -51,23 +66,41 @@ func test_spf_solver{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pederse
     IRouter_aggregator.add_router(router_aggregator_address,router_2_address,Uni)
     IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)  
 
-    local spf_solver_address : felt
-    %{ ids.spf_solver_address = deploy_contract("./src/solvers/spf_solver.cairo", []).contract_address %}
+    local mock_token1_address : felt
+    %{ ids.mock_token1_address = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [1234,123,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
 
-    ISpf_solver.set_router_aggregator(spf_solver_address,router_aggregator_address)
-    #set_router_aggregator(router_aggregator_address)
+    local mock_token2_address : felt
+    %{ ids.mock_token2_address = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [4321,321,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
 
-    let (path_len: felt, path: felt*) = ISpf_solver.get_results(spf_solver_address,Uint256(100*base,0),shitcoin1, shitcoin2)
+    #Deploy Mock_Tokens
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.mock_token1_address) %}
+        #Send tokens to router
+        IERC20.transfer(mock_token1_address,router_1_address,Uint256(1000*base,0))
+        
+    %{ stop_prank_callable() %}      
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.mock_token2_address) %}
+        #Send tokens to router
+        IERC20.transfer(mock_token2_address,router_1_address,Uint256(1000*base,0))
+    %{ stop_prank_callable() %}      
+
+    #%{ print("player_balance: ",ids.player_balance.low) %}
+
+    #Deploy Solver
+    local solver_address : felt
+    %{ ids.solver_address = deploy_contract("./src/solvers/single_swap_solver.cairo", []).contract_address %}
+
+    #Set router_aggregator for solver
+    ISolver.set_router_aggregator(solver_address,router_aggregator_address)
+
+    #Add solver to solver_registry
+    ISolver_registry.add_solver(solver_registry_address,solver_address)
+
+    return ()
+end
+
+@external
+func test_hub{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     
-    tempvar path0 = path[0]
-    tempvar path1 = path[1]
-    tempvar path2 = path[2]
-    tempvar path3 = path[3]
-    
-    %{ print("path0: ",ids.path0) %}
-    %{ print("path1: ",ids.path1) %}
-    %{ print("path2: ",ids.path2) %}
-    %{ print("path3: ",ids.path3) %}
 
     return()
 end

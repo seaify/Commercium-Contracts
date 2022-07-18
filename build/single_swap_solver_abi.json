@@ -29,55 +29,48 @@
             {
                 "name": "_token_out",
                 "type": "felt"
-            },
-            {
-                "name": "_receiver",
-                "type": "felt"
-            }
-        ],
-        "name": "execute_solver",
-        "outputs": [
-            {
-                "name": "amount_out",
-                "type": "Uint256"
-            }
-        ],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_amount_in",
-                "type": "Uint256"
-            },
-            {
-                "name": "_token_in",
-                "type": "felt"
-            },
-            {
-                "name": "_token_out",
-                "type": "felt"
             }
         ],
         "name": "get_results",
         "outputs": [
             {
-                "name": "return_amount",
+                "name": "routers_len",
+                "type": "felt"
+            },
+            {
+                "name": "routers",
+                "type": "felt*"
+            },
+            {
+                "name": "tokens_in_len",
+                "type": "felt"
+            },
+            {
+                "name": "tokens_in",
+                "type": "felt*"
+            },
+            {
+                "name": "tokens_out_len",
+                "type": "felt"
+            },
+            {
+                "name": "tokens_out",
+                "type": "felt*"
+            },
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "felt*"
+            },
+            {
+                "name": "amount_out",
                 "type": "Uint256"
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_executor",
-                "type": "felt"
-            }
-        ],
-        "name": "set_executor",
-        "outputs": [],
         "type": "function"
     },
     {

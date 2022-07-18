@@ -16,12 +16,11 @@ namespace ISolver:
     #Return Values:
     #return_amount   | the total amount of _token_out that was bought by the solver
     func execute_solver(
-	_amount_in: Uint256, 
-	_token_in: felt, 
-	_token_out: felt,
-        _receiver: felt) 
-	-> (
-	return_amount: Uint256):
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt,
+        _receiver: felt
+    ) -> (return_amount: Uint256):
     end
 
     ####
@@ -51,7 +50,10 @@ namespace ISolver:
         tokens_out : felt*,
         amounts_len : felt, 
         amounts : felt*, 
-        return_amount: felt
+        return_amount: Uint256
     ):
+    end
+
+    func set_router_aggregator(_router_aggregator_address: felt):
     end
 end

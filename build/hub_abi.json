@@ -134,7 +134,7 @@
                 "type": "felt"
             }
         ],
-        "name": "set_registry",
+        "name": "set_solver_registry",
         "outputs": [],
         "type": "function"
     },

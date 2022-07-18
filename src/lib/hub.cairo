@@ -33,7 +33,7 @@ namespace Hub:
     # Externals
     #
 
-    func set_registry{
+    func set_solver_registry{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
