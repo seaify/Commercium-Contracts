@@ -4128,6 +4128,10 @@
                 "size": 3,
                 "type": "struct"
             },
+            "src.lib.hub.multi_call_selector": {
+                "type": "const",
+                "value": 872348723
+            },
             "starkware.cairo.common.alloc.alloc": {
                 "decorators": [],
                 "pc": 0,

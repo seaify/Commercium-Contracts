@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.hub import Swap
 
 @contract_interface
 namespace ISolver:
@@ -38,18 +39,19 @@ namespace ISolver:
     #token_amounts_len + token_amounts | array of token_in amounts that will be sold for token_out 
     #min_amount_out		       | minimum amount of _token_out that would be received if logic would have been computed in that moment 
     func get_results(
-	_amount_in: Uint256,
+        _amount_in: Uint256,
         _token_in: felt, 
-	_token_out: felt) 
-	-> (
-	routers_len : felt,
-	routers : felt*,
-	tokens_in_len : felt, 
-	tokens_in : felt*,
-	tokens_out_len : felt, 
-	tokens_out : felt*,
-	amounts_len : felt, 
-	amounts : felt*, 
-	return_amount: felt):
+        _token_out: felt
+    ) -> (
+        routers_len : felt,
+        routers : felt*,
+        tokens_in_len : felt, 
+        tokens_in : felt*,
+        tokens_out_len : felt, 
+        tokens_out : felt*,
+        amounts_len : felt, 
+        amounts : felt*, 
+        return_amount: felt
+    ):
     end
 end

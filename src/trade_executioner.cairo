@@ -65,10 +65,13 @@ func multis_swap{
     end
     
     let(trade_amount: Uint256) = IERC20.balanceOf(_path[0].token_in,_receiver_address)
-
+    #REPLACE WITH INTERNAL SWAP FUNCTION
     swap_single(_path[0].router,trade_amount,_path[0].token_in,_path[0].token_out,_receiver_address)
     
     multis_swap(_path_len-1,_path+1,_trade_executor_address,_receiver_address)
     
     return()
 end
+
+
+#INTERNAL SWAP FUNCTION

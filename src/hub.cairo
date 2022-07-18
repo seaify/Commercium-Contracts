@@ -5,6 +5,7 @@ from starkware.cairo.common.uint256 import Uint256, uint256_le, uint256_sub
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.math import assert_not_equal
+from starkware.cairo.common.memcpy import memcpy
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address, library_call
 
 from src.interfaces.ISolver import ISolver
@@ -14,9 +15,7 @@ from src.interfaces.IERC20 import IERC20
 
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
-from src.lib.hub import Hub, Swap
-
-const multi_call_selector = 872348723
+from src.lib.hub import Hub, Swap, multi_call_selector
 
 #
 #Storage
@@ -91,11 +90,34 @@ func swap_with_solver{
     #(Used to determine received amount)
     let(original_balance: Uint256) = IERC20.balanceOf(_token_out,this_address) 
 
-    #transfer tokens to the solver contract
-    IERC20.transferFrom(_token_in,caller_address,solver_address,_amount_in) 
+    #Get trading path from the selected solver
+    let (routers_len : felt,
+        routers : felt*,
+        tokens_in_len : felt, 
+        tokens_in : felt*,
+        tokens_out_len : felt, 
+        tokens_out : felt*,
+        amounts_len : felt, 
+        amounts : felt*, 
+        return_amount: felt
+    ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
+
+    #Delegate Call: Execute transactions
+    let (trade_executor_hash) = trade_executor.read()
+    let (calldata : felt*) = alloc()
+
+    assert calldata[0] = _amount_in.low
+    assert calldata[1] = _amount_in.high
+    memcpy(calldata, routers, routers_len)
+    memcpy(calldata, tokens_in, tokens_in_len)
+    memcpy(calldata, tokens_out, tokens_out_len)
     
-    #Execute solver logic
-    ISolver.execute_solver(solver_address, _amount_in, _token_in, _token_out, this_address)
+    library_call(
+        trade_executor_hash,
+        multi_call_selector,
+        routers_len+tokens_in_len+tokens_out_len+2,
+        calldata,
+    )
     
     #Check received Amount
     #We do not naively transfer out the entire balance of that token, as there hub might be holding more
@@ -121,8 +143,12 @@ func swap_with_path{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
-    _path_len: felt,
-    _path: Swap*, 
+    routers_len : felt,
+    routers : felt*,
+    tokens_in_len : felt, 
+    tokens_in : felt*, 
+    tokens_out_len : felt, 
+    tokens_out : felt*, 
     _amount_in : Uint256, 
     _min_amount_out : Uint256):
     alloc_locals
@@ -134,26 +160,28 @@ func swap_with_path{
 
     let (this_address) = get_contract_address()
 
-    let(original_balance: Uint256) = IERC20.balanceOf(_path[_path_len].token_out,this_address) 
+    let(original_balance: Uint256) = IERC20.balanceOf(tokens_out[tokens_out_len-1],this_address) 
 
+    #Delegate Call: Execute transactions
     let (trade_executor_hash) = trade_executor.read()
-
     let (calldata : felt*) = alloc()
-    assert calldata = _path
-    assert calldata[_path_len] = _amount_in
-    assert calldata[_path_len+1] = _min_amount_out
+    let (calldata : felt*) = alloc()
 
-    let (retdata_size : felt, retdata : felt*) = library_call(
+    assert calldata[0] = _amount_in.low
+    assert calldata[1] = _amount_in.high
+    memcpy(calldata, routers, routers_len)
+    memcpy(calldata, tokens_in, tokens_in_len)
+    memcpy(calldata, tokens_out, tokens_out_len)
+
+    library_call(
         trade_executor_hash,
         multi_call_selector,
-        _path_len+2,
+        routers_len+tokens_in_len+tokens_out_len+2,
         calldata,
     )
-
-    #DELEGATE CALL
-    #ITrade_executor.multis_swap(trade_executor_address,_path_len,_path,trade_executor_address,this_address)
     
-    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len-1].token_out,this_address) 
+    #Get new Balance of out_token
+    let (new_amount: Uint256) = IERC20.balanceOf(tokens_out[tokens_out_len-1],this_address) 
     #ToDo: underlflow check
     let (received_amount: Uint256) = uint256_sub(new_amount,original_balance)
 
@@ -162,7 +190,7 @@ func swap_with_path{
     assert min_amount_received = TRUE
 
     #Transfer _token_out back to caller
-    IERC20.transfer(_path[_path_len-1].token_out,caller_address,received_amount)
+    IERC20.transfer(tokens_out[tokens_out_len-1],caller_address,received_amount)
 
     ReentrancyGuard._end()
 
