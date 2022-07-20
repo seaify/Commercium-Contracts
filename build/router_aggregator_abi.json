@@ -36,6 +36,29 @@
     {
         "inputs": [
             {
+                "name": "ETH",
+                "type": "felt"
+            },
+            {
+                "name": "USDC",
+                "type": "felt"
+            },
+            {
+                "name": "USDT",
+                "type": "felt"
+            },
+            {
+                "name": "DAI",
+                "type": "felt"
+            }
+        ],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_index",
                 "type": "felt"
             }
@@ -82,7 +105,7 @@
     {
         "inputs": [
             {
-                "name": "_asset",
+                "name": "_token",
                 "type": "felt"
             }
         ],

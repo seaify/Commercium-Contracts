@@ -1,8 +1,10 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uint256_add, uint256_sub, uint256_mul, uint256_unsigned_div_rem)
+from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uint256_add, uint256_eq, uint256_sub, uint256_mul, uint256_unsigned_div_rem)
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.math import assert_not_equal
 
 from src.interfaces.IUni_router import IUni_router
 from src.lib.constants import (uni, cow)
@@ -29,6 +31,31 @@ struct Router:
     member type: felt
 end
 
+# 0 ETH
+# 1 USDC
+# 2 USDT
+# 3 DAI
+@storage_var
+func price_feed(token: felt) -> (price: Uint256):
+end
+
+#
+#Constructor
+#
+
+@constructor
+func constructor{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(ETH : felt,USDC : felt,USDT : felt,DAI : felt):
+    price_feed.write(ETH,Uint256(1000*base,0))
+    price_feed.write(USDC,Uint256(base,0))
+    price_feed.write(USDT,Uint256(base,0))
+    price_feed.write(DAI,Uint256(base,0))
+#    let (owner) = get_caller_address()
+#    Ownable.initializer(owner)
+    return()
+end
 
 @storage_var
 func routers(index: felt) -> (router: Router):
@@ -36,10 +63,6 @@ end
 
 @storage_var
 func router_index_len() -> (len: felt): 
-end
-
-@storage_var
-func price_feed(asset: felt) -> (oracle_address: felt):
 end
 
 #
@@ -73,30 +96,16 @@ end
 func get_global_price{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_asset: felt)->(price: Uint256):
-    #Let's build this once we have real price oracles to test with
-    #price_feed.read()
-    if _asset == USDT :
-        return(Uint256(base,0))
+    range_check_ptr}(_token: felt)->(price: Uint256):
+    alloc_locals
+    #Let's build this propperly once we have real price oracles to test with
+    let (local price: Uint256) = price_feed.read(_token)
+    let (is_price_invalid) = uint256_eq(price,Uint256(0,0))
+    with_attr error_message(
+        "price_feed result invalid"):
+        assert_not_equal(is_price_invalid,TRUE)
     end
-    if _asset == USDC :
-        return(Uint256(base,0))
-    end
-    if _asset == DAI :
-        return(Uint256(base,0))
-    end
-    if _asset == ETH :
-        return(Uint256(1000*base,0))
-    end    
-    if _asset == shitcoin1 :
-        return(Uint256(10*base,0))
-    end    
-    if _asset == shitcoin2 :
-        return(Uint256(10*base,0))
-    end    
-    #Should never happen
-    assert 9 = 8
-    return(Uint256(0,0))
+    return(price)
 end
 
 #Calculates weights from liquidity + fees alone (no global prices required)

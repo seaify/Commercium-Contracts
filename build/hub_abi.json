@@ -85,7 +85,16 @@
             }
         ],
         "name": "swap_with_solver",
-        "outputs": [],
+        "outputs": [
+            {
+                "name": "received_amount",
+                "type": "Uint256"
+            },
+            {
+                "name": "router_address",
+                "type": "felt"
+            }
+        ],
         "type": "function"
     },
     {

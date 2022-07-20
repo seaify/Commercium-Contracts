@@ -75,7 +75,7 @@ func swap_with_solver{
     _token_out : felt, 
     _amount_in : Uint256, 
     _min_amount_out : Uint256, 
-    _solver_id : felt):
+    _solver_id : felt)->(received_amount: Uint256, router_address: felt):
 
     alloc_locals
 
@@ -84,7 +84,10 @@ func swap_with_solver{
     #Get Solver address that will be used
     let (solver_registry) = Hub.solver_registry()
     let (local solver_address) = ISolver_registry.get_solver(solver_registry,_solver_id)
-    assert_not_equal(solver_address,FALSE)
+    with_attr error_message(
+        "solver ID invalid"):
+        assert_not_equal(solver_address,FALSE)
+    end
 
     #Get Caller Address
     let (caller_address) = get_caller_address()
@@ -140,7 +143,7 @@ func swap_with_solver{
 
     ReentrancyGuard._end()
 
-    return ()
+    return (received_amount, routers[0])
 end
 
 @external
@@ -211,7 +214,7 @@ end
 @external
 func set_solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _new_registry: felt) -> ():
-    #Ownable.assert_only_owner()
+    Ownable.assert_only_owner()
     Hub.set_solver_registry(_new_registry)
     return()
 end
@@ -230,5 +233,3 @@ func set_executor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     trade_executor.write(_executor)
     return()
 end
-
-
