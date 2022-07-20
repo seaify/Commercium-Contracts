@@ -150,6 +150,21 @@
     {
         "inputs": [
             {
+                "name": "_router_type",
+                "type": "felt"
+            },
+            {
+                "name": "_router_address",
+                "type": "felt"
+            }
+        ],
+        "name": "set_router_type",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_token_len",
                 "type": "felt"
             },

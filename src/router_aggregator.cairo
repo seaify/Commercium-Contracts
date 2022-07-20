@@ -5,12 +5,11 @@ from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.math import assert_not_equal
+from src.lib.hub import Uni
 
 from src.interfaces.IUni_router import IUni_router
-from src.lib.constants import (uni, cow)
 from src.lib.utils import Utils
 
-const Uni = 0
 const base = 1000000000000000000 
 const Uni_fee = 3000000000000000 # 0.3% fee 
 #Token addresses
@@ -231,7 +230,7 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
 
     #Check type and act accordingly
     #Will likely requrie an individual check for each type of AMM, as the interfaces might be different as well as the decimal number of the fees
-    if router.type == uni :
+    if router.type == Uni :
         let (amount_out: Uint256) = IUni_router.get_amount_out(router.address,_amount_in,_pair.in_token,_pair.out_token)
 	    let (is_new_amount_better) = uint256_le(_best_amount,amount_out)
         if is_new_amount_better == 1:

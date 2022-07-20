@@ -17,7 +17,7 @@ namespace ISolver_registry:
     #Parameters:
     #_solver_id      | ID that will be used to retrieve the solver contract address
     #_solver_address | The solver contract address that will be mapped to the given solver ID 
-    func set_solver(_solver_id: felt, _solver_address: felt) -> ():
+    func set_solver(_solver_id: felt, _solver_address: felt):
     end
 
     func add_solver(_solver_address: felt) -> ():

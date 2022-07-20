@@ -47,5 +47,20 @@
         "name": "add_solver",
         "outputs": [],
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_solver_index",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_address",
+                "type": "felt"
+            }
+        ],
+        "name": "set_solver",
+        "outputs": [],
+        "type": "function"
     }
 ]

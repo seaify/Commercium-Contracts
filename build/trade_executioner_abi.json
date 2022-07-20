@@ -47,48 +47,5 @@
             }
         ],
         "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_amount_in",
-                "type": "Uint256"
-            },
-            {
-                "name": "_routers_len",
-                "type": "felt"
-            },
-            {
-                "name": "_routers",
-                "type": "felt*"
-            },
-            {
-                "name": "_tokens_in_len",
-                "type": "felt"
-            },
-            {
-                "name": "_tokens_in",
-                "type": "felt*"
-            },
-            {
-                "name": "_tokens_out_len",
-                "type": "felt"
-            },
-            {
-                "name": "_tokens_out",
-                "type": "felt*"
-            },
-            {
-                "name": "_trade_executor_address",
-                "type": "felt"
-            },
-            {
-                "name": "_receiver_address",
-                "type": "felt"
-            }
-        ],
-        "name": "multis_swap",
-        "outputs": [],
-        "type": "function"
     }
 ]

@@ -2,16 +2,16 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
-const multi_call_selector = 872348723
+const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984
 
-struct Swap:
-    member token_in: felt
-    member token_out: felt
-    member router: felt
-end
+const Uni = 1
 
 @storage_var
 func Hub_solver_registry() -> (registry_address : felt):
+end
+
+@storage_var 
+func Hub_router_type(router_address: felt)->(router_type: felt):
 end
 
 namespace Hub:
@@ -39,6 +39,15 @@ namespace Hub:
         range_check_ptr
     }(new_registry: felt):
         Hub_solver_registry.write(new_registry)
+        return()
+    end 
+
+    func set_router_type{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr
+    }(_router_type: felt, _router_address: felt):
+        Hub_router_type.write(_router_address,_router_type)
         return()
     end 
 

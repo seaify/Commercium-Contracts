@@ -12,7 +12,6 @@ from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint25
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IERC20 import IERC20
@@ -61,33 +60,59 @@ func __setup__{
 
     #Deploy Hub
     local hub_address : felt
-    %{ context.hub_address = deploy_contract("./src/hub.cairo", []).contract_address %}
-    %{ ids.hub_address = context.hub_address %} 
+    #%{ context.hub_address = deploy_contract("./src/hub.cairo", []).contract_address %}
+    #%{ ids.hub_address = context.hub_address %} 
 
     %{
-        declared = declare("path/to/contract.cairo")
-        prepared = prepare(declared, [1,2,3])
-        start_prank(111, target_contract_address=prepared.contract_address)
-
-        # constructor will be affected by prank
+        declared = declare("./src/hub.cairo")
+        prepared = prepare(declared, [])
+        stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
+        ids.hub_address = prepared.contract_address
+        context.hub_address = prepared.contract_address
+        stop_prank_callable()
     %}
 
     #Deploy Solver Registry
     local solver_registry_address : felt
-    %{ context.solver_registry_address = deploy_contract("./src/solver_registry.cairo", []).contract_address %}  
-    %{ ids.solver_registry_address = context.solver_registry_address %}  
+    %{
+        declared = declare("./src/solver_registry.cairo")
+        prepared = prepare(declared, [])
+        stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
+        deploy(prepared)
+        ids.solver_registry_address = prepared.contract_address
+        context.solver_registry_address = prepared.contract_address
+        stop_prank_callable()
+    %}
 
     #Set solver_registry in Hub
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address)%}
     IHub.set_solver_registry(hub_address,solver_registry_address)
+    %{stop_prank_callable()%}
+
+    #Generate Executor Hash
+    local executioner_hash: felt
+    %{
+        declared = declare("./src/trade_executioner.cairo")
+        prepared = prepare(declared, [])
+        stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
+        # constructor will be affected by prank
+        deploy(prepared)
+        ids.executioner_hash = prepared.contract_address
+        stop_prank_callable()
+    %}
 
     #Set Executor Hash
-    IHub.set_executor(hub_address,executor_hash)
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address)%}
+    IHub.set_executor(hub_address,executioner_hash)
+    %{stop_prank_callable()%}
 
     #Deploy Router Aggregator
     local router_aggregator_address : felt
-    %{ context.router_aggregator_address = deploy_contract("./src/router_aggregator.cairo", [ids.ETH,ids.USDC,ids.USDT,ids.DAI]).contract_address %}
-    %{ ids.router_aggregator_address = context.router_aggregator_address %}
+    %{ 
+        context.router_aggregator_address = deploy_contract("./src/router_aggregator.cairo", [ids.ETH,ids.USDC,ids.USDT,ids.DAI]).contract_address
+        ids.router_aggregator_address = context.router_aggregator_address 
+    %}
 
     # Set routers
     let (router_1_address) = create_router1(public_key_0,ETH,USDC,USDT,DAI)
@@ -104,14 +129,20 @@ func __setup__{
 
     #Deploy Solver
     local solver_address : felt
-    %{ context.solver_address = deploy_contract("./src/solvers/single_swap_solver.cairo", []).contract_address %}
-    %{ ids.solver_address = context.solver_address %}
-
+    %{ 
+        context.solver_address = deploy_contract("./src/solvers/single_swap_solver.cairo", []).contract_address 
+        ids.solver_address = context.solver_address
+    %}
+    
     #Set router_aggregator for solver
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver_address)%}
     ISolver.set_router_aggregator(solver_address,router_aggregator_address)
+    %{stop_prank_callable()%}
 
     #Add solver to solver_registry
-    ISolver_registry.add_solver(solver_registry_address,solver_address)
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver_registry_address)%}
+    ISolver_registry.set_solver(solver_registry_address,1,solver_address)
+    %{stop_prank_callable()%}
 
     return ()
 end
@@ -137,14 +168,23 @@ func test_hub{
     local USDT
     %{ ids.USDT = context.USDT %}
 
+    local amount_to_trade: Uint256 = Uint256(1000*base,0)
+    local expected_min_return: Uint256 = Uint256(900*base,0)
+
+    #Allow hub to take tokens
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
+    IERC20.approve(ETH,hub_address,amount_to_trade)
+    %{ stop_prank_callable() %}
+
+    #Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
     let (received_amount: Uint256, router_address: felt) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
         _token_out=DAI, 
-        _amount_in=Uint256(1000*base,0), 
-        _min_amount_out=Uint256(900*base,0), 
-        _solver_id=0
+        _amount_in=amount_to_trade, 
+        _min_amount_out=expected_min_return, 
+        _solver_id=1
     )
     %{ stop_prank_callable() %}
 

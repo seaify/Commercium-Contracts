@@ -5,17 +5,10 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_contract_address
 
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Swap
+from src.lib.hub import Hub_router_type, Uni
 
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
-
-const Uni = 1
-const Cow = 2
-
-@storage_var 
-func get_router_type(router_address: felt)->(router_type: felt):
-end
 
 @external
 func swap_single{
@@ -34,17 +27,14 @@ func swap_single{
     return(amount_out)
 end
 
-@external
-func multis_swap{
+func multi_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
         _amount_in: Uint256,
         _routers_len : felt,
         _routers : felt*,
-        _tokens_in_len : felt, 
         _tokens_in : felt*, 
-        _tokens_out_len : felt, 
         _tokens_out : felt*, 
         _trade_executor_address: felt,
         _receiver_address: felt
@@ -67,9 +57,7 @@ func multis_swap{
         new_token_amount,
         _routers_len-1,
         _routers+1,
-        _tokens_in_len, 
         _tokens_in+1, 
-        _tokens_out_len, 
         _tokens_out+1, 
         _trade_executor_address,
         _receiver_address
@@ -89,7 +77,7 @@ func _swap{
         _receiver_address: felt
     ): 
 
-    let (router_type) = get_router_type.read(_router_address)
+    let (router_type) = Hub_router_type.read(_router_address)
 
     if router_type == Uni :
         IERC20.approve(_router_address,_receiver_address,_amount_in)

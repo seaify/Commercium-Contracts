@@ -12,7 +12,6 @@ from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint25
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.ISpf_solver import ISpf_solver

@@ -9,14 +9,13 @@ from starkware.cairo.common.memcpy import memcpy
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address, library_call
 
 from src.interfaces.ISolver import ISolver
-from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IERC20 import IERC20
 
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Hub, multi_call_selector
+from src.lib.hub import Hub, multi_call_selector, Hub_router_type
 
 #
 #Storage
@@ -57,8 +56,8 @@ func constructor{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}():
-#    let (owner) = get_caller_address()
-#    Ownable.initializer(owner)
+    let (owner) = get_caller_address()
+    Ownable.initializer(owner)
     return()
 end
 
@@ -118,13 +117,14 @@ func swap_with_solver{
 
     assert calldata[0] = _amount_in.low
     assert calldata[1] = _amount_in.high
+    assert calldata[2] = routers_len
     memcpy(calldata, routers, routers_len)
     memcpy(calldata, tokens_in, tokens_in_len)
     memcpy(calldata, tokens_out, tokens_out_len)
     library_call(
         trade_executor_hash,
         multi_call_selector,
-        routers_len+tokens_in_len+tokens_out_len+2,
+        routers_len+tokens_in_len+tokens_out_len+3,
         calldata,
     )
     
@@ -136,14 +136,18 @@ func swap_with_solver{
 
     #Check that tokens received by solver at at least as much as the min_amount_out
     let (min_amount_received) = uint256_le(_min_amount_out,received_amount)
-    assert min_amount_received = TRUE
+    with_attr error_message(
+        "Minimum amount not received"):
+        assert min_amount_received = TRUE
+    end
+    
 
     #Transfer _token_out back to caller
     IERC20.transfer(_token_out,caller_address,received_amount)
 
     ReentrancyGuard._end()
 
-    return (received_amount, routers[0])
+    return (Uint256(0,0), 0)
 end
 
 @external
@@ -220,16 +224,24 @@ func set_solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 end
 
 @external
+func set_router_type{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    _router_type: felt, _router_address: felt) -> ():
+    Ownable.assert_only_owner()
+    Hub.set_router_type(_router_type, _router_address)
+    return()
+end
+
+@external
 func retrieve_tokens{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _token_len: felt, _token: felt*, _token_amount_len: felt, _token_amount: Uint256*) -> ():
-    #Ownable.assert_only_owner()
+    Ownable.assert_only_owner()
     return()
 end
 
 @external
 func set_executor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _executor: felt):
-    #Only Admin
-    trade_executor.write(_executor)
+    _executor_hash: felt):
+    Ownable.assert_only_owner()
+    trade_executor.write(_executor_hash)
     return()
 end

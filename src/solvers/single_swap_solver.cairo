@@ -6,7 +6,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.ITrade_executor import ITrade_executor
 from src.interfaces.IERC20 import IERC20
 
 ###################################################################################
