@@ -34,11 +34,19 @@
         "name": "get_results",
         "outputs": [
             {
-                "name": "routers_len",
+                "name": "router_addresses_len",
                 "type": "felt"
             },
             {
-                "name": "routers",
+                "name": "router_addresses",
+                "type": "felt*"
+            },
+            {
+                "name": "router_types_len",
+                "type": "felt"
+            },
+            {
+                "name": "router_types",
                 "type": "felt*"
             },
             {

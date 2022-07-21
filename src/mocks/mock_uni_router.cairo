@@ -27,7 +27,7 @@ func exchange_exact_token_for_token{syscall_ptr : felt*, pedersen_ptr : HashBuil
     let (amount_out: Uint256) = get_amount_out(_amount_in,_token_in,_token_out)
     let (caller_address) = get_caller_address()
     let (this_address) = get_contract_address()
-    IERC20.transferFrom(_token_in,caller_address,this_address,amount_out)
+    IERC20.transferFrom(_token_in,caller_address,this_address,_amount_in)
     IERC20.transfer(_token_out,caller_address,amount_out)
     return()
 end

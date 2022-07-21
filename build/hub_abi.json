@@ -188,7 +188,7 @@
     {
         "inputs": [
             {
-                "name": "_executor",
+                "name": "_executor_hash",
                 "type": "felt"
             }
         ],

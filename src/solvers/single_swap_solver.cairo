@@ -25,33 +25,37 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
         _token_in: felt,
         _token_out: felt
     )-> (
-        routers_len : felt,
-        routers : felt*,
+        router_addresses_len : felt,
+        router_addresses : felt*,
+        router_types_len : felt,
+        router_types : felt*,
         tokens_in_len : felt, 
         tokens_in : felt*,
         tokens_out_len : felt, 
         tokens_out : felt*,
         amounts_len : felt, 
         amounts : felt*, 
-        amount_out: Uint256
+        amount_out: Uint256 
     ):
     alloc_locals
     
     let (router_aggregator_address) = router_aggregator.read()
 
-    let (amount_out,router_address,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_token_in,_token_out)
+    let (amount_out,router_address,router_type) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_token_in,_token_out)
 
-    let (routers : felt*) = alloc()
+    let (router_addresses : felt*) = alloc()
+    let (router_types : felt*) = alloc()
     let (tokens_in : felt*) = alloc()
     let (tokens_out : felt*) = alloc()
     let (amounts : Uint256*) = alloc()
     
-    routers[0] = router_address
-    tokens_in[0] = _token_in
-    tokens_out[0] = _token_out
+    assert router_addresses[0] = router_address
+    assert router_types[0] = router_type
+    assert tokens_in[0] = _token_in
+    assert tokens_out[0] = _token_out
     assert amounts[0] = _amount_in
 
-    return(1,routers,1,tokens_in,1,tokens_out,1,amounts,amount_out)
+    return(1,router_addresses,1,router_types,1,tokens_in,1,tokens_out,1,amounts,amount_out)
 end
 
 #

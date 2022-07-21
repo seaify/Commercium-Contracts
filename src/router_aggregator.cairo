@@ -20,11 +20,6 @@ const DAI = 12347
 const ETH = 12348
 const shitcoin2 = 12349
 
-struct Pair:
-    member in_token : felt
-    member out_token : felt
-end
-
 struct Router:
     member address: felt
     member type: felt
@@ -79,13 +74,13 @@ end
 
 @view
 func get_single_best_pool{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _pair: Pair) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+    _amount_in: Uint256, _token_in: felt, _token_out: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
 
     #Transform USD value to what the token amount would be
-    let (price_in: Uint256) = get_global_price(_pair.in_token)
+    let (price_in: Uint256) = get_global_price(_token_in)
     let (amount_in: Uint256) = Utils.fdiv(_amount_in,price_in,Uint256(base,0))
     
-    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(amount_in, _pair, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
+    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
 
     return(res_amount,res_router_address,res_type)
 end
@@ -209,9 +204,9 @@ end
 #
 #Internal
 #
-
+@external
 func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _pair: Pair, _best_amount: Uint256, _router_address: felt, _router_type: felt, _counter: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+    _amount_in: Uint256, _token_in: felt, _token_out: felt, _best_amount: Uint256, _router_address: felt, _router_type: felt, _counter: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
 
     alloc_locals
 
@@ -231,7 +226,7 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     #Check type and act accordingly
     #Will likely requrie an individual check for each type of AMM, as the interfaces might be different as well as the decimal number of the fees
     if router.type == Uni :
-        let (amount_out: Uint256) = IUni_router.get_amount_out(router.address,_amount_in,_pair.in_token,_pair.out_token)
+        let (amount_out: Uint256) = IUni_router.get_amount_out(router.address,_amount_in,_token_in,_token_out)
 	    let (is_new_amount_better) = uint256_le(_best_amount,amount_out)
         if is_new_amount_better == 1:
             assert best_amount = amount_out
@@ -246,6 +241,9 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
             tempvar syscall_ptr = syscall_ptr
             tempvar pedersen_ptr = pedersen_ptr
     else:
+        with_attr error_message("router type invalid"):
+            assert 1 = 0
+        end
         tempvar range_check_ptr = range_check_ptr 	
         tempvar syscall_ptr = syscall_ptr
         tempvar pedersen_ptr = pedersen_ptr    
@@ -255,7 +253,7 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
         #let (out_amount) = ICow_Router.get_exact_token_for_token(router_address,_amount_in,_token_in,_token_out)
     #end
 
-    let (res_amount,res_router_address,res_type) = find_best_router(_amount_in,_pair,best_amount,best_router,best_type,_counter+1)
+    let (res_amount,res_router_address,res_type) = find_best_router(_amount_in,_token_in,_token_out,best_amount,best_router,best_type,_counter+1)
     return(res_amount,res_router_address,res_type)
 end
 

@@ -15,7 +15,8 @@ from src.interfaces.IERC20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Hub, multi_call_selector, Hub_router_type
+from src.lib.hub import Hub, multi_call_selector
+from src.lib.arrayV2 import Array
 
 #
 #Storage
@@ -100,8 +101,10 @@ func swap_with_solver{
     let(original_balance: Uint256) = IERC20.balanceOf(_token_out,this_address) 
 
     #Get trading path from the selected solver
-    let (routers_len : felt,
-        routers : felt*,
+    let (router_addresses_len : felt,
+        router_addresses : felt*,
+        router_types_len : felt,
+        router_types : felt*,
         tokens_in_len : felt, 
         tokens_in : felt*,
         tokens_out_len : felt, 
@@ -115,16 +118,29 @@ func swap_with_solver{
     let (trade_executor_hash) = trade_executor.read()
     let (calldata : felt*) = alloc()
 
+    #TODO: Try using 1 struct instead of multiple pointers and the cast into library call 
+    #Packing trading info into one calldata felt
     assert calldata[0] = _amount_in.low
     assert calldata[1] = _amount_in.high
-    assert calldata[2] = routers_len
-    memcpy(calldata, routers, routers_len)
-    memcpy(calldata, tokens_in, tokens_in_len)
-    memcpy(calldata, tokens_out, tokens_out_len)
+    assert calldata[2] = router_addresses_len
+    memcpy(calldata+3, router_addresses, router_addresses_len)
+    Array.push(router_addresses_len+3,calldata,router_types_len)
+
+    memcpy(calldata+4+router_addresses_len, router_types, router_types_len)
+    Array.push(router_addresses_len+router_types_len+4,calldata,tokens_in_len)
+
+    memcpy(calldata+5+router_addresses_len+router_types_len, tokens_in, tokens_in_len)
+    Array.push(router_addresses_len+router_types_len+tokens_in_len+5,calldata,tokens_out_len)
+
+    memcpy(calldata+6+router_addresses_len+router_types_len+tokens_in_len, tokens_out, tokens_out_len)
+    Array.push(router_addresses_len+router_types_len+tokens_in_len+tokens_out_len+6,calldata,this_address)
+
+    #ALSO USE amounts: felt* AND USE THOSE FOR TRADES
+
     library_call(
         trade_executor_hash,
         multi_call_selector,
-        routers_len+tokens_in_len+tokens_out_len+3,
+        router_addresses_len+router_types_len+tokens_in_len+tokens_out_len+7,
         calldata,
     )
     
@@ -135,19 +151,18 @@ func swap_with_solver{
     let (received_amount: Uint256) = SafeUint256.sub_le(new_amount,original_balance)
 
     #Check that tokens received by solver at at least as much as the min_amount_out
-    let (min_amount_received) = uint256_le(_min_amount_out,received_amount)
+    let (is_min_amount_received) = uint256_le(_min_amount_out,received_amount)
     with_attr error_message(
         "Minimum amount not received"):
-        assert min_amount_received = TRUE
+        assert is_min_amount_received = TRUE
     end
     
-
     #Transfer _token_out back to caller
     IERC20.transfer(_token_out,caller_address,received_amount)
 
     ReentrancyGuard._end()
 
-    return (Uint256(0,0), 0)
+    return (received_amount, router_addresses[0])
 end
 
 @external

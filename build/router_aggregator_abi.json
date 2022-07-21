@@ -17,23 +17,6 @@
         "type": "struct"
     },
     {
-        "members": [
-            {
-                "name": "in_token",
-                "offset": 0,
-                "type": "felt"
-            },
-            {
-                "name": "out_token",
-                "offset": 1,
-                "type": "felt"
-            }
-        ],
-        "name": "Pair",
-        "size": 2,
-        "type": "struct"
-    },
-    {
         "inputs": [
             {
                 "name": "ETH",
@@ -80,8 +63,12 @@
                 "type": "Uint256"
             },
             {
-                "name": "_pair",
-                "type": "Pair"
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
             }
         ],
         "name": "get_single_best_pool",
@@ -209,6 +196,54 @@
         ],
         "name": "remove_router",
         "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_best_amount",
+                "type": "Uint256"
+            },
+            {
+                "name": "_router_address",
+                "type": "felt"
+            },
+            {
+                "name": "_router_type",
+                "type": "felt"
+            },
+            {
+                "name": "_counter",
+                "type": "felt"
+            }
+        ],
+        "name": "find_best_router",
+        "outputs": [
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            },
+            {
+                "name": "router_address",
+                "type": "felt"
+            },
+            {
+                "name": "router_type",
+                "type": "felt"
+            }
+        ],
         "type": "function"
     }
 ]

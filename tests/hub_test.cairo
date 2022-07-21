@@ -9,6 +9,7 @@ from starkware.cairo.common.bitwise import bitwise_or
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
+from src.lib.hub import Uni
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
@@ -25,8 +26,6 @@ const LARGE_VALUE = 850705917302346000000000000000000000000000000
 
 const base = 1000000000000000000 # 1e18
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
-
-const Uni = 0
 
 #const shitcoin1 = 12344
 #const USDT = 12345
@@ -98,7 +97,7 @@ func __setup__{
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         # constructor will be affected by prank
         deploy(prepared)
-        ids.executioner_hash = prepared.contract_address
+        ids.executioner_hash = prepared.class_hash
         stop_prank_callable()
     %}
 
@@ -125,7 +124,7 @@ func __setup__{
     # Add newly created routers to router aggregator
     IRouter_aggregator.add_router(router_aggregator_address,router_1_address,Uni)
     IRouter_aggregator.add_router(router_aggregator_address,router_2_address,Uni)
-    IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)          
+    IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)  
 
     #Deploy Solver
     local solver_address : felt
@@ -168,8 +167,15 @@ func test_hub{
     local USDT
     %{ ids.USDT = context.USDT %}
 
-    local amount_to_trade: Uint256 = Uint256(1000*base,0)
-    local expected_min_return: Uint256 = Uint256(900*base,0)
+    local amount_to_trade: Uint256 = Uint256(100*base,0)
+    local expected_min_return: Uint256 = Uint256(80*base,0)
+
+    local router_aggregator_address
+    %{ ids.router_aggregator_address = context.router_aggregator_address %}
+
+    #let (amount_out,router_address,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,amount_to_trade,ETH,DAI)
+    #%{ print("router_address: ",ids.router_address) %}
+    #%{ print("amount_out: ",ids.amount_out.low) %}
 
     #Allow hub to take tokens
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
@@ -190,6 +196,7 @@ func test_hub{
 
     %{ print("received_amount: ",ids.received_amount.low) %}
     %{ print("router_address: ",ids.router_address) %}
+    assert 99 = 22
 
     return()
 end
@@ -289,7 +296,7 @@ func create_router2{syscall_ptr : felt*, range_check_ptr}(
         IERC20.transfer(USDT,router_address,Uint256(90000*base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
-        IERC20.transfer(DAI,router_address,Uint256(1000*base,0))
+        IERC20.transfer(DAI,router_address,Uint256(1000000*base,0))
         IERC20.transfer(DAI,router_address,Uint256(80000*base,0))
         IERC20.transfer(DAI,router_address,Uint256(90000*base,0))
     %{ stop_prank_callable() %}

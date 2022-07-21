@@ -37,4 +37,7 @@ namespace IRouter_aggregator:
 
     func add_router(_router_address: felt, _router_type: felt):
     end 
+
+    func find_best_router(_amount_in: Uint256, _token_in: felt, _token_out: felt, _best_amount: Uint256, _router_address: felt, _router_type: felt, _counter: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+    end
 end
