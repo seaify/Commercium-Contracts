@@ -17,24 +17,22 @@
         "type": "struct"
     },
     {
-        "inputs": [
+        "data": [
             {
-                "name": "ETH",
+                "name": "previousOwner",
                 "type": "felt"
             },
             {
-                "name": "USDC",
-                "type": "felt"
-            },
-            {
-                "name": "USDT",
-                "type": "felt"
-            },
-            {
-                "name": "DAI",
+                "name": "newOwner",
                 "type": "felt"
             }
         ],
+        "keys": [],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "inputs": [],
         "name": "constructor",
         "outputs": [],
         "type": "constructor"
@@ -195,6 +193,21 @@
             }
         ],
         "name": "remove_router",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_token",
+                "type": "felt"
+            },
+            {
+                "name": "_price",
+                "type": "Uint256"
+            }
+        ],
+        "name": "set_global_price",
         "outputs": [],
         "type": "function"
     },

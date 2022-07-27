@@ -34,7 +34,7 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
         tokens_out_len : felt, 
         tokens_out : felt*,
         amounts_len : felt, 
-        amounts : felt*, 
+        amounts : Uint256*, 
         amount_out: Uint256 
     ):
     alloc_locals

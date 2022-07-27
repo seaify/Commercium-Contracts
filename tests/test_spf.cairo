@@ -6,7 +6,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
 from starkware.cairo.common.math import assert_le, assert_nn_le, unsigned_div_rem, sqrt
 from starkware.cairo.common.math_cmp import is_le_felt
 from starkware.cairo.common.bitwise import bitwise_or
-from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
 from src.lib.array import Array
@@ -32,7 +31,7 @@ const DAI = 12347
 const ETH = 12348
 const shitcoin2 = 12349
 
-#@external
+@external
 func test_spf_solver{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     alloc_locals
 
@@ -56,17 +55,27 @@ func test_spf_solver{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pederse
     ISpf_solver.set_router_aggregator(spf_solver_address,router_aggregator_address)
     #set_router_aggregator(router_aggregator_address)
 
-    let (path_len: felt, path: felt*) = ISpf_solver.get_results(spf_solver_address,Uint256(100*base,0),shitcoin1, shitcoin2)
+    let (router_addresses_len : felt,
+        router_addresses : felt*,
+        router_types_len : felt,
+        router_types : felt*,
+        tokens_in_len : felt, 
+        tokens_in : felt*,
+        tokens_out_len : felt, 
+        tokens_out : felt*,
+        amounts_len : felt, 
+        amounts : Uint256*, 
+        amount_out: Uint256) = ISpf_solver.get_results(spf_solver_address,Uint256(100*base,0),shitcoin1, shitcoin2)
     
-    tempvar path0 = path[0]
-    tempvar path1 = path[1]
-    tempvar path2 = path[2]
-    tempvar path3 = path[3]
+    #tempvar path0 = path[0]
+    #tempvar path1 = path[1]
+    #tempvar path2 = path[2]
+    #tempvar path3 = path[3]
     
-    %{ print("path0: ",ids.path0) %}
-    %{ print("path1: ",ids.path1) %}
-    %{ print("path2: ",ids.path2) %}
-    %{ print("path3: ",ids.path3) %}
+    #%{ print("path0: ",ids.path0) %}
+    #%{ print("path1: ",ids.path1) %}
+    #%{ print("path2: ",ids.path2) %}
+    #%{ print("path3: ",ids.path3) %}
 
     return()
 end

@@ -71,7 +71,7 @@
             },
             {
                 "name": "amounts",
-                "type": "felt*"
+                "type": "Uint256*"
             },
             {
                 "name": "amount_out",

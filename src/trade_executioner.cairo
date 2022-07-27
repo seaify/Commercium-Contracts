@@ -15,7 +15,6 @@ func multi_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
-        _amount_in: Uint256,
         _router_addresses_len : felt,
         _router_addresses : felt*,
         _router_types_len: felt,
@@ -24,6 +23,8 @@ func multi_swap{
         _tokens_in : felt*,
         _tokens_out_len : felt,
         _tokens_out : felt*,
+        _amounts_len : felt,
+        _amounts : Uint256*,
         _receiver_address: felt
     ):
     alloc_locals
@@ -32,9 +33,20 @@ func multi_swap{
         return()
     end
     
-    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_tokens_out[0],_receiver_address)
+    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_tokens_out[0],_receiver_address)  
+    let(local in_amount_before_trade: Uint256) = IERC20.balanceOf(_tokens_in[0],_receiver_address) 
 
-    _swap(_router_addresses[0],_router_types[0],_amount_in,_tokens_in[0],_tokens_out[0],_receiver_address)
+    if _router_addresses_len == 1 :
+        local temp1:Uint256 = _amounts[0]
+        local amount1 = temp1.low
+        local amount2 = in_amount_before_trade.low
+        with_attr error_message("Amounts: {amount1}, in_amount_before_trade: {amount2}"):
+            assert 1 = 2
+        end
+    end 
+
+    _swap(_router_addresses[0],_router_types[0],_amounts[0],_tokens_in[0],_tokens_out[0],_receiver_address)
+
 
     let (amount_after_trade: Uint256) = IERC20.balanceOf(_tokens_out[0],_receiver_address)
 
@@ -42,7 +54,6 @@ func multi_swap{
     let (new_token_amount: Uint256) = SafeUint256.sub_le(amount_after_trade,amount_before_trade)
     
     multi_swap(
-        new_token_amount,
         _router_addresses_len-1,
         _router_addresses+1,
         _router_types_len,
@@ -51,6 +62,8 @@ func multi_swap{
         _tokens_in+1,
         _tokens_out_len,
         _tokens_out+1, 
+        _amounts_len,
+        _amounts+2,
         _receiver_address
     )
     

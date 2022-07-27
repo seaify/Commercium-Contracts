@@ -50,11 +50,14 @@ namespace ISolver:
         tokens_out_len : felt, 
         tokens_out : felt*,
         amounts_len : felt, 
-        amounts : felt*, 
+        amounts : Uint256*, 
         return_amount: Uint256
     ):
     end
 
     func set_router_aggregator(_router_aggregator_address: felt):
+    end
+
+    func set_high_liq_tokens(_index: felt,_high_liq_tokens: felt):
     end
 end

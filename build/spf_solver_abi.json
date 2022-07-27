@@ -17,6 +17,21 @@
         "type": "struct"
     },
     {
+        "data": [
+            {
+                "name": "previousOwner",
+                "type": "felt"
+            },
+            {
+                "name": "newOwner",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
         "inputs": [
             {
                 "name": "_amount_in",
@@ -34,14 +49,51 @@
         "name": "get_results",
         "outputs": [
             {
-                "name": "path_len",
+                "name": "router_addresses_len",
                 "type": "felt"
             },
             {
-                "name": "path",
+                "name": "router_addresses",
                 "type": "felt*"
+            },
+            {
+                "name": "router_types_len",
+                "type": "felt"
+            },
+            {
+                "name": "router_types",
+                "type": "felt*"
+            },
+            {
+                "name": "tokens_in_len",
+                "type": "felt"
+            },
+            {
+                "name": "tokens_in",
+                "type": "felt*"
+            },
+            {
+                "name": "tokens_out_len",
+                "type": "felt"
+            },
+            {
+                "name": "tokens_out",
+                "type": "felt*"
+            },
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            },
+            {
+                "name": "amount_out",
+                "type": "Uint256"
             }
         ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -52,6 +104,21 @@
             }
         ],
         "name": "set_router_aggregator",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_index",
+                "type": "felt"
+            },
+            {
+                "name": "_high_liq_tokens",
+                "type": "felt"
+            }
+        ],
+        "name": "set_high_liq_tokens",
         "outputs": [],
         "type": "function"
     }

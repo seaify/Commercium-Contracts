@@ -108,9 +108,7 @@ func swap_with_solver{
         tokens_in_len : felt, 
         tokens_in : felt*,
         tokens_out_len : felt, 
-        tokens_out : felt*,
-        amounts_len : felt, 
-        amounts : felt*, 
+        tokens_out : felt*
         _
     ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
 
@@ -118,29 +116,33 @@ func swap_with_solver{
     let (trade_executor_hash) = trade_executor.read()
     let (calldata : felt*) = alloc()
 
-    #TODO: Try using 1 struct instead of multiple pointers and the cast into library call 
-    #Packing trading info into one calldata felt
-    assert calldata[0] = _amount_in.low
-    assert calldata[1] = _amount_in.high
-    assert calldata[2] = router_addresses_len
-    memcpy(calldata+3, router_addresses, router_addresses_len)
-    Array.push(router_addresses_len+3,calldata,router_types_len)
+    #TODO: Find a prettyer way to pack all informtation into 1 pointer
+    #Packing trading info into calldata
+    assert calldata[0] = router_addresses_len
+    memcpy(calldata+1, router_addresses, router_addresses_len)
+    Array.push(router_addresses_len+1,calldata,router_types_len)
 
-    memcpy(calldata+4+router_addresses_len, router_types, router_types_len)
-    Array.push(router_addresses_len+router_types_len+4,calldata,tokens_in_len)
+    memcpy(calldata+router_addresses_len+2, router_types, router_types_len)
+    Array.push(router_addresses_len*2+2,calldata,tokens_in_len)
 
-    memcpy(calldata+5+router_addresses_len+router_types_len, tokens_in, tokens_in_len)
-    Array.push(router_addresses_len+router_types_len+tokens_in_len+5,calldata,tokens_out_len)
+    memcpy(calldata+router_addresses_len*2+3, tokens_in, tokens_in_len)
+    Array.push(router_addresses_len*3+3,calldata,tokens_out_len)
 
-    memcpy(calldata+6+router_addresses_len+router_types_len+tokens_in_len, tokens_out, tokens_out_len)
-    Array.push(router_addresses_len+router_types_len+tokens_in_len+tokens_out_len+6,calldata,this_address)
+    memcpy(calldata+router_addresses_len*3+4, tokens_out, tokens_out_len)
+    Array.push(router_addresses_len*4+4,calldata,this_address)
 
-    #ALSO USE amounts: felt* AND USE THOSE FOR TRADES
+    #local temp = calldata[0]
+    #local router1 = calldata[1]
+    #local router2 = calldata[2]
+    #local router3 = calldata[3]
+    #with_attr error_message("calldata0: {temp} router1: {router1}  router2: {router2}  router3: {router3} hash: {trade_executor_hash}"):
+    #    assert 1 = 2
+    #end
 
     library_call(
         trade_executor_hash,
         multi_call_selector,
-        router_addresses_len+router_types_len+tokens_in_len+tokens_out_len+7,
+        router_addresses_len*6+6,
         calldata,
     )
     

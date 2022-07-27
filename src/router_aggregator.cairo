@@ -5,30 +5,21 @@ from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.math import assert_not_equal
+from starkware.starknet.common.syscalls import get_caller_address
 from src.lib.hub import Uni
 
+from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
 from src.lib.utils import Utils
 
 const base = 1000000000000000000 
 const Uni_fee = 3000000000000000 # 0.3% fee 
-#Token addresses
-const shitcoin1 = 12344
-const USDT = 12345
-const USDC = 12346
-const DAI = 12347
-const ETH = 12348
-const shitcoin2 = 12349
 
 struct Router:
     member address: felt
     member type: felt
 end
 
-# 0 ETH
-# 1 USDC
-# 2 USDT
-# 3 DAI
 @storage_var
 func price_feed(token: felt) -> (price: Uint256):
 end
@@ -41,13 +32,9 @@ end
 func constructor{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(ETH : felt,USDC : felt,USDT : felt,DAI : felt):
-    price_feed.write(ETH,Uint256(1000*base,0))
-    price_feed.write(USDC,Uint256(base,0))
-    price_feed.write(USDT,Uint256(base,0))
-    price_feed.write(DAI,Uint256(base,0))
-#    let (owner) = get_caller_address()
-#    Ownable.initializer(owner)
+    range_check_ptr}():
+    let (owner) = get_caller_address()
+    Ownable.initializer(owner)
     return()
 end
 
@@ -96,7 +83,7 @@ func get_global_price{
     let (local price: Uint256) = price_feed.read(_token)
     let (is_price_invalid) = uint256_eq(price,Uint256(0,0))
     with_attr error_message(
-        "price_feed result invalid"):
+        "price_feed result invalid, token: {_token}"):
         assert_not_equal(is_price_invalid,TRUE)
     end
     return(price)
@@ -145,11 +132,11 @@ func get_weight{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
-        _amount_in : Uint256, 
-        _token1: felt, 
-        _token2: felt, 
-        _router_address: felt, 
-        _router_type: felt
+    _amount_in : Uint256, 
+    _token1: felt, 
+    _token2: felt, 
+    _router_address: felt, 
+    _router_type: felt
     )->(weight:felt):
     alloc_locals
 
@@ -181,6 +168,7 @@ end
 @external
 func add_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _router_address: felt, _router_type: felt):
+    Ownable.assert_only_owner()
     let (router_len) = router_index_len.read()
     routers.write(router_len,Router(_router_address,_router_type))
     router_index_len.write(router_len+1)
@@ -191,6 +179,7 @@ end
 @external
 func remove_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _index: felt):
+    Ownable.assert_only_owner()
     let (router_len) = router_index_len.read()
     let (last_router:Router) = routers.read(router_len)
     routers.write(_index,last_router)
@@ -200,6 +189,16 @@ func remove_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
     return()
 end
 
+@external
+func set_global_price{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(_token: felt,_price: Uint256):
+    Ownable.assert_only_owner()
+    price_feed.write(_token,_price)
+    #EMIT ADD PRICE FEED EVENT
+    return()
+end
 
 #
 #Internal
