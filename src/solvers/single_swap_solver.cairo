@@ -8,6 +8,8 @@ from starkware.cairo.common.alloc import alloc
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.IERC20 import IERC20
 
+const base = 1000000000000000000 # 1e18
+
 ###################################################################################
 #                                                                                 #  
 #   THIS IS THE SIMPLEST AND MOST FLEXIBLE SOLVER FOR INTEGRATION WITH PROTOCOLS  #
@@ -34,8 +36,7 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
         tokens_out_len : felt, 
         tokens_out : felt*,
         amounts_len : felt, 
-        amounts : Uint256*, 
-        amount_out: Uint256 
+        amounts : felt*
     ):
     alloc_locals
     
@@ -47,15 +48,15 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     let (router_types : felt*) = alloc()
     let (tokens_in : felt*) = alloc()
     let (tokens_out : felt*) = alloc()
-    let (amounts : Uint256*) = alloc()
+    let (amounts : felt*) = alloc()
     
     assert router_addresses[0] = router_address
     assert router_types[0] = router_type
     assert tokens_in[0] = _token_in
     assert tokens_out[0] = _token_out
-    assert amounts[0] = _amount_in
+    assert amounts[0] = base
 
-    return(1,router_addresses,1,router_types,1,tokens_in,1,tokens_out,1,amounts,amount_out)
+    return(1,router_addresses,1,router_types,1,tokens_in,1,tokens_out,1,amounts)
 end
 
 #

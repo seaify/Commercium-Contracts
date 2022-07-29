@@ -41,13 +41,6 @@ func solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     return(solver_registry)
 end
 
-@view
-func get_contract_caller{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    ) -> (caller: felt):
-    let (caller) = get_caller_address()
-    return(caller)
-end
-
 #
 #Constructor
 #
@@ -56,15 +49,16 @@ end
 func constructor{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}():
-    let (owner) = get_caller_address()
-    Ownable.initializer(owner)
+    range_check_ptr}(_owner: felt):
+    Ownable.initializer(_owner)
     return()
 end
 
 #
 #Externals
 #
+
+#TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT
 
 @external
 func swap_with_solver{
@@ -75,7 +69,7 @@ func swap_with_solver{
     _token_out : felt, 
     _amount_in : Uint256, 
     _min_amount_out : Uint256, 
-    _solver_id : felt)->(received_amount: Uint256, router_address: felt):
+    _solver_id : felt)->(received_amount: Uint256):
 
     alloc_locals
 
@@ -108,8 +102,9 @@ func swap_with_solver{
         tokens_in_len : felt, 
         tokens_in : felt*,
         tokens_out_len : felt, 
-        tokens_out : felt*
-        _
+        tokens_out : felt*,
+        amounts_len : felt, 
+        amounts : felt*
     ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
 
     #Delegate Call: Execute transactions
@@ -120,29 +115,27 @@ func swap_with_solver{
     #Packing trading info into calldata
     assert calldata[0] = router_addresses_len
     memcpy(calldata+1, router_addresses, router_addresses_len)
-    Array.push(router_addresses_len+1,calldata,router_types_len)
+    assert calldata[router_addresses_len+1] = router_types_len
 
     memcpy(calldata+router_addresses_len+2, router_types, router_types_len)
-    Array.push(router_addresses_len*2+2,calldata,tokens_in_len)
+    assert calldata[router_addresses_len*2+2] = tokens_in_len
 
     memcpy(calldata+router_addresses_len*2+3, tokens_in, tokens_in_len)
-    Array.push(router_addresses_len*3+3,calldata,tokens_out_len)
+    assert calldata[router_addresses_len*3+3] = tokens_out_len
 
     memcpy(calldata+router_addresses_len*3+4, tokens_out, tokens_out_len)
-    Array.push(router_addresses_len*4+4,calldata,this_address)
+    assert calldata[router_addresses_len*4+4] = amounts_len
 
-    #local temp = calldata[0]
-    #local router1 = calldata[1]
-    #local router2 = calldata[2]
-    #local router3 = calldata[3]
-    #with_attr error_message("calldata0: {temp} router1: {router1}  router2: {router2}  router3: {router3} hash: {trade_executor_hash}"):
-    #    assert 1 = 2
-    #end
+    memcpy(calldata+router_addresses_len*4+5, amounts, amounts_len)
+    assert calldata[router_addresses_len*5+5] = this_address
+
+    assert calldata[router_addresses_len*5+6] = _amount_in.low
+    assert calldata[router_addresses_len*5+7] = _amount_in.high
 
     library_call(
         trade_executor_hash,
         multi_call_selector,
-        router_addresses_len*6+6,
+        router_addresses_len*5+8,
         calldata,
     )
     
@@ -164,7 +157,7 @@ func swap_with_solver{
 
     ReentrancyGuard._end()
 
-    return (received_amount, router_addresses[0])
+    return (received_amount)
 end
 
 @external

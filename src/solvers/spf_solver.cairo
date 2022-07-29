@@ -84,8 +84,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     tokens_out_len : felt, 
     tokens_out : felt*,
     amounts_len : felt, 
-    amounts : Uint256*, 
-    amount_out: Uint256):
+    amounts : felt*):
     alloc_locals
     
     let (tokens : felt*) = alloc()
@@ -97,12 +96,11 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
 
     #transform input amount to USD amount
     let (router_aggregator_address) = router_aggregator.read()
-    
     let (price: Uint256) = IRouter_aggregator.get_global_price(router_aggregator_address,tokens[0])
-    let (amount_in: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
+    let (amount_in_usd: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
 
     #We use _dst_len to count the number of legit source to destination edges
-    set_edges(amount_in,Vertices,tokens,Vertices,src,_edge_len=0,_edge=edge,_dst_counter=1,_src_counter=0,_total_counter=0)
+    set_edges(_amount_in,amount_in_usd,Vertices,tokens,Vertices,src,_edge_len=0,_edge=edge,_dst_counter=1,_src_counter=0,_total_counter=0)
 
     #Initialize inQueue Array to false
     let (distances : felt*) = alloc()
@@ -116,13 +114,13 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
 
     let (router_addresses : felt*) = alloc()
     let (router_types : felt*) = alloc()
-    let (amounts : Uint256*) = alloc()
+    let (amounts : felt*) = alloc()
     let (tokens_in : felt*) = alloc()
     let (tokens_out : felt*) = alloc()
     let (final_tokens_in : felt*) = alloc()
     let (final_tokens_out : felt*) = alloc()
 
-    assert amounts[0] = _amount_in
+    assert amounts[0] = base
 
     #Determining the Final path we should be taking for the trade
     let (path : felt*) = alloc()
@@ -131,7 +129,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert tokens_in[0] = 0
         assert tokens_out[0] = 5
 
-        set_routers_from_edge(1,src,edge,tokens_in,tokens_out,_amount_in,amounts+2,router_addresses,router_types)
+        set_routers_from_edge(1,src,edge,tokens_in,tokens_out,router_addresses,router_types)
 
         assert final_tokens_in[0] = tokens[0]
         assert final_tokens_out[1] = tokens[5]
@@ -146,8 +144,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
             tokens_out_len=1,
             tokens_out=final_tokens_out,
             amounts_len=1,
-            amounts=amounts,
-            amount_out=amounts[1]
+            amounts=amounts
         )
     end
     assert path[1] = new_predecessors[path[0]]
@@ -157,12 +154,14 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert tokens_in[1] = path[0]
         assert tokens_out[1] = 5
 
-        set_routers_from_edge(2,src,edge,tokens_in,tokens_out,_amount_in,amounts+2,router_addresses,router_types)
+        set_routers_from_edge(2,src,edge,tokens_in,tokens_out,router_addresses,router_types)
 
         assert final_tokens_in[0] = tokens[0]
         assert final_tokens_out[0] = tokens[path[0]]
         assert final_tokens_in[1] = tokens[path[0]]
         assert final_tokens_out[1] = tokens[5]
+
+        assert amounts[1] = base
 
         return(
             router_addresses_len=2,
@@ -174,12 +173,10 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
             tokens_out_len=2,
             tokens_out=final_tokens_out,
             amounts_len=2,
-            amounts=amounts,
-            amount_out=amounts[2]
+            amounts=amounts
         )
     end
     assert path[2] = new_predecessors[path[1]]
-    
     if path[2] == 0:
         assert tokens_in[0] = 0
         assert tokens_out[0] = path[1]
@@ -188,7 +185,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert tokens_in[2] = path[0]
         assert tokens_out[2] = 5
 
-        set_routers_from_edge(3,src,edge,tokens_in,tokens_out,_amount_in,amounts+2,router_addresses,router_types)
+        set_routers_from_edge(3,src,edge,tokens_in,tokens_out,router_addresses,router_types)
 
         assert final_tokens_in[0] = tokens[0]
         assert final_tokens_out[0] = tokens[path[1]]
@@ -196,6 +193,9 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert final_tokens_out[1] = tokens[path[0]]
         assert final_tokens_in[2] = tokens[path[0]]
         assert final_tokens_out[2] = tokens[5]
+
+        assert amounts[1] = base
+        assert amounts[2] = base
 
         return(
             router_addresses_len=3,
@@ -207,8 +207,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
             tokens_out_len=3,
             tokens_out=final_tokens_out,
             amounts_len=3,
-            amounts=amounts,
-            amount_out=amounts[3]
+            amounts=amounts
         )
     end
     assert path[3] = new_predecessors[path[2]]
@@ -222,7 +221,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert tokens_in[3] = path[0]
         assert tokens_out[3] = 5
 
-        set_routers_from_edge(4,src,edge,tokens_in,tokens_out,_amount_in,amounts+2,router_addresses,router_types)
+        set_routers_from_edge(4,src,edge,tokens_in,tokens_out,router_addresses,router_types)
 
         assert final_tokens_in[0] = tokens[0]
         assert final_tokens_out[0] = tokens[path[2]]
@@ -232,6 +231,10 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert final_tokens_out[2] = tokens[path[0]]
         assert final_tokens_in[3] = tokens[path[0]]
         assert final_tokens_out[3] = tokens[5]
+
+        assert amounts[1] = base
+        assert amounts[2] = base
+        assert amounts[3] = base
 
         return(
             router_addresses_len=4,
@@ -243,13 +246,12 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
             tokens_out_len=4,
             tokens_out=final_tokens_out,
             amounts_len=4,
-            amounts=amounts,
-            amount_out=amounts[4]
+            amounts=amounts
         )
     end
     #Should never happen
     assert 0 = 1
-    return(0,router_addresses,0,router_types,0,tokens_in,0,tokens_out,0,amounts,Uint256(0,0))
+    return(0,router_addresses,0,router_types,0,tokens_in,0,tokens_out,0,amounts)
 end
 
 #
@@ -262,6 +264,7 @@ end
 #We use _src_couter to track the number of sources we have checked (We check vertices 0-4)
 func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _amount_in : Uint256, 
+    _amount_in_usd : Uint256, 
     _vertices:felt,
     _tokens:felt*,
     _src_len:felt,
@@ -306,7 +309,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             tempvar range_check_ptr = range_check_ptr
             assert we_are_not_advancing = 1
         else:  
-            let(local weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter],router_address,router_type)  
+            let(local weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in_usd,amount_out,_tokens[_src_counter],_tokens[_dst_counter])  
             if _src_counter == 0 :
                 assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight + extra_base)
             else:
@@ -328,6 +331,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             assert _src[0] = Source(_total_counter, _edge_len)
 	        set_edges(
                 _amount_in,
+                _amount_in_usd,
                 _vertices,
                 _tokens,
                 _src_len,
@@ -345,12 +349,13 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             assert _src[0] = Source(_total_counter, _edge_len+1)
             set_edges(
                 _amount_in,
+                _amount_in_usd,
                 _vertices,
                 _tokens,
                 _src_len,
                 _src+2, #+2 because our struct consists of 2 felts
                 0, # _edge_len
-                _edge+5,
+                _edge+4,
                 _dst_counter=1,
                 _src_counter=_src_counter+1,
                 _total_counter=_total_counter+_edge_len+1
@@ -365,6 +370,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             #We are not advancing the edge erray
             set_edges(
                 _amount_in,
+                _amount_in_usd,
                 _vertices,
                 _tokens,
                 _src_len,
@@ -382,12 +388,13 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             #We are advancing the edge array
             set_edges(
                 _amount_in,
+                _amount_in_usd,
                 _vertices,
                 _tokens,
                 _src_len,
                 _src,
                 _edge_len+1,
-                _edge+5,
+                _edge+4,
                 _dst_counter=_dst_counter+1,
                 _src_counter=_src_counter,
                 _total_counter=_total_counter
@@ -461,7 +468,7 @@ func shortest_path_faster{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pe
         _is_in_queue_len, 
         new_is_in_queue,
         _vertices,
-        _edge + (offset*5), 
+        _edge + (offset*4), 
         _predecessors_len, 
         _predecessors, 
         current_source[0].stop,
@@ -546,7 +553,7 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
                 _is_in_queue_len, 
                 new_is_in_queue,
                 _vertices, 
-                _edge+5,
+                _edge+4,
                 _predecessors_len,
                 new_predecessors,
                 _dst_stop-1, 
@@ -572,7 +579,7 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
                 _is_in_queue_len, 
                 _is_in_queue, 
                 _vertices,
-                _edge+5, 
+                _edge+4, 
                 _predecessors_len,
                 new_predecessors,
                 _dst_stop-1, 
@@ -599,7 +606,7 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
             _is_in_queue_len, 
             _is_in_queue, 
             _vertices,
-            _edge+5,
+            _edge+4,
             _predecessors_len,
             _predecessors,
             _dst_stop-1,
@@ -650,18 +657,17 @@ func set_routers_from_edge{
     _edge : Edge*,
     _tokens_in : felt*,
     _tokens_out : felt*,
-    _amount_in: Uint256*,
-    _amounts: Uint256*,
     _router_addresses : felt*,
     _router_types : felt*):
+    alloc_locals
 
     if _src_len == 0:
         return()
     end
 
-    let (amount_out: uint256) = get_router_and_address(_src,_edge,_tokens_in,_tokens_out,_amount_in,_amounts,_router_addresses,_router_types,0)
+    get_router_and_address(_src,_edge,_tokens_in,_tokens_out,_router_addresses,_router_types,0)
 
-    set_routers_from_edge(_src_len-1,_src,_edge,_tokens_in+1,_tokens_out+1,amount_out,_amounts+2,_router_addresses+1,_router_types+1)
+    set_routers_from_edge(_src_len-1,_src,_edge,_tokens_in+1,_tokens_out+1,_router_addresses+1,_router_types+1)
     
     return()
 end 
@@ -674,37 +680,25 @@ func get_router_and_address{
     _edge : Edge*,
     _tokens_in : felt*,
     _tokens_out : felt*,
-    _amount_in: Uint256*,
-    _amounts : Uint256*,
     _router_addresses : felt*,
     _router_types : felt*,
     _counter: felt,
     ):
     alloc_locals
 
+    local edge_position = _src[_tokens_in[0]].start + _counter  
+
+    #local destination1 = _edge[edge_position].dst
+    #local destination2 = _edge[edge_position+1].dst
+    #local destination3 = _edge[edge_position+2].dst
+
     
-    #local stoken_out = _token_out[0]
-    #local dst0 : Router  = _edge[3].router
-    #local dst00 = dst0.address
-    #local dst1 : Router  = _edge[4].router
-    #local dst11 = dst1.address
-    #local dst2 : Router  = _edge[5].router
-    #local dst22 = dst2.address
-    #if 1 == 1 :
-    #    with_attr error_message("dst0: {dst00},dst1: {dst11},dst2: {dst22}"):
-    #        assert 1 = 2
-    #    end
-    #end
-    
-    local edge_position = _src[_tokens_in[0]].start + _counter
+
     if _edge[edge_position].dst == _tokens_out[0]:
         tempvar router : Router = _edge[edge_position].router
         assert _router_addresses[0] = router.address
-        assert _router_types[0] = router.type
+        assert _router_types[0] = router.type  
         
-        #GET AMOUNT FROM ROUTER HERE
-        _amount_in
-
         return()
     else:
         get_router_and_address(
@@ -712,7 +706,6 @@ func get_router_and_address{
             _edge,
             _tokens_in,
             _tokens_out,
-            _amounts,
             _router_addresses,
             _router_types,
             _counter + 1

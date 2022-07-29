@@ -9,7 +9,10 @@ hub = [
     "./src/hub.cairo",
 ]
 router_aggregator = [
-    "./src/router_aggregator.cairo",
+    "./src/router_aggregators/router_aggregatorV2.cairo",
+]
+router_aggregator_testnet = [
+    "./src/router_aggregators/router_aggregatorV3.cairo",
 ]
 incentivized_router_aggregator = [
     "./src/incentivized_router_aggregator.cairo",

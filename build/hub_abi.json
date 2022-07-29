@@ -44,19 +44,12 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "get_contract_caller",
-        "outputs": [
+        "inputs": [
             {
-                "name": "caller",
+                "name": "_owner",
                 "type": "felt"
             }
         ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "constructor",
         "outputs": [],
         "type": "constructor"
@@ -89,10 +82,6 @@
             {
                 "name": "received_amount",
                 "type": "Uint256"
-            },
-            {
-                "name": "router_address",
-                "type": "felt"
             }
         ],
         "type": "function"

@@ -2,14 +2,15 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uint256_add, uint256_eq, uint256_sub, uint256_mul, uint256_unsigned_div_rem)
-from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.math import assert_not_equal
 from starkware.starknet.common.syscalls import get_caller_address
+from starkware.cairo.common.alloc import alloc
 from src.lib.hub import Uni
 
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
+from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils
 
 const base = 1000000000000000000 
@@ -20,8 +21,13 @@ struct Router:
     member type: felt
 end
 
+struct Feed:
+    member key: felt
+    member address : felt
+end
+
 @storage_var
-func price_feed(token: felt) -> (price: Uint256):
+func price_feed(token: felt) -> (feed: Feed):
 end
 
 #
@@ -32,9 +38,8 @@ end
 func constructor{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}():
-    let (owner) = get_caller_address()
-    Ownable.initializer(owner)
+    range_check_ptr}(_owner: felt):
+    Ownable.initializer(_owner)
     return()
 end
 
@@ -63,11 +68,7 @@ end
 func get_single_best_pool{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
 
-    #Transform USD value to what the token amount would be
-    let (price_in: Uint256) = get_global_price(_token_in)
-    let (amount_in: Uint256) = Utils.fdiv(_amount_in,price_in,Uint256(base,0))
-    
-    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
+    let (res_amount:Uint256,res_router_address,res_type) = find_best_router(_amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
 
     return(res_amount,res_router_address,res_type)
 end
@@ -80,51 +81,17 @@ func get_global_price{
     range_check_ptr}(_token: felt)->(price: Uint256):
     alloc_locals
     #Let's build this propperly once we have real price oracles to test with
-    let (local price: Uint256) = price_feed.read(_token)
-    let (is_price_invalid) = uint256_eq(price,Uint256(0,0))
+    let (feed: Feed) = price_feed.read(_token)
+    let (price,decimals,_,_) = IEmpiric_oracle.get_value(feed.address,feed.key,0)
+
+    #ToDo decimal transform
+
     with_attr error_message(
         "price_feed result invalid, token: {_token}"):
-        assert_not_equal(is_price_invalid,TRUE)
+        assert price = FALSE
     end
-    return(price)
-end
-
-#Calculates weights from liquidity + fees alone (no global prices required)
-#Appears to not be feasible
-@view
-func get_liquidity_weight{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in : Uint256, _token1: felt, _token2: felt, _router_address: felt, _router_type: felt)->(weight:felt):
-    alloc_locals
-
-    local weight : felt
-
-    #If Uni type Dex
-    if _router_type == Uni :
-        let (reserve1: Uint256, reserve2: Uint256) = IUni_router.get_reserves(_router_address,_token1,_token2)
-        let (exchange_rate) = Utils.fdiv(reserve1,reserve2,Uint256(base,0))
-        
-        let (optimal_amount_out: Uint256) = Utils.fmul(_amount_in,exchange_rate,Uint256(base,0))
-
-        let (amount_out: Uint256) = IUni_router.get_amount_out(_router_address,_amount_in,_token1,_token2)
-
-        let (slippage: Uint256) = Utils.fdiv(amount_out,optimal_amount_out,Uint256(base,0))
-
-        let (slippage_weight: Uint256) = uint256_sub(Uint256(base,0),slippage)
-
-        assert weight = slippage_weight.low + Uni_fee
-
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-    else:
-        #There will be more types
-        assert weight = 9999999999999999999999999
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-    end
-
-    return(weight)
+    
+    return(Uint256(price,0))
 end
 
 @view
@@ -132,37 +99,25 @@ func get_weight{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
-    _amount_in : Uint256, 
+    _amount_in_usd : Uint256, 
+    _amount_out : Uint256, 
     _token1: felt, 
-    _token2: felt, 
-    _router_address: felt, 
-    _router_type: felt
+    _token2: felt
     )->(weight:felt):
-    alloc_locals
 
-    #Transform _amount_in (which is in USD value) to what the token amount would be
-    let (price_in: Uint256) = get_global_price(_token1)
-    let (amount_in: Uint256) = Utils.fdiv(_amount_in,price_in,Uint256(base,0))
+    #Transform Token Amount to USD Amount
+    let (price_out: Uint256) = get_global_price(_token2)
+    let (value_out: Uint256) = Utils.fmul(_amount_out,price_out,Uint256(base,0))
 
-    #If Uni type Dex
-    if _router_type == Uni :
+    #Determine Weight
+    let (trade_cost) = uint256_sub(_amount_in_usd,value_out)
+    let(route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(base,0))
 
-        let (local amount_out: Uint256) = IUni_router.get_amount_out(_router_address,amount_in,_token1,_token2)
-        let (price_out: Uint256) = get_global_price(_token2)
-        let (value_out: Uint256) = Utils.fmul(amount_out,price_out,Uint256(base,0))
-
-        let (trade_cost) = uint256_sub(_amount_in,value_out)
-        let(route_cost) = Utils.fdiv(trade_cost,_amount_in,Uint256(base,0))
-
-        return(route_cost.low)
-    else:
-        #There will be more types
-        return(9999999999999999999999999)
-    end
+    return(route_cost.low)
 end    
 
 #
-#Admin (DAO)
+#Admin
 #
 
 @external
@@ -193,9 +148,9 @@ end
 func set_global_price{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_token: felt,_price: Uint256):
+    range_check_ptr}(_token: felt,_key: felt, _oracle_address: felt):
     Ownable.assert_only_owner()
-    price_feed.write(_token,_price)
+    price_feed.write(_token,Feed(_key,_oracle_address))
     #EMIT ADD PRICE FEED EVENT
     return()
 end
@@ -225,10 +180,13 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     #Check type and act accordingly
     #Will likely requrie an individual check for each type of AMM, as the interfaces might be different as well as the decimal number of the fees
     if router.type == Uni :
-        let (amount_out: Uint256) = IUni_router.get_amount_out(router.address,_amount_in,_token_in,_token_out)
-	    let (is_new_amount_better) = uint256_le(_best_amount,amount_out)
+        let (path : felt*) = alloc()
+        assert path[0] = _token_in
+        assert path[1] = _token_out
+        let (_,amounts_out: Uint256*) = IUni_router.get_amounts_out(router.address,_amount_in,2,path)
+	    let (is_new_amount_better) = uint256_le(_best_amount,amounts_out[0])
         if is_new_amount_better == 1:
-            assert best_amount = amount_out
+            assert best_amount = amounts_out[0]
             assert best_type = router.type
             assert best_router = router.address
         else:

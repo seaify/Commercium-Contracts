@@ -50,8 +50,7 @@ namespace ISolver:
         tokens_out_len : felt, 
         tokens_out : felt*,
         amounts_len : felt, 
-        amounts : Uint256*, 
-        return_amount: Uint256
+        amounts : felt*
     ):
     end
 

@@ -8416,9 +8416,9 @@
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IUni_router.IUni_router.EXCHANGE_EXACT_TOKEN_FOR_TOKEN_SELECTOR": {
+            "src.interfaces.IUni_router.IUni_router.GET_AMOUNTS_OUT_SELECTOR": {
                 "type": "const",
-                "value": 110903923766121065911514201545813879915395773001468594576310121605286834851
+                "value": 1544114163115011815335571033296884160831958766777219908207586860250867652764
             },
             "src.interfaces.IUni_router.IUni_router.GET_AMOUNT_OUT_SELECTOR": {
                 "type": "const",
@@ -8449,6 +8449,10 @@
             "src.interfaces.IUni_router.IUni_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
+            },
+            "src.interfaces.IUni_router.IUni_router.SWAP_EXACT_TOKENS_FOR_TOKENS_SELECTOR": {
+                "type": "const",
+                "value": 1426565999849372202067242202088433764048928624912224385906297528280239424972
             },
             "src.interfaces.IUni_router.IUni_router.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",

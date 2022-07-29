@@ -32,7 +32,12 @@
         "type": "event"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "felt"
+            }
+        ],
         "name": "constructor",
         "outputs": [],
         "type": "constructor"
@@ -107,7 +112,11 @@
     {
         "inputs": [
             {
-                "name": "_amount_in",
+                "name": "_amount_in_usd",
+                "type": "Uint256"
+            },
+            {
+                "name": "_amount_out",
                 "type": "Uint256"
             },
             {
@@ -116,47 +125,6 @@
             },
             {
                 "name": "_token2",
-                "type": "felt"
-            },
-            {
-                "name": "_router_address",
-                "type": "felt"
-            },
-            {
-                "name": "_router_type",
-                "type": "felt"
-            }
-        ],
-        "name": "get_liquidity_weight",
-        "outputs": [
-            {
-                "name": "weight",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_amount_in",
-                "type": "Uint256"
-            },
-            {
-                "name": "_token1",
-                "type": "felt"
-            },
-            {
-                "name": "_token2",
-                "type": "felt"
-            },
-            {
-                "name": "_router_address",
-                "type": "felt"
-            },
-            {
-                "name": "_router_type",
                 "type": "felt"
             }
         ],

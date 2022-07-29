@@ -15,7 +15,12 @@
         "type": "event"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "felt"
+            }
+        ],
         "name": "constructor",
         "outputs": [],
         "type": "constructor"

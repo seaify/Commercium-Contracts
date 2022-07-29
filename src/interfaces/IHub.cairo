@@ -11,7 +11,7 @@ namespace IHub:
         _token_out : felt, 
         _amount_in : Uint256, 
         _min_amount_out : Uint256, 
-        _solver_id : felt)->(received_amount: Uint256, router_address: felt):
+        _solver_id : felt)->(received_amount: Uint256):
     end
 
     func set_solver_registry(_new_registry: felt):

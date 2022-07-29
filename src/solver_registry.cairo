@@ -25,11 +25,10 @@ end
 func constructor{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}():
+    range_check_ptr}(_owner: felt):
     #All unofficial solvers are saved at IDs 100+
     solvers_len.write(100)
-    let (owner) = get_caller_address()
-    Ownable.initializer(owner)
+    Ownable.initializer(_owner)
     return()
 end
 

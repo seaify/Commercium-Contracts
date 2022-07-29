@@ -27,13 +27,6 @@ const LARGE_VALUE = 850705917302346000000000000000000000000000000
 const base = 1000000000000000000 # 1e18
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
-#const shitcoin1 = 12344
-#const USDT = 12345
-#const USDC = 12346
-#const DAI = 12347
-#const ETH = 12348
-#const shitcoin2 = 12349
-
 @external
 func __setup__{
     syscall_ptr : felt*, 
@@ -73,7 +66,7 @@ func __setup__{
     local hub_address : felt
     %{
         declared = declare("./src/hub.cairo")
-        prepared = prepare(declared, [])
+        prepared = prepare(declared, [ids.public_key_0])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
         ids.hub_address = prepared.contract_address
@@ -85,7 +78,7 @@ func __setup__{
     local solver_registry_address : felt
     %{
         declared = declare("./src/solver_registry.cairo")
-        prepared = prepare(declared, [])
+        prepared = prepare(declared, [ids.public_key_0])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
         ids.solver_registry_address = prepared.contract_address
@@ -118,8 +111,8 @@ func __setup__{
     #Deploy Router Aggregator
     local router_aggregator_address : felt
     %{
-        declared = declare("./src/router_aggregator.cairo")
-        prepared = prepare(declared, [])
+        declared = declare("./src/router_aggregators/router_aggregatorV2.cairo")
+        prepared = prepare(declared, [ids.public_key_0])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
         ids.router_aggregator_address = prepared.contract_address
@@ -189,7 +182,7 @@ func __setup__{
     return ()
 end
 
-
+@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -216,10 +209,6 @@ func test_single_swap{
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
-    #let (amount_out,router_address,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,amount_to_trade,ETH,DAI)
-    #%{ print("router_address: ",ids.router_address) %}
-    #%{ print("amount_out: ",ids.amount_out.low) %}
-
     #Allow hub to take tokens
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
     IERC20.approve(ETH,hub_address,amount_to_trade)
@@ -227,7 +216,7 @@ func test_single_swap{
 
     #Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256, router_address: felt) = IHub.swap_with_solver(
+    let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
         _token_out=DAI, 
@@ -238,7 +227,6 @@ func test_single_swap{
     %{ stop_prank_callable() %}
 
     %{ print("received_amount: ",ids.received_amount.low) %}
-    %{ print("router_address: ",ids.router_address) %}
 
     return()
 end
@@ -254,18 +242,6 @@ func test_spf{
 
     local hub_address
     %{ ids.hub_address = context.hub_address %}
-
-    local router_1_address
-    local router_2_address
-    local router_3_address
-    %{ ids.router_1_address = context.router_1_address %}
-    %{ ids.router_2_address = context.router_2_address %}
-    %{ ids.router_3_address = context.router_3_address %}
-    %{ print("router_1_address: ",ids.router_1_address) %}
-    %{ print("router_2_address: ",ids.router_2_address) %}
-    %{ print("router_3_address: ",ids.router_3_address) %}
-
-
 
     local ETH
     %{ ids.ETH = context.ETH %}
@@ -303,7 +279,7 @@ func test_spf{
 
     #Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256, router_address: felt) = IHub.swap_with_solver(
+    let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=shitcoin1, 
         _token_out=shitcoin2, 
@@ -314,8 +290,6 @@ func test_spf{
     %{ stop_prank_callable() %}
 
     %{ print("received_amount: ",ids.received_amount.low) %}
-    %{ print("router_address: ",ids.router_address) %}
-    assert 99 = 22
 
     return()
 end

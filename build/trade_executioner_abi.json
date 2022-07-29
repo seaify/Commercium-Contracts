@@ -56,11 +56,15 @@
             },
             {
                 "name": "_amounts",
-                "type": "Uint256*"
+                "type": "felt*"
             },
             {
                 "name": "_receiver_address",
                 "type": "felt"
+            },
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
             }
         ],
         "name": "multi_swap",
