@@ -123,6 +123,7 @@
         ],
         "name": "swap_with_path",
         "outputs": [],
+        "stateMutability": "view",
         "type": "function"
     },
     {

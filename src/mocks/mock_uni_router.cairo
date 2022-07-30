@@ -3,6 +3,7 @@
 from starkware.cairo.common.uint256 import (Uint256, uint256_add,uint256_unsigned_div_rem,uint256_mul)
 from starkware.starknet.common.syscalls import (get_caller_address, get_contract_address)
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.IERC20 import IERC20
 
@@ -21,15 +22,17 @@ func reserves(pair: Pair)->(reserves: Reserves):
 end
 
 @external
-func exchange_exact_token_for_token{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256,_token_in: felt,_token_out: felt,min_amount_out: Uint256):
+func swap_exact_tokens_for_tokens{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    _amount_in: Uint256,_min_amount_out: Uint256, _path_len: felt, _path: felt*,_receiver_address: felt,_deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
     alloc_locals
-    let (amount_out: Uint256) = get_amount_out(_amount_in,_token_in,_token_out)
+    let (amount_out: Uint256) = get_amount_out(_amount_in,_path[0],_path[1])
     let (caller_address) = get_caller_address()
     let (this_address) = get_contract_address()
-    IERC20.transferFrom(_token_in,caller_address,this_address,_amount_in)
-    IERC20.transfer(_token_out,caller_address,amount_out)
-    return()
+    IERC20.transferFrom(_path[0],caller_address,this_address,_amount_in)
+    IERC20.transfer(_path[1],caller_address,amount_out)
+    let (amounts : Uint256*) = alloc()
+    assert amounts[0] = amount_out
+    return(1, amounts)
 end
 
 @view

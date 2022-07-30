@@ -32,6 +32,9 @@ single_swap_solver = [
 mock_uni_router = [
     "./src/mocks/mock_uni_router.cairo",
 ]
+mock_price_oracle = [
+    "./src/mocks/mock_price_oracle.cairo",
+]
 
 [profile.devnet.protostar.deploy]
 gateway-url="http://127.0.0.1:5050/"

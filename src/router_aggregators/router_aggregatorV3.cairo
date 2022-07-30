@@ -73,7 +73,7 @@ func get_single_best_pool{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     return(res_amount,res_router_address,res_type)
 end
 
-#Returns price in USD
+#Returns token price in USD
 @view
 func get_global_price{
     syscall_ptr : felt*, 
@@ -114,7 +114,7 @@ func get_weight{
     let(route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(base,0))
 
     return(route_cost.low)
-end    
+end
 
 #
 #Admin
@@ -158,6 +158,7 @@ end
 #
 #Internal
 #
+
 @external
 func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt, _best_amount: Uint256, _router_address: felt, _router_type: felt, _counter: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
@@ -198,7 +199,7 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
             tempvar syscall_ptr = syscall_ptr
             tempvar pedersen_ptr = pedersen_ptr
     else:
-        with_attr error_message("router type invalid"):
+        with_attr error_message("router type invalid: {ids.router.type}"):
             assert 1 = 0
         end
         tempvar range_check_ptr = range_check_ptr 	
@@ -212,14 +213,4 @@ func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
 
     let (res_amount,res_router_address,res_type) = find_best_router(_amount_in,_token_in,_token_out,best_amount,best_router,best_type,_counter+1)
     return(res_amount,res_router_address,res_type)
-end
-
-func calc_uni_amount_out{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr,}(
-    _amount_in: Uint256,_reserve1:Uint256,_reserve2:Uint256,_fee)->(amount_out:Uint256):
-    let (feed_amount:Uint256,_) = uint256_mul(_amount_in,Uint256(_fee,0))
-    let (numerator,_) = uint256_mul(feed_amount,_reserve2)
-    let (feed_reserve,_) = uint256_mul(_reserve1,Uint256(1000,0))
-    let (denominator,_) = uint256_add(feed_reserve,feed_amount)
-    let (amount_out,_) = uint256_unsigned_div_rem(numerator,denominator)
-    return(amount_out)
 end

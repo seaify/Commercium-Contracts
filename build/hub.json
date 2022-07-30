@@ -124,6 +124,7 @@
             ],
             "name": "swap_with_path",
             "outputs": [],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -3563,7 +3564,7 @@
             },
             "__main__.swap_with_path": {
                 "decorators": [
-                    "external"
+                    "view"
                 ],
                 "pc": 1126,
                 "type": "function"
@@ -8202,7 +8203,7 @@
             },
             "__wrappers__.swap_with_path": {
                 "decorators": [
-                    "external"
+                    "view"
                 ],
                 "pc": 1252,
                 "type": "function"

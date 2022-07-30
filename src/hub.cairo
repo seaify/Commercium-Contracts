@@ -58,7 +58,8 @@ end
 #Externals
 #
 
-#TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT
+#TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT???
+#swap_exact_tokens_for_tokens(amountIn: Uint256, amountOutMin: Uint256, path_len: felt, path: felt*, to: felt, deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
 
 @external
 func swap_with_solver{
@@ -70,7 +71,6 @@ func swap_with_solver{
     _amount_in : Uint256, 
     _min_amount_out : Uint256, 
     _solver_id : felt)->(received_amount: Uint256):
-
     alloc_locals
 
     ReentrancyGuard._start()
@@ -132,6 +132,7 @@ func swap_with_solver{
     assert calldata[router_addresses_len*5+6] = _amount_in.low
     assert calldata[router_addresses_len*5+7] = _amount_in.high
 
+    #Execute Trades
     library_call(
         trade_executor_hash,
         multi_call_selector,
@@ -140,7 +141,7 @@ func swap_with_solver{
     )
     
     #Check received Amount
-    #We do not naively transfer out the entire balance of that token, as there hub might be holding more
+    #We do not naively transfer out the entire balance of that token, as the hub might be holding more
     #tokens that it received as rewards or that where mistakenly sent here
     let (new_amount: Uint256) = IERC20.balanceOf(_token_out,this_address) 
     let (received_amount: Uint256) = SafeUint256.sub_le(new_amount,original_balance)
@@ -160,7 +161,7 @@ func swap_with_solver{
     return (received_amount)
 end
 
-@external
+@view
 func swap_with_path{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 

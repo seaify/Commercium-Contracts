@@ -13,4 +13,13 @@ namespace IEmpiric_oracle:
     ):
     end
 
+    #Just for tests
+    func set_token_price(
+            _key: felt, 
+            _aggregation_mode: felt,
+            _price: felt, 
+            _decimals: felt
+        ):
+    end    
+
 end

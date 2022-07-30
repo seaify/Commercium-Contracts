@@ -23,16 +23,24 @@
                 "type": "Uint256"
             },
             {
-                "name": "_token_in",
-                "type": "felt"
-            },
-            {
-                "name": "_token_out",
-                "type": "felt"
-            },
-            {
-                "name": "min_amount_out",
+                "name": "_min_amount_out",
                 "type": "Uint256"
+            },
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "felt*"
+            },
+            {
+                "name": "_receiver_address",
+                "type": "felt"
+            },
+            {
+                "name": "_deadline",
+                "type": "felt"
             }
         ],
         "name": "exchange_exact_token_for_token",

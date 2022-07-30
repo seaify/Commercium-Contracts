@@ -15,6 +15,7 @@ from src.lib.utils import Utils
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ISolver_registry import ISolver_registry
+from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.ISpf_solver import ISpf_solver
@@ -111,7 +112,7 @@ func __setup__{
     #Deploy Router Aggregator
     local router_aggregator_address : felt
     %{
-        declared = declare("./src/router_aggregators/router_aggregatorV2.cairo")
+        declared = declare("./src/router_aggregators/router_aggregatorV3.cairo")
         prepared = prepare(declared, [ids.public_key_0])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
@@ -132,19 +133,42 @@ func __setup__{
     %{ context.router_2_address = ids.router_2_address %}
     %{ context.router_3_address = ids.router_3_address %}
 
+    #Deploy Price Oracle
+    local mock_oracle_address : felt
+    %{ 
+        context.mock_oracle_address = deploy_contract("./src/mocks/mock_price_oracle.cairo", []).contract_address 
+        ids.mock_oracle_address = context.mock_oracle_address
+    %}
+
+    # Set Global Prices for Mock ERC20s in Mock_Price_Feed
+     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.mock_oracle_address) %}
+    #ETH/USD, key: 28556963469423460
+    IEmpiric_oracle.set_token_price(mock_oracle_address,28556963469423460, 0, 1000*base, 18)
+    #USDC/USD, key: 8463218501920060260
+    IEmpiric_oracle.set_token_price(mock_oracle_address,8463218501920060260, 0, 1*base, 18)
+    #USDT/USD, key: 8463218574934504292
+    IEmpiric_oracle.set_token_price(mock_oracle_address,8463218574934504292, 0, 1*base, 18)
+    #DAI/USD, key: 28254602066752356
+    IEmpiric_oracle.set_token_price(mock_oracle_address,28254602066752356, 0, 1*base, 18)
+    #Shitcoin1/USD, key: 99234898239
+    IEmpiric_oracle.set_token_price(mock_oracle_address,99234898239, 0, 10*base, 18)
+    #Shitcoin2/USD, key: 23674728373
+    IEmpiric_oracle.set_token_price(mock_oracle_address,23674728373, 0, 10*base, 18)
+    %{ stop_prank_callable() %}
+
     # Add newly created routers to router aggregator
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_address) %}
     IRouter_aggregator.add_router(router_aggregator_address,router_1_address,Uni)
     IRouter_aggregator.add_router(router_aggregator_address,router_2_address,Uni)
     IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)  
-    
-    # Set Global Prices for Mock ERC20s in router aggregator
-    IRouter_aggregator.set_global_price(router_aggregator_address,ETH,Uint256(1000*base,0))
-    IRouter_aggregator.set_global_price(router_aggregator_address,USDC,Uint256(1*base,0))
-    IRouter_aggregator.set_global_price(router_aggregator_address,USDT,Uint256(1*base,0))
-    IRouter_aggregator.set_global_price(router_aggregator_address,DAI,Uint256(1*base,0))
-    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin1,Uint256(10*base,0))
-    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin2,Uint256(10*base,0))
+
+    #Set Price feeds at the Router
+    IRouter_aggregator.set_global_price(router_aggregator_address,ETH,28556963469423460,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_address,USDC,8463218501920060260,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_address,USDT,8463218574934504292,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_address,DAI,28254602066752356,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin1,99234898239,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin2,23674728373,mock_oracle_address)
     %{ stop_prank_callable() %}
 
     #let (return_amount: Uint256) = IUni_router.get_amount_out(router_1_address,Uint256(100,0), shitcoin1, ETH)
@@ -180,7 +204,7 @@ func __setup__{
     %{stop_prank_callable()%}
 
     return ()
-end
+end      
 
 @external
 func test_single_swap{

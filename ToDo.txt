@@ -1,0 +1,5 @@
+1.Mock Emperic Price Feed
+2.Adjust Testing router and router_aggregator to reflect Uni/JediSwap functionality
+3.Change amounts to be token amounts and not trading percentage
+4.
+5.Take token decimals into consideration
