@@ -90,7 +90,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     let (tokens : felt*) = alloc()
     let (Vertices) = construct_token_arr(_token_in,_token_out,tokens,MAX_VERTICES,0,0)
 
-    #Edge, this is not a Struct because we cannot pass structs that have pointers in them.
+    #Edges
     let (src : Source*) = alloc()
     let (edge : Edge*) = alloc()
 

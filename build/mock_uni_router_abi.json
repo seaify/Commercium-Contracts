@@ -43,8 +43,17 @@
                 "type": "felt"
             }
         ],
-        "name": "exchange_exact_token_for_token",
-        "outputs": [],
+        "name": "swap_exact_tokens_for_tokens",
+        "outputs": [
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
         "type": "function"
     },
     {

@@ -88,7 +88,7 @@ func get_global_price{
 
     with_attr error_message(
         "price_feed result invalid, token: {_token}"):
-        assert price = FALSE
+        assert_not_equal(price,FALSE)
     end
     
     return(Uint256(price,0))
