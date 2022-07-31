@@ -185,7 +185,7 @@ func __setup__{
     %}
     local solver2_address : felt
     %{ 
-        context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", []).contract_address 
+        context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0]).contract_address 
         ids.solver2_address = context.solver2_address
     %}
     

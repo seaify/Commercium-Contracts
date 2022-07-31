@@ -61,9 +61,17 @@ struct Edge:
     member weight : felt
 end
 
-struct Branch:
-    member src : felt
-    member edges : Edge*
+#
+#Constructor
+#
+
+@constructor
+func constructor{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(_owner: felt):
+    Ownable.initializer(_owner)
+    return()
 end
 
 #
@@ -95,8 +103,9 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     let (edge : Edge*) = alloc()
 
     #transform input amount to USD amount
+    #As of now all Empiric prices are scaled to 18 decimal places
     let (router_aggregator_address) = router_aggregator.read()
-    let (price: Uint256) = IRouter_aggregator.get_global_price(router_aggregator_address,tokens[0])
+    let (price: Uint256,_) = IRouter_aggregator.get_global_price(router_aggregator_address,tokens[0])
     let (amount_in_usd: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
 
     #We use _dst_len to count the number of legit source to destination edges
@@ -766,7 +775,7 @@ func set_router_aggregator{
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(
     _new_router_aggregator_address: felt):
-    #Ownable.assert_only_owner()
+    Ownable.assert_only_owner()
     router_aggregator.write(_new_router_aggregator_address)
     return()
 end
@@ -776,7 +785,7 @@ func set_high_liq_tokens{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}(_index: felt,_high_liq_tokens: felt):
-    #Ownable.assert_only_owner()
+    Ownable.assert_only_owner()
     high_liq_tokens.write(_index,_high_liq_tokens)
     return()
 end

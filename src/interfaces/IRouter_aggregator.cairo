@@ -24,7 +24,7 @@ namespace IRouter_aggregator:
         ) -> (weight: felt):  
     end
 
-    func get_global_price(token: felt)->(price: Uint256):
+    func get_global_price(token: felt)->(price: Uint256, decimals: felt):
     end
 
     func get_liquidity_weight(

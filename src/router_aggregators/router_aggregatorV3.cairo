@@ -3,6 +3,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uint256_add, uint256_eq, uint256_sub, uint256_mul, uint256_unsigned_div_rem)
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.pow import pow
 from starkware.cairo.common.math import assert_not_equal
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.alloc import alloc
@@ -78,7 +79,7 @@ end
 func get_global_price{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_token: felt)->(price: Uint256):
+    range_check_ptr}(_token: felt)->(price: Uint256, decimals: felt):
     alloc_locals
     #Let's build this propperly once we have real price oracles to test with
     let (feed: Feed) = price_feed.read(_token)
@@ -91,7 +92,7 @@ func get_global_price{
         assert_not_equal(price,FALSE)
     end
     
-    return(Uint256(price,0))
+    return(Uint256(price,0),decimals)
 end
 
 @view
@@ -104,14 +105,16 @@ func get_weight{
     _token1: felt, 
     _token2: felt
     )->(weight:felt):
+    alloc_locals
 
     #Transform Token Amount to USD Amount
-    let (price_out: Uint256) = get_global_price(_token2)
+    #As of now all Empiric prices are scaled to 18 decimal places
+    let (price_out: Uint256,_) = get_global_price(_token2)
     let (value_out: Uint256) = Utils.fmul(_amount_out,price_out,Uint256(base,0))
 
     #Determine Weight
     let (trade_cost) = uint256_sub(_amount_in_usd,value_out)
-    let(route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(base,0))
+    let (route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(base,0))
 
     return(route_cost.low)
 end

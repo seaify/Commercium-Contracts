@@ -4,6 +4,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_contract_address
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.pow import pow
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
@@ -39,9 +40,11 @@ func multi_swap{
         return()
     end
     
-    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_tokens_out[0],_receiver_address)  
+    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_tokens_out[0],_receiver_address) 
+    let (decimals) = IERC20.decimals(_tokens_out[0])
+    let (token_base) = pow(10,decimals)
 
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(base,0))
+    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(token_base,0))
 
     _swap(_router_addresses[0],_router_types[0],trade_amount,_tokens_in[0],_tokens_out[0],_receiver_address)
 

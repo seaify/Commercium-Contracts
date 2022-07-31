@@ -59,8 +59,6 @@ end
 #
 
 #TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT???
-#swap_exact_tokens_for_tokens(amountIn: Uint256, amountOutMin: Uint256, path_len: felt, path: felt*, to: felt, deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
-
 @external
 func swap_with_solver{
     syscall_ptr : felt*, 
