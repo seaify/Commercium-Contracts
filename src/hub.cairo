@@ -15,7 +15,7 @@ from src.interfaces.IERC20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Hub, multi_call_selector
+from src.lib.hub import Hub, multi_call_selector, simulate_multi_swap_selector
 from src.lib.arrayV2 import Array
 
 #
@@ -41,6 +41,7 @@ func solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     return(solver_registry)
 end
 
+
 @view
 func get_solver_result{
     syscall_ptr : felt*, 
@@ -65,7 +66,34 @@ func get_solver_result{
         amounts : felt*
     ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
 
-    return(Uint256(0,0))
+    let (trade_executor_hash) = trade_executor.read()
+    let (calldata : felt*) = alloc()
+
+    #Packing trading info into calldata
+    assert calldata[0] = router_addresses_len
+    memcpy(calldata+1, router_addresses, router_addresses_len)
+    assert calldata[router_addresses_len+1] = router_types_len
+
+    memcpy(calldata+router_addresses_len+2, router_types, router_types_len)
+    assert calldata[router_addresses_len*2+2] = path_len
+
+    memcpy(calldata+router_addresses_len*2+3, path, path_len)
+    assert calldata[router_addresses_len*2+path_len+3] = amounts_len
+
+    memcpy(calldata+router_addresses_len*2+path_len+4, amounts, amounts_len)
+
+    assert calldata[router_addresses_len*3+path_len+4] = _amount_in.low
+    assert calldata[router_addresses_len*3+path_len+5] = _amount_in.high
+
+    #Get out amount from path
+    let (retdata_size : felt, retdata : felt*) = library_call(
+        trade_executor_hash,
+        simulate_multi_swap_selector,
+        router_addresses_len*3+path_len+6,
+        calldata,
+    )
+
+    return(Uint256(retdata[0],retdata[1]))
 end
 
 #UniSwap Conform function
@@ -214,7 +242,6 @@ func swap_with_path{
 
     #Delegate Call: Execute transactions
     let (trade_executor_hash) = trade_executor.read()
-    let (calldata : felt*) = alloc()
     let (calldata : felt*) = alloc()
 
     assert calldata[0] = _amount_in.low

@@ -200,7 +200,7 @@ func __setup__{
     return ()
 end      
 
-@external
+#@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -249,7 +249,7 @@ func test_single_swap{
     return()
 end
 
-@external
+#@external
 func test_spf{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -308,6 +308,70 @@ func test_spf{
     %{ stop_prank_callable() %}
 
     %{ print("received_amount: ",ids.received_amount.low) %}
+
+    return()
+end
+
+@external
+func test_view_amount_out{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}():
+    alloc_locals
+
+    local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+
+    local hub_address
+    %{ ids.hub_address = context.hub_address %}
+
+    local ETH
+    %{ ids.ETH = context.ETH %}
+    local DAI
+    %{ ids.DAI = context.DAI %}
+    local USDC
+    %{ ids.USDC = context.USDC %}
+    local USDT
+    %{ ids.USDT = context.USDT %}
+    local shitcoin1
+    %{ ids.shitcoin1 = context.shitcoin1 %}
+    local shitcoin2
+    %{ ids.shitcoin2 = context.shitcoin2 %}
+
+    local amount_to_trade: Uint256 = Uint256(100*base,0)
+    local expected_min_return: Uint256 = Uint256(75*base,0)
+
+    local router_aggregator_address
+    %{ ids.router_aggregator_address = context.router_aggregator_address %}
+
+    #Set high Liq tokens for spf_solver
+    local solver2_address
+    %{ids.solver2_address = context.solver2_address %}
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
+        ISolver.set_high_liq_tokens(solver2_address,0,ETH)
+        ISolver.set_high_liq_tokens(solver2_address,1,DAI)
+        ISolver.set_high_liq_tokens(solver2_address,2,USDT)
+        ISolver.set_high_liq_tokens(solver2_address,3,USDC)
+    %{stop_prank_callable()%}
+
+    #Allow hub to take tokens
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
+    IERC20.approve(shitcoin1,hub_address,amount_to_trade)
+    %{ stop_prank_callable() %}
+
+    #Get amount out
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
+    let (received_amount: Uint256) = IHub.get_solver_result(
+        hub_address,
+        _amount_in=amount_to_trade,
+        _token_in=shitcoin1, 
+        _token_out=shitcoin2,  
+        _solver_id=2
+    )
+    %{ stop_prank_callable() %}
+
+    %{ print("received_amount: ",ids.received_amount.low) %}
+
+    assert 1 = 2
 
     return()
 end

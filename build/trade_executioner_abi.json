@@ -51,6 +51,55 @@
                 "type": "felt*"
             },
             {
+                "name": "_amount_in",
+                "type": "Uint256"
+            }
+        ],
+        "name": "simulate_multi_swap",
+        "outputs": [
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_router_addresses_len",
+                "type": "felt"
+            },
+            {
+                "name": "_router_addresses",
+                "type": "felt*"
+            },
+            {
+                "name": "_router_types_len",
+                "type": "felt"
+            },
+            {
+                "name": "_router_types",
+                "type": "felt*"
+            },
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "felt*"
+            },
+            {
+                "name": "_amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "_amounts",
+                "type": "felt*"
+            },
+            {
                 "name": "_receiver_address",
                 "type": "felt"
             },
