@@ -125,19 +125,35 @@
     {
         "inputs": [
             {
-                "name": "routers_len",
+                "name": "_router_addresses_len",
                 "type": "felt"
             },
             {
-                "name": "routers",
+                "name": "_router_addresses",
                 "type": "felt*"
             },
             {
-                "name": "path_len",
+                "name": "_router_types_len",
                 "type": "felt"
             },
             {
-                "name": "path",
+                "name": "_router_types",
+                "type": "felt*"
+            },
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "felt*"
+            },
+            {
+                "name": "_amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "_amounts",
                 "type": "felt*"
             },
             {
