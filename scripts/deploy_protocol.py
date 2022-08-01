@@ -30,7 +30,6 @@ contractAddresses = {"hub": 1826220194373481129959900449007723010762434223450601
                     "single_swap_solver": 987856532891641573059637784706467952960262676067481791414651315702423310040,
                     "spf_solver": 0}
                     
-
 #######################
 #                     #
 #   DEPLOY CONTRACTS  #
@@ -89,16 +88,16 @@ async def deployContracts():
         contractAddresses["sigle_swap_solver"] = contract.address
 
         # Deploy SPF Solver
-        #print("Deploying SPF Solver")
-        #compiled = Path("./build/", "spf_solver.json").read_text("utf-8")
-        #deployment_result = await Contract.deploy(
-        #    client, compiled_contract=compiled, constructor_args=[]
-        #)
-        #print("Waiting for acceptance...")
-        #await deployment_result.wait_for_acceptance()
-        #contract = deployment_result.deployed_contract
-        #print("SPF Solver Address: ",contract.address)
-        #contractAddresses["spf_solver"] = contract.address
+        print("Deploying SPF Solver")
+        compiled = Path("./build/", "spf_solver.json").read_text("utf-8")
+        deployment_result = await Contract.deploy(
+            client, compiled_contract=compiled, constructor_args=[]
+        )
+        print("Waiting for acceptance...")
+        await deployment_result.wait_for_acceptance()
+        contract = deployment_result.deployed_contract
+        print("SPF Solver Address: ",contract.address)
+        contractAddresses["spf_solver"] = contract.address
     
     ##########################
     #                        #
@@ -110,6 +109,7 @@ async def deployContracts():
     routerAggregatorContract = await Contract.from_address(contractAddresses["router_aggregator"],client)
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
+    spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
 
     # Configure Hub
     print("...Configuring Hub...")
@@ -142,6 +142,9 @@ async def deployContracts():
     print("Adding Single Swap Solver...")
     invocation = await solverRegistryContract.functions["set_solver"].invoke(1,singleSwapSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
+    print("Adding SPF Solver...")
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(1,spfSolverContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance() 
 
     #Configure Solvers
     print("...Configuring Solvers...")
@@ -149,7 +152,10 @@ async def deployContracts():
     print("Setting Router Aggregator for Single Swap Solver...")
     invocation = await singleSwapSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
-
+    print("Setting Router Aggregator for SPF Solver...")
+    invocation = await spfSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    #Set high liq tokens for spf solver 
 
 asyncio.run(deployContracts())
 

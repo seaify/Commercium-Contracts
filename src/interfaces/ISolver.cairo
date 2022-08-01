@@ -45,10 +45,8 @@ namespace ISolver:
         router_addresses : felt*,
         router_types_len : felt,
         router_types : felt*,
-        tokens_in_len : felt, 
-        tokens_in : felt*,
-        tokens_out_len : felt, 
-        tokens_out : felt*,
+        tokens_to_trade_len : felt, 
+        tokens_to_trade : felt*,
         amounts_len : felt, 
         amounts : felt*
     ):

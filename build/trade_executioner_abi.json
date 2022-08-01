@@ -35,19 +35,11 @@
                 "type": "felt*"
             },
             {
-                "name": "_tokens_in_len",
+                "name": "_path_len",
                 "type": "felt"
             },
             {
-                "name": "_tokens_in",
-                "type": "felt*"
-            },
-            {
-                "name": "_tokens_out_len",
-                "type": "felt"
-            },
-            {
-                "name": "_tokens_out",
+                "name": "_path",
                 "type": "felt*"
             },
             {

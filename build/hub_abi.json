@@ -46,6 +46,42 @@
     {
         "inputs": [
             {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_solver_result",
+        "outputs": [
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_amounts_out",
+        "outputs": [],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_owner",
                 "type": "felt"
             }
@@ -123,7 +159,6 @@
         ],
         "name": "swap_with_path",
         "outputs": [],
-        "stateMutability": "view",
         "type": "function"
     },
     {

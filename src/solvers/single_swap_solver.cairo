@@ -31,10 +31,8 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
         router_addresses : felt*,
         router_types_len : felt,
         router_types : felt*,
-        tokens_in_len : felt, 
-        tokens_in : felt*,
-        tokens_out_len : felt, 
-        tokens_out : felt*,
+        _path_len : felt, 
+        _path : felt*,
         amounts_len : felt, 
         amounts : felt*
     ):
@@ -46,17 +44,16 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
 
     let (router_addresses : felt*) = alloc()
     let (router_types : felt*) = alloc()
-    let (tokens_in : felt*) = alloc()
-    let (tokens_out : felt*) = alloc()
+    let (path : felt*) = alloc()
     let (amounts : felt*) = alloc()
     
     assert router_addresses[0] = router_address
     assert router_types[0] = router_type
-    assert tokens_in[0] = _token_in
-    assert tokens_out[0] = _token_out
+    assert path[0] = _token_in
+    assert path[1] = _token_out
     assert amounts[0] = base
 
-    return(1,router_addresses,1,router_types,1,tokens_in,1,tokens_out,1,amounts)
+    return(1,router_addresses,1,router_types,2,path,1,amounts)
 end
 
 #

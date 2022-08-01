@@ -171,12 +171,6 @@ func __setup__{
     IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin2,23674728373,mock_oracle_address)
     %{ stop_prank_callable() %}
 
-    #let (return_amount: Uint256) = IUni_router.get_amount_out(router_1_address,Uint256(100,0), shitcoin1, ETH)
-    #let (_,local router_res,_) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,Uint256(1000,0), shitcoin1, ETH)
-    #with_attr error_message("router_res: {router_res} router_1_address: {router_1_address} router_2_address: {router_2_address} router_3_address: {router_3_address}"):
-    #    assert 1 = 2
-    #end
-
     #Deploy Solvers
     local solver1_address : felt
     %{ 
