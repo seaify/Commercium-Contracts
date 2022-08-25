@@ -42,7 +42,6 @@ func solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     return(solver_registry)
 end
 
-
 @view
 func get_solver_result{
     syscall_ptr : felt*, 
@@ -112,6 +111,31 @@ end
 #Externals
 #
 
+#Uniswap Conform function
+@external
+func swap_exact_tokens_for_tokens{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}(
+    amountIn: Uint256, 
+    amountOutMin: Uint256, 
+    path_len: felt, 
+    path: felt*, 
+    to: felt, 
+    deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
+    alloc_locals
+
+    #Check that deadline hasn't past
+
+    #Check that the proposed trade is only between two tokens
+    assert path_len = 2
+
+    let (received_amount: Uint256) = swap_with_solver(path[0],path[1],amountIn,amountOutMin,to,1)
+    
+    return(1, received_amount)
+end    
+
+
 #TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT???
 @external
 func swap_with_solver{
@@ -121,77 +145,11 @@ func swap_with_solver{
     _token_in : felt, 
     _token_out : felt, 
     _amount_in : Uint256, 
-    _min_amount_out : Uint256, 
+    _min_amount_out : Uint256,
+    _to : felt,
     _solver_id : felt)->(received_amount: Uint256):
-    alloc_locals
 
-    ReentrancyGuard._start()
-
-    #Get Solver address that will be used
-    let (solver_registry) = Hub.solver_registry()
-    let (local solver_address) = ISolver_registry.get_solver(solver_registry,_solver_id)
-    with_attr error_message(
-        "solver ID invalid"):
-        assert_not_equal(solver_address,FALSE)
-    end
-
-    #Get Caller Address
-    let (caller_address) = get_caller_address()
-    #Get Hub Address
-    let (this_address) = get_contract_address()
-    #Send tokens_in to the hub
-    IERC20.transferFrom(_token_in,caller_address,this_address,_amount_in)
-
-    #Check current token balance
-    #(Used to determine received amount)
-    let(original_balance: Uint256) = IERC20.balanceOf(_token_out,this_address) 
-
-    #Get trading path from the selected solver
-    let (router_addresses_len : felt,
-        router_addresses : felt*,
-        router_types_len : felt,
-        router_types : felt*,
-        path_len : felt, 
-        path : felt*,
-        amounts_len : felt, 
-        amounts : felt*
-    ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
-
-    #Delegate Call: Execute transactions
-    let (trade_executor_hash) = trade_executor.read()
-
-    #Execute Trades
-    ITrade_executioner.library_call_multi_swap(
-        trade_executor_hash,
-        router_addresses_len,
-        router_addresses,
-        router_types_len,
-        router_types,
-        path_len,
-        path,
-        amounts_len,
-        amounts,
-        this_address,
-        _amount_in
-    )
-    
-    #Check received Amount
-    #We do not naively transfer out the entire balance of that token, as the hub might be holding more
-    #tokens that it received as rewards or that where mistakenly sent here
-    let (new_amount: Uint256) = IERC20.balanceOf(_token_out,this_address) 
-    let (received_amount: Uint256) = SafeUint256.sub_le(new_amount,original_balance)
-
-    #Check that tokens received by solver at at least as much as the min_amount_out
-    let (is_min_amount_received) = uint256_le(_min_amount_out,received_amount)
-    with_attr error_message(
-        "Minimum amount not received"):
-        assert is_min_amount_received = TRUE
-    end
-    
-    #Transfer _token_out back to caller
-    IERC20.transfer(_token_out,caller_address,received_amount)
-
-    ReentrancyGuard._end()
+    let (received_amount: Uint256) = Hub.swap_with_solver(_token_in,_token_out,_amount_in,_min_amount_out,_to,_solver_id)
 
     return (received_amount)
 end
