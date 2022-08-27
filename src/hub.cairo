@@ -16,20 +16,8 @@ from src.interfaces.IERC20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Hub, multi_call_selector, simulate_multi_swap_selector
+from src.lib.hub import Hub, multi_call_selector, simulate_multi_swap_selector, Hub_trade_executor, Hub_solver_registry
 from src.lib.arrayV2 import Array
-
-#
-#Storage
-#
-
-@storage_var
-func trade_executor() -> (trade_executor_address: felt):
-end
-
-@storage_var
-func Hub_solver_registry() -> (registry_address : felt):
-end
 
 #
 #Views
@@ -66,7 +54,7 @@ func get_solver_result{
         amounts : felt*
     ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
 
-    let (trade_executor_hash) = trade_executor.read()
+    let (trade_executor_hash) = Hub_trade_executor.read()
 
     #Execute Trades
     let (amount_out: Uint256) = ITrade_executioner.library_call_simulate_multi_swap(
@@ -131,8 +119,10 @@ func swap_exact_tokens_for_tokens{
     assert path_len = 2
 
     let (received_amount: Uint256) = swap_with_solver(path[0],path[1],amountIn,amountOutMin,to,1)
+    let (uint256_pointer: Uint256*) = alloc()
+    assert uint256_pointer[0] = received_amount
     
-    return(1, received_amount)
+    return(1, uint256_pointer)
 end    
 
 
@@ -181,7 +171,7 @@ func swap_with_path{
     let(original_balance: Uint256) = IERC20.balanceOf(_path[_path_len-1],this_address) 
 
     #Delegate Call: Execute transactions
-    let (trade_executor_hash) = trade_executor.read()
+    let (trade_executor_hash) = Hub_trade_executor.read()
 
     #Execute Trades
     ITrade_executioner.library_call_multi_swap(
@@ -246,6 +236,6 @@ end
 func set_executor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _executor_hash: felt):
     Ownable.assert_only_owner()
-    trade_executor.write(_executor_hash)
+    Hub_trade_executor.write(_executor_hash)
     return()
 end

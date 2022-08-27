@@ -14,7 +14,7 @@ from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
 
 const base = 1000000000000000000 # 1e18
-const trade_deadline = 2644328911 # Might want to increase this
+const trade_deadline = 2644328911 # Might want to increase this or make a parameter
 
 @view
 func simulate_multi_swap{
@@ -163,7 +163,7 @@ func simulate_swap{
         assert path[0] = _token_in
         assert path[1] = _token_out
         let (amounts_len: felt, amounts: Uint256*) = IUni_router.get_amounts_out(_router_address,_amount_in, 2, path) 
-        return(amounts[0]) 
+        return(amounts[1]) 
     else:
         with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist"):
             assert 1 = 2

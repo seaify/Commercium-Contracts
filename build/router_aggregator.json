@@ -9860,6 +9860,246 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
+            "src.interfaces.IERC20.IERC20": {
+                "type": "namespace"
+            },
+            "src.interfaces.IERC20.IERC20.ALLOWANCE_SELECTOR": {
+                "type": "const",
+                "value": 863164345921111744606866654754108663958095967665259696902984674202985078753
+            },
+            "src.interfaces.IERC20.IERC20.APPROVE_SELECTOR": {
+                "type": "const",
+                "value": 949021990203918389843157787496164629863144228991510976554585288817234167820
+            },
+            "src.interfaces.IERC20.IERC20.Args": {
+                "full_name": "src.interfaces.IERC20.IERC20.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.IERC20.IERC20.BALANCEOF_SELECTOR": {
+                "type": "const",
+                "value": 1307730684388977109649524593492043083703013045633289330664425380824804018030
+            },
+            "src.interfaces.IERC20.IERC20.DECIMALS_SELECTOR": {
+                "type": "const",
+                "value": 134830404806214277570220174593674215737759987247891306080029841794115377321
+            },
+            "src.interfaces.IERC20.IERC20.ImplicitArgs": {
+                "full_name": "src.interfaces.IERC20.IERC20.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.IERC20.IERC20.NAME_SELECTOR": {
+                "type": "const",
+                "value": 1528802474226268325865027367859591458315299653151958663884057507666229546336
+            },
+            "src.interfaces.IERC20.IERC20.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.IERC20.IERC20.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.IERC20.IERC20.SYMBOL_SELECTOR": {
+                "type": "const",
+                "value": 944713526212149105522785400348068751682982210605126537021911324578866405028
+            },
+            "src.interfaces.IERC20.IERC20.TOTALSUPPLY_SELECTOR": {
+                "type": "const",
+                "value": 227334030968744315992796982100494617316223563777432855541120004521101595501
+            },
+            "src.interfaces.IERC20.IERC20.TRANSFERFROM_SELECTOR": {
+                "type": "const",
+                "value": 116061167288211781254449158074459916871457383008289084697957612485591092000
+            },
+            "src.interfaces.IERC20.IERC20.TRANSFER_SELECTOR": {
+                "type": "const",
+                "value": 232670485425082704932579856502088130646006032362877466777181098476241604910
+            },
+            "src.interfaces.IERC20.IERC20.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.IERC20.IERC20.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.IERC20.IERC20.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.IERC20.IERC20.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.IERC20.Uint256": {
+                "destination": "starkware.cairo.common.uint256.Uint256",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver.ISolver": {
+                "type": "namespace"
+            },
+            "src.interfaces.ISolver.ISolver.Args": {
+                "full_name": "src.interfaces.ISolver.ISolver.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ISolver.ISolver.EXECUTE_SOLVER_SELECTOR": {
+                "type": "const",
+                "value": 1188558399020764667708794977745498038339256202812327748612909822496765894330
+            },
+            "src.interfaces.ISolver.ISolver.GET_RESULTS_SELECTOR": {
+                "type": "const",
+                "value": 1293459937670193751964793641424453989261707951196969045081472354966734908281
+            },
+            "src.interfaces.ISolver.ISolver.ImplicitArgs": {
+                "full_name": "src.interfaces.ISolver.ISolver.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ISolver.ISolver.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.ISolver.ISolver.SET_HIGH_LIQ_TOKENS_SELECTOR": {
+                "type": "const",
+                "value": 1614161925002162500012745081387186460515218167469459996015429486990962404545
+            },
+            "src.interfaces.ISolver.ISolver.SET_ROUTER_AGGREGATOR_SELECTOR": {
+                "type": "const",
+                "value": 1225884521947965816184569002475137388993483087834274283686395398490552687910
+            },
+            "src.interfaces.ISolver.ISolver.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.ISolver.ISolver.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver.ISolver.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver.ISolver.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver.ISolver.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver.Uint256": {
+                "destination": "starkware.cairo.common.uint256.Uint256",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry": {
+                "type": "namespace"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.ADD_SOLVER_SELECTOR": {
+                "type": "const",
+                "value": 866507149298479494642890106039081889940212009487735045270037407197039814708
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.Args": {
+                "full_name": "src.interfaces.ISolver_registry.ISolver_registry.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.GET_SOLVER_SELECTOR": {
+                "type": "const",
+                "value": 74365092117648041044354399064160864993396654345173385590257116782437694866
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.ImplicitArgs": {
+                "full_name": "src.interfaces.ISolver_registry.ISolver_registry.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.SET_SOLVER_SELECTOR": {
+                "type": "const",
+                "value": 781046969042571626063498627736387101338287952415818505997604603660955014358
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.ISolver_registry.ISolver_registry.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner": {
+                "type": "namespace"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.Args": {
+                "full_name": "src.interfaces.ITrade_executioner.ITrade_executioner.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.ImplicitArgs": {
+                "full_name": "src.interfaces.ITrade_executioner.ITrade_executioner.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.MULTI_SWAP_SELECTOR": {
+                "type": "const",
+                "value": 558079996720636069421427664524843719962060853116440040296815770714276714984
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.SIMULATE_MULTI_SWAP_SELECTOR": {
+                "type": "const",
+                "value": 1310124106700095074905752334807922719347974895149925748802193060450827293357
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.ITrade_executioner.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.Uint256": {
+                "destination": "starkware.cairo.common.uint256.Uint256",
+                "type": "alias"
+            },
             "src.interfaces.IUni_factory.IUni_factory": {
                 "type": "namespace"
             },
@@ -10459,6 +10699,10 @@
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
+            "src.lib.hub.FALSE": {
+                "destination": "starkware.cairo.common.bool.FALSE",
+                "type": "alias"
+            },
             "src.lib.hub.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
@@ -10572,9 +10816,96 @@
                 "destination": "starkware.starknet.common.syscalls.storage_write",
                 "type": "alias"
             },
+            "src.lib.hub.Hub_trade_executor": {
+                "type": "namespace"
+            },
+            "src.lib.hub.Hub_trade_executor.Args": {
+                "full_name": "src.lib.hub.Hub_trade_executor.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub_trade_executor.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_trade_executor.ImplicitArgs": {
+                "full_name": "src.lib.hub.Hub_trade_executor.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.lib.hub.Hub_trade_executor.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.lib.hub.Hub_trade_executor.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.lib.hub.Hub_trade_executor.hash2": {
+                "destination": "starkware.cairo.common.hash.hash2",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_trade_executor.normalize_address": {
+                "destination": "starkware.starknet.common.storage.normalize_address",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_trade_executor.storage_read": {
+                "destination": "starkware.starknet.common.syscalls.storage_read",
+                "type": "alias"
+            },
+            "src.lib.hub.Hub_trade_executor.storage_write": {
+                "destination": "starkware.starknet.common.syscalls.storage_write",
+                "type": "alias"
+            },
+            "src.lib.hub.IERC20": {
+                "destination": "src.interfaces.IERC20.IERC20",
+                "type": "alias"
+            },
+            "src.lib.hub.ISolver": {
+                "destination": "src.interfaces.ISolver.ISolver",
+                "type": "alias"
+            },
+            "src.lib.hub.ISolver_registry": {
+                "destination": "src.interfaces.ISolver_registry.ISolver_registry",
+                "type": "alias"
+            },
+            "src.lib.hub.ITrade_executioner": {
+                "destination": "src.interfaces.ITrade_executioner.ITrade_executioner",
+                "type": "alias"
+            },
+            "src.lib.hub.ReentrancyGuard": {
+                "destination": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard",
+                "type": "alias"
+            },
+            "src.lib.hub.SafeUint256": {
+                "destination": "src.openzeppelin.security.safemath.SafeUint256",
+                "type": "alias"
+            },
+            "src.lib.hub.TRUE": {
+                "destination": "starkware.cairo.common.bool.TRUE",
+                "type": "alias"
+            },
+            "src.lib.hub.Uint256": {
+                "destination": "starkware.cairo.common.uint256.Uint256",
+                "type": "alias"
+            },
             "src.lib.hub.Uni": {
                 "type": "const",
                 "value": 1
+            },
+            "src.lib.hub.assert_not_equal": {
+                "destination": "starkware.cairo.common.math.assert_not_equal",
+                "type": "alias"
+            },
+            "src.lib.hub.get_caller_address": {
+                "destination": "starkware.starknet.common.syscalls.get_caller_address",
+                "type": "alias"
+            },
+            "src.lib.hub.get_contract_address": {
+                "destination": "starkware.starknet.common.syscalls.get_contract_address",
+                "type": "alias"
             },
             "src.lib.hub.multi_call_selector": {
                 "type": "const",
@@ -10583,6 +10914,10 @@
             "src.lib.hub.simulate_multi_swap_selector": {
                 "type": "const",
                 "value": 1310124106700095074905752334807922719347974895149925748802193060450827293357
+            },
+            "src.lib.hub.uint256_le": {
+                "destination": "starkware.cairo.common.uint256.uint256_le",
+                "type": "alias"
             },
             "src.lib.utils.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
@@ -12300,6 +12635,163 @@
             },
             "src.openzeppelin.access.ownable.get_caller_address": {
                 "destination": "starkware.starknet.common.syscalls.get_caller_address",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.FALSE": {
+                "destination": "starkware.cairo.common.bool.FALSE",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard": {
+                "type": "namespace"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.Args": {
+                "full_name": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.ImplicitArgs": {
+                "full_name": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered": {
+                "type": "namespace"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.Args": {
+                "full_name": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.ImplicitArgs": {
+                "full_name": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.hash2": {
+                "destination": "starkware.cairo.common.hash.hash2",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.normalize_address": {
+                "destination": "starkware.starknet.common.storage.normalize_address",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.storage_read": {
+                "destination": "starkware.starknet.common.syscalls.storage_read",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard_entered.storage_write": {
+                "destination": "starkware.starknet.common.syscalls.storage_write",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.reentrancy_guard.TRUE": {
+                "destination": "starkware.cairo.common.bool.TRUE",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.FALSE": {
+                "destination": "starkware.cairo.common.bool.FALSE",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.HashBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.SafeUint256": {
+                "type": "namespace"
+            },
+            "src.openzeppelin.security.safemath.SafeUint256.Args": {
+                "full_name": "src.openzeppelin.security.safemath.SafeUint256.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.safemath.SafeUint256.ImplicitArgs": {
+                "full_name": "src.openzeppelin.security.safemath.SafeUint256.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.openzeppelin.security.safemath.SafeUint256.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.openzeppelin.security.safemath.SafeUint256.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.openzeppelin.security.safemath.SignatureBuiltin": {
+                "destination": "starkware.cairo.common.cairo_builtins.SignatureBuiltin",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.TRUE": {
+                "destination": "starkware.cairo.common.bool.TRUE",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.Uint256": {
+                "destination": "starkware.cairo.common.uint256.Uint256",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.assert_not_zero": {
+                "destination": "starkware.cairo.common.math.assert_not_zero",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_add": {
+                "destination": "starkware.cairo.common.uint256.uint256_add",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_check": {
+                "destination": "starkware.cairo.common.uint256.uint256_check",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_eq": {
+                "destination": "starkware.cairo.common.uint256.uint256_eq",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_le": {
+                "destination": "starkware.cairo.common.uint256.uint256_le",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_lt": {
+                "destination": "starkware.cairo.common.uint256.uint256_lt",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_mul": {
+                "destination": "starkware.cairo.common.uint256.uint256_mul",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_sub": {
+                "destination": "starkware.cairo.common.uint256.uint256_sub",
+                "type": "alias"
+            },
+            "src.openzeppelin.security.safemath.uint256_unsigned_div_rem": {
+                "destination": "starkware.cairo.common.uint256.uint256_unsigned_div_rem",
                 "type": "alias"
             },
             "starkware.cairo.common.alloc.alloc": {
@@ -17119,7 +17611,7 @@
                         "cairo_type": "felt",
                         "offset": 2
                     },
-                    "reserved": {
+                    "deploy_from_zero": {
                         "cairo_type": "felt",
                         "offset": 5
                     },

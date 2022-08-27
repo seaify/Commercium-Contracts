@@ -55,20 +55,25 @@ end
 
 @view
 func get_amounts_out{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, path_len: felt, path: felt*) -> (amounts_len: felt, amount_out:Uint256):
+    _amount_in: Uint256, path_len: felt, path: felt*) -> (amounts_len: felt, amounts:Uint256*):
     alloc_locals
 
+    let (local amounts : Uint256*) = alloc()
     let (reserve_1:Uint256,reserve_2:Uint256) = get_reserves(path[0],path[1])
     
     if reserve_1.low == 0 :
-        return(1,Uint256(0,0))
+        assert amounts[0] = Uint256(0,0)
+        assert amounts[1] = Uint256(0,0)
+        return(1,amounts)
     else:
         let (feed_amount:Uint256,_) = uint256_mul(_amount_in,Uint256(997,0))
         let (numerator,_) = uint256_mul(feed_amount,reserve_2)
         let (feed_reserve,_) = uint256_mul(reserve_1,Uint256(1000,0))
         let (denominator,_) = uint256_add(feed_reserve,feed_amount)
         let (amount_out,_) = uint256_unsigned_div_rem(numerator,denominator)
-        return(1,amount_out)
+        assert amounts[0] = _amount_in
+        assert amounts[1] = amount_out
+        return(2,amounts)
     end
 end
 

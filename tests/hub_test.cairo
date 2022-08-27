@@ -36,6 +36,7 @@ func __setup__{
     alloc_locals
 
     local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+    %{ context.public_key_0 = ids.public_key_0 %}
 
     #Deploy Mock_Tokens
     local shitcoin1 : felt
@@ -200,14 +201,15 @@ func __setup__{
     return ()
 end      
 
-#@external
+@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}():
     alloc_locals
 
-    local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+    local public_key_0
+    %{ ids.public_key_0 = context.public_key_0 %}
 
     local hub_address
     %{ ids.hub_address = context.hub_address %}
@@ -227,6 +229,15 @@ func test_single_swap{
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
+    let (_amount_out: Uint256) = IHub.get_solver_result(
+        hub_address,
+        amount_to_trade, 
+        ETH, 
+        DAI, 
+        1
+    )
+    %{ print("Get_out amount: ",ids._amount_out.low) %}
+
     #Allow hub to take tokens
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
     IERC20.approve(ETH,hub_address,amount_to_trade)
@@ -240,12 +251,13 @@ func test_single_swap{
         _token_out=DAI, 
         _amount_in=amount_to_trade, 
         _min_amount_out=expected_min_return, 
+        _to=public_key_0,
         _solver_id=1
     )
     %{ stop_prank_callable() %}
 
     %{ print("received_amount: ",ids.received_amount.low) %}
-
+    assert 1 = 2
     return()
 end
 
@@ -256,7 +268,8 @@ func test_spf{
     range_check_ptr}():
     alloc_locals
 
-    local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+    local public_key_0
+    %{ ids.public_key_0 = context.public_key_0 %}
 
     local hub_address
     %{ ids.hub_address = context.hub_address %}
@@ -303,6 +316,7 @@ func test_spf{
         _token_out=shitcoin2, 
         _amount_in=amount_to_trade, 
         _min_amount_out=expected_min_return, 
+        _to=public_key_0,
         _solver_id=2
     )
     %{ stop_prank_callable() %}
@@ -312,14 +326,15 @@ func test_spf{
     return()
 end
 
-@external
+#@external
 func test_view_amount_out{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
     range_check_ptr}():
     alloc_locals
 
-    local public_key_0 = 111813453203092678575228394645067365508785178229282836578911214210165801044
+    local public_key_0
+    %{ ids.public_key_0 = context.public_key_0 %}
 
     local hub_address
     %{ ids.hub_address = context.hub_address %}
@@ -363,8 +378,8 @@ func test_view_amount_out{
     let (received_amount: Uint256) = IHub.get_solver_result(
         hub_address,
         _amount_in=amount_to_trade,
-        _token_in=shitcoin1, 
-        _token_out=shitcoin2,  
+        _token_in=shitcoin1,
+        _token_out=shitcoin2,
         _solver_id=2
     )
     %{ stop_prank_callable() %}

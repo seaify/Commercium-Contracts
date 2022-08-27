@@ -14,7 +14,7 @@ ETH_USD_Key = 28556963469423460
 DAI_USD_Key = 28254602066752356
 EMPIRIC_ORACLE_ADDRESS = 536554312408700354284283040928046824434969893969739486945260186308733942996
 JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993
-execution_contract_hash = 870496024551722250897324095886341944628671384249770594839316402520611867594
+execution_contract_hash = 3496084467840643183654246674483082029580642851050804453527806264271640746690
 
 #Setup Admin Account
 private_key = 514919074163669761001641341781643512607564785866885624866019752723630562244
@@ -24,11 +24,11 @@ client = AccountClient(net="testnet", chain=StarknetChainId.TESTNET,n_retries=1,
 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
-contractAddresses = {"hub": 1826220194373481129959900449007723010762434223450601695055895438993921035659,
-                    "solver_registry": 2756135770317046202610086077655295877543999294925181574794478075636304978743,
-                    "router_aggregator": 607049118905836426015641314705389601688981221854780140611812836108609797114,
-                    "single_swap_solver": 987856532891641573059637784706467952960262676067481791414651315702423310040,
-                    "spf_solver": 0}
+contractAddresses = {"hub": 2564871805806106849975133249130922009633518990198014318443179860106012529501,
+                    "solver_registry": 339234692535171577551477557872295479580825059112759814425791895611285703998,
+                    "router_aggregator": 141598234779943145909949961255707921073346208612990875967745473717510442335,
+                    "single_swap_solver": 3129224635722298990038073977040022864604796615622257110045829298235759774007,
+                    "spf_solver": 2671560820787853880739211732065112677201613849594734093942110582342388784590}
                     
 #######################
 #                     #
@@ -65,7 +65,7 @@ async def deployContracts():
 
         # Deploy Router Aggregator
         print("Deploying Router Aggregator")
-        compiled = Path("./build/", "router_aggregatorV3.json").read_text("utf-8")
+        compiled = Path("./build/", "router_aggregator_testnet.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
             client, compiled_contract=compiled, constructor_args=[account_address]
         )
@@ -91,7 +91,7 @@ async def deployContracts():
         print("Deploying SPF Solver")
         compiled = Path("./build/", "spf_solver.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[]
+            client, compiled_contract=compiled, constructor_args=[account_address]
         )
         print("Waiting for acceptance...")
         await deployment_result.wait_for_acceptance()
@@ -143,7 +143,7 @@ async def deployContracts():
     invocation = await solverRegistryContract.functions["set_solver"].invoke(1,singleSwapSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
     print("Adding SPF Solver...")
-    invocation = await solverRegistryContract.functions["set_solver"].invoke(1,spfSolverContract.address,max_fee=50000000000000000000)
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(2,spfSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
 
     #Configure Solvers

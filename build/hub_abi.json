@@ -93,6 +93,46 @@
     {
         "inputs": [
             {
+                "name": "amountIn",
+                "type": "Uint256"
+            },
+            {
+                "name": "amountOutMin",
+                "type": "Uint256"
+            },
+            {
+                "name": "path_len",
+                "type": "felt"
+            },
+            {
+                "name": "path",
+                "type": "felt*"
+            },
+            {
+                "name": "to",
+                "type": "felt"
+            },
+            {
+                "name": "deadline",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_exact_tokens_for_tokens",
+        "outputs": [
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_token_in",
                 "type": "felt"
             },
@@ -107,6 +147,10 @@
             {
                 "name": "_min_amount_out",
                 "type": "Uint256"
+            },
+            {
+                "name": "_to",
+                "type": "felt"
             },
             {
                 "name": "_solver_id",

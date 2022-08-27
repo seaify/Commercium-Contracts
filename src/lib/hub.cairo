@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
+from src.openzeppelin.security.safemath import SafeUint256
 from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.bool import TRUE, FALSE
@@ -16,6 +17,14 @@ const multi_call_selector = 5580799967206360694214276645248437199620608531164400
 const simulate_multi_swap_selector = 1310124106700095074905752334807922719347974895149925748802193060450827293357
 
 const Uni = 1
+
+#
+#Storage
+#
+
+@storage_var
+func Hub_trade_executor() -> (trade_executor_address: felt):
+end
 
 @storage_var
 func Hub_solver_registry() -> (registry_address : felt):
@@ -88,10 +97,10 @@ namespace Hub:
             amounts : felt*
         ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
 
-        #Delegate Call: Execute transactions
-        let (trade_executor_hash) = trade_executor.read()
+        #Get trade executor class hash
+        let (trade_executor_hash) = Hub_trade_executor.read()
 
-        #Execute Trades
+        #Delegate Call: Execute transactions
         ITrade_executioner.library_call_multi_swap(
             trade_executor_hash,
             router_addresses_len,
@@ -125,6 +134,18 @@ namespace Hub:
         ReentrancyGuard._end()
 
         return (received_amount)
+    end
+
+    func set_solver_registry{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        _new_registry: felt) -> ():
+        Hub_solver_registry.write(_new_registry)
+        return()
+    end
+
+    func set_router_type{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        _router_type: felt, _router_address: felt) -> ():
+        Hub_router_type.write(_router_address,_router_type)
+        return()
     end
 
 end

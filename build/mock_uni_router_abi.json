@@ -103,8 +103,8 @@
                 "type": "felt"
             },
             {
-                "name": "amount_out",
-                "type": "Uint256"
+                "name": "amounts",
+                "type": "Uint256*"
             }
         ],
         "stateMutability": "view",
