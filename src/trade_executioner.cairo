@@ -36,11 +36,8 @@ func simulate_multi_swap{
     if _router_addresses_len == 0 :
         return(_amount_in)
     end
-    
-    let (decimals) = IERC20.decimals(_path[1])
-    let (token_base) = pow(10,decimals)
 
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(token_base,0))
+    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(base,0))
 
     let (amount_out: Uint256) = simulate_swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1])
     
