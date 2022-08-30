@@ -26,6 +26,7 @@ const Edges = 21
 const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
 const base = 1000000000000000000 # 1e18
+const small_base = 1000000
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
 @external
@@ -48,11 +49,11 @@ func __setup__{
     %{ context.shitcoin2 = ids.shitcoin2 %}
     %{ print("shitcoin2 Address: ",ids.shitcoin2) %}
     local USDC : felt
-    %{ ids.USDC = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12345,345,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.USDC = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12345,345,6,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
     %{ context.USDC = ids.USDC %}
     %{ print("USDC Address: ",ids.USDC) %}
     local ETH : felt
-    %{ ids.ETH = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12346,346,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.ETH = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12346,346,18,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
     %{ context.ETH = ids.ETH %}
     %{ print("ETH Address: ",ids.ETH) %}
     local USDT : felt
@@ -233,7 +234,7 @@ func test_single_swap{
         hub_address,
         amount_to_trade, 
         ETH, 
-        DAI, 
+        USDC, 
         1
     )
     %{ print("Get_out amount: ",ids._amount_out.low) %}
@@ -248,7 +249,7 @@ func test_single_swap{
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
-        _token_out=DAI, 
+        _token_out=USDC, 
         _amount_in=amount_to_trade, 
         _min_amount_out=expected_min_return, 
         _to=public_key_0,
@@ -418,10 +419,10 @@ func create_router1{syscall_ptr : felt*, range_check_ptr}(
     IUni_router.set_reserves(router_address,shitcoin1, DAI, Uint256(1000*base,0), Uint256(10000*base,0))         #10,000
 
     IUni_router.set_reserves(router_address,ETH, USDT, Uint256(100*base,0), Uint256(100000*base,0))       #100,000
-    IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*base,0))         #10,000
+    IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*small_base,0))         #10,000
     IUni_router.set_reserves(router_address,ETH, DAI, Uint256(10*base,0), Uint256(10000*base,0))          #10,000
 
-    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*base,0))     #80,000
+    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*small_base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
     IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
@@ -438,9 +439,9 @@ func create_router1{syscall_ptr : felt*, range_check_ptr}(
         IERC20.transfer(ETH,router_address,Uint256(10*base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
-        IERC20.transfer(USDC,router_address,Uint256(10000*base,0))
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
+        IERC20.transfer(USDC,router_address,Uint256(10000*small_base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDT) %}
         IERC20.transfer(USDT,router_address,Uint256(100000*base,0))
@@ -484,15 +485,15 @@ func create_router2{syscall_ptr : felt*, range_check_ptr}(
     IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
-    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
+    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*small_base,0))      #80,000
 
     #Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
         IERC20.transfer(ETH,router_address,Uint256(1000*base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDT) %}
         IERC20.transfer(USDT,router_address,Uint256(80000*base,0))
@@ -532,10 +533,10 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
     IUni_router.set_reserves(router_address,shitcoin1, USDT, Uint256(1000*base,0), Uint256(10000*base,0))       #10,000
 
     IUni_router.set_reserves(router_address,ETH, USDT, Uint256(100*base,0), Uint256(100000*base,0))       #100,000
-    IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*base,0))         #10,000
+    IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*small_base,0))         #10,000
     IUni_router.set_reserves(router_address,ETH, DAI, Uint256(100*base,0), Uint256(100000*base,0))          #100,000
     
-    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*base,0))     #80,000
+    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*small_base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
     IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
@@ -557,9 +558,9 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
         IERC20.transfer(ETH,router_address,Uint256(100*base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
-        IERC20.transfer(USDC,router_address,Uint256(10000*base,0))
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
-        IERC20.transfer(USDC,router_address,Uint256(80000*base,0))
+        IERC20.transfer(USDC,router_address,Uint256(10000*small_base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
+        IERC20.transfer(USDC,router_address,Uint256(80000*small_base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDT) %}
         IERC20.transfer(USDT,router_address,Uint256(10000*base,0))

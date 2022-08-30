@@ -78,11 +78,9 @@ func multi_swap{
         return()
     end
     
-    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address) 
-    let (decimals) = IERC20.decimals(_path[1])
-    let (token_base) = pow(10,decimals)
-
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(token_base,0))
+    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address)
+    
+    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(base,0))
 
     _swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1],_receiver_address)
 
