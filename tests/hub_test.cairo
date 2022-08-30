@@ -12,6 +12,7 @@ from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint25
 from src.lib.hub import Uni
 from src.lib.array import Array
 from src.lib.utils import Utils
+from src.lib.constants import MAX_FELT
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ISolver_registry import ISolver_registry
@@ -23,7 +24,6 @@ from src.interfaces.IHub import IHub
 
 const Vertices = 6
 const Edges = 21
-const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
 const base = 1000000000000000000 # 1e18
 const small_base = 1000000 # 1e6
@@ -43,27 +43,27 @@ func __setup__{
     local shitcoin1 : felt
     %{ ids.shitcoin1 = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12343,343,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.shitcoin1 = ids.shitcoin1 %}
-    %{ print("shitcoin1 Address: ",ids.shitcoin1) %}
+    #%{ print("shitcoin1 Address: ",ids.shitcoin1) %}
     local shitcoin2 : felt
     %{ ids.shitcoin2 = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12344,344,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.shitcoin2 = ids.shitcoin2 %}
-    %{ print("shitcoin2 Address: ",ids.shitcoin2) %}
+    #%{ print("shitcoin2 Address: ",ids.shitcoin2) %}
     local USDC : felt
     %{ ids.USDC = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12345,345,6,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
     %{ context.USDC = ids.USDC %}
-    %{ print("USDC Address: ",ids.USDC) %}
+    #%{ print("USDC Address: ",ids.USDC) %}
     local ETH : felt
-    %{ ids.ETH = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12346,346,18,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
+    %{ ids.ETH = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12346,346,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.ETH = ids.ETH %}
-    %{ print("ETH Address: ",ids.ETH) %}
+    #%{ print("ETH Address: ",ids.ETH) %}
     local USDT : felt
     %{ ids.USDT = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12347,347,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.USDT = ids.USDT %}
-    %{ print("USDT Address: ",ids.USDT) %}
+    #%{ print("USDT Address: ",ids.USDT) %}
     local DAI : felt
     %{ ids.DAI = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12348,348,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.DAI = ids.DAI %}
-    %{ print("DAI Address: ",ids.DAI) %}
+    #%{ print("DAI Address: ",ids.DAI) %}
 
     #Deploy Hub
     local hub_address : felt
@@ -125,11 +125,11 @@ func __setup__{
 
     # Set routers
     let (local router_1_address) = create_router1(public_key_0,ETH,USDC,USDT,DAI,shitcoin1,shitcoin2)
-    %{ print("Router 1: ",ids.router_1_address) %}
+    #%{ print("Router 1: ",ids.router_1_address) %}
     let (local router_2_address) = create_router2(public_key_0,ETH,USDC,USDT,DAI,shitcoin1,shitcoin2)
-    %{ print("Router 2: ",ids.router_2_address) %}
+    #%{ print("Router 2: ",ids.router_2_address) %}
     let (local router_3_address) = create_router3(public_key_0,ETH,USDC,USDT,DAI,shitcoin1,shitcoin2)
-    %{ print("Router 3: ",ids.router_3_address) %}
+    #%{ print("Router 3: ",ids.router_3_address) %}
 
     %{ context.router_1_address = ids.router_1_address %}
     %{ context.router_2_address = ids.router_2_address %}
@@ -184,6 +184,17 @@ func __setup__{
         context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0]).contract_address 
         ids.solver2_address = context.solver2_address
     %}
+
+    #Configure SPF
+    #Set high Liq tokens for spf_solver
+    local solver2_address
+    %{ids.solver2_address = context.solver2_address %}
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
+        ISolver.set_high_liq_tokens(solver2_address,0,ETH)
+        ISolver.set_high_liq_tokens(solver2_address,1,DAI)
+        ISolver.set_high_liq_tokens(solver2_address,2,USDT)
+        ISolver.set_high_liq_tokens(solver2_address,3,USDC)
+    %{stop_prank_callable()%}
     
     #Set router_aggregator for solver
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver1_address)%}
@@ -225,7 +236,6 @@ func test_single_swap{
     %{ ids.USDT = context.USDT %}
 
     local amount_to_trade: Uint256 = Uint256(100*base,0)
-    local expected_min_return: Uint256 = Uint256(80*base,0)
 
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
@@ -251,14 +261,13 @@ func test_single_swap{
         _token_in=ETH, 
         _token_out=USDC, 
         _amount_in=amount_to_trade, 
-        _min_amount_out=expected_min_return, 
+        _min_amount_out=_amount_out, 
         _to=public_key_0,
         _solver_id=1
     )
     %{ stop_prank_callable() %}
 
     %{ print("received_amount: ",ids.received_amount.low) %}
-    assert 1 = 2
     return()
 end
 
@@ -294,16 +303,6 @@ func test_spf{
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
-    #Set high Liq tokens for spf_solver
-    local solver2_address
-    %{ids.solver2_address = context.solver2_address %}
-    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
-        ISolver.set_high_liq_tokens(solver2_address,0,ETH)
-        ISolver.set_high_liq_tokens(solver2_address,1,DAI)
-        ISolver.set_high_liq_tokens(solver2_address,2,USDT)
-        ISolver.set_high_liq_tokens(solver2_address,3,USDC)
-    %{stop_prank_callable()%}
-
     #Allow hub to take tokens
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
     IERC20.approve(shitcoin1,hub_address,amount_to_trade)
@@ -327,7 +326,7 @@ func test_spf{
     return()
 end
 
-#@external
+@external
 func test_view_amount_out{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -359,35 +358,36 @@ func test_view_amount_out{
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
-    #Set high Liq tokens for spf_solver
-    local solver2_address
-    %{ids.solver2_address = context.solver2_address %}
-    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
-        ISolver.set_high_liq_tokens(solver2_address,0,ETH)
-        ISolver.set_high_liq_tokens(solver2_address,1,DAI)
-        ISolver.set_high_liq_tokens(solver2_address,2,USDT)
-        ISolver.set_high_liq_tokens(solver2_address,3,USDC)
-    %{stop_prank_callable()%}
-
     #Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
-    IERC20.approve(shitcoin1,hub_address,amount_to_trade)
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
+    IERC20.approve(ETH,hub_address,amount_to_trade)
     %{ stop_prank_callable() %}
 
     #Get amount out
+    #Using custom interface
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
     let (received_amount: Uint256) = IHub.get_solver_result(
         hub_address,
         _amount_in=amount_to_trade,
-        _token_in=shitcoin1,
-        _token_out=shitcoin2,
-        _solver_id=2
+        _token_in=ETH,
+        _token_out=USDC,
+        _solver_id=1
+    )
+
+    #Using uni conform interface
+    let (path: felt*) = alloc()
+    assert path[0] = ETH
+    assert path[1] = USDC
+    let (_, uni_view_amounts: Uint256*) = IHub.get_amounts_out(
+        hub_address,
+        amountIn=amount_to_trade,
+        path_len=2,
+        path=path
     )
     %{ stop_prank_callable() %}
 
+    assert uni_view_amounts[1] = received_amount
     %{ print("received_amount: ",ids.received_amount.low) %}
-
-    assert 1 = 2
 
     return()
 end
@@ -482,10 +482,10 @@ func create_router2{syscall_ptr : felt*, range_check_ptr}(
     
     IUni_router.set_reserves(router_address,ETH, DAI, Uint256(1000*base,0), Uint256(1000000*base,0))          #1,000,000
     
-    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*base,0))     #80,000
+    IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*small_base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
-    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*small_base,0))      #80,000
+    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*small_base,0), Uint256(80000*base,0))      #80,000
 
     #Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
@@ -539,7 +539,7 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
     IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*small_base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
-    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
+    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*small_base,0), Uint256(80000*base,0))      #80,000
 
     IUni_router.set_reserves(router_address,shitcoin2, DAI, Uint256(10000*base,0), Uint256(100000*base,0))       #100,000
     IUni_router.set_reserves(router_address,shitcoin2, USDT, Uint256(1000*base,0), Uint256(10000*base,0))       #10,000

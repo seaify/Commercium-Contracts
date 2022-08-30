@@ -9,12 +9,12 @@ from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint25
 
 from src.lib.array import Array
 from src.lib.utils import Utils
+from src.lib.constants import MAX_FELT
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.openzeppelin.access.ownable import Ownable
 
 const MAX_VERTICES = 6
 const Edges = 21
-const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
 const base = 1000000000000000000 # 1e18
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
@@ -608,11 +608,11 @@ func init_arrays{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     
     #Always of length V
     assert _distances[0] = 0 #Source Token 
-    assert _distances[1] = 850705917302346000000000000000000000000000000
-    assert _distances[2] = 850705917302346000000000000000000000000000000
-    assert _distances[3] = 850705917302346000000000000000000000000000000
-    assert _distances[4] = 850705917302346000000000000000000000000000000
-    assert _distances[5] = 850705917302346000000000000000000000000000000
+    assert _distances[1] = MAX_FELT
+    assert _distances[2] = MAX_FELT
+    assert _distances[3] = MAX_FELT
+    assert _distances[4] = MAX_FELT
+    assert _distances[5] = MAX_FELT
 
     assert _predecessors[0] = 0 
     assert _predecessors[1] = 0
@@ -749,9 +749,10 @@ end
 
 @external
 func set_high_liq_tokens{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_index: felt,_high_liq_tokens: felt):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_index: felt,_high_liq_tokens: felt):
     Ownable.assert_only_owner()
     high_liq_tokens.write(_index,_high_liq_tokens)
     return()

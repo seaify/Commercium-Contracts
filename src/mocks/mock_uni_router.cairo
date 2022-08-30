@@ -64,7 +64,7 @@ func get_amounts_out{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     if reserve_1.low == 0 :
         assert amounts[0] = Uint256(0,0)
         assert amounts[1] = Uint256(0,0)
-        return(1,amounts)
+        return(2,amounts)
     else:
         let (feed_amount:Uint256,_) = uint256_mul(_amount_in,Uint256(997,0))
         let (numerator,_) = uint256_mul(feed_amount,reserve_2)

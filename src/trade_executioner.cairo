@@ -9,11 +9,10 @@ from starkware.cairo.common.pow import pow
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
 from src.lib.utils import Utils
+from src.lib.constants import BASE
 
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
-
-const base = 1000000000000000000 # 1e18
 const trade_deadline = 2644328911 # Might want to increase this or make a parameter
 
 @view
@@ -37,7 +36,7 @@ func simulate_multi_swap{
         return(_amount_in)
     end
 
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(base,0))
+    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
     let (amount_out: Uint256) = simulate_swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1])
     
@@ -80,7 +79,7 @@ func multi_swap{
     
     let(local amount_before_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address)
     
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(base,0))
+    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
     _swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1],_receiver_address)
 

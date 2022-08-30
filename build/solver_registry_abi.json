@@ -15,6 +15,36 @@
         "type": "event"
     },
     {
+        "data": [
+            {
+                "name": "solver_address",
+                "type": "felt"
+            },
+            {
+                "name": "solver_id",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "unofficial_solver_added",
+        "type": "event"
+    },
+    {
+        "data": [
+            {
+                "name": "solver_address",
+                "type": "felt"
+            },
+            {
+                "name": "solver_id",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "official_solver_added",
+        "type": "event"
+    },
+    {
         "inputs": [
             {
                 "name": "_owner",

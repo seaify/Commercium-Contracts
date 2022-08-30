@@ -13,6 +13,13 @@ namespace IHub:
         _solver_id: felt)->(amount_out: Uint256):
     end
 
+    func get_amounts_out(
+            amountIn: Uint256, 
+            path_len: felt, 
+            path: felt*
+        ) -> (amounts_len: felt, amounts: Uint256*):
+    end
+
     func swap_with_solver(
         _token_in : felt, 
         _token_out : felt, 

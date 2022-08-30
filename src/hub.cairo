@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -44,41 +46,9 @@ func get_solver_result{
         _token_out: felt, 
         _solver_id: felt
     )->(amount_out: Uint256):
-    alloc_locals
 
-    let (solver_registry) = Hub.solver_registry()
-    let (local solver_address) = ISolver_registry.get_solver(solver_registry,_solver_id)
-    with_attr error_message("solver ID invalid"):
-        assert_not_equal(solver_address,FALSE)
-    end
-
-    #Get trading path from the selected solver
-    let (router_addresses_len : felt,
-        router_addresses : felt*,
-        router_types_len : felt,
-        router_types : felt*,
-        path_len : felt, 
-        path : felt*,
-        amounts_len : felt, 
-        amounts : felt*
-    ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
-
-    let (trade_executor_hash) = Hub_trade_executor.read()
-
-    #Execute Trades
-    let (amount_out: Uint256) = ITrade_executioner.library_call_simulate_multi_swap(
-        trade_executor_hash,
-        router_addresses_len,
-        router_addresses,
-        router_types_len,
-        router_types,
-        path_len,
-        path,
-        amounts_len,
-        amounts,
-        _amount_in
-    )
-
+    let (amount_out) = Hub.get_solver_result(_amount_in,_token_in,_token_out,_solver_id)
+    
     return(amount_out)
 end
 
@@ -94,44 +64,17 @@ func get_amounts_out{
         path: felt*
     ) -> (amounts_len: felt, amounts: Uint256*):
     alloc_locals
-    
+
     #The user only dictates in_token and out_token
     with_attr error_message("HUB: Path should consist of exactly 2 tokens"):
         assert path_len = 2
     end
 
-    #We get the solver with the id 1
-    let (solver_registry) = Hub.solver_registry()
-    let (local solver_address) = ISolver_registry.get_solver(solver_registry,1)
-    with_attr error_message("solver ID invalid"):
-        assert_not_equal(solver_address,FALSE)
-    end
-
-    #Get trading path from the selected solver
-    let (router_addresses_len : felt,
-        router_addresses : felt*,
-        router_types_len : felt,
-        router_types : felt*,
-        path_len : felt, 
-        path : felt*,
-        amounts_len : felt, 
-        amounts : felt*
-    ) = ISolver.get_results(solver_address, amountIn, path[0], path[1])
-
-    let (trade_executor_hash) = Hub_trade_executor.read()
-
-    #Execute Trades
-    let (amount_out: Uint256) = ITrade_executioner.library_call_simulate_multi_swap(
-        trade_executor_hash,
-        router_addresses_len,
-        router_addresses,
-        router_types_len,
-        router_types,
-        path_len,
-        path,
-        amounts_len,
-        amounts,
-        amountIn
+    let (amount_out) = Hub.get_solver_result(
+        _amount_in=amountIn,
+        _token_in=path[0],
+        _token_out=path[1],
+        _solver_id=1
     )
 
     let (return_amounts: Uint256*) = alloc()
@@ -180,15 +123,18 @@ func swap_exact_tokens_for_tokens{
     #Check that the proposed trade is only between two tokens
     assert path_len = 2
 
+    #Execute swap with solver 1 as the default
     let (received_amount: Uint256) = swap_with_solver(path[0],path[1],amountIn,amountOutMin,to,1)
-    let (uint256_pointer: Uint256*) = alloc()
-    assert uint256_pointer[0] = received_amount
+
+    #Transform output to conform with uniSwap Interface
+    let (amounts: Uint256*) = alloc()
+    assert amounts[0] = amountIn
+    assert amounts[1] = received_amount
     
-    return(1, uint256_pointer)
+    return(2, amounts)
 end    
 
 
-#TODO: ADD UNIV2 CONFORM FUNCTION THAT USES SOLVER 1 AS A DEFAULT???
 @external
 func swap_with_solver{
         syscall_ptr : felt*, 
@@ -298,6 +244,17 @@ func set_router_type{
 end
 
 @external
+func set_executor{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_executor_hash: felt):
+    Ownable.assert_only_owner()
+    Hub_trade_executor.write(_executor_hash)
+    return()
+end
+
+@external
 func retrieve_tokens{
         syscall_ptr : felt*, 
         pedersen_ptr : HashBuiltin*, 
@@ -309,16 +266,5 @@ func retrieve_tokens{
         _token_amount: Uint256*
     ) -> ():
     Ownable.assert_only_owner()
-    return()
-end
-
-@external
-func set_executor{
-        syscall_ptr : felt*, 
-        pedersen_ptr : HashBuiltin*, 
-        range_check_ptr
-    }(_executor_hash: felt):
-    Ownable.assert_only_owner()
-    Hub_trade_executor.write(_executor_hash)
     return()
 end

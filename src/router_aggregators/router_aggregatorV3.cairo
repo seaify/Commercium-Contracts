@@ -13,8 +13,8 @@ from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils
+from src.lib.constants import BASE
 
-const base = 1000000000000000000 
 const Uni_fee = 3000000000000000 # 0.3% fee 
 
 struct Router:
@@ -37,9 +37,10 @@ end
 
 @constructor
 func constructor{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_owner: felt):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_owner: felt):
     Ownable.initializer(_owner)
     return()
 end
@@ -57,8 +58,11 @@ end
 #
 
 @view
-func get_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _index: felt) -> (router_address: felt):
+func get_router{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_index: felt) -> (router_address: felt):
 
     let (router:Router) = routers.read(_index)
 
@@ -66,8 +70,19 @@ func get_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @view
-func get_single_best_pool{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+func get_single_best_pool{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (
+        amount_out: Uint256, 
+        router_address: felt, 
+        router_type: felt
+    ):
 
     let (res_amount:Uint256,res_router_address,res_type) = find_best_router(_amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
 
@@ -77,9 +92,10 @@ end
 #Returns token price in USD
 @view
 func get_global_price{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_token: felt)->(price: Uint256, decimals: felt):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_token: felt)->(price: Uint256, decimals: felt):
     alloc_locals
     #Let's build this propperly once we have real price oracles to test with
     let (feed: Feed) = price_feed.read(_token)
@@ -97,24 +113,25 @@ end
 
 @view
 func get_weight{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
-    _amount_in_usd : Uint256, 
-    _amount_out : Uint256, 
-    _token1: felt, 
-    _token2: felt
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in_usd : Uint256, 
+        _amount_out : Uint256, 
+        _token1: felt, 
+        _token2: felt
     )->(weight:felt):
     alloc_locals
 
     #Transform Token Amount to USD Amount
     #As of now all Empiric prices are scaled to 18 decimal places
     let (price_out: Uint256,_) = get_global_price(_token2)
-    let (value_out: Uint256) = Utils.fmul(_amount_out,price_out,Uint256(base,0))
+    let (value_out: Uint256) = Utils.fmul(_amount_out,price_out,Uint256(BASE,0))
 
     #Determine Weight
     let (trade_cost) = uint256_sub(_amount_in_usd,value_out)
-    let (route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(base,0))
+    let (route_cost) = Utils.fdiv(trade_cost,_amount_in_usd,Uint256(BASE,0))
 
     return(route_cost.low)
 end
@@ -124,8 +141,11 @@ end
 #
 
 @external
-func add_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _router_address: felt, _router_type: felt):
+func add_router{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_router_address: felt, _router_type: felt):
     Ownable.assert_only_owner()
     let (router_len) = router_index_len.read()
     routers.write(router_len,Router(_router_address,_router_type))
@@ -135,8 +155,11 @@ func add_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @external
-func remove_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _index: felt):
+func remove_router{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_index: felt):
     Ownable.assert_only_owner()
     let (router_len) = router_index_len.read()
     let (last_router:Router) = routers.read(router_len)
@@ -149,9 +172,14 @@ end
 
 @external
 func set_global_price{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_token: felt,_key: felt, _oracle_address: felt):
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _token: felt,
+        _key: felt, 
+        _oracle_address: felt
+    ):
     Ownable.assert_only_owner()
     price_feed.write(_token,Feed(_key,_oracle_address))
     #EMIT ADD PRICE FEED EVENT
@@ -163,8 +191,23 @@ end
 #
 
 @external
-func find_best_router{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt, _best_amount: Uint256, _router_address: felt, _router_type: felt, _counter: felt) -> (amount_out: Uint256, router_address: felt, router_type: felt):
+func find_best_router{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _best_amount: Uint256, 
+        _router_address: felt, 
+        _router_type: felt, 
+        _counter: felt
+    ) -> (
+        amount_out: Uint256, 
+        router_address: felt, 
+        router_type: felt
+    ):
 
     alloc_locals
 

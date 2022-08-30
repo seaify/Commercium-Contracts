@@ -264,6 +264,17 @@
     {
         "inputs": [
             {
+                "name": "_executor_hash",
+                "type": "felt"
+            }
+        ],
+        "name": "set_executor",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_token_len",
                 "type": "felt"
             },
@@ -281,17 +292,6 @@
             }
         ],
         "name": "retrieve_tokens",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_executor_hash",
-                "type": "felt"
-            }
-        ],
-        "name": "set_executor",
         "outputs": [],
         "type": "function"
     }
