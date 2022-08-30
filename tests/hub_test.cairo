@@ -26,7 +26,7 @@ const Edges = 21
 const LARGE_VALUE = 850705917302346000000000000000000000000000000 
 
 const base = 1000000000000000000 # 1e18
-const small_base = 1000000
+const small_base = 1000000 # 1e6
 const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
 @external
@@ -262,7 +262,7 @@ func test_single_swap{
     return()
 end
 
-#@external
+@external
 func test_spf{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 

@@ -73,9 +73,31 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "name": "amountIn",
+                "type": "Uint256"
+            },
+            {
+                "name": "path_len",
+                "type": "felt"
+            },
+            {
+                "name": "path",
+                "type": "felt*"
+            }
+        ],
         "name": "get_amounts_out",
-        "outputs": [],
+        "outputs": [
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     },

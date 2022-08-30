@@ -111,12 +111,51 @@ async def deployContracts():
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
     spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
 
-   
+    # Configure Hub
+    print("...Configuring Hub...")
+    #Set Solver Registry
+    invocation = await hubContract.functions["set_solver_registry"].invoke(solverRegistryContract.address,max_fee=50000000000000000000)
+    print("Setting Solver Registry...")
+    await invocation.wait_for_acceptance()
     #Set Trade Executioner
     print("Setting TradeExecutioner Hash...")
     invocation = await hubContract.functions["set_executor"].invoke(execution_contract_hash,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
 
+    #Configure Router Aggregator
+    print("...Configuring Router Aggregator...")
+    #Set Price Feeds
+    print("Adding ETH Price Feed...")
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(ethAddress,ETH_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    print("Adding DAI Price Feed...")
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(daiAddress,DAI_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    #Add Router
+    print("Adding JediSwapRouter...")
+    invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,1,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()    
+
+    #Configure Solver Registry
+    print("...Configuring Solver Registry...")
+    #Add Single Swap Solver to Registry
+    print("Adding Single Swap Solver...")
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(1,singleSwapSolverContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance() 
+    print("Adding SPF Solver...")
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(2,spfSolverContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance() 
+
+    #Configure Solvers
+    print("...Configuring Solvers...")
+    #Setting Router Aggregator
+    print("Setting Router Aggregator for Single Swap Solver...")
+    invocation = await singleSwapSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    print("Setting Router Aggregator for SPF Solver...")
+    invocation = await spfSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    #Set high liq tokens for spf solver 
 
 asyncio.run(deployContracts())
 
