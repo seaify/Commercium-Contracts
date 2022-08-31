@@ -1,11 +1,9 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import (Uint256, uint256_lt, uint256_le, uint256_add, uint256_eq, uint256_sub, uint256_mul, uint256_unsigned_div_rem)
-from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.pow import pow
+from starkware.cairo.common.uint256 import (Uint256, uint256_le, uint256_sub)
+from starkware.cairo.common.bool import FALSE
 from starkware.cairo.common.math import assert_not_equal
-from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.alloc import alloc
 from src.lib.hub import Uni
 
@@ -14,8 +12,6 @@ from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils
 from src.lib.constants import BASE
-
-const Uni_fee = 3000000000000000 # 0.3% fee 
 
 struct Router:
     member address: felt
@@ -31,6 +27,14 @@ end
 func price_feed(token: felt) -> (feed: Feed):
 end
 
+@storage_var
+func routers(index: felt) -> (router: Router):
+end
+
+@storage_var
+func router_index_len() -> (len: felt): 
+end
+
 #
 #Constructor
 #
@@ -43,14 +47,6 @@ func constructor{
     }(_owner: felt):
     Ownable.initializer(_owner)
     return()
-end
-
-@storage_var
-func routers(index: felt) -> (router: Router):
-end
-
-@storage_var
-func router_index_len() -> (len: felt): 
 end
 
 #
@@ -97,11 +93,11 @@ func get_global_price{
         range_check_ptr
     }(_token: felt)->(price: Uint256, decimals: felt):
     alloc_locals
-    #Let's build this propperly once we have real price oracles to test with
+    
     let (feed: Feed) = price_feed.read(_token)
     let (price,decimals,_,_) = IEmpiric_oracle.get_value(feed.address,feed.key,0)
 
-    #ToDo decimal transform
+    #IF EMPIRIC INTORDUCES DIFFERENT DECIMALS, WE HAVE TO DO A TRANSFORMATION HERE
 
     with_attr error_message(
         "price_feed result invalid, token: {_token}"):

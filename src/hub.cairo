@@ -3,23 +3,19 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_le, uint256_sub
+from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.math import assert_not_equal
-from starkware.cairo.common.memcpy import memcpy
+from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address, library_call
 
 from src.interfaces.ISolver import ISolver
-from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.ITrade_executioner import ITrade_executioner
 from src.interfaces.IERC20 import IERC20
 
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Hub, multi_call_selector, simulate_multi_swap_selector, Hub_trade_executor, Hub_solver_registry
-from src.lib.arrayV2 import Array
+from src.lib.hub import Hub, Hub_trade_executor
 
 #
 #Views
@@ -52,7 +48,6 @@ func get_solver_result{
     return(amount_out)
 end
 
-#Same as get_solver_result but UniSwap conform
 @view
 func get_amounts_out{
         syscall_ptr : felt*, 
@@ -102,7 +97,6 @@ end
 #Externals
 #
 
-#Uniswap Conform function
 @external
 func swap_exact_tokens_for_tokens{
         syscall_ptr : felt*, 
@@ -133,7 +127,6 @@ func swap_exact_tokens_for_tokens{
     
     return(2, amounts)
 end    
-
 
 @external
 func swap_with_solver{

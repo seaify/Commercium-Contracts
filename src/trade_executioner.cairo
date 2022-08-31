@@ -2,9 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.starknet.common.syscalls import get_contract_address
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.pow import pow
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
@@ -17,9 +15,10 @@ const trade_deadline = 2644328911 # Might want to increase this or make a parame
 
 @view
 func simulate_multi_swap{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
         _router_addresses_len : felt,
         _router_addresses : felt*,
         _router_types_len: felt,
@@ -57,9 +56,10 @@ end
 
 @external
 func multi_swap{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
         _router_addresses_len : felt,
         _router_addresses : felt*,
         _router_types_len: felt,
@@ -104,9 +104,10 @@ func multi_swap{
 end
 
 func _swap{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
         _router_address: felt,
         _router_type: felt,
         _amount_in: Uint256,
@@ -142,9 +143,10 @@ func _swap{
 end
 
 func simulate_swap{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
         _router_address: felt,
         _router_type: felt,
         _amount_in: Uint256,

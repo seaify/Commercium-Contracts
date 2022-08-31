@@ -8817,6 +8817,14 @@
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
+            "src.lib.constants.BASE": {
+                "type": "const",
+                "value": 1000000000000000000
+            },
+            "src.lib.constants.MAX_FELT": {
+                "type": "const",
+                "value": -1
+            },
             "src.lib.constants.cow": {
                 "type": "const",
                 "value": 1

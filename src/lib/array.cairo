@@ -17,7 +17,9 @@ namespace Array:
         _index: felt, 
         _new_val: felt, 
         _counter: felt):
-        
+        #TEMPORARY
+        alloc_locals
+
         if _new_arr_len == _counter:
             return()
         end
@@ -43,7 +45,6 @@ namespace Array:
         _arr_len: felt, 
         _arr: felt*, 
         _new_val: felt) -> ():
-
 
         if _new_arr_len == 0:
             return()

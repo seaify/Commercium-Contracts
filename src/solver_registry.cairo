@@ -5,7 +5,6 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from src.openzeppelin.access.ownable import Ownable
 from starkware.cairo.common.math import assert_le, assert_not_equal
-from starkware.starknet.common.syscalls import get_caller_address
 from src.lib.constants import MAX_FELT
 
 @event

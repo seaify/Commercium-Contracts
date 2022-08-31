@@ -1,14 +1,12 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
-from starkware.starknet.common.syscalls import (get_contract_address)
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.IERC20 import IERC20
-
-const base = 1000000000000000000 # 1e18
+from src.lib.constants import BASE
 
 ###################################################################################
 #                                                                                 #  
@@ -22,11 +20,15 @@ func router_aggregator() -> (router_aggregator_address: felt):
 end
 
 @view
-func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_ptr}(
+func get_results{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(
         _amount_in: Uint256,
         _token_in: felt,
         _token_out: felt
-    )-> (
+    )->(
         router_addresses_len : felt,
         router_addresses : felt*,
         router_types_len : felt,
@@ -51,7 +53,7 @@ func get_results{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,range_check_pt
     assert router_types[0] = router_type
     assert path[0] = _token_in
     assert path[1] = _token_out
-    assert amounts[0] = base
+    assert amounts[0] = BASE
 
     return(1,router_addresses,1,router_types,2,path,1,amounts)
 end
@@ -61,8 +63,11 @@ end
 #
 
 @external
-func set_router_aggregator{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _router_aggregator: felt):
+func set_router_aggregator{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_router_aggregator: felt):
     router_aggregator.write(_router_aggregator)
     return()
 end

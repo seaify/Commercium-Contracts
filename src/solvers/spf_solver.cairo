@@ -1,23 +1,21 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
-from starkware.cairo.common.math import assert_le, assert_nn_le, unsigned_div_rem, sqrt
+from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le_felt
 from starkware.cairo.common.bitwise import bitwise_or
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
+from starkware.cairo.common.uint256 import Uint256,uint256_eq
 
 from src.lib.array import Array
 from src.lib.utils import Utils
-from src.lib.constants import MAX_FELT
+from src.lib.constants import MAX_FELT, BASE
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.openzeppelin.access.ownable import Ownable
 
 const MAX_VERTICES = 6
 const Edges = 21
-
-const base = 1000000000000000000 # 1e18
-const extra_base = 100000000000000000000 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
+const EXTRA_BASE = BASE * 100 # We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
 #Token addresses
 #const USDT = 12345
@@ -67,9 +65,10 @@ end
 
 @constructor
 func constructor{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(_owner: felt):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_owner: felt):
     Ownable.initializer(_owner)
     return()
 end
@@ -79,22 +78,38 @@ end
 #
 
 @view
-func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*,range_check_ptr}(
-    _amount_in: Uint256,
-    _token_in: felt,
-    _token_out: felt) -> (
-    router_addresses_len : felt,
-    router_addresses : felt*,
-    router_types_len : felt,
-    router_types : felt*,
-    path_len : felt, 
-    path : felt*,
-    amounts_len : felt, 
-    amounts : felt*):
+func get_results{
+        syscall_ptr : felt*, 
+        bitwise_ptr : BitwiseBuiltin*, 
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(
+        _amount_in: Uint256,
+        _token_in: felt,
+        _token_out: felt
+    ) -> (
+        router_addresses_len : felt,
+        router_addresses : felt*,
+        router_types_len : felt,
+        router_types : felt*,
+        path_len : felt, 
+        path : felt*,
+        amounts_len : felt, 
+        amounts : felt*
+    ):
     alloc_locals
     
     let (tokens : felt*) = alloc()
-    let (Vertices) = construct_token_arr(_token_in,_token_out,tokens,MAX_VERTICES,0,0)
+    assert tokens[0] = _token_in
+
+    let (Vertices) = construct_token_arr(
+        _token_in=_token_in,
+        _token_out=_token_out,
+        _tokens=tokens+1,
+        _total_vertices=MAX_VERTICES,
+        _liq_counter=0,
+        _counter=1
+    )
 
     #Edges
     let (src : Source*) = alloc()
@@ -104,7 +119,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     #As of now all Empiric prices are scaled to 18 decimal places
     let (router_aggregator_address) = router_aggregator.read()
     let (price: Uint256,_) = IRouter_aggregator.get_global_price(router_aggregator_address,tokens[0])
-    let (amount_in_usd: Uint256) = Utils.fmul(price,_amount_in,Uint256(base,0))
+    let (amount_in_usd: Uint256) = Utils.fmul(price,_amount_in,Uint256(BASE,0))
 
     #We use _dst_len to count the number of legit source to destination edges
     set_edges(_amount_in,amount_in_usd,Vertices,tokens,Vertices,src,_edge_len=0,_edge=edge,_dst_counter=1,_src_counter=0,_total_counter=0)
@@ -114,10 +129,18 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     let (predecessors : felt*) = alloc()
     let (is_in_queue : felt*) = alloc()
     let (queue: felt*) = alloc()
-    init_arrays(MAX_VERTICES,distances,MAX_VERTICES,predecessors,6,is_in_queue,queue)
+
+    init_arrays(
+        _distances_len=Vertices,
+        _distances=distances,
+        _predecessors=predecessors,
+        _is_in_queue=is_in_queue,
+        _queue=queue,
+        _counter=0
+    )
 
     #Getting each tokens best predecessor
-    let (new_predecessors: felt*) = shortest_path_faster(MAX_VERTICES,distances,MAX_VERTICES,is_in_queue,1,queue,Vertices,src,edge,MAX_VERTICES,predecessors)
+    let (new_predecessors: felt*) = shortest_path_faster(Vertices,distances,Vertices,is_in_queue,1,queue,Vertices,src,edge,Vertices,predecessors)
 
     let (router_addresses : felt*) = alloc()
     let (router_types : felt*) = alloc()
@@ -125,16 +148,21 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
     let (token_ids : felt*) = alloc()
     let (final_tokens : felt*) = alloc()
 
-    assert amounts[0] = base
+    assert amounts[0] = BASE
 
     #Determining the Final path we should be taking for the trade
     let (path : felt*) = alloc()
     assert path[0] = new_predecessors[Vertices-1]
     if path[0] == 0:
+
         assert token_ids[0] = 0
         assert token_ids[1] = 5
 
         set_routers_from_edge(1,src,edge,token_ids,router_addresses,router_types)
+
+        with_attr error_message("CHECKPOINT"):
+            assert 1 = 2
+        end
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[5]
@@ -162,7 +190,7 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert final_tokens[1] = tokens[path[0]]
         assert final_tokens[2] = tokens[5]
 
-        assert amounts[1] = base
+        assert amounts[1] = BASE
 
         return(
             router_addresses_len=2,
@@ -189,8 +217,8 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert final_tokens[2] = tokens[path[0]]
         assert final_tokens[3] = tokens[5]
 
-        assert amounts[1] = base
-        assert amounts[2] = base
+        assert amounts[1] = BASE
+        assert amounts[2] = BASE
 
         return(
             router_addresses_len=3,
@@ -219,9 +247,9 @@ func get_results{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_pt
         assert final_tokens[3] = tokens[path[0]]
         assert final_tokens[4] = tokens[5]
 
-        assert amounts[1] = base
-        assert amounts[2] = base
-        assert amounts[3] = base
+        assert amounts[1] = BASE
+        assert amounts[2] = BASE
+        assert amounts[3] = BASE
 
         return(
             router_addresses_len=4,
@@ -247,18 +275,22 @@ end
 #We use _dst_len to track every src->dst edge that is not 0
 #We use _dst_counter to track the number of destinations we have checked for each source (We check vertices 1-5)
 #We use _src_couter to track the number of sources we have checked (We check vertices 0-4)
-func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in : Uint256, 
-    _amount_in_usd : Uint256, 
-    _vertices:felt,
-    _tokens:felt*,
-    _src_len:felt,
-    _src:Source*,
-    _edge_len: felt,
-    _edge: Edge*,
-    _dst_counter:felt,
-    _src_counter:felt,
-    _total_counter: felt
+func set_edges{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in : Uint256, 
+        _amount_in_usd : Uint256, 
+        _vertices:felt,
+        _tokens:felt*,
+        _src_len:felt,
+        _src:Source*,
+        _edge_len: felt,
+        _edge: Edge*,
+        _dst_counter:felt,
+        _src_counter:felt,
+        _total_counter: felt
     )->():
     
     alloc_locals
@@ -296,7 +328,7 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         else:  
             let(local weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in_usd,amount_out,_tokens[_src_counter],_tokens[_dst_counter])  
             if _src_counter == 0 :
-                assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight + extra_base)
+                assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight + EXTRA_BASE)
             else:
                 assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight)
             end    
@@ -396,24 +428,30 @@ func set_edges{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     return()
 end
 
-func shortest_path_faster{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _distances_len:felt,
-    _distances:felt*,
-    _is_in_queue_len:felt,
-    _is_in_queue:felt*,
-    _queue_len:felt,
-    _queue:felt*,
-    _vertices: felt,
-    _src: Source*,
-    _edge: Edge*,
-    _predecessors_len: felt,
-    _predecessors: felt*) -> (final_distances: felt*):
+func shortest_path_faster{
+        syscall_ptr : felt*, 
+        bitwise_ptr : BitwiseBuiltin*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _distances_len:felt,
+        _distances:felt*,
+        _is_in_queue_len:felt,
+        _is_in_queue:felt*,
+        _queue_len:felt,
+        _queue:felt*,
+        _vertices: felt,
+        _src: Source*,
+        _edge: Edge*,
+        _predecessors_len: felt,
+        _predecessors: felt*
+    ) -> (final_distances: felt*):
     alloc_locals
 
     #If there is no destination left in the queue we can stop the procedure
     if _queue_len == 0 :
         return(_predecessors)
-    end    
+    end
 
     #Get first entry from queue
     let (new_queue : felt*) = alloc()
@@ -422,7 +460,15 @@ func shortest_path_faster{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pe
 
     #Mark the removed entry as not being in the queue anymore
     let (new_is_in_queue : felt*) = alloc()
-    Array.update(_is_in_queue_len,new_is_in_queue,_is_in_queue_len,_is_in_queue,1,0,0)
+    Array.update(
+        _new_arr_len=_is_in_queue_len,
+        _new_arr=new_is_in_queue,
+        _arr_len=_is_in_queue_len,
+        _arr=_is_in_queue,
+        _index=src_nr,
+        _new_val=0,
+        _counter=0
+    )
 
     #Get Source from queue Nr
     let current_source: Source* = _src + (src_nr*2) 
@@ -466,20 +512,35 @@ func shortest_path_faster{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pe
     return(predecessors)
 end     
 
-func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _distances_len: felt,
-    _distances: felt*, 
-    _queue_len: felt, 
-    _queue: felt*, 
-    _is_in_queue_len: felt, 
-    _is_in_queue: felt*,
-    _vertices: felt,
-    _edge: Edge*,
-    _predecessors_len: felt,
-    _predecessors: felt*,
-    _dst_stop:felt,
-    _src_nr: felt, 
-    _current_distance: felt) -> (_distances_len: felt,_distances: felt*,_queue_len: felt,_queue: felt*,_is_in_queue_len: felt,_is_in_queue: felt*,res_predecessors_len: felt,res_predecessors: felt*):
+func determine_distances{
+        syscall_ptr : felt*, 
+        bitwise_ptr : BitwiseBuiltin*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _distances_len: felt,
+        _distances: felt*, 
+        _queue_len: felt, 
+        _queue: felt*, 
+        _is_in_queue_len: felt, 
+        _is_in_queue: felt*,
+        _vertices: felt,
+        _edge: Edge*,
+        _predecessors_len: felt,
+        _predecessors: felt*,
+        _dst_stop:felt,
+        _src_nr: felt, 
+        _current_distance: felt
+    )->(
+        _distances_len: felt,
+        _distances: felt*,
+        _queue_len: felt,
+        _queue: felt*,
+        _is_in_queue_len: felt,
+        _is_in_queue: felt*,
+        res_predecessors_len: felt,
+        res_predecessors: felt*
+    ):
     
     alloc_locals
 
@@ -498,7 +559,7 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
 
     if is_dst_end == 1 :
         #Moving towards the goal token should always improve the distance
-        assert new_distance = _current_distance - extra_base + _edge[0].weight
+        assert new_distance = _current_distance - EXTRA_BASE + _edge[0].weight
     else:
         assert new_distance = _current_distance + _edge[0].weight
     end
@@ -603,46 +664,51 @@ func determine_distances{syscall_ptr : felt*, bitwise_ptr : BitwiseBuiltin*, ped
     end
 end
 
-func init_arrays{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _distances_len:felt,_distances:felt*,_predecessors_len:felt,_predecessors:felt*,_is_queue_len:felt,_is_in_queue:felt*,_queue:felt*) -> ():
+func init_arrays{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _distances_len:felt,
+        _distances:felt*,
+        _predecessors:felt*,
+        _is_in_queue:felt*,
+        _queue:felt*,
+        _counter: felt
+    ) -> ():
     
-    #Always of length V
-    assert _distances[0] = 0 #Source Token 
-    assert _distances[1] = MAX_FELT
-    assert _distances[2] = MAX_FELT
-    assert _distances[3] = MAX_FELT
-    assert _distances[4] = MAX_FELT
-    assert _distances[5] = MAX_FELT
+    if _counter == _distances_len:
+        return()
+    end
 
-    assert _predecessors[0] = 0 
-    assert _predecessors[1] = 0
-    assert _predecessors[2] = 0
-    assert _predecessors[3] = 0
-    assert _predecessors[4] = 0
-    assert _predecessors[5] = 0
-
-    assert _is_in_queue[0] = 0 # In_token will start in queue
-    assert _is_in_queue[1] = 0 
-    assert _is_in_queue[2] = 0
-    assert _is_in_queue[3] = 0
-    assert _is_in_queue[4] = 0
-    assert _is_in_queue[5] = 0
-
-    assert _queue[0] = 0 # In token is only token in queue
-    
-    return()
+    if _counter == 1:
+        assert _distances[0] = 0 #Source Token 
+        assert _queue[0] = 0 # In token is only token in queue
+        assert _predecessors[0] = 0
+        assert _is_in_queue[0] = 0 # In_token will start in queue
+        init_arrays(_distances_len,_distances+1,_predecessors+1,_is_in_queue+1,_queue,_counter+1)
+        return()
+    else:
+        assert _distances[0] = MAX_FELT
+        assert _predecessors[0] = 0
+        assert _is_in_queue[0] = 0
+        init_arrays(_distances_len,_distances+1,_predecessors+1,_is_in_queue+1,_queue,_counter+1)
+        return()
+    end
 end
 
 func set_routers_from_edge{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
-    _src_len : felt,
-    _src : Source*,
-    _edge : Edge*,
-    _tokens : felt*,
-    _router_addresses : felt*,
-    _router_types : felt*):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _src_len : felt,
+        _src : Source*,
+        _edge : Edge*,
+        _tokens : felt*,
+        _router_addresses : felt*,
+        _router_types : felt*
+    ):
     alloc_locals
 
     if _src_len == 0:
@@ -657,15 +723,16 @@ func set_routers_from_edge{
 end 
 
 func get_router_and_address{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
-    _src : Source*,
-    _edge : Edge*,
-    _tokens : felt*,
-    _router_addresses : felt*,
-    _router_types : felt*,
-    _counter: felt,
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _src : Source*,
+        _edge : Edge*,
+        _tokens : felt*,
+        _router_addresses : felt*,
+        _router_types : felt*,
+        _counter: felt,
     ):
     alloc_locals
 
@@ -690,16 +757,18 @@ func get_router_and_address{
     end
 end
 
+#First token in arr needs to be in_token and last one the out_token
 func construct_token_arr{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
-    _token_in : felt,
-    _token_out : felt,
-    _tokens : felt*,
-    _total_vertices: felt,
-    _liq_counter: felt,
-    _counter: felt
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _token_in : felt,
+        _token_out : felt,
+        _tokens : felt*,
+        _total_vertices: felt,
+        _liq_counter: felt,
+        _counter: felt
     ) -> (vertices: felt):
 
     if _counter == _total_vertices-1 :
@@ -710,20 +779,12 @@ func construct_token_arr{
     let (high_liq_token) = high_liq_tokens.read(_liq_counter)
 
     if _token_in == high_liq_token :
-        assert _tokens[0] = _token_in
-        let (total_vertices) = construct_token_arr(_token_in,_token_out,_tokens+1,_total_vertices-1,_liq_counter+1,_counter+1)
+        let (total_vertices) = construct_token_arr(_token_in,_token_out,_tokens,_total_vertices-1,_liq_counter+1,_counter)
         return(total_vertices)
     end
 
     if _token_out == high_liq_token :
-        assert _tokens[0] = _token_out
-        let (total_vertices) = construct_token_arr(_token_in,_token_out,_tokens,_total_vertices-1,_liq_counter+1,_counter+1)
-        return(total_vertices)
-    end
-
-    if _counter == 0:
-        assert _tokens[0] = _token_in
-        let (total_vertices) = construct_token_arr(_token_in,_token_out,_tokens+1,_total_vertices,_liq_counter,_counter+1)
+        let (total_vertices) = construct_token_arr(_token_in,_token_out,_tokens,_total_vertices-1,_liq_counter+1,_counter)
         return(total_vertices)
     end
 
@@ -738,10 +799,10 @@ end
 
 @external
 func set_router_aggregator{
-    syscall_ptr : felt*, 
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr}(
-    _new_router_aggregator_address: felt):
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(_new_router_aggregator_address: felt):
     Ownable.assert_only_owner()
     router_aggregator.write(_new_router_aggregator_address)
     return()
