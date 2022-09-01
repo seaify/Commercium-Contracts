@@ -42,7 +42,7 @@ func get_results{
     
     let (router_aggregator_address) = router_aggregator.read()
 
-    let (amount_out,router_address,router_type) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_token_in,_token_out)
+    let (amount_out,router_address,router_type) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_token_in,_token_out)
 
     let (router_addresses : felt*) = alloc()
     let (router_types : felt*) = alloc()

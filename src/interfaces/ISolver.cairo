@@ -35,7 +35,7 @@ namespace ISolver:
     #token_in_len + token_in           | array of token addresses that will be sold
     #token_out_len + token_out	       | array of token addresses that will be received
     #token_amounts_len + token_amounts | array of token_in amounts that will be sold for token_out 
-    #min_amount_out		       | minimum amount of _token_out that would be received if logic would have been computed in that moment 
+    #min_amount_out		       | minimum amount of _token_out that would be received if logic would have been computed in that moment
     func get_results(
         _amount_in: Uint256,
         _token_in: felt, 

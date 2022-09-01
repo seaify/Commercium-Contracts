@@ -8,7 +8,6 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address, library_call
 
-from src.interfaces.ISolver import ISolver
 from src.interfaces.ITrade_executioner import ITrade_executioner
 from src.interfaces.IERC20 import IERC20
 

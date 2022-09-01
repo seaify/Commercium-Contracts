@@ -12,6 +12,9 @@ namespace ISolver_registry:
     func get_solver(_solver_id: felt) -> (solver_address: felt):
     end
 
+    func get_next_id() -> (solver_id: felt):
+    end
+
     #Mapp a given solver ID to a given solver address
     ###
     #Parameters:
@@ -20,6 +23,6 @@ namespace ISolver_registry:
     func set_solver(_solver_id: felt, _solver_address: felt):
     end
 
-    func add_solver(_solver_address: felt) -> ():
+    func add_solver(_solver_address: felt):
     end
 end

@@ -73,6 +73,18 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "get_next_id",
+        "outputs": [
+            {
+                "name": "solver_id",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "name": "_solver_address",

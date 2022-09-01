@@ -156,16 +156,12 @@ func get_results{
     if path[0] == 0:
 
         assert token_ids[0] = 0
-        assert token_ids[1] = 5
+        assert token_ids[1] = Vertices-1
 
         set_routers_from_edge(1,src,edge,token_ids,router_addresses,router_types)
 
-        with_attr error_message("CHECKPOINT"):
-            assert 1 = 2
-        end
-
         assert final_tokens[0] = tokens[0]
-        assert final_tokens[1] = tokens[5]
+        assert final_tokens[1] = tokens[Vertices-1]
 
         return(
             router_addresses_len=1,
@@ -182,13 +178,13 @@ func get_results{
     if path[1] == 0:
         assert token_ids[0] = 0
         assert token_ids[1] = path[0]
-        assert token_ids[2] = 5
+        assert token_ids[2] = Vertices-1
 
         set_routers_from_edge(2,src,edge,token_ids,router_addresses,router_types)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[path[0]]
-        assert final_tokens[2] = tokens[5]
+        assert final_tokens[2] = tokens[Vertices-1]
 
         assert amounts[1] = BASE
 
@@ -208,14 +204,14 @@ func get_results{
         assert token_ids[0] = 0
         assert token_ids[1] = path[1]
         assert token_ids[2] = path[0]
-        assert token_ids[3] = 5
+        assert token_ids[3] = Vertices-1
 
         set_routers_from_edge(3,src,edge,token_ids,router_addresses,router_types)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[path[1]]
         assert final_tokens[2] = tokens[path[0]]
-        assert final_tokens[3] = tokens[5]
+        assert final_tokens[3] = tokens[Vertices-1]
 
         assert amounts[1] = BASE
         assert amounts[2] = BASE
@@ -237,7 +233,7 @@ func get_results{
         assert token_ids[1] = path[2]
         assert token_ids[2] = path[1]
         assert token_ids[3] = path[0]
-        assert token_ids[4] = 5
+        assert token_ids[4] = Vertices-1
 
         set_routers_from_edge(4,src,edge,token_ids,router_addresses,router_types)
 
@@ -245,7 +241,7 @@ func get_results{
         assert final_tokens[1] = tokens[path[2]]
         assert final_tokens[2] = tokens[path[1]]
         assert final_tokens[3] = tokens[path[0]]
-        assert final_tokens[4] = tokens[5]
+        assert final_tokens[4] = tokens[Vertices-1]
 
         assert amounts[1] = BASE
         assert amounts[2] = BASE
@@ -317,7 +313,7 @@ func set_edges{
         assert we_are_not_advancing = 0
     else:
         let (router_aggregator_address) = router_aggregator.read()        
-        let (local amount_out: Uint256, local router_address: felt, local router_type: felt) = IRouter_aggregator.get_single_best_pool(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter])
+        let (local amount_out: Uint256, local router_address: felt, local router_type: felt) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter])
         let (amount_is_zero) = uint256_eq(amount_out,Uint256(0,0))
         if amount_is_zero == 1 :
             #Edge(Destination_List(dst,dst,dst,dst,dst),Weight_List(weight,weight,weight,weight,weight),Pool_List(pool,pool,pool,pool,pool))
@@ -736,7 +732,7 @@ func get_router_and_address{
     ):
     alloc_locals
 
-    local edge_position = _src[_tokens[0]].start + _counter      
+    local edge_position = _src[_tokens[0]].start + _counter
 
     if _edge[edge_position].dst == _tokens[1]:
         tempvar router : Router = _edge[edge_position].router

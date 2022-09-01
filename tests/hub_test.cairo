@@ -213,7 +213,7 @@ func __setup__{
     return ()
 end      
 
-#@external
+@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -306,13 +306,13 @@ func test_spf{
         hub_address,
         amount_to_trade, 
         ETH, 
-        DAI, 
+        USDC, 
         2
     )
-    %{ print("Get_out amount: ",ids._amount_out.low) %}
+    %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     #Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
     IERC20.approve(ETH,hub_address,amount_to_trade)
     %{ stop_prank_callable() %}
 
@@ -321,7 +321,7 @@ func test_spf{
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
-        _token_out=DAI, 
+        _token_out=USDC, 
         _amount_in=amount_to_trade, 
         _min_amount_out=amount_out, 
         _to=public_key_0,
@@ -334,7 +334,7 @@ func test_spf{
     return()
 end
 
-#@external
+@external
 func test_view_amount_out{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 

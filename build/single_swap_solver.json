@@ -163,7 +163,7 @@
             "0x480a7ff77fff8000",
             "0x480a7ff97fff8000",
             "0x480680017fff8000",
-            "0x6c03d140f32c05d3d171e36b6c0b82fcbd1617e4befa13f10563f974d46893",
+            "0xd7d278dbb01c89ccfc6aedc5c2c42d5c0d13df00fecdbc34c4490576faa9d0",
             "0x4828800080007ffc",
             "0x480a80007fff8000",
             "0x1104800180018000",
@@ -2371,9 +2371,9 @@
                 "type": "const",
                 "value": 1293002912401472760825582597880399616546695967391830902100430567129841919989
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.GET_SINGLE_BEST_POOL_SELECTOR": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.GET_SINGLE_BEST_ROUTER_SELECTOR": {
                 "type": "const",
-                "value": 190845829703981124268220587646480370266871275892450572633929272511559919763
+                "value": 381324743989618642523121830802694883671975233110637777596102061082394929616
             },
             "src.interfaces.IRouter_aggregator.IRouter_aggregator.GET_WEIGHT_SELECTOR": {
                 "type": "const",
@@ -2405,13 +2405,13 @@
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router": {
                 "decorators": [],
                 "pc": 46,
                 "type": "function"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.Args": {
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.Args",
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.Args": {
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -2433,8 +2433,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.ImplicitArgs",
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.ImplicitArgs": {
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -2448,17 +2448,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.Return": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.Return": {
                 "cairo_type": "(amount_out : starkware.cairo.common.uint256.Uint256, router_address : felt, router_type : felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.SIZEOF_LOCALS": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__calldata_ptr": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__calldata_ptr",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2495,9 +2495,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__calldata_tmp": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__calldata_tmp",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2510,9 +2510,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_actual_size": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_actual_size",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2525,9 +2525,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_amount_out": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_amount_out": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_amount_out",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_amount_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2540,9 +2540,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_router_address": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_router_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_router_address",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_router_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2555,9 +2555,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_router_type": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_router_type": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_arg_router_type",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_arg_router_type",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2570,9 +2570,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_ptr": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__return_value_ptr",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2609,9 +2609,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__temp4": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__temp4": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__temp4",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__temp4",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2624,9 +2624,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__temp5": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__temp5": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.__temp5",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.__temp5",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2639,9 +2639,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.calldata_ptr_start": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.calldata_ptr_start",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2662,9 +2662,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.contract_address": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.contract_address",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2677,9 +2677,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.in_amount": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.in_amount": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.in_amount",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.in_amount",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2692,9 +2692,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.range_check_ptr": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.range_check_ptr",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2707,9 +2707,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.retdata": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.retdata",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2722,9 +2722,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.retdata_size": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.retdata_size",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2737,9 +2737,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.syscall_ptr": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.syscall_ptr",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2760,9 +2760,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.token_in": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.token_in": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.token_in",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.token_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -2775,9 +2775,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.token_out": {
+            "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.token_out": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_pool.token_out",
+                "full_name": "src.interfaces.IRouter_aggregator.IRouter_aggregator.get_single_best_router.token_out",
                 "references": [
                     {
                         "ap_tracking_data": {

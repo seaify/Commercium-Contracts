@@ -59,6 +59,16 @@ func get_solver{
     return(solver_address)
 end
 
+@view
+func get_next_id{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }() -> (solver_id: felt):
+    let (solver_id) = solvers_len.read()
+    return(solver_id)
+end
+
 #
 # External
 #

@@ -6,7 +6,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 @contract_interface
 namespace IRouter_aggregator:
 
-    func get_single_best_pool(
+    func get_single_best_router(
         in_amount: Uint256, 
         token_in: felt, 
         token_out: felt

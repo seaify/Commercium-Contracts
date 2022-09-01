@@ -10011,6 +10011,10 @@
                 "size": 0,
                 "type": "struct"
             },
+            "src.interfaces.ISolver_registry.ISolver_registry.GET_NEXT_ID_SELECTOR": {
+                "type": "const",
+                "value": 1039743954449149286185708650069458884303275568257641106955160669738698838564
+            },
             "src.interfaces.ISolver_registry.ISolver_registry.GET_SOLVER_SELECTOR": {
                 "type": "const",
                 "value": 74365092117648041044354399064160864993396654345173385590257116782437694866
