@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from src.lib.router_aggregator import Router
 
 @contract_interface
 namespace IRouter_aggregator:
@@ -16,11 +17,23 @@ namespace IRouter_aggregator:
         router_type:felt):
     end
 
+    func get_all_routers(
+            _amount_in: Uint256, 
+            _token_in: felt, 
+            _token_out: felt
+        ) -> (
+            amounts_out_len: felt,
+            amounts_out: Uint256*,
+            routers_len: felt,  
+            routers: Router*
+        ):
+    end
+
     func get_weight(
-        _amount_in_usd : Uint256, 
-        _amount_out : Uint256, 
-        _token1: felt, 
-        _token2: felt
+            _amount_in_usd : Uint256, 
+            _amount_out : Uint256, 
+            _token1: felt, 
+            _token2: felt
         ) -> (weight: felt):  
     end
 
