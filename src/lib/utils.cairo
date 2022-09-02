@@ -10,6 +10,16 @@ struct Router:
     member type: felt
 end
 
+struct Liquidity:
+    member in: Uint256
+    member out: Uint256
+end
+
+struct Path:
+    member token_in: felt
+    member token_out: felt
+end
+
 namespace Utils:
 
     func not_equal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

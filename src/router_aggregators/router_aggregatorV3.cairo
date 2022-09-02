@@ -10,7 +10,7 @@ from starkware.cairo.common.usort import usort
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.lib.utils import Utils, Router
+from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE
 from src.lib.router_aggregator import (RouterAggregator, Feed, price_feed, routers, router_index_len)
 
@@ -97,6 +97,40 @@ func get_all_routers{
     )
 
     return(routers_len,amounts,routers_len,routers)
+end
+
+@view
+func get_all_routers_and_liquidity{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (
+        liquidity_len: felt,
+        liquidity: Liquidity*,
+        routers_len: felt,  
+        routers: Router*
+    ):
+    alloc_locals
+
+    let (liquidity : Liquidity*) = alloc()
+    let (routers : Router*) = alloc()
+
+    #Number of saved routers
+    let (routers_len: felt) = router_index_len.read()
+
+    #Fill amounts and router arrs, get 
+    RouterAggregator.all_routers_and_liquidity(
+        _token_in,
+        _token_out,
+        liquidity,
+        routers,
+        routers_len
+    )
+
+    return(routers_len,liquidity,routers_len,routers)
 end
 
 #Returns token price in USD
@@ -195,7 +229,3 @@ func set_global_price{
     #EMIT ADD PRICE FEED EVENT
     return()
 end
-
-#
-#Internal
-#

@@ -10,6 +10,8 @@ from starkware.cairo.common.usort import usort
 from src.lib.hub import Uni
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
+from src.interfaces.IUni_pair import IUni_pair
+from src.interfaces.IUni_factory import IUni_factory
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils, Router
 from src.lib.constants import BASE
@@ -153,7 +155,57 @@ namespace RouterAggregator:
         )
 
         return()
-    end   
+    end
+
+    func all_routers_and_liquidity{
+            syscall_ptr : felt*, 
+            pedersen_ptr : HashBuiltin*, 
+            range_check_ptr
+        }(
+            _token_in: felt, 
+            _token_out: felt,
+            _liquidity: Liquidity*, 
+            _routers: Router*,
+            _routers_len: felt
+        ):
+        alloc_locals
+
+        if 0 == _routers_len :
+            return()
+        end
+
+        #Get router
+        let (router: Router) = routers.read(_routers_len-1)
+
+        #Add rounter to routers arr
+        assert _routers[0] = router
+
+        if router.type == Uni :
+            let (pair_address: felt) = IUni_factory.get_pair(router.address,_token_in,_token_out)
+            let (reserve0: Uint256, reserve1: Uint256, _) = IUni_pair.get_reserves(pair_address)
+            assert _liquidity[0] = Liquidity(reserve0,reserve1)
+            tempvar range_check_ptr = range_check_ptr 	
+            tempvar syscall_ptr = syscall_ptr
+            tempvar pedersen_ptr = pedersen_ptr 
+        else:
+            with_attr error_message("router type invalid: {ids.router.type}"):
+                assert 1 = 0
+            end
+            tempvar range_check_ptr = range_check_ptr 	
+            tempvar syscall_ptr = syscall_ptr
+            tempvar pedersen_ptr = pedersen_ptr    
+        end
+
+        all_routers_and_liquidity(
+            _token_in, 
+            _token_out,
+            _liquidity+4, 
+            _routers+2, 
+            _routers_len-1
+        )
+
+        return()
+    end
      
     #ALTERNATIVE SORTING METHOD...propably better with larger number of solvers
     #@view
