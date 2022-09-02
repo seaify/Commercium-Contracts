@@ -14,6 +14,7 @@ from src.interfaces.IERC20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
+from src.lib.utils import Router
 from src.lib.hub import Hub, Hub_trade_executor
 
 #
@@ -152,10 +153,8 @@ func swap_with_path{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }(
-        _router_addresses_len: felt,
-        _router_addresses: felt*,
-        _router_types_len: felt,
-        _router_types: felt*,
+        _routers_len: felt,
+        _routers: Router*,
         _path_len: felt,
         _path: felt*,
         _amounts_len: felt,
@@ -180,10 +179,8 @@ func swap_with_path{
     #Execute Trades
     ITrade_executioner.library_call_multi_swap(
         trade_executor_hash,
-        _router_addresses_len,
-        _router_addresses,
-        _router_types_len,
-        _router_types,
+        _routers_len,
+        _routers,
         _path_len,
         _path,
         _amounts_len,

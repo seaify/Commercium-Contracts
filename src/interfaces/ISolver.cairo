@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.utils import Router
 
 @contract_interface
 namespace ISolver:
@@ -41,10 +42,8 @@ namespace ISolver:
         _token_in: felt, 
         _token_out: felt
     ) -> (
-        router_addresses_len : felt,
-        router_addresses : felt*,
-        router_types_len : felt,
-        router_types : felt*,
+        routers_len : felt,
+        routers : Router*,
         tokens_to_trade_len : felt, 
         tokens_to_trade : felt*,
         amounts_len : felt, 

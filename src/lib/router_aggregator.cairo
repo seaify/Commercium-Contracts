@@ -11,13 +11,8 @@ from src.lib.hub import Uni
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.lib.utils import Utils
+from src.lib.utils import Utils, Router
 from src.lib.constants import BASE
-
-struct Router:
-    member address: felt
-    member type: felt
-end
 
 struct Feed:
     member key: felt
@@ -51,28 +46,25 @@ namespace RouterAggregator:
             _token_in: felt, 
             _token_out: felt, 
             _best_amount: Uint256, 
-            _router_address: felt, 
-            _router_type: felt, 
+            _router: Router,
             _counter: felt
         ) -> (
             amount_out: Uint256, 
-            router_address: felt, 
-            router_type: felt
+            router: Router
         ):
         alloc_locals
 
         let (index) = router_index_len.read()
 
         if _counter == index :
-            return(_best_amount, _router_address, _router_type)
+            return(_best_amount, _router)
         end
 
         #Get routers
         let (router: Router) = routers.read(_counter)
 
         local best_amount: Uint256
-        local best_type : felt
-        local best_router: felt
+        local best_router : Router
 
         #Check type and act accordingly
         #Will likely requrie an individual check for each type of AMM, as the interfaces might be different as well as the decimal number of the fees
@@ -84,12 +76,10 @@ namespace RouterAggregator:
             let (is_new_amount_better) = uint256_le(_best_amount,amounts_out[1])
             if is_new_amount_better == 1:
                 assert best_amount = amounts_out[1]
-                assert best_type = router.type
-                assert best_router = router.address
+                assert best_router = router
             else:
                 assert best_amount = _best_amount
-                assert best_type = _router_type
-                assert best_router = _router_address
+                assert best_router = router
             end
                 tempvar range_check_ptr = range_check_ptr
                 tempvar syscall_ptr = syscall_ptr
@@ -107,8 +97,8 @@ namespace RouterAggregator:
             #let (out_amount) = ICow_Router.get_exact_token_for_token(router_address,_amount_in,_token_in,_token_out)
         #end
 
-        let (res_amount,res_router_address,res_type) = find_best_router(_amount_in,_token_in,_token_out,best_amount,best_router,best_type,_counter+1)
-        return(res_amount,res_router_address,res_type)
+        let (res_amount,res_router) = find_best_router(_amount_in,_token_in,_token_out,best_amount,best_router,_counter+1)
+        return(res_amount,res_router)
     end
 
     func all_routers_and_amounts{

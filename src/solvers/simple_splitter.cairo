@@ -1,19 +1,12 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.uint256 import Uint256
 
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
+from src.interfaces.utils import Router
 from src.interfaces.IERC20 import IERC20
-from src.lib.utils import Router
 from src.lib.constants import BASE
-
-###################################################################################
-#                                                                                 #  
-#   THIS IS THE SIMPLEST AND MOST FLEXIBLE SOLVER FOR INTEGRATION WITH PROTOCOLS  #
-#                                                                                 #  
-###################################################################################
 
 #This should be a const, but easier like this for testing   
 @storage_var
@@ -41,18 +34,18 @@ func get_results{
     
     let (router_aggregator_address) = router_aggregator.read()
 
-    let (_,router: Router) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_token_in,_token_out)
+    let (
+        amounts_out_len: felt,
+        amounts_out: Uint256*,
+        routers_len: felt,  
+        routers: Router*
+    ) = IRouter_aggregator.get_all_routers(router_aggregator_address, _amount_in, _token_in, _token_out)
 
-    let (routers : Router*) = alloc()
-    let (path : felt*) = alloc()
-    let (amounts : felt*) = alloc()
+    let (sum: Uint256) = sum_amounts(amounts_out_len,amounts_out)
+
+    let () = determine_share_and_kick(sum,amounts_out,routers)
     
-    assert routers[0] = router
-    assert path[0] = _token_in
-    assert path[1] = _token_out
-    assert amounts[0] = BASE
-
-    return(1,routers,2,path,1,amounts)
+    return(1,router_addresses,1,router_types,2,path,1,amounts)
 end
 
 #
@@ -67,4 +60,31 @@ func set_router_aggregator{
     }(_router_aggregator: felt):
     router_aggregator.write(_router_aggregator)
     return()
+end
+
+#
+# Internals
+#
+
+func sum_amounts{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(amounts_out_len: felt, amounts_out Uint256*):
+
+    if amounts_out_len == 0:
+        return (0)
+    end
+
+    let (sum: Uint256) = sum_amounts(amounts_out_len-1,amounts_out+1)
+
+    return(amounts_out[0]+sum)
+end
+
+func array_sum(arr : felt*, size) -> (sum : felt):
+    
+
+    # size is not zero.
+    let (sum_of_rest) = array_sum(arr=arr + 1, size=size - 1)
+    return (sum=[arr] + sum_of_rest)
 end

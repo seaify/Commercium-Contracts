@@ -13,8 +13,7 @@ namespace IRouter_aggregator:
         token_out: felt
             )->(
         amount_out: Uint256,
-        router_address: felt, 
-        router_type:felt):
+        router: Router):
     end
 
     func get_all_routers(

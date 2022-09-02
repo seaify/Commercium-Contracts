@@ -1,15 +1,14 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.utils import Router
 
 @contract_interface
 namespace ITrade_executioner:
 
     func multi_swap(
-        _router_addresses_len : felt,
-        _router_addresses : felt*,
-        _router_types_len: felt,
-        _router_types: felt*,
+        routers_len : felt,
+        routers : Router*,
         _path_len : felt,
         _path : felt*,
         _amounts_len : felt,
@@ -19,10 +18,8 @@ namespace ITrade_executioner:
     end
 
     func simulate_multi_swap(
-        _router_addresses_len : felt,
-        _router_addresses : felt*,
-        _router_types_len: felt,
-        _router_types: felt*,
+        routers_len : felt,
+        routers : Router*,
         _path_len : felt,
         _path : felt*,
         _amounts_len : felt,

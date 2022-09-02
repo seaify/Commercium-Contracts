@@ -17,6 +17,23 @@
         "type": "struct"
     },
     {
+        "members": [
+            {
+                "name": "address",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "type",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Router",
+        "size": 2,
+        "type": "struct"
+    },
+    {
         "data": [
             {
                 "name": "previousOwner",
@@ -191,20 +208,12 @@
     {
         "inputs": [
             {
-                "name": "_router_addresses_len",
+                "name": "_routers_len",
                 "type": "felt"
             },
             {
-                "name": "_router_addresses",
-                "type": "felt*"
-            },
-            {
-                "name": "_router_types_len",
-                "type": "felt"
-            },
-            {
-                "name": "_router_types",
-                "type": "felt*"
+                "name": "_routers",
+                "type": "Router*"
             },
             {
                 "name": "_path_len",

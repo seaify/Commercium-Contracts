@@ -7,13 +7,12 @@ from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
-from src.lib.hub import Uni
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.lib.utils import Utils
+from src.lib.utils import Utils, Router
 from src.lib.constants import BASE
-from src.lib.router_aggregator import (RouterAggregator, Router, Feed, price_feed, routers, router_index_len)
+from src.lib.router_aggregator import (RouterAggregator, Feed, price_feed, routers, router_index_len)
 
 #
 #Constructor
@@ -56,13 +55,12 @@ func get_single_best_router{
         _token_out: felt
     ) -> (
         amount_out: Uint256, 
-        router_address: felt, 
-        router_type: felt
+        router: Router
     ):
 
-    let (res_amount:Uint256,res_router_address,res_type) = RouterAggregator.find_best_router(_amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router_address=0, _router_type=0, _counter=0)
+    let (res_amount:Uint256,res_router) = RouterAggregator.find_best_router(_amount_in, _token_in, _token_out, _best_amount=Uint256(0,0), _router=Router(0,0), _counter=0)
 
-    return(res_amount,res_router_address,res_type)
+    return(res_amount,res_router)
 end
 
 @view

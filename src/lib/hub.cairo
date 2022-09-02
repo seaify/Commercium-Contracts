@@ -12,6 +12,7 @@ from src.interfaces.ISolver import ISolver
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.ITrade_executioner import ITrade_executioner
+from src.lib.utils import Router
 
 const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984
 const simulate_multi_swap_selector = 1310124106700095074905752334807922719347974895149925748802193060450827293357
@@ -68,10 +69,8 @@ namespace Hub:
         end
 
         #Get trading path from the selected solver
-        let (router_addresses_len : felt,
-            router_addresses : felt*,
-            router_types_len : felt,
-            router_types : felt*,
+        let (routers_len : felt,
+            routers: Router*,
             path_len : felt, 
             path : felt*,
             amounts_len : felt, 
@@ -83,10 +82,8 @@ namespace Hub:
         #Execute Trades
         let (amount_out: Uint256) = ITrade_executioner.library_call_simulate_multi_swap(
             trade_executor_hash,
-            router_addresses_len,
-            router_addresses,
-            router_types_len,
-            router_types,
+            routers_len,
+            routers,
             path_len,
             path,
             amounts_len,
@@ -135,10 +132,8 @@ namespace Hub:
         let(original_balance: Uint256) = IERC20.balanceOf(_token_out,this_address) 
 
         #Get trading path from the selected solver
-        let (router_addresses_len : felt,
-            router_addresses : felt*,
-            router_types_len : felt,
-            router_types : felt*,
+        let (routers_len : felt,
+            routers: Router*,
             path_len : felt, 
             path : felt*,
             amounts_len : felt, 
@@ -151,10 +146,8 @@ namespace Hub:
         #Delegate Call: Execute transactions
         ITrade_executioner.library_call_multi_swap(
             trade_executor_hash,
-            router_addresses_len,
-            router_addresses,
-            router_types_len,
-            router_types,
+            routers_len,
+            routers,
             path_len,
             path,
             amounts_len,

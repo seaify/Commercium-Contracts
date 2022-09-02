@@ -1,7 +1,8 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
+from src.lib.utils import Router
 
 @contract_interface
 namespace IHub:
@@ -34,10 +35,8 @@ namespace IHub:
     end    
 
     func swap_with_path(
-            _router_addresses_len: felt,
-            _router_addresses: felt*,
-            _router_types_len: felt,
-            _router_types: felt*,
+            routers_len : felt,
+            routers : Router*,
             _path_len: felt,
             _path: felt*,
             _amounts_len: felt,

@@ -8,7 +8,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256,uint256_eq
 
 from src.lib.array import Array
-from src.lib.utils import Utils
+from src.lib.utils import Utils, Router
 from src.lib.constants import MAX_FELT, BASE
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.openzeppelin.access.ownable import Ownable
@@ -48,11 +48,6 @@ struct Source:
     member stop : felt
 end
 
-struct Router:
-    member address : felt
-    member type : felt
-end
-
 struct Edge:
     member dst : felt
     member router : Router
@@ -88,10 +83,8 @@ func get_results{
         _token_in: felt,
         _token_out: felt
     ) -> (
-        router_addresses_len : felt,
-        router_addresses : felt*,
-        router_types_len : felt,
-        router_types : felt*,
+        routers_len : felt,
+        routers : Router*,
         path_len : felt, 
         path : felt*,
         amounts_len : felt, 
@@ -142,8 +135,7 @@ func get_results{
     #Getting each tokens best predecessor
     let (new_predecessors: felt*) = shortest_path_faster(Vertices,distances,Vertices,is_in_queue,1,queue,Vertices,src,edge,Vertices,predecessors)
 
-    let (router_addresses : felt*) = alloc()
-    let (router_types : felt*) = alloc()
+    let (routers : Router*) = alloc()
     let (amounts : felt*) = alloc()
     let (token_ids : felt*) = alloc()
     let (final_tokens : felt*) = alloc()
@@ -158,16 +150,14 @@ func get_results{
         assert token_ids[0] = 0
         assert token_ids[1] = Vertices-1
 
-        set_routers_from_edge(1,src,edge,token_ids,router_addresses,router_types)
+        set_routers_from_edge(1,src,edge,token_ids,routers)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[Vertices-1]
 
         return(
-            router_addresses_len=1,
-            router_addresses=router_addresses,
-            router_types_len=1,
-            router_types=router_types,
+            routers_len=1,
+            routers=routers,
             path_len=2,
             path=final_tokens,
             amounts_len=1,
@@ -180,7 +170,7 @@ func get_results{
         assert token_ids[1] = path[0]
         assert token_ids[2] = Vertices-1
 
-        set_routers_from_edge(2,src,edge,token_ids,router_addresses,router_types)
+        set_routers_from_edge(2,src,edge,token_ids,routers)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[path[0]]
@@ -189,10 +179,8 @@ func get_results{
         assert amounts[1] = BASE
 
         return(
-            router_addresses_len=2,
-            router_addresses=router_addresses,
-            router_types_len=2,
-            router_types=router_types,
+            routers_len=2,
+            routers=routers,
             path_len=3,
             path=final_tokens,
             amounts_len=2,
@@ -206,7 +194,7 @@ func get_results{
         assert token_ids[2] = path[0]
         assert token_ids[3] = Vertices-1
 
-        set_routers_from_edge(3,src,edge,token_ids,router_addresses,router_types)
+        set_routers_from_edge(3,src,edge,token_ids,routers)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[path[1]]
@@ -217,10 +205,8 @@ func get_results{
         assert amounts[2] = BASE
 
         return(
-            router_addresses_len=3,
-            router_addresses=router_addresses,
-            router_types_len=3,
-            router_types=router_types,
+            routers_len=3,
+            routers=routers,
             path_len=4,
             path=final_tokens,
             amounts_len=3,
@@ -235,7 +221,7 @@ func get_results{
         assert token_ids[3] = path[0]
         assert token_ids[4] = Vertices-1
 
-        set_routers_from_edge(4,src,edge,token_ids,router_addresses,router_types)
+        set_routers_from_edge(4,src,edge,token_ids,routers)
 
         assert final_tokens[0] = tokens[0]
         assert final_tokens[1] = tokens[path[2]]
@@ -248,11 +234,9 @@ func get_results{
         assert amounts[3] = BASE
 
         return(
-            router_addresses_len=4,
-            router_addresses=router_addresses,
-            router_types_len=5,
-            router_types=router_types,
-            path_len=4,
+            routers_len=4,
+            routers=routers,
+            path_len=5,
             path=final_tokens,
             amounts_len=4,
             amounts=amounts
@@ -260,7 +244,7 @@ func get_results{
     end
     #Should never happen
     assert 0 = 1
-    return(0,router_addresses,0,router_types,0,final_tokens,0,amounts)
+    return(0,routers,0,final_tokens,0,amounts)
 end
 
 #
@@ -313,7 +297,7 @@ func set_edges{
         assert we_are_not_advancing = 0
     else:
         let (router_aggregator_address) = router_aggregator.read()        
-        let (local amount_out: Uint256, local router_address: felt, local router_type: felt) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter])
+        let (local amount_out: Uint256, local router: Router) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_tokens[_src_counter],_tokens[_dst_counter])
         let (amount_is_zero) = uint256_eq(amount_out,Uint256(0,0))
         if amount_is_zero == 1 :
             #Edge(Destination_List(dst,dst,dst,dst,dst),Weight_List(weight,weight,weight,weight,weight),Pool_List(pool,pool,pool,pool,pool))
@@ -324,9 +308,9 @@ func set_edges{
         else:  
             let(local weight:felt) = IRouter_aggregator.get_weight(router_aggregator_address,_amount_in_usd,amount_out,_tokens[_src_counter],_tokens[_dst_counter])  
             if _src_counter == 0 :
-                assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight + EXTRA_BASE)
+                assert _edge[0] = Edge(_dst_counter,router,weight + EXTRA_BASE)
             else:
-                assert _edge[0] = Edge(_dst_counter,Router(router_address,router_type),weight)
+                assert _edge[0] = Edge(_dst_counter,router,weight)
             end    
             assert we_are_not_advancing = 0
             tempvar syscall_ptr = syscall_ptr
@@ -702,8 +686,7 @@ func set_routers_from_edge{
         _src : Source*,
         _edge : Edge*,
         _tokens : felt*,
-        _router_addresses : felt*,
-        _router_types : felt*
+        _routers : Router*
     ):
     alloc_locals
 
@@ -711,9 +694,9 @@ func set_routers_from_edge{
         return()
     end
 
-    get_router_and_address(_src,_edge,_tokens,_router_addresses,_router_types,0)
+    get_router_and_address(_src,_edge,_tokens,_routers,0)
 
-    set_routers_from_edge(_src_len-1,_src,_edge,_tokens+1,_router_addresses+1,_router_types+1)
+    set_routers_from_edge(_src_len-1,_src,_edge,_tokens+1,_routers+2)
     
     return()
 end 
@@ -726,8 +709,7 @@ func get_router_and_address{
         _src : Source*,
         _edge : Edge*,
         _tokens : felt*,
-        _router_addresses : felt*,
-        _router_types : felt*,
+        _routers: Router*,
         _counter: felt,
     ):
     alloc_locals
@@ -735,9 +717,7 @@ func get_router_and_address{
     local edge_position = _src[_tokens[0]].start + _counter
 
     if _edge[edge_position].dst == _tokens[1]:
-        tempvar router : Router = _edge[edge_position].router
-        assert _router_addresses[0] = router.address
-        assert _router_types[0] = router.type  
+        assert _routers[0] = _edge[edge_position].router
         
         return()
     else:
@@ -745,8 +725,7 @@ func get_router_and_address{
             _src,
             _edge,
             _tokens,
-            _router_addresses,
-            _router_types,
+            _routers,
             _counter + 1
         )
         return()

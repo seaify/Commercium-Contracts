@@ -5,6 +5,11 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import (Uint256,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
+struct Router:
+    member address: felt
+    member type: felt
+end
+
 namespace Utils:
 
     func not_equal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

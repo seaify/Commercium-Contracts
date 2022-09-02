@@ -6,7 +6,7 @@ from starkware.cairo.common.alloc import alloc
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
-from src.lib.utils import Utils
+from src.lib.utils import Utils, Router
 from src.lib.constants import BASE
 
 from src.interfaces.IERC20 import IERC20
@@ -19,10 +19,8 @@ func simulate_multi_swap{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }(
-        _router_addresses_len : felt,
-        _router_addresses : felt*,
-        _router_types_len: felt,
-        _router_types: felt*,
+        _routers_len : felt,
+        _routers: Router*,
         _path_len : felt,
         _path : felt*,
         _amounts_len : felt,
@@ -31,19 +29,17 @@ func simulate_multi_swap{
     )->(amount_out: Uint256):
     alloc_locals
 
-    if _router_addresses_len == 0 :
+    if _routers_len == 0 :
         return(_amount_in)
     end
 
     let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
-    let (amount_out: Uint256) = simulate_swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1])
+    let (amount_out: Uint256) = simulate_swap(_routers[0],trade_amount,_path[0],_path[1])
     
     let (final_amount_out) = simulate_multi_swap(
-        _router_addresses_len-1,
-        _router_addresses+1,
-        _router_types_len,
-        _router_types+1,
+        _routers_len-1,
+        _routers+2,
         _path_len,
         _path+1,
         _amounts_len,
@@ -60,10 +56,8 @@ func multi_swap{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }(
-        _router_addresses_len : felt,
-        _router_addresses : felt*,
-        _router_types_len: felt,
-        _router_types: felt*,
+        _routers_len : felt,
+        _routers: Router*,
         _path_len : felt,
         _path : felt*,
         _amounts_len : felt,
@@ -73,7 +67,7 @@ func multi_swap{
     ):
     alloc_locals
 
-    if _router_addresses_len == 0 :
+    if _routers_len == 0 :
         return()
     end
     
@@ -81,17 +75,15 @@ func multi_swap{
     
     let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
-    _swap(_router_addresses[0],_router_types[0],trade_amount,_path[0],_path[1],_receiver_address)
+    _swap(_routers[0],trade_amount,_path[0],_path[1],_receiver_address)
 
     let (amount_after_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address)
 
     let (new_token_amount: Uint256) = SafeUint256.sub_le(amount_after_trade,amount_before_trade)
     
     multi_swap(
-        _router_addresses_len-1,
-        _router_addresses+1,
-        _router_types_len,
-        _router_types+1,
+        _routers_len-1,
+        _routers+2,
         _path_len,
         _path+1,
         _amounts_len,
@@ -108,20 +100,19 @@ func _swap{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }(
-        _router_address: felt,
-        _router_type: felt,
+        _router: Router,
         _amount_in: Uint256,
         _token_in: felt,
         _token_out: felt,
         _receiver_address: felt
     ): 
 
-    if _router_type == Uni :
-        IERC20.approve(_token_in,_router_address,_amount_in)
+    if _router.type == Uni :
+        IERC20.approve(_token_in,_router.address,_amount_in)
         let (path : felt*) = alloc()
         assert path[0] = _token_in
         assert path[1] = _token_out
-        IUni_router.swap_exact_tokens_for_tokens(_router_address,_amount_in,Uint256(0,0),2,path,_receiver_address,trade_deadline)
+        IUni_router.swap_exact_tokens_for_tokens(_router.address,_amount_in,Uint256(0,0),2,path,_receiver_address,trade_deadline)
         tempvar syscall_ptr = syscall_ptr
         tempvar pedersen_ptr = pedersen_ptr
         tempvar range_check_ptr = range_check_ptr    
@@ -147,18 +138,17 @@ func simulate_swap{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }(
-        _router_address: felt,
-        _router_type: felt,
+        _router: Router,
         _amount_in: Uint256,
         _token_in: felt,
         _token_out: felt
     )->(amount_out: Uint256): 
 
-    if _router_type == Uni :
+    if _router.type == Uni :
         let (path : felt*) = alloc()
         assert path[0] = _token_in
         assert path[1] = _token_out
-        let (amounts_len: felt, amounts: Uint256*) = IUni_router.get_amounts_out(_router_address,_amount_in, 2, path) 
+        let (amounts_len: felt, amounts: Uint256*) = IUni_router.get_amounts_out(_router.address,_amount_in, 2, path) 
         return(amounts[1]) 
     else:
         with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist"):
