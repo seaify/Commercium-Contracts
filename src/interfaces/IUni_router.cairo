@@ -23,5 +23,8 @@ namespace IUni_router:
     func get_amounts_out(amountIn: Uint256, path_len: felt, path: felt*) -> (amounts_len: felt, amounts: Uint256*):
     end
 
+    func factory()->(address: felt):
+    end
+
 end
 

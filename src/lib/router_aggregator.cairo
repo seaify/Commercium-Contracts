@@ -181,7 +181,8 @@ namespace RouterAggregator:
         assert _routers[0] = router
 
         if router.type == Uni :
-            let (pair_address: felt) = IUni_factory.get_pair(router.address,_token_in,_token_out)
+            let (factory_address) = IUni_router.factory(router.address)
+            let (pair_address: felt) = IUni_factory.get_pair(factory_address,_token_in,_token_out)
             let (reserve0: Uint256, reserve1: Uint256, _) = IUni_pair.get_reserves(pair_address)
             assert _liquidity[0] = Liquidity(reserve0,reserve1)
             tempvar range_check_ptr = range_check_ptr
