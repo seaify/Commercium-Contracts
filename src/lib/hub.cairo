@@ -12,7 +12,7 @@ from src.interfaces.ISolver import ISolver
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.ITrade_executioner import ITrade_executioner
-from src.lib.utils import Router
+from src.lib.utils import Router, Path
 
 const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984
 const simulate_multi_swap_selector = 1310124106700095074905752334807922719347974895149925748802193060450827293357
@@ -72,7 +72,7 @@ namespace Hub:
         let (routers_len : felt,
             routers: Router*,
             path_len : felt, 
-            path : felt*,
+            path : Path*,
             amounts_len : felt, 
             amounts : felt*
         ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
@@ -135,7 +135,7 @@ namespace Hub:
         let (routers_len : felt,
             routers: Router*,
             path_len : felt, 
-            path : felt*,
+            path : Path*,
             amounts_len : felt, 
             amounts : felt*
         ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)

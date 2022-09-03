@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from src.lib.router_aggregator import Router
+from src.lib.router_aggregator import Router, Liquidity
 
 @contract_interface
 namespace IRouter_aggregator:
@@ -26,6 +26,17 @@ namespace IRouter_aggregator:
             routers_len: felt,  
             routers: Router*
         ):
+    end
+
+    func get_all_routers_and_liquidity(
+        _token_in: felt, 
+        _token_out: felt
+    )->(
+        liquidity_len: felt,
+        liquidity: Liquidity*,
+        routers_len: felt,  
+        routers: Router*
+    ):
     end
 
     func get_weight(

@@ -19,7 +19,6 @@ from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.interfaces.IERC20 import IERC20
 from src.interfaces.IUni_router import IUni_router
-from src.interfaces.ISpf_solver import ISpf_solver
 from src.interfaces.IHub import IHub
 
 const Vertices = 6
@@ -184,11 +183,14 @@ func __setup__{
         context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0]).contract_address 
         ids.solver2_address = context.solver2_address
     %}
+    local solver3_address : felt
+    %{ 
+        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitter.cairo", [ids.public_key_0]).contract_address 
+        ids.solver3_address = context.solver3_address
+    %}
 
     #Configure SPF
     #Set high Liq tokens for spf_solver
-    local solver2_address
-    %{ids.solver2_address = context.solver2_address %}
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
         ISolver.set_high_liq_tokens(solver2_address,0,ETH)
         ISolver.set_high_liq_tokens(solver2_address,1,DAI)
@@ -203,17 +205,21 @@ func __setup__{
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
         ISolver.set_router_aggregator(solver2_address,router_aggregator_address)
     %{stop_prank_callable()%}
+    %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver3_address)%}
+        ISolver.set_router_aggregator(solver3_address,router_aggregator_address)
+    %{stop_prank_callable()%}
 
     #Add solver to solver_registry
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver_registry_address)%}
         ISolver_registry.set_solver(solver_registry_address,1,solver1_address)
         ISolver_registry.set_solver(solver_registry_address,2,solver2_address)
+        ISolver_registry.set_solver(solver_registry_address,3,solver3_address)
     %{stop_prank_callable()%}
 
     return ()
 end      
 
-@external
+#@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -236,9 +242,6 @@ func test_single_swap{
     %{ ids.USDT = context.USDT %}
 
     local amount_to_trade: Uint256 = Uint256(100*base,0)
-
-    local router_aggregator_address
-    %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
     let (_amount_out: Uint256) = IHub.get_solver_result(
         hub_address,
@@ -271,7 +274,7 @@ func test_single_swap{
     return()
 end
 
-@external
+#@external
 func test_spf{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -298,9 +301,6 @@ func test_spf{
     %{ ids.shitcoin2 = context.shitcoin2 %}
 
     local amount_to_trade: Uint256 = Uint256(100*base,0)
-
-    local router_aggregator_address
-    %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
     let (amount_out: Uint256) = IHub.get_solver_result(
         hub_address,
@@ -335,6 +335,66 @@ func test_spf{
 end
 
 @external
+func test_heuristic_splitter{
+    syscall_ptr : felt*, 
+    pedersen_ptr : HashBuiltin*, 
+    range_check_ptr}():
+    alloc_locals
+
+    local public_key_0
+    %{ ids.public_key_0 = context.public_key_0 %}
+
+    local hub_address
+    %{ ids.hub_address = context.hub_address %}
+
+    local ETH
+    %{ ids.ETH = context.ETH %}
+    local DAI
+    %{ ids.DAI = context.DAI %}
+    local USDC
+    %{ ids.USDC = context.USDC %}
+    local USDT
+    %{ ids.USDT = context.USDT %}
+    local shitcoin1
+    %{ ids.shitcoin1 = context.shitcoin1 %}
+    local shitcoin2
+    %{ ids.shitcoin2 = context.shitcoin2 %}
+
+    local amount_to_trade: Uint256 = Uint256(100*base,0)
+
+    let (amount_out: Uint256) = IHub.get_solver_result(
+        hub_address,
+        amount_to_trade, 
+        ETH, 
+        USDC, 
+        3
+    )
+    %{ print("Get_out amount: ",ids.amount_out.low) %}
+
+    #Allow hub to take tokens
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
+    IERC20.approve(ETH,hub_address,amount_to_trade)
+    %{ stop_prank_callable() %}
+
+    #Execute Solver via Hub
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
+    let (received_amount: Uint256) = IHub.swap_with_solver(
+        hub_address,
+        _token_in=ETH, 
+        _token_out=USDC, 
+        _amount_in=amount_to_trade, 
+        _min_amount_out=amount_out, 
+        _to=public_key_0,
+        _solver_id=3
+    )
+    %{ stop_prank_callable() %}
+
+    %{ print("received_amount: ",ids.received_amount.low) %}
+
+    return()
+end
+
+#@external
 func test_view_amount_out{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 

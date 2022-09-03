@@ -34,6 +34,23 @@
         "type": "struct"
     },
     {
+        "members": [
+            {
+                "name": "token_in",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "token_out",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Path",
+        "size": 2,
+        "type": "struct"
+    },
+    {
         "data": [
             {
                 "name": "previousOwner",
@@ -74,12 +91,12 @@
                 "type": "Router*"
             },
             {
-                "name": "_path_len",
+                "name": "path_len",
                 "type": "felt"
             },
             {
-                "name": "_path",
-                "type": "felt*"
+                "name": "path",
+                "type": "Path*"
             },
             {
                 "name": "amounts_len",

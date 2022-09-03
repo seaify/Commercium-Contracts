@@ -6,7 +6,7 @@ from starkware.cairo.common.alloc import alloc
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
-from src.lib.utils import Utils, Router
+from src.lib.utils import Utils, Router, Path
 from src.lib.constants import BASE
 
 from src.interfaces.IERC20 import IERC20
@@ -22,7 +22,7 @@ func simulate_multi_swap{
         _routers_len : felt,
         _routers: Router*,
         _path_len : felt,
-        _path : felt*,
+        _path : Path*,
         _amounts_len : felt,
         _amounts : felt*,
         _amount_in: Uint256
@@ -35,13 +35,13 @@ func simulate_multi_swap{
 
     let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
-    let (amount_out: Uint256) = simulate_swap(_routers[0],trade_amount,_path[0],_path[1])
+    let (amount_out: Uint256) = simulate_swap(_routers[0],trade_amount,_path[0].token_in,_path[0].token_out)
     
     let (final_amount_out) = simulate_multi_swap(
         _routers_len-1,
         _routers+2,
         _path_len,
-        _path+1,
+        _path+2,
         _amounts_len,
         _amounts+1,
         amount_out
@@ -59,7 +59,7 @@ func multi_swap{
         _routers_len : felt,
         _routers: Router*,
         _path_len : felt,
-        _path : felt*,
+        _path : Path*,
         _amounts_len : felt,
         _amounts : felt*,
         _receiver_address: felt,
@@ -71,13 +71,13 @@ func multi_swap{
         return()
     end
     
-    let(local amount_before_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address)
+    let (local amount_before_trade: Uint256) = IERC20.balanceOf(_path[0].token_out,_receiver_address)
     
     let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
-    _swap(_routers[0],trade_amount,_path[0],_path[1],_receiver_address)
+    _swap(_routers[0],trade_amount,_path[0].token_in,_path[0].token_out,_receiver_address)
 
-    let (amount_after_trade: Uint256) = IERC20.balanceOf(_path[1],_receiver_address)
+    let (amount_after_trade: Uint256) = IERC20.balanceOf(_path[0].token_out,_receiver_address)
 
     let (new_token_amount: Uint256) = SafeUint256.sub_le(amount_after_trade,amount_before_trade)
     
@@ -85,7 +85,7 @@ func multi_swap{
         _routers_len-1,
         _routers+2,
         _path_len,
-        _path+1,
+        _path+2,
         _amounts_len,
         _amounts+1,
         _receiver_address,

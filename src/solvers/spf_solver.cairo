@@ -8,7 +8,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256,uint256_eq
 
 from src.lib.array import Array
-from src.lib.utils import Utils, Router
+from src.lib.utils import Utils, Router, Path
 from src.lib.constants import MAX_FELT, BASE
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.openzeppelin.access.ownable import Ownable
@@ -86,7 +86,7 @@ func get_results{
         routers_len : felt,
         routers : Router*,
         path_len : felt, 
-        path : felt*,
+        path : Path*,
         amounts_len : felt, 
         amounts : felt*
     ):
@@ -138,7 +138,7 @@ func get_results{
     let (routers : Router*) = alloc()
     let (amounts : felt*) = alloc()
     let (token_ids : felt*) = alloc()
-    let (final_tokens : felt*) = alloc()
+    let (final_tokens : Path*) = alloc()
 
     assert amounts[0] = BASE
 
@@ -152,13 +152,12 @@ func get_results{
 
         set_routers_from_edge(1,src,edge,token_ids,routers)
 
-        assert final_tokens[0] = tokens[0]
-        assert final_tokens[1] = tokens[Vertices-1]
+        assert final_tokens[0] = Path(tokens[0],tokens[Vertices-1])
 
         return(
             routers_len=1,
             routers=routers,
-            path_len=2,
+            path_len=1,
             path=final_tokens,
             amounts_len=1,
             amounts=amounts
@@ -172,16 +171,15 @@ func get_results{
 
         set_routers_from_edge(2,src,edge,token_ids,routers)
 
-        assert final_tokens[0] = tokens[0]
-        assert final_tokens[1] = tokens[path[0]]
-        assert final_tokens[2] = tokens[Vertices-1]
+        assert final_tokens[0] = Path(tokens[0],tokens[path[0]])
+        assert final_tokens[1] = Path(tokens[path[0]],tokens[Vertices-1])
 
         assert amounts[1] = BASE
 
         return(
             routers_len=2,
             routers=routers,
-            path_len=3,
+            path_len=2,
             path=final_tokens,
             amounts_len=2,
             amounts=amounts
@@ -196,10 +194,9 @@ func get_results{
 
         set_routers_from_edge(3,src,edge,token_ids,routers)
 
-        assert final_tokens[0] = tokens[0]
-        assert final_tokens[1] = tokens[path[1]]
-        assert final_tokens[2] = tokens[path[0]]
-        assert final_tokens[3] = tokens[Vertices-1]
+        assert final_tokens[0] = Path(tokens[0],tokens[path[1]])
+        assert final_tokens[1] = Path(tokens[path[1]],tokens[path[0]])
+        assert final_tokens[2] = Path(tokens[path[0]],tokens[Vertices-1])
 
         assert amounts[1] = BASE
         assert amounts[2] = BASE
@@ -207,7 +204,7 @@ func get_results{
         return(
             routers_len=3,
             routers=routers,
-            path_len=4,
+            path_len=3,
             path=final_tokens,
             amounts_len=3,
             amounts=amounts
@@ -223,11 +220,10 @@ func get_results{
 
         set_routers_from_edge(4,src,edge,token_ids,routers)
 
-        assert final_tokens[0] = tokens[0]
-        assert final_tokens[1] = tokens[path[2]]
-        assert final_tokens[2] = tokens[path[1]]
-        assert final_tokens[3] = tokens[path[0]]
-        assert final_tokens[4] = tokens[Vertices-1]
+        assert final_tokens[0] = Path(tokens[0],tokens[path[2]])
+        assert final_tokens[1] = Path(tokens[path[2]],tokens[path[1]])
+        assert final_tokens[2] = Path(tokens[path[1]],tokens[path[0]])
+        assert final_tokens[3] = Path(tokens[path[0]],tokens[Vertices-1])
 
         assert amounts[1] = BASE
         assert amounts[2] = BASE
@@ -236,7 +232,7 @@ func get_results{
         return(
             routers_len=4,
             routers=routers,
-            path_len=5,
+            path_len=4,
             path=final_tokens,
             amounts_len=4,
             amounts=amounts

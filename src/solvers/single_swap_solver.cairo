@@ -6,7 +6,7 @@ from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.IERC20 import IERC20
-from src.lib.utils import Router
+from src.lib.utils import Router, Path
 from src.lib.constants import BASE
 
 ###################################################################################
@@ -32,8 +32,8 @@ func get_results{
     )->(
         routers_len : felt,
         routers : Router*,
-        _path_len : felt, 
-        _path : felt*,
+        path_len : felt, 
+        path : Path*,
         amounts_len : felt, 
         amounts : felt*
     ):
@@ -44,15 +44,14 @@ func get_results{
     let (_,router: Router) = IRouter_aggregator.get_single_best_router(router_aggregator_address,_amount_in,_token_in,_token_out)
 
     let (routers : Router*) = alloc()
-    let (path : felt*) = alloc()
+    let (path : Path*) = alloc()
     let (amounts : felt*) = alloc()
     
     assert routers[0] = router
-    assert path[0] = _token_in
-    assert path[1] = _token_out
+    assert path[0] = Path(_token_in,_token_out)
     assert amounts[0] = BASE
 
-    return(1,routers,2,path,1,amounts)
+    return(1,routers,1,path,1,amounts)
 end
 
 #

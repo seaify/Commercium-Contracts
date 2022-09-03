@@ -34,6 +34,23 @@
         "type": "struct"
     },
     {
+        "members": [
+            {
+                "name": "token_in",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "token_out",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Path",
+        "size": 2,
+        "type": "struct"
+    },
+    {
         "data": [
             {
                 "name": "previousOwner",
@@ -221,7 +238,7 @@
             },
             {
                 "name": "_path",
-                "type": "felt*"
+                "type": "Path*"
             },
             {
                 "name": "_amounts_len",

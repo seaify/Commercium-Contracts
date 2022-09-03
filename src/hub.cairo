@@ -14,7 +14,7 @@ from src.interfaces.IERC20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.utils import Router
+from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
 #
@@ -156,7 +156,7 @@ func swap_with_path{
         _routers_len: felt,
         _routers: Router*,
         _path_len: felt,
-        _path: felt*,
+        _path: Path*,
         _amounts_len: felt,
         _amounts: felt*,
         _amount_in : Uint256, 
@@ -171,7 +171,7 @@ func swap_with_path{
 
     let (this_address) = get_contract_address()
 
-    let(original_balance: Uint256) = IERC20.balanceOf(_path[_path_len-1],this_address) 
+    let(original_balance: Uint256) = IERC20.balanceOf(_path[_path_len-1].token_out,this_address) 
 
     #Delegate Call: Execute transactions
     let (trade_executor_hash) = Hub_trade_executor.read()
@@ -190,7 +190,7 @@ func swap_with_path{
     )
     
     #Get new Balance of out_token
-    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len-1],this_address) 
+    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len-1].token_out,this_address) 
     #ToDo: underlflow check
     let (received_amount: Uint256) = SafeUint256.sub_le(new_amount,original_balance)
 
@@ -199,7 +199,7 @@ func swap_with_path{
     assert min_amount_received = TRUE
 
     #Transfer _token_out back to caller
-    IERC20.transfer(_path[_path_len-1],caller_address,received_amount)
+    IERC20.transfer(_path[_path_len-1].token_out,caller_address,received_amount)
 
     ReentrancyGuard._end()
 

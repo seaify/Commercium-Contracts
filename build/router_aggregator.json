@@ -9994,6 +9994,10 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
+            "src.interfaces.ISolver.Path": {
+                "destination": "src.lib.utils.Path",
+                "type": "alias"
+            },
             "src.interfaces.ISolver.Router": {
                 "destination": "src.lib.utils.Router",
                 "type": "alias"
@@ -10102,6 +10106,10 @@
             },
             "src.interfaces.ITrade_executioner.ITrade_executioner.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.ITrade_executioner.Path": {
+                "destination": "src.lib.utils.Path",
                 "type": "alias"
             },
             "src.interfaces.ITrade_executioner.Router": {
@@ -10887,6 +10895,10 @@
                 "destination": "src.interfaces.ITrade_executioner.ITrade_executioner",
                 "type": "alias"
             },
+            "src.lib.hub.Path": {
+                "destination": "src.lib.utils.Path",
+                "type": "alias"
+            },
             "src.lib.hub.ReentrancyGuard": {
                 "destination": "src.openzeppelin.security.reentrancy_guard.ReentrancyGuard",
                 "type": "alias"
@@ -10938,6 +10950,36 @@
             "src.lib.utils.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
+            },
+            "src.lib.utils.Liquidity": {
+                "full_name": "src.lib.utils.Liquidity",
+                "members": {
+                    "in": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 0
+                    },
+                    "out": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 2
+                    }
+                },
+                "size": 4,
+                "type": "struct"
+            },
+            "src.lib.utils.Path": {
+                "full_name": "src.lib.utils.Path",
+                "members": {
+                    "token_in": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "token_out": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    }
+                },
+                "size": 2,
+                "type": "struct"
             },
             "src.lib.utils.Router": {
                 "full_name": "src.lib.utils.Router",

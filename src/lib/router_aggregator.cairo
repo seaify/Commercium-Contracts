@@ -13,7 +13,7 @@ from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IUni_pair import IUni_pair
 from src.interfaces.IUni_factory import IUni_factory
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.lib.utils import Utils, Router
+from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE
 
 struct Feed:
@@ -184,9 +184,9 @@ namespace RouterAggregator:
             let (pair_address: felt) = IUni_factory.get_pair(router.address,_token_in,_token_out)
             let (reserve0: Uint256, reserve1: Uint256, _) = IUni_pair.get_reserves(pair_address)
             assert _liquidity[0] = Liquidity(reserve0,reserve1)
-            tempvar range_check_ptr = range_check_ptr 	
+            tempvar range_check_ptr = range_check_ptr
             tempvar syscall_ptr = syscall_ptr
-            tempvar pedersen_ptr = pedersen_ptr 
+            tempvar pedersen_ptr = pedersen_ptr
         else:
             with_attr error_message("router type invalid: {ids.router.type}"):
                 assert 1 = 0
