@@ -21,18 +21,8 @@ end
 func reserves(pair: Pair)->(reserves: Reserves):
 end
 
-@external
-func swap_exact_tokens_for_tokens{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256,_min_amount_out: Uint256, _path_len: felt, _path: felt*,_receiver_address: felt,_deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
-    alloc_locals
-    let (amount_out: Uint256) = get_amount_out(_amount_in,_path[0],_path[1])
-    let (caller_address) = get_caller_address()
-    let (this_address) = get_contract_address()
-    IERC20.transferFrom(_path[0],caller_address,this_address,_amount_in)
-    IERC20.transfer(_path[1],caller_address,amount_out)
-    let (amounts : Uint256*) = alloc()
-    assert amounts[0] = amount_out
-    return(1, amounts)
+@storage_var
+func factory_address()->(address: felt):
 end
 
 @view
@@ -86,10 +76,40 @@ func get_reserves{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     return(token_reserves.reserve_1,token_reserves.reserve_2)
 end
 
+@view 
+func factory{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (address:felt):
+    
+    let (address) = factory_address.read()
+    
+    return(address)
+end
+
 @external
 func set_reserves{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _token_in: felt, _token_out: felt, _reserve_1: Uint256, _reserve_2: Uint256):
     reserves.write(Pair(_token_in,_token_out),Reserves(_reserve_1,_reserve_2))
     reserves.write(Pair(_token_out,_token_in),Reserves(_reserve_2,_reserve_1))
     return()
+end
+
+@external
+func set_factory{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address: felt):
+    factory_address.write(address)
+    return()
+end
+
+@external
+func swap_exact_tokens_for_tokens{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    _amount_in: Uint256,_min_amount_out: Uint256, _path_len: felt, _path: felt*,_receiver_address: felt,_deadline: felt) -> (amounts_len: felt, amounts: Uint256*):
+    alloc_locals
+    let (amount_out: Uint256) = get_amount_out(_amount_in,_path[0],_path[1])
+    let (caller_address) = get_caller_address()
+    let (this_address) = get_contract_address()
+    IERC20.transferFrom(_path[0],caller_address,this_address,_amount_in)
+    IERC20.transfer(_path[1],caller_address,amount_out)
+    let (amounts : Uint256*) = alloc()
+    assert amounts[0] = amount_out
+    return(1, amounts)
 end

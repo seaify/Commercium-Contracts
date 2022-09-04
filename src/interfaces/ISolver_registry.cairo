@@ -23,6 +23,6 @@ namespace ISolver_registry:
     func set_solver(_solver_id: felt, _solver_address: felt):
     end
 
-    func add_solver(_solver_address: felt):
+    func add_solver(_solver_address: felt)->(id: felt):
     end
 end

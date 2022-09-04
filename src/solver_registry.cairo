@@ -78,7 +78,7 @@ func add_solver{
         syscall_ptr : felt*, 
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-    }(_solver_address: felt):
+    }(_solver_address: felt)->(id: felt):
     let (len: felt) = solvers_len.read()
     #I mean...should never happen, but we are making sure
     assert_not_equal(len,MAX_FELT)
@@ -88,7 +88,7 @@ func add_solver{
     solvers_len.write(len+1)
 
     unofficial_solver_added.emit(solver_address=_solver_address, solver_id=len)
-    return()
+    return(len)
 end
 
 @external

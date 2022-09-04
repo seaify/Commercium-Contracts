@@ -1,6 +1,6 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.uint256 import Uint256, uint256_add
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
@@ -30,14 +30,14 @@ func simulate_multi_swap{
     alloc_locals
 
     if _routers_len == 0 :
-        return(_amount_in)
+        return(Uint256(0,0))
     end
 
     let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
 
     let (amount_out: Uint256) = simulate_swap(_routers[0],trade_amount,_path[0].token_in,_path[0].token_out)
-    
-    let (final_amount_out) = simulate_multi_swap(
+
+    let (sum) = simulate_multi_swap(
         _routers_len-1,
         _routers+2,
         _path_len,
@@ -47,7 +47,9 @@ func simulate_multi_swap{
         amount_out
     )
 
-    return(final_amount_out)
+    let (final_sum: Uint256,_) = uint256_add(amount_out,sum)
+
+    return(final_sum)
 end
 
 @external
@@ -70,16 +72,16 @@ func multi_swap{
     if _routers_len == 0 :
         return()
     end
+
+    let (amount_before_trade: Uint256) = IERC20.balanceOf(_path[0].token_out,_receiver_address)
     
-    let (local amount_before_trade: Uint256) = IERC20.balanceOf(_path[0].token_out,_receiver_address)
+    let (init_amount: Uint256) = IERC20.balanceOf(_path[0].token_in,_receiver_address)
     
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
+    let (trade_amount) = Utils.fmul(init_amount,Uint256(_amounts[0],0),Uint256(BASE,0))
 
     _swap(_routers[0],trade_amount,_path[0].token_in,_path[0].token_out,_receiver_address)
 
     let (amount_after_trade: Uint256) = IERC20.balanceOf(_path[0].token_out,_receiver_address)
-
-    let (new_token_amount: Uint256) = SafeUint256.sub_le(amount_after_trade,amount_before_trade)
     
     multi_swap(
         _routers_len-1,
@@ -89,7 +91,7 @@ func multi_swap{
         _amounts_len,
         _amounts+1,
         _receiver_address,
-        new_token_amount
+        _amount_in
     )
     
     return()

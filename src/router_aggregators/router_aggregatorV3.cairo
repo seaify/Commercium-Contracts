@@ -130,10 +130,6 @@ func get_all_routers_and_liquidity{
         routers_len
     )
 
-    with_attr error_message("CHECKPOINT"):
-        assert 1 = 2
-    end
-
     return(routers_len,liquidity,routers_len,routers)
 end
 

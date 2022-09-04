@@ -20,8 +20,8 @@ incentivized_router_aggregator = [
 solver_registry = [
     "./src/solver_registry.cairo",
 ]
-trade_executioner = [
-    "./src/trade_executioner.cairo",
+trade_executor = [
+    "./src/trade_executor.cairo",
 ]
 spf_solver = [
     "./src/solvers/spf_solver.cairo",

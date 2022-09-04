@@ -96,7 +96,7 @@ func __setup__{
     #Generate Executor Hash
     local executioner_hash: felt
     %{
-        declared = declare("./src/trade_executioner.cairo")
+        declared = declare("./src/trade_executor.cairo")
         prepared = prepare(declared, [])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         # constructor will be affected by prank
@@ -219,7 +219,7 @@ func __setup__{
     return ()
 end      
 
-#@external
+@external
 func test_single_swap{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -241,7 +241,7 @@ func test_single_swap{
     local USDT
     %{ ids.USDT = context.USDT %}
 
-    local amount_to_trade: Uint256 = Uint256(100*base,0)
+    local amount_to_trade: Uint256 = Uint256(2*base,0)
 
     let (_amount_out: Uint256) = IHub.get_solver_result(
         hub_address,
@@ -274,7 +274,7 @@ func test_single_swap{
     return()
 end
 
-#@external
+@external
 func test_spf{
     syscall_ptr : felt*, 
     pedersen_ptr : HashBuiltin*, 
@@ -300,7 +300,7 @@ func test_spf{
     local shitcoin2
     %{ ids.shitcoin2 = context.shitcoin2 %}
 
-    local amount_to_trade: Uint256 = Uint256(100*base,0)
+    local amount_to_trade: Uint256 = Uint256(2*base,0)
 
     let (amount_out: Uint256) = IHub.get_solver_result(
         hub_address,
@@ -360,7 +360,7 @@ func test_heuristic_splitter{
     local shitcoin2
     %{ ids.shitcoin2 = context.shitcoin2 %}
 
-    local amount_to_trade: Uint256 = Uint256(100*base,0)
+    local amount_to_trade: Uint256 = Uint256(2*base,0)
 
     let (amount_out: Uint256) = IHub.get_solver_result(
         hub_address,
@@ -420,8 +420,8 @@ func test_view_amount_out{
     local shitcoin2
     %{ ids.shitcoin2 = context.shitcoin2 %}
 
-    local amount_to_trade: Uint256 = Uint256(100*base,0)
-    local expected_min_return: Uint256 = Uint256(75*base,0)
+    local amount_to_trade: Uint256 = Uint256(2*base,0)
+    local expected_min_return: Uint256 = Uint256(1*base,0)
 
     local router_aggregator_address
     %{ ids.router_aggregator_address = context.router_aggregator_address %}
@@ -493,7 +493,7 @@ func create_router1{syscall_ptr : felt*, range_check_ptr}(
     IUni_router.set_reserves(router_address,USDT, USDC, Uint256(80000*base,0), Uint256(80000*small_base,0))     #80,000
     IUni_router.set_reserves(router_address,USDT, DAI, Uint256(90000*base,0), Uint256(90000*base,0))      #90,000
     
-    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*base,0), Uint256(80000*base,0))      #80,000
+    IUni_router.set_reserves(router_address,USDC, DAI, Uint256(80000*small_base,0), Uint256(80000*base,0))      #80,000
 
     #Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}

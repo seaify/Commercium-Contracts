@@ -71,7 +71,7 @@ func get_results{
 
     let (final_routers_len: felt) = kick_low_liquidity(sum.low,routers_len,final_routers,routers,final_liquidity,liquidity,routers_len)
 
-    let (final_sum: Uint256) = sum_liquidity(liquidity_len,final_liquidity)
+    let (final_sum: Uint256) = sum_liquidity(final_routers_len,final_liquidity)
 
     set_amounts(final_sum.low,final_routers_len,final_liquidity,amounts)
 
@@ -79,14 +79,9 @@ func get_results{
 
     let (check_sum) = sum_amounts(final_routers_len,amounts)
     
-    #Makse sure amounts add up to 100%
-    with_attr error_message("HUB: Path should consist of exactly 2 tokens"):
-        assert check_sum = BASE
-    end
-    
     return(
         routers_len=final_routers_len,
-        routers=routers,
+        routers=final_routers,
         path_len=final_routers_len,
         path=path,
         amounts_len=final_routers_len,
@@ -112,14 +107,14 @@ end
 # Internals
 #
 
-func sum_liquidity{range_check_ptr}(liquidity_len: felt, liquidity: Liquidity*)->(sum: Uint256):
+func sum_liquidity{range_check_ptr}(_liquidity_len: felt, _liquidity: Liquidity*)->(sum: Uint256):
 
-    if liquidity_len == 0:
+    if _liquidity_len == 0:
         return (Uint256(0,0))
     end
 
-    let (sum: Uint256) = sum_liquidity(liquidity_len-1,liquidity+4)
-    let (addition: Uint256,_) = uint256_add(liquidity[0].out,sum)
+    let (sum: Uint256) = sum_liquidity(_liquidity_len-1,_liquidity+4)
+    let (addition: Uint256,_) = uint256_add(_liquidity[0].out,sum)
     return(addition)
 end
 
@@ -153,13 +148,13 @@ func kick_low_liquidity{range_check_ptr}(
     let (is_below_threshold) = is_le_felt(share,threshold)
 
     if is_below_threshold == TRUE:
-        kick_low_liquidity(_sum,_routers_len,_final_routers,_routers+2,_final_liquidity,_liquidity+1,_counter-1)
-        return(_routers_len)
+        let (res_router_len) = kick_low_liquidity(_sum,_routers_len-1,_final_routers,_routers+2,_final_liquidity,_liquidity+4,_counter-1)
+        return(res_router_len)
     else:
         assert _final_routers[0] = _routers[0]
         assert _final_liquidity[0] = _liquidity[0]
-        kick_low_liquidity(_sum,_routers_len-1,_final_routers+2,_routers+2,_final_liquidity+1,_liquidity+1,_counter-1)
-        return(_routers_len)
+        let (res_router_len) = kick_low_liquidity(_sum,_routers_len,_final_routers+2,_routers+2,_final_liquidity+4,_liquidity+4,_counter-1)
+        return(res_router_len)
     end
 end
 
@@ -179,7 +174,10 @@ func set_amounts{range_check_ptr}(
     let (local share,_) = unsigned_div_rem(based_liquidity,_sum)
     assert _amounts[0] = share
 
-    set_amounts(_sum,_routers_len-1,_liquidity+4,_amounts+1)
+    #TODO: ADD SAFE MATH CHECK
+    tempvar new_sum = _sum - _liquidity[0].out.low
+
+    set_amounts(new_sum,_routers_len-1,_liquidity+4,_amounts+1)
     return()
 end
 
