@@ -10,8 +10,10 @@ from pathlib import Path
 
 ethAddress = 2087021424722619777119509474943472645767659996348769578120564519014510906823
 daiAddress = 1767481910113252210994791615708990276342505294349567333924577048691453030089
+usdcAddress = 159707947995249021625440365289670166666892266109381225273086299925265990694
 ETH_USD_Key = 28556963469423460
 DAI_USD_Key = 28254602066752356
+USDC_USD_Key = 8463218501920060260
 EMPIRIC_ORACLE_ADDRESS = 536554312408700354284283040928046824434969893969739486945260186308733942996
 JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993
 execution_contract_hash = 2064099869494044600463193389870658049751373975999385172371135047097091846831
@@ -24,11 +26,12 @@ client = AccountClient(net="testnet", chain=StarknetChainId.TESTNET,n_retries=1,
 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
-contractAddresses = {"hub": 2564871805806106849975133249130922009633518990198014318443179860106012529501,
-                    "solver_registry": 339234692535171577551477557872295479580825059112759814425791895611285703998,
-                    "router_aggregator": 141598234779943145909949961255707921073346208612990875967745473717510442335,
-                    "single_swap_solver": 3129224635722298990038073977040022864604796615622257110045829298235759774007,
-                    "spf_solver": 1135402204814511555075178073338855859953730460125729580695030124062298106885}
+contractAddresses = {"hub": 0,
+                    "solver_registry": 0,
+                    "router_aggregator": 0,
+                    "single_swap_solver": 0,
+                    "spf_solver": 0,
+                    "heuristic_splitter_solver": 0}
                     
 #######################
 #                     #
@@ -98,6 +101,18 @@ async def deployContracts():
         contract = deployment_result.deployed_contract
         print("SPF Solver Address: ",contract.address)
         contractAddresses["spf_solver"] = contract.address
+
+        # Deploy Heuristic Splitter Solver
+        print("Deploying Heuristic Splitter Solver")
+        compiled = Path("./build/", "heuristic_splitter.json").read_text("utf-8")
+        deployment_result = await Contract.deploy(
+            client, compiled_contract=compiled, constructor_args=[account_address]
+        )
+        print("Waiting for acceptance...")
+        await deployment_result.wait_for_acceptance()
+        contract = deployment_result.deployed_contract
+        print("Heuristic Splitter Address: ",contract.address)
+        contractAddresses["heuristic_splitter_solver"] = contract.address
     
     ##########################
     #                        #
@@ -110,6 +125,7 @@ async def deployContracts():
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
     spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
+    heurtisticSplitterContract = await Contract.from_address(contractAddresses["heuristic_splitter_solver"],client)
 
     # Configure Hub
     print("...Configuring Hub...")
@@ -131,6 +147,9 @@ async def deployContracts():
     print("Adding DAI Price Feed...")
     invocation = await routerAggregatorContract.functions["set_global_price"].invoke(daiAddress,DAI_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
+    print("Adding USDC Price Feed...")
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(usdcAddress,USDC_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
     #Add Router
     print("Adding JediSwapRouter...")
     invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,1,max_fee=50000000000000000000)
@@ -145,6 +164,9 @@ async def deployContracts():
     print("Adding SPF Solver...")
     invocation = await solverRegistryContract.functions["set_solver"].invoke(2,spfSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
+    print("Adding Heuristic Splitter Solver...")
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(3,heurtisticSplitterContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
 
     #Configure Solvers
     print("...Configuring Solvers...")
@@ -155,7 +177,17 @@ async def deployContracts():
     print("Setting Router Aggregator for SPF Solver...")
     invocation = await spfSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
-    #Set high liq tokens for spf solver 
+    print("Setting Router Aggregator for Heuristic Splitter Solver...")
+    invocation = await heurtisticSplitterContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    #Set high liq tokens for spf solver
+    print("Setting High liq tokens for SPF Solver...")
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("0",ethAddress,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("1",daiAddress,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("2",usdcAddress,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
 
 asyncio.run(deployContracts())
 
