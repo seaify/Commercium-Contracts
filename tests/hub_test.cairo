@@ -15,6 +15,7 @@ from src.lib.utils import Utils
 from src.lib.constants import MAX_FELT
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ISolver import ISolver
+from src.interfaces.ISpf_solver import ISpf_solver
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.interfaces.IERC20 import IERC20
@@ -192,10 +193,10 @@ func __setup__{
     #Configure SPF
     #Set high Liq tokens for spf_solver
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
-        ISolver.set_high_liq_tokens(solver2_address,0,ETH)
-        ISolver.set_high_liq_tokens(solver2_address,1,DAI)
-        ISolver.set_high_liq_tokens(solver2_address,2,USDT)
-        ISolver.set_high_liq_tokens(solver2_address,3,USDC)
+        ISpf_solver.set_high_liq_tokens(solver2_address,0,ETH)
+        ISpf_solver.set_high_liq_tokens(solver2_address,1,DAI)
+        ISpf_solver.set_high_liq_tokens(solver2_address,2,USDT)
+        ISpf_solver.set_high_liq_tokens(solver2_address,3,USDC)
     %{stop_prank_callable()%}
     
     #Set router_aggregator for solver
@@ -243,11 +244,11 @@ func test_single_swap{
 
     local amount_to_trade: Uint256 = Uint256(2*base,0)
 
-    let (_amount_out: Uint256) = IHub.get_solver_result(
+    let (_amount_out: Uint256) = IHub.get_solver_amount(
         hub_address,
         amount_to_trade, 
         ETH, 
-        USDC, 
+        USDT, 
         1
     )
     %{ print("Get_out amount: ",ids._amount_out.low) %}
@@ -262,7 +263,7 @@ func test_single_swap{
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
-        _token_out=USDC, 
+        _token_out=USDT, 
         _amount_in=amount_to_trade, 
         _min_amount_out=_amount_out, 
         _to=public_key_0,
@@ -302,11 +303,11 @@ func test_spf{
 
     local amount_to_trade: Uint256 = Uint256(2*base,0)
 
-    let (amount_out: Uint256) = IHub.get_solver_result(
+    let (amount_out: Uint256) = IHub.get_solver_amount(
         hub_address,
         amount_to_trade, 
         ETH, 
-        USDC, 
+        USDT, 
         2
     )
     %{ print("Get_out amount: ",ids.amount_out.low) %}
@@ -321,7 +322,7 @@ func test_spf{
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
-        _token_out=USDC, 
+        _token_out=USDT, 
         _amount_in=amount_to_trade, 
         _min_amount_out=amount_out, 
         _to=public_key_0,
@@ -362,11 +363,11 @@ func test_heuristic_splitter{
 
     local amount_to_trade: Uint256 = Uint256(2*base,0)
 
-    let (amount_out: Uint256) = IHub.get_solver_result(
+    let (amount_out: Uint256) = IHub.get_solver_amount(
         hub_address,
         amount_to_trade, 
         ETH, 
-        USDC, 
+        USDT, 
         3
     )
     %{ print("Get_out amount: ",ids.amount_out.low) %}
@@ -381,7 +382,7 @@ func test_heuristic_splitter{
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH, 
-        _token_out=USDC, 
+        _token_out=USDT, 
         _amount_in=amount_to_trade, 
         _min_amount_out=amount_out, 
         _to=public_key_0,
@@ -434,7 +435,7 @@ func test_view_amount_out{
     #Get amount out
     #Using custom interface
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.get_solver_result(
+    let (received_amount: Uint256) = IHub.get_solver_amount(
         hub_address,
         _amount_in=amount_to_trade,
         _token_in=ETH,
@@ -600,7 +601,6 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
 
     IUni_router.set_reserves(router_address,shitcoin1, USDT, Uint256(1000*base,0), Uint256(10000*base,0))       #10,000
 
-    IUni_router.set_reserves(router_address,ETH, USDT, Uint256(100*base,0), Uint256(100000*base,0))       #100,000
     IUni_router.set_reserves(router_address,ETH, USDC, Uint256(10*base,0), Uint256(10000*small_base,0))         #10,000
     IUni_router.set_reserves(router_address,ETH, DAI, Uint256(100*base,0), Uint256(100000*base,0))          #100,000
     
@@ -621,7 +621,6 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
         IERC20.transfer(shitcoin1,router_address,Uint256(1000*base,0))
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-        IERC20.transfer(ETH,router_address,Uint256(100*base,0))
         IERC20.transfer(ETH,router_address,Uint256(10*base,0))
         IERC20.transfer(ETH,router_address,Uint256(100*base,0))
     %{ stop_prank_callable() %}
@@ -633,7 +632,6 @@ func create_router3{syscall_ptr : felt*, range_check_ptr}(
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDT) %}
         IERC20.transfer(USDT,router_address,Uint256(10000*base,0))
         IERC20.transfer(USDT,router_address,Uint256(10000*base,0))
-        IERC20.transfer(USDT,router_address,Uint256(100000*base,0))
         IERC20.transfer(USDT,router_address,Uint256(80000*base,0))
         IERC20.transfer(USDT,router_address,Uint256(90000*base,0))
     %{ stop_prank_callable() %}

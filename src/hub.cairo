@@ -32,7 +32,7 @@ func solver_registry{
 end
 
 @view
-func get_solver_result{
+func get_solver_amount{
         syscall_ptr : felt*, 
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -43,9 +43,50 @@ func get_solver_result{
         _solver_id: felt
     )->(amount_out: Uint256):
 
-    let (amount_out) = Hub.get_solver_result(_amount_in,_token_in,_token_out,_solver_id)
+    let (amount_out) = Hub.get_solver_amount(_amount_in,_token_in,_token_out,_solver_id)
     
     return(amount_out)
+end
+
+@view
+func get_solver_amount_and_path{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_id: felt
+    )->(
+        routers_len : felt,
+        routers : Router*,
+        path_len : felt, 
+        path : Path*,
+        amounts_len : felt, 
+        amounts : felt*,
+        amount_out: Uint256
+    ):
+
+    let (
+        routers_len : felt,
+        routers : Router*,
+        path_len : felt, 
+        path : Path*,
+        amounts_len : felt, 
+        amounts : felt*,
+        amount_out: Uint256
+    ) = Hub.get_solver_amount_and_path(_amount_in,_token_in,_token_out,_solver_id)
+    
+    return(
+        routers_len,
+        routers,
+        path_len,
+        path,
+        amounts_len,
+        amounts,
+        amount_out
+    )
 end
 
 @view
@@ -65,7 +106,7 @@ func get_amounts_out{
         assert path_len = 2
     end
 
-    let (amount_out) = Hub.get_solver_result(
+    let (amount_out) = Hub.get_solver_amount(
         _amount_in=amountIn,
         _token_in=path[0],
         _token_out=path[1],

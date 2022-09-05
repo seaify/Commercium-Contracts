@@ -50,7 +50,7 @@ namespace Hub:
         return(solver_registry)
     end
 
-    func get_solver_result{
+    func get_solver_amount{
             syscall_ptr : felt*, 
             pedersen_ptr : HashBuiltin*, 
             range_check_ptr
@@ -92,6 +92,66 @@ namespace Hub:
         )
 
         return(amount_out)
+    end
+
+    func get_solver_amount_and_path{
+            syscall_ptr : felt*, 
+            pedersen_ptr : HashBuiltin*, 
+            range_check_ptr
+        }(
+            _amount_in: Uint256, 
+            _token_in: felt, 
+            _token_out: felt, 
+            _solver_id: felt
+        )->(
+            routers_len : felt,
+            routers : Router*,
+            path_len : felt, 
+            path : Path*,
+            amounts_len : felt, 
+            amounts : felt*,
+            amount_out: Uint256
+        ):
+        alloc_locals
+
+        let (solver_registry) = Hub.solver_registry()
+        let (local solver_address) = ISolver_registry.get_solver(solver_registry,_solver_id)
+        with_attr error_message("solver ID invalid"):
+            assert_not_equal(solver_address,FALSE)
+        end
+
+        #Get trading path from the selected solver
+        let (routers_len : felt,
+            routers: Router*,
+            path_len : felt, 
+            path : Path*,
+            amounts_len : felt, 
+            amounts : felt*
+        ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out)
+
+        let (trade_executor_hash) = Hub_trade_executor.read()
+
+        #Execute Trades
+        let (amount_out: Uint256) = ITrade_executioner.library_call_simulate_multi_swap(
+            trade_executor_hash,
+            routers_len,
+            routers,
+            path_len,
+            path,
+            amounts_len,
+            amounts,
+            _amount_in
+        )
+
+        return(
+            routers_len,
+            routers,
+            path_len,
+            path,
+            amounts_len,
+            amounts,
+            amount_out
+        )
     end
 
     #

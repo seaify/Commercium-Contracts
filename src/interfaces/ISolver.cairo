@@ -53,7 +53,4 @@ namespace ISolver:
 
     func set_router_aggregator(_router_aggregator_address: felt):
     end
-
-    func set_high_liq_tokens(_index: felt,_high_liq_tokens: felt):
-    end
 end

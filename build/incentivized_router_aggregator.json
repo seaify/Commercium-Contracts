@@ -8416,6 +8416,10 @@
                 "size": 0,
                 "type": "struct"
             },
+            "src.interfaces.IUni_router.IUni_router.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
+            },
             "src.interfaces.IUni_router.IUni_router.GET_AMOUNTS_OUT_SELECTOR": {
                 "type": "const",
                 "value": 1544114163115011815335571033296884160831958766777219908207586860250867652764

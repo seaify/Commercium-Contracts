@@ -92,7 +92,12 @@
             }
         ],
         "name": "add_solver",
-        "outputs": [],
+        "outputs": [
+            {
+                "name": "id",
+                "type": "felt"
+            }
+        ],
         "type": "function"
     },
     {

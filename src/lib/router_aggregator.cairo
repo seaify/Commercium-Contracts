@@ -81,7 +81,7 @@ namespace RouterAggregator:
                 assert best_router = router
             else:
                 assert best_amount = _best_amount
-                assert best_router = router
+                assert best_router = _router
             end
                 tempvar range_check_ptr = range_check_ptr
                 tempvar syscall_ptr = syscall_ptr

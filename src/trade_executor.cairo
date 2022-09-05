@@ -3,6 +3,9 @@
 from starkware.cairo.common.uint256 import Uint256, uint256_add
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.default_dict import (default_dict_new, default_dict_finalize)
+from starkware.cairo.common.dict import (dict_write, dict_read)
+from starkware.cairo.common.dict_access import DictAccess
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.hub import Uni
@@ -29,27 +32,25 @@ func simulate_multi_swap{
     )->(amount_out: Uint256):
     alloc_locals
 
-    if _routers_len == 0 :
-        return(Uint256(0,0))
-    end
+    #Create Dict to track token balances
+    let (local token_balances_start) = default_dict_new(default_value=0)
+    let token_balances = token_balances_start
+    #Set initial balance of token_in
+    dict_write{dict_ptr=token_balances}(key=_path[0].token_in, new_value=_amount_in.low)
 
-    let (trade_amount) = Utils.fmul(_amount_in,Uint256(_amounts[0],0),Uint256(BASE,0))
-
-    let (amount_out: Uint256) = simulate_swap(_routers[0],trade_amount,_path[0].token_in,_path[0].token_out)
-
-    let (sum) = simulate_multi_swap(
-        _routers_len-1,
-        _routers+2,
+    let (amount_out: Uint256, final_token_balances: DictAccess*) = _simulate_multi_swap(
+        _routers_len,
+        _routers,
         _path_len,
-        _path+2,
+        _path,
         _amounts_len,
-        _amounts+1,
-        amount_out
+        _amounts,
+        token_balances
     )
 
-    let (final_sum: Uint256,_) = uint256_add(amount_out,sum)
+    default_dict_finalize(token_balances_start, final_token_balances, 0)
 
-    return(final_sum)
+    return(amount_out)
 end
 
 @external
@@ -163,4 +164,60 @@ func simulate_swap{
     #    ICoW.deposit(_router_address,amount)
     #	ICoW.balance() :
     #end
+end
+
+#
+# Internal
+#
+
+func _simulate_multi_swap{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(
+        _routers_len : felt,
+        _routers: Router*,
+        _path_len : felt,
+        _path : Path*,
+        _amounts_len : felt,
+        _amounts : felt*,
+        _token_balances: DictAccess*
+    )->(amount_out: Uint256, final_token_balances: DictAccess*):
+    alloc_locals
+
+    local local_token_balances: DictAccess* = _token_balances 
+
+    if _routers_len == 0 :
+        return(Uint256(0,0),_token_balances)
+    end
+
+    #Determine token amount to trade
+    let (current_balance) = dict_read{dict_ptr=_token_balances}(_path[0].token_in)
+    let (trade_amount) = Utils.felt_fmul(current_balance,_amounts[0],BASE)
+
+    #Save new balance of token_in
+    tempvar new_token_in_balance = current_balance - trade_amount  
+    dict_write{dict_ptr=_token_balances}(_path[0].token_in,new_token_in_balance)
+
+    #Simulate individual swap
+    let (amount_out: Uint256) = simulate_swap(_routers[0],Uint256(trade_amount,0),_path[0].token_in,_path[0].token_out)
+
+    #Save new balance of token_out
+    let (current_balance) = dict_read{dict_ptr=_token_balances}(_path[0].token_out)
+    tempvar new_token_out_balance = current_balance + amount_out.low
+    dict_write{dict_ptr=_token_balances}(_path[0].token_out,new_token_out_balance)
+
+    let (sum,final_token_balances) = _simulate_multi_swap(
+        _routers_len-1,
+        _routers+2,
+        _path_len,
+        _path+2,
+        _amounts_len,
+        _amounts+1,
+        _token_balances
+    )
+
+    let (final_sum: Uint256,_) = uint256_add(amount_out,sum)
+
+    return(final_sum,final_token_balances)
 end

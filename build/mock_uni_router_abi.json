@@ -23,46 +23,6 @@
                 "type": "Uint256"
             },
             {
-                "name": "_min_amount_out",
-                "type": "Uint256"
-            },
-            {
-                "name": "_path_len",
-                "type": "felt"
-            },
-            {
-                "name": "_path",
-                "type": "felt*"
-            },
-            {
-                "name": "_receiver_address",
-                "type": "felt"
-            },
-            {
-                "name": "_deadline",
-                "type": "felt"
-            }
-        ],
-        "name": "swap_exact_tokens_for_tokens",
-        "outputs": [
-            {
-                "name": "amounts_len",
-                "type": "felt"
-            },
-            {
-                "name": "amounts",
-                "type": "Uint256*"
-            }
-        ],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_amount_in",
-                "type": "Uint256"
-            },
-            {
                 "name": "_token_in",
                 "type": "felt"
             },
@@ -136,6 +96,18 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "factory",
+        "outputs": [
+            {
+                "name": "address",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "name": "_token_in",
@@ -156,6 +128,57 @@
         ],
         "name": "set_reserves",
         "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "address",
+                "type": "felt"
+            }
+        ],
+        "name": "set_factory",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_min_amount_out",
+                "type": "Uint256"
+            },
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "felt*"
+            },
+            {
+                "name": "_receiver_address",
+                "type": "felt"
+            },
+            {
+                "name": "_deadline",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_exact_tokens_for_tokens",
+        "outputs": [
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
         "type": "function"
     }
 ]

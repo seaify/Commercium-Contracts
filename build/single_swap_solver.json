@@ -3076,6 +3076,10 @@
                 "type": "const",
                 "value": 0
             },
+            "src.interfaces.IUni_pair.IUni_pair.TOKEN1_SELECTOR": {
+                "type": "const",
+                "value": 1528423166344164884778003319102070559163101217476907668203506001925807383112
+            },
             "src.interfaces.IUni_pair.IUni_pair.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
@@ -3104,6 +3108,10 @@
                 "members": {},
                 "size": 0,
                 "type": "struct"
+            },
+            "src.interfaces.IUni_router.IUni_router.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
             },
             "src.interfaces.IUni_router.IUni_router.GET_AMOUNTS_OUT_SELECTOR": {
                 "type": "const",
@@ -3732,6 +3740,10 @@
             },
             "src.lib.utils.uint256_unsigned_div_rem": {
                 "destination": "starkware.cairo.common.uint256.uint256_unsigned_div_rem",
+                "type": "alias"
+            },
+            "src.lib.utils.unsigned_div_rem": {
+                "destination": "starkware.cairo.common.math.unsigned_div_rem",
                 "type": "alias"
             },
             "src.openzeppelin.access.ownable.HashBuiltin": {

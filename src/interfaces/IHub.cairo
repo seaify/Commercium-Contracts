@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
-from src.lib.utils import Router
+from src.lib.utils import Router, Path
 
 @contract_interface
 namespace IHub:
@@ -10,12 +10,28 @@ namespace IHub:
     func solver_registry() -> (solver_registry: felt):
     end
 
-    func get_solver_result(
+    func get_solver_amount(
             _amount_in: Uint256, 
             _token_in: felt, 
             _token_out: felt, 
             _solver_id: felt
         )->(amount_out: Uint256):
+    end
+
+    func get_solver_amount_and_path(
+            _amount_in: Uint256, 
+            _token_in: felt,
+            _token_out: felt,
+            _solver_id: felt
+        )->(
+            routers_len : felt,
+            routers : Router*,
+            path_len : felt, 
+            path : Path*,
+            amounts_len : felt, 
+            amounts : felt*,
+            amount_out: Uint256
+        ):
     end
 
     func get_amounts_out(
@@ -32,7 +48,7 @@ namespace IHub:
         _min_amount_out : Uint256, 
         _to : felt,
         _solver_id : felt)->(received_amount: Uint256):
-    end    
+    end
 
     func swap_with_path(
             routers_len : felt,
