@@ -51,7 +51,7 @@ namespace IHub {
         _amounts: felt*,
         _amount_in: Uint256,
         _min_amount_out: Uint256,
-    ) {
+    ) -> (received_amount: Uint256)  {
     }
 
     func swap_exact_tokens_for_tokens(

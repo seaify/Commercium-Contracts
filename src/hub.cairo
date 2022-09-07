@@ -39,7 +39,7 @@ func get_solver_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 ) -> (amount_out: Uint256) {
     let (amount_out) = Hub.get_solver_amount(_amount_in, _token_in, _token_out, _solver_id);
 
-    return (amount_out);
+    return (amount_out=amount_out);
 }
 
 @view
@@ -153,7 +153,7 @@ func swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     _amounts: felt*,
     _amount_in: Uint256,
     _min_amount_out: Uint256,
-) {
+) -> (received_amount: Uint256) {
     alloc_locals;
 
     ReentrancyGuard._start();
@@ -197,7 +197,7 @@ func swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 
     ReentrancyGuard._end();
 
-    return ();
+    return (received_amount,);
 }
 
 //

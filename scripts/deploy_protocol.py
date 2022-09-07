@@ -1,10 +1,9 @@
-from starknet_py.net import AccountClient
-from starknet_py.net.client import Client
-from starknet_py.net.signer.stark_curve_signer import (StarkCurveSigner,KeyPair)
+from starknet_py.net.account.account_client import (AccountClient)
+from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starknet_py.contract import Contract
-from starknet_py.net.networks import TESTNET
 from starknet_py.net.models import StarknetChainId
-from starkware.crypto.signature.signature import (pedersen_hash, private_to_stark_key, sign)
+from starkware.crypto.signature.signature import private_to_stark_key
+from starknet_py.net.gateway_client import GatewayClient
 import asyncio
 from pathlib import Path
 
@@ -16,17 +15,17 @@ DAI_USD_Key = 28254602066752356
 USDC_USD_Key = 8463218501920060260
 EMPIRIC_ORACLE_ADDRESS = 536554312408700354284283040928046824434969893969739486945260186308733942996
 JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993
-execution_contract_hash = 2064099869494044600463193389870658049751373975999385172371135047097091846831
+execution_contract_hash = 0
 
 #Setup Admin Account
 private_key = 514919074163669761001641341781643512607564785866885624866019752723630562244
 account_address = 1590051254895316108224788633147187307512845622787220809042235657274059647
 public_key = private_to_stark_key(private_key)
-client = AccountClient(net="testnet", chain=StarknetChainId.TESTNET,n_retries=1,address=account_address,key_pair=KeyPair(private_key,public_key))
+client = AccountClient(address=public_key, client=GatewayClient(net="testnet"), key_pair=public_key, chain=StarknetChainId.TESTNET)
 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
-contractAddresses = {"hub": 0,
+contractAddresses = {"hub": 12312321,
                     "solver_registry": 0,
                     "router_aggregator": 0,
                     "single_swap_solver": 0,
@@ -40,6 +39,13 @@ contractAddresses = {"hub": 0,
 #######################
 
 async def deployContracts():
+
+    print("Declaring Executor Contract")
+    compiled = Path("./build/", "trade_executor.json").read_text("utf-8")
+    signedTransaction = client.sign_declare_transaction(client=client,compiled_contract=compiled,max_fee=50000000000000000000)
+    hash = await client.declare(signedTransaction)
+    print(hash)
+
 
     if contractAddresses["hub"] == 0 :
         # Deploy Hub
