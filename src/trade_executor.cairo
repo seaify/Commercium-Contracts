@@ -8,12 +8,14 @@ from starkware.cairo.common.dict import dict_write, dict_read
 from starkware.cairo.common.dict_access import DictAccess
 
 from src.openzeppelin.security.safemath import SafeUint256
-from src.lib.hub import Uni
 from src.lib.utils import Utils, Router, Path
-from src.lib.constants import BASE
+from src.lib.constants import BASE, AlphaRoad, JediSwap
+from src.lib.router_aggregator import RouterAggregator
 
 from src.interfaces.IERC20 import IERC20
-from src.interfaces.IUni_router import IUni_router
+from src.interfaces.IRouter import (IJedi_router, IAlpha_router)
+from src.interfaces.IFactory import IAlpha_factory
+from src.interfaces.IPool import IAlpha_pool
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
 
 @view
@@ -87,17 +89,38 @@ func multi_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func _swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _router: Router, _amount_in: Uint256, _token_in: felt, _token_out: felt, _receiver_address: felt
 ) {
-    if (_router.type == Uni) {
+    if (_router.type == JediSwap) {
         IERC20.approve(_token_in, _router.address, _amount_in);
         let (path: felt*) = alloc();
         assert path[0] = _token_in;
         assert path[1] = _token_out;
-        IUni_router.swap_exact_tokens_for_tokens(
-            _router.address, _amount_in, Uint256(0, 0), 2, path, _receiver_address, trade_deadline
+        IJedi_router.swap_exact_tokens_for_tokens(
+            _router.address, 
+            _amount_in, 
+            Uint256(0, 0), 
+            2, 
+            path, 
+            _receiver_address, 
+            trade_deadline
         );
         tempvar syscall_ptr = syscall_ptr;
         tempvar pedersen_ptr = pedersen_ptr;
         tempvar range_check_ptr = range_check_ptr;
+        return ();
+    }
+    if (_router.type == AlphaRoad){
+        IERC20.approve(_token_in, _router.address, _amount_in);
+        IAlpha_router.swapExactTokensForTokens(
+            _router.address,
+            _token_in,
+            _token_out,
+            _amount_in,
+            Uint256(0,0)
+        ); 
+        tempvar syscall_ptr = syscall_ptr;
+        tempvar pedersen_ptr = pedersen_ptr;
+        tempvar range_check_ptr = range_check_ptr;
+        return ();
     } else {
         with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
             assert 1 = 2;
@@ -105,38 +128,20 @@ func _swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         tempvar syscall_ptr = syscall_ptr;
         tempvar pedersen_ptr = pedersen_ptr;
         tempvar range_check_ptr = range_check_ptr;
+        return ();
     }
-
-    // if router_type == Cow :
-    //    ICoW.deposit(_router_address,amount)
-    // 	ICoW.balance() :
-    // end
-
-    return ();
 }
 
 func simulate_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router: Router, _amount_in: Uint256, _token_in: felt, _token_out: felt
+    _router: Router, 
+    _amount_in: Uint256, 
+    _token_in: felt, 
+    _token_out: felt
 ) -> (amount_out: Uint256) {
-    if (_router.type == Uni) {
-        let (path: felt*) = alloc();
-        assert path[0] = _token_in;
-        assert path[1] = _token_out;
-        let (amounts_len: felt, amounts: Uint256*) = IUni_router.get_amounts_out(
-            _router.address, _amount_in, 2, path
-        );
-        return (amounts[1],);
-    } else {
-        with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
-            assert 1 = 2;
-        }
-        return (Uint256(0, 0),);
-    }
 
-    // if router_type == Cow :
-    //    ICoW.deposit(_router_address,amount)
-    // 	ICoW.balance() :
-    // end
+    let (amount_out: Uint256) = RouterAggregator.get_router_amount(_amount_in,_token_in,_token_out,_router);
+
+    return(amount_out,);
 }
 
 //

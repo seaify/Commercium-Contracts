@@ -46,7 +46,6 @@ async def deployContracts():
     hash = await client.declare(signedTransaction)
     print(hash)
 
-
     if contractAddresses["hub"] == 0 :
         # Deploy Hub
         print("Deploying Hub")
@@ -74,7 +73,7 @@ async def deployContracts():
 
         # Deploy Router Aggregator
         print("Deploying Router Aggregator")
-        compiled = Path("./build/", "router_aggregator_testnet.json").read_text("utf-8")
+        compiled = Path("./build/", "router_aggregator.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
             client, compiled_contract=compiled, constructor_args=[account_address]
         )

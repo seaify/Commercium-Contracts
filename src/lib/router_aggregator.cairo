@@ -7,14 +7,13 @@ from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
-from src.lib.hub import Uni
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.IUni_router import IUni_router
-from src.interfaces.IUni_pair import IUni_pair
-from src.interfaces.IUni_factory import IUni_factory
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
+from src.interfaces.IRouter import IAlpha_router, IJedi_router
+from src.interfaces.IFactory import IAlpha_factory, IJedi_factory
+from src.interfaces.IPool import IAlpha_pool, IJedi_pool
 from src.lib.utils import Utils, Router, Liquidity
-from src.lib.constants import BASE
+from src.lib.constants import (BASE, JediSwap, AlphaRoad)
 
 struct Feed {
     key: felt,
@@ -38,6 +37,7 @@ func router_index_len() -> (len: felt) {
 //
 
 namespace RouterAggregator {
+
     func find_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256,
         _token_in: felt,
@@ -60,33 +60,15 @@ namespace RouterAggregator {
         local best_amount: Uint256;
         local best_router: Router;
 
-        // Check type and act accordingly
-        // Will likely requrie an individual check for each type of AMM, as the interfaces might be different as well as the decimal number of the fees
-        if (router.type == Uni) {
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            let (_, amounts_out: Uint256*) = IUni_router.get_amounts_out(
-                router.address, _amount_in, 2, path
-            );
-            let (is_new_amount_better) = uint256_le(_best_amount, amounts_out[1]);
-            if (is_new_amount_better == 1) {
-                assert best_amount = amounts_out[1];
-                assert best_router = router;
-            } else {
-                assert best_amount = _best_amount;
-                assert best_router = _router;
-            }
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
+        let (amount: Uint256) = get_router_amount(_amount_in,_token_in,_token_out,router);
+
+        let (is_new_amount_better) = uint256_le(_best_amount, amount);
+        if (is_new_amount_better == 1) {
+            assert best_amount = amount;
+            assert best_router = router;
         } else {
-            with_attr error_message("router type invalid: {ids.router.type}") {
-                assert 1 = 0;
-            }
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
+            assert best_amount = _best_amount;
+            assert best_router = _router;
         }
 
         // if router.router_type == cow :
@@ -119,25 +101,8 @@ namespace RouterAggregator {
         // Add rounter to routers arr
         assert _routers[0] = router;
 
-        if (router.type == Uni) {
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            let (_, amounts_out: Uint256*) = IUni_router.get_amounts_out(
-                router.address, _amount_in, 2, path
-            );
-            assert _amounts[0] = amounts_out[1];
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-        } else {
-            with_attr error_message("router type invalid: {ids.router.type}") {
-                assert 1 = 0;
-            }
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-        }
+        let (amount: Uint256) = get_router_amount(_amount_in,_token_in,_token_out,router);
+        assert _amounts[0] = amount;
 
         all_routers_and_amounts(
             _amount_in, _token_in, _token_out, _amounts + 2, _routers + 2, _routers_len - 1
@@ -165,31 +130,8 @@ namespace RouterAggregator {
         // Add rounter to routers arr
         assert _routers[0] = router;
 
-        if (router.type == Uni) {
-            // let (factory_address) = IUni_router.factory(router.address)
-            // let (pair_address: felt) = IUni_factory.get_pair(factory_address,_token_in,_token_out)
-            // let (reserve0: Uint256, reserve1: Uint256, _) = IUni_pair.get_reserves(pair_address)
-            // let(token0) = IUni_pair.token0(pair_address)
-            // if _token_in == token0:
-            //   assert _liquidity[0] = Liquidity(reserve0,reserve1)
-            // else:
-            //   assert _liquidity[0] = Liquidity(reserve1,reserve0)
-            // end
-            let (reserve0: Uint256, reserve1: Uint256) = IUni_router.get_reserves(
-                router.address, _token_in, _token_out
-            );
-            assert _liquidity[0] = Liquidity(reserve0, reserve1);
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-        } else {
-            with_attr error_message("router type invalid: {ids.router.type}") {
-                assert 1 = 0;
-            }
-            tempvar range_check_ptr = range_check_ptr;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-        }
+        let (liquidity: Liquidity) = get_router_liquidity(_token_in,_token_out,_routers[0]);
+        assert _liquidity[0] = liquidity;
 
         all_routers_and_liquidity(
             _token_in, _token_out, _liquidity + 4, _routers + 2, _routers_len - 1
@@ -198,7 +140,82 @@ namespace RouterAggregator {
         return ();
     }
 
-    // ALTERNATIVE SORTING METHOD...propably better with larger number of solvers
+    func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _amount_in: Uint256,
+        _token_in: felt,
+        _token_out: felt,
+        _router: Router
+    ) -> (amount_out: Uint256) {
+
+        if (_router.type == JediSwap) {
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            let (amounts_len: felt, amounts: Uint256*) = IJedi_router.get_amounts_out(
+                _router.address, _amount_in, 2, path
+            );
+            return (amounts[1],);
+        }
+        if (_router.type == AlphaRoad){
+            let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
+            let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
+            let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlpha_pool.getReserves(pair_address);
+            let (amount_token_0: Uint256) = IAlpha_router.quote(
+                _router.address,
+                _amount_in, 
+                reserve_token_0, 
+                reserve_token_1
+            );
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+            return (amount_token_0,);
+        } else {
+            with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
+                assert 1 = 2;
+            }
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+            return (Uint256(0,0),);
+        }
+    }
+
+    func get_router_liquidity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+            _token_in: felt,
+            _token_out: felt,
+            _router: Router
+        ) -> (amount_out: Uint256) {
+
+            if (router.type == JediSwap) {
+                let (factory_address: felt) = IJedi_router.factory(_router.address);
+                let (pair_address: felt) = IJedi_factory.get_pair(factory_address,_token_in,_token_out);
+                let (reserve0: Uint256, reserve1: Uint256,_) = IJedi_pool.get_reserves(pair_address);
+                return(Liquidity(reserve0, reserve1),);
+                tempvar range_check_ptr = range_check_ptr;
+                tempvar syscall_ptr = syscall_ptr;
+                tempvar pedersen_ptr = pedersen_ptr;
+            } 
+            if (router.type == AlphaRoad) {
+                let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
+                let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
+                let (reserve0: Uint256, reserve1: Uint256) = IAlpha_pool.getReserves(pair_address);
+                return(Liquidity(reserve0, reserve1),);
+                tempvar range_check_ptr = range_check_ptr;
+                tempvar syscall_ptr = syscall_ptr;
+                tempvar pedersen_ptr = pedersen_ptr;
+            } else {
+                with_attr error_message("router type invalid: {ids.router.type}") {
+                    assert 1 = 0;
+                }
+                tempvar range_check_ptr = range_check_ptr;
+                tempvar syscall_ptr = syscall_ptr;
+                tempvar pedersen_ptr = pedersen_ptr;
+                return(Liquidity(0, 0),);
+            }
+    }
+
+    // ALTERNATIVE SORTING METHOD...propably better with larger number of routers
     // @view
     // func get_all_routers_sorted{
     //        syscall_ptr : felt*,

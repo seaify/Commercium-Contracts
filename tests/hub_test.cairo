@@ -9,7 +9,6 @@ from starkware.cairo.common.bitwise import bitwise_or
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import (Uint256,uint256_le,uint256_eq,uint256_add,uint256_sub,uint256_mul,uint256_signed_div_rem,uint256_unsigned_div_rem)
 
-from src.lib.hub import Uni
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.lib.constants import MAX_FELT
