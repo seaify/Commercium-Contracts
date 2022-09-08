@@ -54,7 +54,7 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 }
 
 @view
-func get_all_routers{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func get_all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amounts_out_len: felt, amounts_out: Uint256*, routers_len: felt, routers: Router*) {
     alloc_locals;

@@ -11,7 +11,7 @@ namespace IRouter_aggregator {
     ) {
     }
 
-    func get_all_routers(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (
+    func get_all_routers_and_amounts(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (
         amounts_out_len: felt, amounts_out: Uint256*, routers_len: felt, routers: Router*
     ) {
     }

@@ -191,7 +191,12 @@ namespace RouterAggregator {
                 let (factory_address: felt) = IJedi_router.factory(_router.address);
                 let (pair_address: felt) = IJedi_factory.get_pair(factory_address,_token_in,_token_out);
                 let (reserve0: Uint256, reserve1: Uint256,_) = IJedi_pool.get_reserves(pair_address);
-                return(Liquidity(reserve0, reserve1),);
+                let (token0) = IJedi_pool.token0();
+                if (token0 == _token_in) {
+                    return(Liquidity(reserve0, reserve1),);
+                } else {
+                    return(Liquidity(reserve1, reserve0),);
+                }
                 tempvar range_check_ptr = range_check_ptr;
                 tempvar syscall_ptr = syscall_ptr;
                 tempvar pedersen_ptr = pedersen_ptr;
@@ -200,6 +205,12 @@ namespace RouterAggregator {
                 let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
                 let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
                 let (reserve0: Uint256, reserve1: Uint256) = IAlpha_pool.getReserves(pair_address);
+                let (token0) = IAlpha_pool.token0();
+                if (token0 == _token_in) {
+                    return(Liquidity(reserve0, reserve1),);
+                } else {
+                    return(Liquidity(reserve1, reserve0),);
+                }
                 return(Liquidity(reserve0, reserve1),);
                 tempvar range_check_ptr = range_check_ptr;
                 tempvar syscall_ptr = syscall_ptr;
