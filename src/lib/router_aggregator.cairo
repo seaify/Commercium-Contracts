@@ -181,6 +181,44 @@ namespace RouterAggregator {
         }
     }
 
+    func get_router_amount_in{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _amount_out: Uint256,
+        _token_in: felt,
+        _token_out: felt,
+        _router: Router
+    ) -> (amount_out: Uint256) {
+
+        if (_router.type == JediSwap) {
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            let (amounts_len: felt, amounts: Uint256*) = IJedi_router.get_amounts_in(
+                _router.address, _amount_out, 2, path
+            );
+            return (amounts[0],);
+        }
+        if (_router.type == AlphaRoad){
+
+            //Waiting for alpha road to release their 
+
+            with_attr error_message("Router Aggregator Lib: Alpha Road currently not implemented") {
+                assert 1 = 2;
+            }
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+            return (Uint256(0,0),);
+        } else {
+            with_attr error_message("Router Aggregator Lib: Router type doesn't exist") {
+                assert 1 = 2;
+            }
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+            return (Uint256(0,0),);
+        }
+    }
+
     func get_router_liquidity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
             _token_in: felt,
             _token_out: felt,

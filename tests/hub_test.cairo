@@ -111,14 +111,22 @@ func __setup__{
     %{stop_prank_callable()%}
 
     #Deploy Router Aggregator
-    local router_aggregator_address : felt
+    local router_aggregator_hash : felt
     %{
-        declared = declare("./src/router_aggregators/router_aggregatorV3.cairo")
-        prepared = prepare(declared, [ids.public_key_0])
+        declared = declare("./src/router_aggregators/router_aggregator.cairo")
+        ids.router_aggregator_hash = declared
+        stop_prank_callable()
+    %}
+
+    #Deploy Router Aggregator Proxy
+    local router_aggregator_proxy_address : felt
+    %{
+        declared = declare("./src/router_aggregators/router_proxy.cairo")
+        prepared = prepare(declared, [ids.router_aggregator_hash,ids.public_key_0,ids.public_key_0])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
-        ids.router_aggregator_address = prepared.contract_address
-        context.router_aggregator_address = prepared.contract_address
+        ids.router_aggregator_proxy_address = prepared.contract_address
+        context.router_aggregator_proxy_address = prepared.contract_address
         stop_prank_callable()
     %}
 
@@ -158,18 +166,18 @@ func __setup__{
     %{ stop_prank_callable() %}
 
     # Add newly created routers to router aggregator
-    %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_address) %}
-    IRouter_aggregator.add_router(router_aggregator_address,router_1_address,Uni)
-    IRouter_aggregator.add_router(router_aggregator_address,router_2_address,Uni)
-    IRouter_aggregator.add_router(router_aggregator_address,router_3_address,Uni)  
+    %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_proxy_address) %}
+    IRouter_aggregator.add_router(router_aggregator_proxy_address,router_1_address,Uni)
+    IRouter_aggregator.add_router(router_aggregator_proxy_address,router_2_address,Uni)
+    IRouter_aggregator.add_router(router_aggregator_proxy_address,router_3_address,Uni)  
 
     #Set Price feeds at the Router
-    IRouter_aggregator.set_global_price(router_aggregator_address,ETH,28556963469423460,mock_oracle_address)
-    IRouter_aggregator.set_global_price(router_aggregator_address,USDC,8463218501920060260,mock_oracle_address)
-    IRouter_aggregator.set_global_price(router_aggregator_address,USDT,8463218574934504292,mock_oracle_address)
-    IRouter_aggregator.set_global_price(router_aggregator_address,DAI,28254602066752356,mock_oracle_address)
-    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin1,99234898239,mock_oracle_address)
-    IRouter_aggregator.set_global_price(router_aggregator_address,shitcoin2,23674728373,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,ETH,28556963469423460,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,USDC,8463218501920060260,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,USDT,8463218574934504292,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,DAI,28254602066752356,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,shitcoin1,99234898239,mock_oracle_address)
+    IRouter_aggregator.set_global_price(router_aggregator_proxy_address,shitcoin2,23674728373,mock_oracle_address)
     %{ stop_prank_callable() %}
 
     #Deploy Solvers
@@ -200,13 +208,13 @@ func __setup__{
     
     #Set router_aggregator for solver
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver1_address)%}
-        ISolver.set_router_aggregator(solver1_address,router_aggregator_address)
+        ISolver.set_router_aggregator(solver1_address,router_aggregator_proxy_address)
     %{stop_prank_callable()%}
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address)%}
-        ISolver.set_router_aggregator(solver2_address,router_aggregator_address)
+        ISolver.set_router_aggregator(solver2_address,router_aggregator_proxy_address)
     %{stop_prank_callable()%}
     %{stop_prank_callable = start_prank(ids.public_key_0,ids.solver3_address)%}
-        ISolver.set_router_aggregator(solver3_address,router_aggregator_address)
+        ISolver.set_router_aggregator(solver3_address,router_aggregator_proxy_address)
     %{stop_prank_callable()%}
 
     #Add solver to solver_registry
@@ -422,9 +430,6 @@ func test_view_amount_out{
 
     local amount_to_trade: Uint256 = Uint256(2*base,0)
     local expected_min_return: Uint256 = Uint256(1*base,0)
-
-    local router_aggregator_address
-    %{ ids.router_aggregator_address = context.router_aggregator_address %}
 
     #Allow hub to take tokens
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}

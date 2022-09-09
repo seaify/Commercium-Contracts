@@ -14,6 +14,16 @@ namespace IJedi_router {
     ) -> (amounts_len: felt, amounts: Uint256*) {
     }
 
+    ​func swap_tokens_for_exact_tokens(
+        amountOut: Uint256, 
+        amountInMax: Uint256, 
+        path_len: felt, 
+        path: felt*, 
+        to: felt, 
+        deadline: felt
+    ) -> (amounts_len: felt, amounts: Uint256*){
+    }
+
     func get_pool_stats(token1: felt, token2: felt) -> (
         reserve1: Uint256, reserve2: Uint256, fee: felt
     ) {
@@ -25,14 +35,32 @@ namespace IJedi_router {
     func set_reserves(_token_in: felt, _token_out: felt, _reserve_1: Uint256, _reserve_2: Uint256) {
     }
 
-    func get_amount_out(amountIn: Uint256, reserveIn: Uint256, reserveOut: Uint256) -> (
-        amountOut: Uint256
-    ) {
+    func get_amount_out(
+            amountIn: Uint256, 
+            reserveIn: Uint256, 
+            reserveOut: Uint256
+        ) -> (amountOut: Uint256) {
     }
 
-    func get_amounts_out(amountIn: Uint256, path_len: felt, path: felt*) -> (
-        amounts_len: felt, amounts: Uint256*
-    ) {
+    func get_amounts_out(
+            amountIn: Uint256, 
+            path_len: felt, 
+            path: felt*
+        ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func get_amount_in(
+            amountOut: Uint256, 
+            reserveIn: Uint256, 
+            reserveOut: Uint256
+        ) -> (amountIn: Uint256){
+    }
+
+    func get_amounts_in(
+            amountOut: Uint256, 
+            path_len: felt, 
+            path: felt*
+        ) -> (amounts_len: felt, amounts: Uint256*){
     }
 
     func factory() -> (address: felt) {

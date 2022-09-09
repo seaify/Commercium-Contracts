@@ -15,16 +15,6 @@ from src.lib.constants import BASE
 from src.lib.router_aggregator import RouterAggregator, Feed, price_feed, routers, router_index_len
 
 //
-// Constructor
-//
-
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
-    Ownable.initializer(_owner);
-    return ();
-}
-
-//
 // Views
 //
 

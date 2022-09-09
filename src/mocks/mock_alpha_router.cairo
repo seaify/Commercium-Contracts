@@ -28,26 +28,6 @@ func reserves(pair: Pair) -> (reserves: Reserves) {
 
 @storage_var
 func factory_address() -> (address: felt) {
-}
-
-@view
-func get_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt
-) -> (amount_out: Uint256) {
-    alloc_locals;
-    let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(_token_in, _token_out);
-
-    if (reserve_1.low == 0) {
-        return (Uint256(0, 0),);
-    } else {
-        let (feed_amount: Uint256, _) = uint256_mul(_amount_in, Uint256(997, 0));
-        let (numerator, _) = uint256_mul(feed_amount, reserve_2);
-        let (feed_reserve, _) = uint256_mul(reserve_1, Uint256(1000, 0));
-        let (denominator, _) = uint256_add(feed_reserve, feed_amount);
-        let (amount_out, _) = uint256_unsigned_div_rem(numerator, denominator);
-        return (amount_out,);
-    }
-}
 
 @view
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

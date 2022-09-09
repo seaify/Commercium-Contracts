@@ -6,21 +6,28 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import library_call
 from src.openzeppelin.upgrades.library import Proxy
+from src.openzeppelin.access.ownable import Ownable
 
 //
 // Views
 //
 
 @view
-func get_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    implementation: felt
-) {
-    let (implementation) = Proxy.get_implementation_hash(implementation);
+func get_implementation_hash{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }()->(implementation: felt) {
+    let (implementation) = Proxy.get_implementation_hash();
     return (implementation,);
 }
 
 @view
-func get_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+func get_admin{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }()->(admin: felt) {
     let (admin) = Proxy.get_admin();
     return (admin,);
 }
@@ -30,11 +37,20 @@ func get_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //
 
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _implementation_hash: felt, _adming: felt
-) {
-    Proxy.initializer(_adming);
+func constructor{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _implementation_hash: felt, 
+        _admin: felt, 
+        _owner: felt
+    ){
+    //Setting the proxy admin
+    Proxy.initializer(_admin);
     Proxy._set_implementation_hash(_implementation_hash);
+    //Setting the router aggregator owner
+    Ownable.initializer(_owner);
     return ();
 }
 
@@ -43,7 +59,11 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 @external
-func set_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func set_implementation_hash{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
     _new_implementation: felt
 ) {
     Proxy.assert_only_admin();
@@ -52,7 +72,11 @@ func set_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 }
 
 @external
-func _set_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_new_admin: felt) {
+func _set_admin{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_new_admin: felt) {
     Proxy.assert_only_admin();
     Proxy._set_admin(_new_admin);
     return ();
@@ -65,9 +89,15 @@ func _set_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 @external
 @raw_input
 @raw_output
-func __default__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    selector: felt, calldata_size: felt, calldata: felt*
-) -> (retdata_size: felt, retdata: felt*) {
+func __default__{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        selector: felt, 
+        calldata_size: felt, 
+        calldata: felt*
+    ) -> (retdata_size: felt, retdata: felt*) {
     let (class_hash) = Proxy.get_implementation_hash();
 
     let (retdata_size: felt, retdata: felt*) = library_call(
