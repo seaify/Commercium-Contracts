@@ -32,7 +32,7 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, 
+    _amount_out: Uint256, 
     _token_in: felt, 
     _token_out: felt
 ) -> (
@@ -47,29 +47,32 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     let (amounts: felt*) = alloc();
     let (final_routers: Router*) = alloc();
-    let (final_amounts_out: Uint256*) = alloc();
+    let (final_amounts_in: Uint256*) = alloc();
     let (path: Path*) = alloc();
 
     let (router_aggregator_address) = router_aggregator.read();
 
     let (
-        amounts_out_len: felt, 
-        amounts_out: Uint256*, 
+        amounts_in_len: felt, 
+        amounts_in: Uint256*, 
         routers_len: felt, 
         routers: Router*
-    ) = IRouter_aggregator.get_all_routers_and_amounts(
-        router_aggregator_address, _amount_in, _token_in, _token_out
+    ) = IRouter_aggregator.get_all_routers_and_amounts_in(
+        router_aggregator_address, 
+        _amount_out, 
+        _token_in, 
+        _token_out
     );
 
-    let (sum: Uint256) = sum_amounts(amounts_out_len, amounts_out);
+    let (sum: Uint256) = sum_amounts(amounts_in_len, amounts_in);
 
     let (final_routers_len: felt) = kick_low_amounts(
-        sum.low, routers_len, final_routers, routers, final_amounts_out, amounts_out, routers_len
+        sum.low, routers_len, final_routers, routers, final_amounts_in, amounts_in, routers_len
     );
 
-    let (final_sum: Uint256) = sum_amounts(final_routers_len, final_amounts_out);
+    let (final_sum: Uint256) = sum_amounts(final_routers_len, final_amounts_in);
 
-    set_amounts(final_sum.low, final_routers_len, final_amounts_out, amounts);
+    set_amounts(final_sum.low, final_routers_len, final_amounts_in, amounts);
 
     set_path(final_routers_len, path, _token_in, _token_out);
 
@@ -79,7 +82,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         path_len=final_routers_len,
         path=path,
         amounts_len=final_routers_len,
-        amounts=amounts,
+        amounts=amounts
     );
 }
 

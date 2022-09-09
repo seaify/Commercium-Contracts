@@ -128,6 +128,39 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 }
 
 @external
+func swap_tokens_for_exact_tokens{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        amountOut: Uint256, 
+        amountInMax: Uint256, 
+        path_len: felt, 
+        path: felt*, 
+        to: felt, 
+        deadline: felt
+    )->(amounts_len: felt, amounts: Uint256*) {
+    alloc_locals;
+
+    // Check that deadline hasn't past
+
+    // Check that the proposed trade is only between two tokens
+    assert path_len = 2;
+
+    // Execute swap with solver 1 as the default
+    let (amount_in: Uint256) = swap_with_solver_exact_out(
+        path[0], path[1], amountOut, amountInMax, to, 1
+    );
+
+    // Transform output to conform with uniSwap Interface
+    let (amounts: Uint256*) = alloc();
+    assert amounts[0] = amount_in;
+    assert amounts[1] = amountOut;
+
+    return (2, amounts);
+}
+
+@external
 func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token_in: felt,
     _token_out: felt,
@@ -141,6 +174,21 @@ func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     );
 
     return (received_amount,);
+}
+
+@external
+func swap_with_solver_exact_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token_in: felt,
+    _token_out: felt,
+    _amount_out: Uint256,
+    _max_amount_out: Uint256,
+    _to: felt,
+    _solver_id: felt,
+) -> (in_amount: Uint256) {
+    let (in_amount: Uint256) = Hub.swap_with_solver_exact_out(
+        _token_in, _token_out, _amount_out, _max_amount_out, _to, _solver_id
+    );
+    return (in_amount,);
 }
 
 @external
@@ -179,8 +227,7 @@ func swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
         _path,
         _amounts_len,
         _amounts,
-        this_address,
-        _amount_in,
+        this_address
     );
 
     // Get new Balance of out_token
