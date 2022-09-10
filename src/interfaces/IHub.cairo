@@ -42,6 +42,16 @@ namespace IHub {
     ) -> (received_amount: Uint256) {
     }
 
+    func swap_with_solver_exact_out(
+        _token_in: felt,
+        _token_out: felt,
+        _amount_out: Uint256,
+        _max_amount_out: Uint256,
+        _to: felt,
+        _solver_id: felt,
+    ) -> (in_amount: Uint256){
+    }
+
     func swap_with_path(
         routers_len: felt,
         routers: Router*,
@@ -51,7 +61,7 @@ namespace IHub {
         _amounts: felt*,
         _amount_in: Uint256,
         _min_amount_out: Uint256,
-    ) -> (received_amount: Uint256)  {
+    ) -> (received_amount: Uint256){
     }
 
     func swap_exact_tokens_for_tokens(
@@ -62,6 +72,16 @@ namespace IHub {
         to: felt,
         deadline: felt,
     ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func swap_tokens_for_exact_tokens(
+        amountOut: Uint256, 
+        amountInMax: Uint256, 
+        path_len: felt, 
+        path: felt*, 
+        to: felt, 
+        deadline: felt
+    )->(amounts_len: felt, amounts: Uint256*){
     }
 
     func set_solver_registry(_new_registry: felt) {

@@ -335,7 +335,7 @@ namespace Hub {
         let (is_no_remaining_amount) = uint256_eq(remaining_amount_in,Uint256(0,0));
         let (used_amount) = uint256_sub(_max_amount_in,remaining_amount_in);
         if(is_no_remaining_amount==FALSE){
-            IERC20.transfer(_token_in, _to, remaining_amount_in);
+            IERC20.transfer(_token_in, caller_address, remaining_amount_in);
             tempvar syscall_ptr = syscall_ptr;
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;

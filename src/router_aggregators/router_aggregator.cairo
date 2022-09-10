@@ -103,14 +103,20 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in_usd: Uint256, _amount_out: Uint256, _token1: felt, _token2: felt
-) -> (weight: felt) {
+func get_weight{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in_usd: Uint256, 
+        _amount_out: Uint256, 
+        _token_out: felt
+    )->(weight: felt) {
     alloc_locals;
 
     // Transform Token Amount to USD Amount
     // As of now all Empiric prices are scaled to 18 decimal places
-    let (price_out: Uint256, _) = get_global_price(_token2);
+    let (price_out: Uint256, _) = get_global_price(_token_out);
     let (value_out: Uint256) = Utils.fmul(_amount_out, price_out, Uint256(BASE, 0));
 
     // Determine Weight
