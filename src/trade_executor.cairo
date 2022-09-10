@@ -1,6 +1,6 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256, uint256_add
+from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
@@ -11,7 +11,7 @@ from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.utils import Utils, Router, Path
-from src.lib.constants import BASE, AlphaRoad, JediSwap, MAX_FELT
+from src.lib.constants import BASE, AlphaRoad, JediSwap, MAX_FELT, HALF_MAX
 from src.lib.router_aggregator import RouterAggregator
 
 from src.interfaces.IERC20 import IERC20
@@ -152,7 +152,7 @@ func multi_swap_exact_out{
 
     _swap_exact_out(_routers[0], trade_amount, _path[0].token_in, _path[0].token_out, _receiver_address);
 
-    multi_swap(
+    multi_swap_exact_out(
         _routers_len - 1,
         _routers + 2,
         _path_len,
@@ -160,7 +160,7 @@ func multi_swap_exact_out{
         _amounts_len,
         _amounts + 1,
         _receiver_address,
-        _amount_in,
+        _amount_out
     );
 
     return ();
@@ -186,34 +186,52 @@ func _swap_exact_in{
         //Writing to storage is expensive, so we check current allowance level before re-approving transfer
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let (is_below_threshold) = is_le_felt(allowance.low,HALF_MAX);
+        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == 0) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            IJedi_router.swap_exact_tokens_for_tokens(
+                _router.address, 
+                _amount_in, 
+                Uint256(0, 0), 
+                2, 
+                path, 
+                _receiver_address, 
+                trade_deadline
+            );
+            return ();
+        } else {
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            IJedi_router.swap_exact_tokens_for_tokens(
+                _router.address, 
+                _amount_in, 
+                Uint256(0, 0), 
+                2, 
+                path, 
+                _receiver_address, 
+                trade_deadline
+            );
+            return ();
         }
-        let (path: felt*) = alloc();
-        assert path[0] = _token_in;
-        assert path[1] = _token_out;
-        IJedi_router.swap_exact_tokens_for_tokens(
-            _router.address, 
-            _amount_in, 
-            Uint256(0, 0), 
-            2, 
-            path, 
-            _receiver_address, 
-            trade_deadline
-        );
-        tempvar syscall_ptr = syscall_ptr;
-        tempvar pedersen_ptr = pedersen_ptr;
-        tempvar range_check_ptr = range_check_ptr;
-        return ();
     }
     if (_router.type == AlphaRoad){
         //Writing to storage is expensive, so we check current allowance level before re-approving transfer
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let (is_below_threshold) = is_le_felt(allowance.low,HALF_MAX);
+        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == 0) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+        } else {
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
         }
         IAlpha_router.swapExactTokensForTokens(
             _router.address,
@@ -237,22 +255,6 @@ func _swap_exact_in{
     }
 }
 
-func simulate_swap_exact_in{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(
-        _router: Router, 
-        _amount_in: Uint256, 
-        _token_in: felt, 
-        _token_out: felt
-    ) -> (amount_out: Uint256) {
-
-    let (amount_out: Uint256) = RouterAggregator.get_router_amount(_amount_in,_token_in,_token_out,_router);
-
-    return(amount_out,);
-}
-
 //Perform swap given an exact output amount
 func _swap_exact_out{
         syscall_ptr: felt*, 
@@ -269,33 +271,51 @@ func _swap_exact_out{
         //Writing to storage is expensive, so we check current allowance level before re-approving transfer
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let (is_below_threshold) = is_le_felt(allowance.low,HALF_MAX);
+        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == 0) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            IJedi_router.swap_tokens_for_exact_tokens(
+                _router.address,
+                _amount_out,
+                Uint256(MAX_FELT, 0),
+                2,
+                path,
+                _receiver_address, 
+                trade_deadline
+            );
+            return ();
+        } else {
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            IJedi_router.swap_tokens_for_exact_tokens(
+                _router.address,
+                _amount_out,
+                Uint256(MAX_FELT, 0),
+                2,
+                path,
+                _receiver_address, 
+                trade_deadline
+            );
+            return ();
         }
-        let (path: felt*) = alloc();
-        assert path[0] = _token_in;
-        assert path[1] = _token_out;
-        IJedi_router.swap_tokens_for_exact_tokens(
-            _router.address,
-            _amount_out,
-            Uint256(MAX_FELT, 0),
-            2,
-            path,
-            _receiver_address, 
-            trade_deadline
-        );
-        tempvar syscall_ptr = syscall_ptr;
-        tempvar pedersen_ptr = pedersen_ptr;
-        tempvar range_check_ptr = range_check_ptr;
-        return ();
     }
     if (_router.type == AlphaRoad){
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let (is_below_threshold) = is_le_felt(allowance.low,HALF_MAX);
+        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == 0) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+        } else {
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
         }
         IAlpha_router.swapTokensForExactTokens(
             _router.address,
@@ -304,9 +324,6 @@ func _swap_exact_out{
             _amount_out,
             Uint256(MAX_FELT, 0)
         ); 
-        tempvar syscall_ptr = syscall_ptr;
-        tempvar pedersen_ptr = pedersen_ptr;
-        tempvar range_check_ptr = range_check_ptr;
         return ();
     } else {
         with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
@@ -319,7 +336,23 @@ func _swap_exact_out{
     }
 }
 
-func simulate_swap_exact_out{
+func _simulate_swap_exact_in{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _router: Router, 
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (amount_out: Uint256) {
+
+    let (amount_out: Uint256) = RouterAggregator.get_router_amount(_amount_in,_token_in,_token_out,_router);
+
+    return(amount_out,);
+}
+
+func _simulate_swap_exact_out{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
@@ -363,7 +396,7 @@ func _simulate_multi_swap{
     dict_write{dict_ptr=_token_balances}(_path[0].token_in, new_token_in_balance);
 
     // Simulate individual swap
-    let (amount_out: Uint256) = simulate_swap_exact_in(
+    let (amount_out: Uint256) = _simulate_swap_exact_in(
         _routers[0], Uint256(trade_amount, 0), _path[0].token_in, _path[0].token_out
     );
 
@@ -412,17 +445,17 @@ func _simulate_multi_swap_exact_out{
 
     // Save new balance of token_in
     tempvar new_token_out_balance = current_balance - trade_amount;
-    dict_write{dict_ptr=_token_balances}(_path[0].token_out, new_token_in_balance);
+    dict_write{dict_ptr=_token_balances}(_path[0].token_out, new_token_out_balance);
 
     // Simulate individual swap
-    let (amount_in: Uint256) = simulate_swap_exact_out(
+    let (amount_in: Uint256) = _simulate_swap_exact_out(
         _routers[0], Uint256(trade_amount, 0), _path[0].token_in, _path[0].token_out
     );
 
     // Save new balance of token_out
     let (current_balance) = dict_read{dict_ptr=_token_balances}(_path[0].token_in);
-    tempvar new_token_out_balance = current_balance + amount_in.low;
-    dict_write{dict_ptr=_token_balances}(_path[0].token_in, new_token_out_balance);
+    tempvar new_token_in_balance = current_balance + amount_in.low;
+    dict_write{dict_ptr=_token_balances}(_path[0].token_in, new_token_in_balance);
 
     let (sum, final_token_balances) = _simulate_multi_swap(
         _routers_len - 1,
@@ -434,7 +467,7 @@ func _simulate_multi_swap_exact_out{
         _token_balances,
     );
 
-    let (final_sum: Uint256, _) = uint256_add(amount_out, sum);
+    let (final_sum: Uint256, _) = uint256_add(amount_in, sum);
 
     return (final_sum, final_token_balances);
 }
