@@ -15,7 +15,10 @@ namespace IHub {
     }
 
     func get_solver_amount_and_path(
-        _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_id: felt
     ) -> (
         routers_len: felt,
         routers: Router*,
@@ -27,9 +30,19 @@ namespace IHub {
     ) {
     }
 
-    func get_amounts_out(amountIn: Uint256, path_len: felt, path: felt*) -> (
-        amounts_len: felt, amounts: Uint256*
-    ) {
+    func get_solver_amount_exact_out(
+        _amount_out: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_id: felt
+    ) -> (amount_in: Uint256) {
+    }
+
+    func get_amounts_out(
+        _amountIn: Uint256, 
+        _path_len: felt, 
+        _path: felt*
+    )->(amounts_len: felt, amounts: Uint256*){
     }
 
     func swap_with_solver(
@@ -46,7 +59,7 @@ namespace IHub {
         _token_in: felt,
         _token_out: felt,
         _amount_out: Uint256,
-        _max_amount_out: Uint256,
+        _max_amount_in: Uint256,
         _to: felt,
         _solver_id: felt,
     ) -> (in_amount: Uint256){

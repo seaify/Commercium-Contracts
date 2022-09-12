@@ -43,6 +43,22 @@ func get_solver_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 @view
+func get_solver_amount_exact_out{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }(
+            _amount_out: Uint256, 
+            _token_in: felt, 
+            _token_out: felt, 
+            _solver_id: felt
+        ) -> (amount_in: Uint256) {
+    let (amount_in) = Hub.get_solver_amount_exact_out(_amount_out, _token_in, _token_out, _solver_id);
+
+    return (amount_in=amount_in);
+}
+
+@view
 func get_solver_amount_and_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
 ) -> (
@@ -181,12 +197,12 @@ func swap_with_solver_exact_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     _token_in: felt,
     _token_out: felt,
     _amount_out: Uint256,
-    _max_amount_out: Uint256,
+    _max_amount_in: Uint256,
     _to: felt,
     _solver_id: felt,
 ) -> (in_amount: Uint256) {
     let (in_amount: Uint256) = Hub.swap_with_solver_exact_out(
-        _token_in, _token_out, _amount_out, _max_amount_out, _to, _solver_id
+        _token_in, _token_out, _amount_out, _max_amount_in, _to, _solver_id
     );
     return (in_amount,);
 }
