@@ -17,6 +17,40 @@
         "type": "struct"
     },
     {
+        "members": [
+            {
+                "name": "address",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "type",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Router",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
+                "name": "in",
+                "offset": 0,
+                "type": "Uint256"
+            },
+            {
+                "name": "out",
+                "offset": 2,
+                "type": "Uint256"
+            }
+        ],
+        "name": "Liquidity",
+        "size": 4,
+        "type": "struct"
+    },
+    {
         "data": [
             {
                 "name": "previousOwner",
@@ -30,17 +64,6 @@
         "keys": [],
         "name": "OwnershipTransferred",
         "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_owner",
-                "type": "felt"
-            }
-        ],
-        "name": "constructor",
-        "outputs": [],
-        "type": "constructor"
     },
     {
         "inputs": [
@@ -74,19 +97,85 @@
                 "type": "felt"
             }
         ],
-        "name": "get_single_best_pool",
+        "name": "get_single_best_router",
         "outputs": [
             {
                 "name": "amount_out",
                 "type": "Uint256"
             },
             {
-                "name": "router_address",
+                "name": "router",
+                "type": "Router"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
                 "type": "felt"
             },
             {
-                "name": "router_type",
+                "name": "_token_out",
                 "type": "felt"
+            }
+        ],
+        "name": "get_all_routers_and_amounts",
+        "outputs": [
+            {
+                "name": "amounts_out_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts_out",
+                "type": "Uint256*"
+            },
+            {
+                "name": "routers_len",
+                "type": "felt"
+            },
+            {
+                "name": "routers",
+                "type": "Router*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            }
+        ],
+        "name": "get_all_routers_and_liquidity",
+        "outputs": [
+            {
+                "name": "liquidity_len",
+                "type": "felt"
+            },
+            {
+                "name": "liquidity",
+                "type": "Liquidity*"
+            },
+            {
+                "name": "routers_len",
+                "type": "felt"
+            },
+            {
+                "name": "routers",
+                "type": "Router*"
             }
         ],
         "stateMutability": "view",
@@ -104,6 +193,10 @@
             {
                 "name": "price",
                 "type": "Uint256"
+            },
+            {
+                "name": "decimals",
+                "type": "felt"
             }
         ],
         "stateMutability": "view",
@@ -120,11 +213,7 @@
                 "type": "Uint256"
             },
             {
-                "name": "_token1",
-                "type": "felt"
-            },
-            {
-                "name": "_token2",
+                "name": "_token_out",
                 "type": "felt"
             }
         ],
@@ -171,60 +260,16 @@
                 "type": "felt"
             },
             {
-                "name": "_price",
-                "type": "Uint256"
+                "name": "_key",
+                "type": "felt"
+            },
+            {
+                "name": "_oracle_address",
+                "type": "felt"
             }
         ],
         "name": "set_global_price",
         "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_amount_in",
-                "type": "Uint256"
-            },
-            {
-                "name": "_token_in",
-                "type": "felt"
-            },
-            {
-                "name": "_token_out",
-                "type": "felt"
-            },
-            {
-                "name": "_best_amount",
-                "type": "Uint256"
-            },
-            {
-                "name": "_router_address",
-                "type": "felt"
-            },
-            {
-                "name": "_router_type",
-                "type": "felt"
-            },
-            {
-                "name": "_counter",
-                "type": "felt"
-            }
-        ],
-        "name": "find_best_router",
-        "outputs": [
-            {
-                "name": "amount_out",
-                "type": "Uint256"
-            },
-            {
-                "name": "router_address",
-                "type": "felt"
-            },
-            {
-                "name": "router_type",
-                "type": "felt"
-            }
-        ],
         "type": "function"
     }
 ]

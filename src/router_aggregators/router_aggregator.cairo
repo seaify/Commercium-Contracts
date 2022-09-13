@@ -8,7 +8,6 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.IUni_router import IUni_router
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE

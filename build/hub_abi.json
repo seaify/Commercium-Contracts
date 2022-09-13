@@ -109,6 +109,35 @@
     {
         "inputs": [
             {
+                "name": "_amount_out",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_solver_amount_exact_out",
+        "outputs": [
+            {
+                "name": "amount_in",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_amount_in",
                 "type": "Uint256"
             },
@@ -242,6 +271,46 @@
     {
         "inputs": [
             {
+                "name": "amountOut",
+                "type": "Uint256"
+            },
+            {
+                "name": "amountInMax",
+                "type": "Uint256"
+            },
+            {
+                "name": "path_len",
+                "type": "felt"
+            },
+            {
+                "name": "path",
+                "type": "felt*"
+            },
+            {
+                "name": "to",
+                "type": "felt"
+            },
+            {
+                "name": "deadline",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_tokens_for_exact_tokens",
+        "outputs": [
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_token_in",
                 "type": "felt"
             },
@@ -270,6 +339,42 @@
         "outputs": [
             {
                 "name": "received_amount",
+                "type": "Uint256"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_amount_out",
+                "type": "Uint256"
+            },
+            {
+                "name": "_max_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_to",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_with_solver_exact_out",
+        "outputs": [
+            {
+                "name": "in_amount",
                 "type": "Uint256"
             }
         ],
@@ -311,7 +416,12 @@
             }
         ],
         "name": "swap_with_path",
-        "outputs": [],
+        "outputs": [
+            {
+                "name": "received_amount",
+                "type": "Uint256"
+            }
+        ],
         "type": "function"
     },
     {

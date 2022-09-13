@@ -175,6 +175,7 @@
             "pedersen",
             "range_check"
         ],
+        "compiler_version": "0.10.0",
         "data": [
             "0x40780017fff7fff",
             "0x1",
@@ -1091,7 +1092,7 @@
                 "type": "struct"
             },
             "__main__.add_solver.Return": {
-                "cairo_type": "(id : felt)",
+                "cairo_type": "(id: felt)",
                 "type": "type_definition"
             },
             "__main__.add_solver.SIZEOF_LOCALS": {
@@ -1455,7 +1456,7 @@
                 "type": "struct"
             },
             "__main__.get_next_id.Return": {
-                "cairo_type": "(solver_id : felt)",
+                "cairo_type": "(solver_id: felt)",
                 "type": "type_definition"
             },
             "__main__.get_next_id.SIZEOF_LOCALS": {
@@ -1584,7 +1585,7 @@
                 "type": "struct"
             },
             "__main__.get_solver.Return": {
-                "cairo_type": "(solver_address : felt)",
+                "cairo_type": "(solver_address: felt)",
                 "type": "type_definition"
             },
             "__main__.get_solver.SIZEOF_LOCALS": {
@@ -2202,7 +2203,7 @@
                 "type": "struct"
             },
             "__main__.solvers.addr.Return": {
-                "cairo_type": "(res : felt)",
+                "cairo_type": "(res: felt)",
                 "type": "type_definition"
             },
             "__main__.solvers.addr.SIZEOF_LOCALS": {
@@ -2345,7 +2346,7 @@
                 "type": "struct"
             },
             "__main__.solvers.read.Return": {
-                "cairo_type": "(solver_address : felt)",
+                "cairo_type": "(solver_address: felt)",
                 "type": "type_definition"
             },
             "__main__.solvers.read.SIZEOF_LOCALS": {
@@ -2721,7 +2722,7 @@
                 "type": "struct"
             },
             "__main__.solvers_len.addr.Return": {
-                "cairo_type": "(res : felt)",
+                "cairo_type": "(res: felt)",
                 "type": "type_definition"
             },
             "__main__.solvers_len.addr.SIZEOF_LOCALS": {
@@ -2812,7 +2813,7 @@
                 "type": "struct"
             },
             "__main__.solvers_len.read.Return": {
-                "cairo_type": "(len : felt)",
+                "cairo_type": "(len: felt)",
                 "type": "type_definition"
             },
             "__main__.solvers_len.read.SIZEOF_LOCALS": {
@@ -3377,7 +3378,7 @@
                 "type": "struct"
             },
             "__wrappers__.add_solver.Return": {
-                "cairo_type": "(syscall_ptr : felt*, pedersen_ptr : starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr : felt, size : felt, retdata : felt*)",
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.add_solver.SIZEOF_LOCALS": {
@@ -3511,7 +3512,7 @@
                 "type": "reference"
             },
             "__wrappers__.add_solver.ret_value": {
-                "cairo_type": "(id : felt)",
+                "cairo_type": "(id: felt)",
                 "full_name": "__wrappers__.add_solver.ret_value",
                 "references": [
                     {
@@ -3520,7 +3521,7 @@
                             "offset": 148
                         },
                         "pc": 480,
-                        "value": "[cast(ap + (-1), (id : felt)*)]"
+                        "value": "[cast(ap + (-1), (id: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -3591,7 +3592,7 @@
                         "offset": 1
                     },
                     "ret_value": {
-                        "cairo_type": "(id : felt)",
+                        "cairo_type": "(id: felt)",
                         "offset": 0
                     }
                 },
@@ -3605,7 +3606,7 @@
                 "type": "struct"
             },
             "__wrappers__.add_solver_encode_return.Return": {
-                "cairo_type": "(range_check_ptr : felt, data_len : felt, data : felt*)",
+                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.add_solver_encode_return.SIZEOF_LOCALS": {
@@ -3685,7 +3686,7 @@
                 "type": "reference"
             },
             "__wrappers__.add_solver_encode_return.ret_value": {
-                "cairo_type": "(id : felt)",
+                "cairo_type": "(id: felt)",
                 "full_name": "__wrappers__.add_solver_encode_return.ret_value",
                 "references": [
                     {
@@ -3694,7 +3695,7 @@
                             "offset": 0
                         },
                         "pc": 462,
-                        "value": "[cast(fp + (-4), (id : felt)*)]"
+                        "value": "[cast(fp + (-4), (id: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -3719,7 +3720,7 @@
                 "type": "struct"
             },
             "__wrappers__.constructor.Return": {
-                "cairo_type": "(syscall_ptr : felt*, pedersen_ptr : starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr : felt, size : felt, retdata : felt*)",
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.constructor.SIZEOF_LOCALS": {
@@ -3936,7 +3937,7 @@
                 "type": "struct"
             },
             "__wrappers__.get_next_id.Return": {
-                "cairo_type": "(syscall_ptr : felt*, pedersen_ptr : starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr : felt, size : felt, retdata : felt*)",
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.get_next_id.SIZEOF_LOCALS": {
@@ -4032,7 +4033,7 @@
                 "type": "reference"
             },
             "__wrappers__.get_next_id.ret_value": {
-                "cairo_type": "(solver_id : felt)",
+                "cairo_type": "(solver_id: felt)",
                 "full_name": "__wrappers__.get_next_id.ret_value",
                 "references": [
                     {
@@ -4041,7 +4042,7 @@
                             "offset": 28
                         },
                         "pc": 417,
-                        "value": "[cast(ap + (-1), (solver_id : felt)*)]"
+                        "value": "[cast(ap + (-1), (solver_id: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -4112,7 +4113,7 @@
                         "offset": 1
                     },
                     "ret_value": {
-                        "cairo_type": "(solver_id : felt)",
+                        "cairo_type": "(solver_id: felt)",
                         "offset": 0
                     }
                 },
@@ -4126,7 +4127,7 @@
                 "type": "struct"
             },
             "__wrappers__.get_next_id_encode_return.Return": {
-                "cairo_type": "(range_check_ptr : felt, data_len : felt, data : felt*)",
+                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.get_next_id_encode_return.SIZEOF_LOCALS": {
@@ -4206,7 +4207,7 @@
                 "type": "reference"
             },
             "__wrappers__.get_next_id_encode_return.ret_value": {
-                "cairo_type": "(solver_id : felt)",
+                "cairo_type": "(solver_id: felt)",
                 "full_name": "__wrappers__.get_next_id_encode_return.ret_value",
                 "references": [
                     {
@@ -4215,7 +4216,7 @@
                             "offset": 0
                         },
                         "pc": 402,
-                        "value": "[cast(fp + (-4), (solver_id : felt)*)]"
+                        "value": "[cast(fp + (-4), (solver_id: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -4240,7 +4241,7 @@
                 "type": "struct"
             },
             "__wrappers__.get_solver.Return": {
-                "cairo_type": "(syscall_ptr : felt*, pedersen_ptr : starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr : felt, size : felt, retdata : felt*)",
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.get_solver.SIZEOF_LOCALS": {
@@ -4374,7 +4375,7 @@
                 "type": "reference"
             },
             "__wrappers__.get_solver.ret_value": {
-                "cairo_type": "(solver_address : felt)",
+                "cairo_type": "(solver_address: felt)",
                 "full_name": "__wrappers__.get_solver.ret_value",
                 "references": [
                     {
@@ -4383,7 +4384,7 @@
                             "offset": 68
                         },
                         "pc": 387,
-                        "value": "[cast(ap + (-1), (solver_address : felt)*)]"
+                        "value": "[cast(ap + (-1), (solver_address: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -4454,7 +4455,7 @@
                         "offset": 1
                     },
                     "ret_value": {
-                        "cairo_type": "(solver_address : felt)",
+                        "cairo_type": "(solver_address: felt)",
                         "offset": 0
                     }
                 },
@@ -4468,7 +4469,7 @@
                 "type": "struct"
             },
             "__wrappers__.get_solver_encode_return.Return": {
-                "cairo_type": "(range_check_ptr : felt, data_len : felt, data : felt*)",
+                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.get_solver_encode_return.SIZEOF_LOCALS": {
@@ -4548,7 +4549,7 @@
                 "type": "reference"
             },
             "__wrappers__.get_solver_encode_return.ret_value": {
-                "cairo_type": "(solver_address : felt)",
+                "cairo_type": "(solver_address: felt)",
                 "full_name": "__wrappers__.get_solver_encode_return.ret_value",
                 "references": [
                     {
@@ -4557,7 +4558,7 @@
                             "offset": 0
                         },
                         "pc": 369,
-                        "value": "[cast(fp + (-4), (solver_address : felt)*)]"
+                        "value": "[cast(fp + (-4), (solver_address: felt)*)]"
                     }
                 ],
                 "type": "reference"
@@ -4582,7 +4583,7 @@
                 "type": "struct"
             },
             "__wrappers__.set_solver.Return": {
-                "cairo_type": "(syscall_ptr : felt*, pedersen_ptr : starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr : felt, size : felt, retdata : felt*)",
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
             "__wrappers__.set_solver.SIZEOF_LOCALS": {
@@ -4802,21 +4803,25 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
+            "src.lib.constants.AlphaRoad": {
+                "type": "const",
+                "value": 1
+            },
             "src.lib.constants.BASE": {
                 "type": "const",
                 "value": 1000000000000000000
             },
+            "src.lib.constants.HALF_MAX": {
+                "type": "const",
+                "value": 1809251394333065606848661391547535052811553607665798349986546028067936010240
+            },
+            "src.lib.constants.JediSwap": {
+                "type": "const",
+                "value": 0
+            },
             "src.lib.constants.MAX_FELT": {
                 "type": "const",
                 "value": -1
-            },
-            "src.lib.constants.cow": {
-                "type": "const",
-                "value": 1
-            },
-            "src.lib.constants.uni": {
-                "type": "const",
-                "value": 0
             },
             "src.openzeppelin.access.ownable.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
@@ -5330,7 +5335,7 @@
                 "type": "struct"
             },
             "src.openzeppelin.access.ownable.Ownable.owner.Return": {
-                "cairo_type": "(owner : felt)",
+                "cairo_type": "(owner: felt)",
                 "type": "type_definition"
             },
             "src.openzeppelin.access.ownable.Ownable.owner.SIZEOF_LOCALS": {
@@ -5475,7 +5480,7 @@
                 "type": "struct"
             },
             "src.openzeppelin.access.ownable.Ownable_owner.addr.Return": {
-                "cairo_type": "(res : felt)",
+                "cairo_type": "(res: felt)",
                 "type": "type_definition"
             },
             "src.openzeppelin.access.ownable.Ownable_owner.addr.SIZEOF_LOCALS": {
@@ -5566,7 +5571,7 @@
                 "type": "struct"
             },
             "src.openzeppelin.access.ownable.Ownable_owner.read.Return": {
-                "cairo_type": "(owner : felt)",
+                "cairo_type": "(owner: felt)",
                 "type": "type_definition"
             },
             "src.openzeppelin.access.ownable.Ownable_owner.read.SIZEOF_LOCALS": {
@@ -6137,12 +6142,20 @@
                 "type": "struct"
             },
             "starkware.cairo.common.alloc.alloc.Return": {
-                "cairo_type": "(ptr : felt*)",
+                "cairo_type": "(ptr: felt*)",
                 "type": "type_definition"
             },
             "starkware.cairo.common.alloc.alloc.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
+            },
+            "starkware.cairo.common.bool.FALSE": {
+                "type": "const",
+                "value": 0
+            },
+            "starkware.cairo.common.bool.TRUE": {
+                "type": "const",
+                "value": 1
             },
             "starkware.cairo.common.cairo_builtins.BitwiseBuiltin": {
                 "full_name": "starkware.cairo.common.cairo_builtins.BitwiseBuiltin",
@@ -6216,6 +6229,25 @@
                 },
                 "size": 3,
                 "type": "struct"
+            },
+            "starkware.cairo.common.cairo_builtins.KeccakBuiltin": {
+                "full_name": "starkware.cairo.common.cairo_builtins.KeccakBuiltin",
+                "members": {
+                    "input": {
+                        "cairo_type": "starkware.cairo.common.keccak_state.KeccakBuiltinState",
+                        "offset": 0
+                    },
+                    "output": {
+                        "cairo_type": "starkware.cairo.common.keccak_state.KeccakBuiltinState",
+                        "offset": 8
+                    }
+                },
+                "size": 16,
+                "type": "struct"
+            },
+            "starkware.cairo.common.cairo_builtins.KeccakBuiltinState": {
+                "destination": "starkware.cairo.common.keccak_state.KeccakBuiltinState",
+                "type": "alias"
             },
             "starkware.cairo.common.cairo_builtins.SignatureBuiltin": {
                 "full_name": "starkware.cairo.common.cairo_builtins.SignatureBuiltin",
@@ -6302,7 +6334,7 @@
                 "type": "struct"
             },
             "starkware.cairo.common.hash.hash2.Return": {
-                "cairo_type": "(result : felt)",
+                "cairo_type": "(result: felt)",
                 "type": "type_definition"
             },
             "starkware.cairo.common.hash.hash2.SIZEOF_LOCALS": {
@@ -6376,6 +6408,53 @@
                     }
                 ],
                 "type": "reference"
+            },
+            "starkware.cairo.common.keccak_state.KeccakBuiltinState": {
+                "full_name": "starkware.cairo.common.keccak_state.KeccakBuiltinState",
+                "members": {
+                    "s0": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "s1": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    },
+                    "s2": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "s3": {
+                        "cairo_type": "felt",
+                        "offset": 3
+                    },
+                    "s4": {
+                        "cairo_type": "felt",
+                        "offset": 4
+                    },
+                    "s5": {
+                        "cairo_type": "felt",
+                        "offset": 5
+                    },
+                    "s6": {
+                        "cairo_type": "felt",
+                        "offset": 6
+                    },
+                    "s7": {
+                        "cairo_type": "felt",
+                        "offset": 7
+                    }
+                },
+                "size": 8,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.FALSE": {
+                "destination": "starkware.cairo.common.bool.FALSE",
+                "type": "alias"
+            },
+            "starkware.cairo.common.math.TRUE": {
+                "destination": "starkware.cairo.common.bool.TRUE",
+                "type": "alias"
             },
             "starkware.cairo.common.math.assert_250_bit": {
                 "decorators": [
@@ -6870,7 +6949,7 @@
                 "type": "struct"
             },
             "starkware.starknet.common.storage.normalize_address.Return": {
-                "cairo_type": "(res : felt)",
+                "cairo_type": "(res: felt)",
                 "type": "type_definition"
             },
             "starkware.starknet.common.storage.normalize_address.SIZEOF_LOCALS": {
@@ -7653,6 +7732,10 @@
                         "cairo_type": "felt",
                         "offset": 2
                     },
+                    "nonce": {
+                        "cairo_type": "felt",
+                        "offset": 7
+                    },
                     "signature": {
                         "cairo_type": "felt*",
                         "offset": 4
@@ -7670,7 +7753,7 @@
                         "offset": 0
                     }
                 },
-                "size": 7,
+                "size": 8,
                 "type": "struct"
             },
             "starkware.starknet.common.syscalls.emit_event": {
@@ -7841,7 +7924,7 @@
                 "type": "struct"
             },
             "starkware.starknet.common.syscalls.get_caller_address.Return": {
-                "cairo_type": "(caller_address : felt)",
+                "cairo_type": "(caller_address: felt)",
                 "type": "type_definition"
             },
             "starkware.starknet.common.syscalls.get_caller_address.SIZEOF_LOCALS": {
@@ -7929,7 +8012,7 @@
                 "type": "struct"
             },
             "starkware.starknet.common.syscalls.storage_read.Return": {
-                "cairo_type": "(value : felt)",
+                "cairo_type": "(value: felt)",
                 "type": "type_definition"
             },
             "starkware.starknet.common.syscalls.storage_read.SIZEOF_LOCALS": {
@@ -10113,7 +10196,7 @@
                         "offset": 0
                     },
                     "pc": 369,
-                    "value": "[cast(fp + (-4), (solver_address : felt)*)]"
+                    "value": "[cast(fp + (-4), (solver_address: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {
@@ -10249,7 +10332,7 @@
                         "offset": 68
                     },
                     "pc": 387,
-                    "value": "[cast(ap + (-1), (solver_address : felt)*)]"
+                    "value": "[cast(ap + (-1), (solver_address: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {
@@ -10337,7 +10420,7 @@
                         "offset": 0
                     },
                     "pc": 402,
-                    "value": "[cast(fp + (-4), (solver_id : felt)*)]"
+                    "value": "[cast(fp + (-4), (solver_id: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {
@@ -10449,7 +10532,7 @@
                         "offset": 28
                     },
                     "pc": 417,
-                    "value": "[cast(ap + (-1), (solver_id : felt)*)]"
+                    "value": "[cast(ap + (-1), (solver_id: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {
@@ -10609,7 +10692,7 @@
                         "offset": 0
                     },
                     "pc": 462,
-                    "value": "[cast(fp + (-4), (id : felt)*)]"
+                    "value": "[cast(fp + (-4), (id: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {
@@ -10745,7 +10828,7 @@
                         "offset": 148
                     },
                     "pc": 480,
-                    "value": "[cast(ap + (-1), (id : felt)*)]"
+                    "value": "[cast(ap + (-1), (id: felt)*)]"
                 },
                 {
                     "ap_tracking_data": {

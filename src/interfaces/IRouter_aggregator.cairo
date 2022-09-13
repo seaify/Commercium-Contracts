@@ -6,7 +6,7 @@ from src.lib.utils import Router, Liquidity
 
 @contract_interface
 namespace IRouter_aggregator {
-```
+
     func get_single_best_router(
             in_amount: Uint256, 
             token_in: felt, 
@@ -45,7 +45,6 @@ namespace IRouter_aggregator {
             routers: Router*
         ){
     }
-```
 
     func get_weight(
             _amount_in_usd: Uint256, 

@@ -84,9 +84,15 @@ func get_solver_amount_and_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    amountIn: Uint256, path_len: felt, path: felt*
-) -> (amounts_len: felt, amounts: Uint256*) {
+func get_amounts_out{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        amountIn: Uint256, 
+        path_len: felt, 
+        path: felt*
+    ) -> (amounts_len: felt, amounts: Uint256*) {
     alloc_locals;
 
     // The user only dictates in_token and out_token

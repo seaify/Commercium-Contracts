@@ -319,7 +319,6 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
                 router_aggregator_address,
                 _amount_in_usd,
                 amount_out,
-                _tokens[_src_counter],
                 _tokens[_dst_counter],
             );
             if (_src_counter == 0) {
@@ -564,8 +563,10 @@ func determine_distances{
     if (is_dst_end == 1) {
         // Moving towards the goal token should always improve the distance
         assert new_distance = _current_distance - EXTRA_BASE + _edge[0].weight;
+        tempvar range_check_ptr = range_check_ptr;
     } else {
         assert new_distance = _current_distance + _edge[0].weight;
+        tempvar range_check_ptr = range_check_ptr;
     }
 
     let is_old_distance_better = is_le_felt(_distances[_edge[0].dst], new_distance);

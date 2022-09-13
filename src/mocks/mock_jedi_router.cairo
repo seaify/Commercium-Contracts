@@ -28,6 +28,7 @@ func reserves(pair: Pair) -> (reserves: Reserves) {
 
 @storage_var
 func factory_address() -> (address: felt) {
+}
 
 @view
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -111,7 +112,7 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     _path_len: felt,
     _path: felt*,
     _receiver_address: felt,
-    _deadline: felt,
+    _deadline: felt
 ) -> (amounts_len: felt, amounts: Uint256*) {
     alloc_locals;
     let (amount_out: Uint256) = get_amount_out(_amount_in, _path[0], _path[1]);

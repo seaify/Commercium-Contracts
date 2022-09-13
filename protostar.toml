@@ -1,5 +1,5 @@
 ["protostar.config"]
-protostar_version = "v0.3.2"
+protostar_version = "v0.4.0"
 
 ["protostar.project"]
 libs_path = "lib"
@@ -10,9 +10,6 @@ hub = [
 ]
 router_aggregator = [
     "./src/router_aggregators/router_aggregator.cairo",
-]
-incentivized_router_aggregator = [
-    "./src/incentivized_router_aggregator.cairo",
 ]
 solver_registry = [
     "./src/solver_registry.cairo",
@@ -29,8 +26,8 @@ single_swap_solver = [
 heuristic_splitter = [
     "./src/solvers/heuristic_splitter.cairo",
 ]
-mock_uni_router = [
-    "./src/mocks/mock_uni_router.cairo",
+mock_jedi_router = [
+    "./src/mocks/mock_jedi_router.cairo",
 ]
 mock_price_oracle = [
     "./src/mocks/mock_price_oracle.cairo",

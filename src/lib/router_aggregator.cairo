@@ -140,12 +140,16 @@ namespace RouterAggregator {
         return ();
     }
 
-    func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256,
-        _token_in: felt,
-        _token_out: felt,
-        _router: Router
-    ) -> (amount_out: Uint256) {
+    func get_router_amount{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }(
+            _amount_in: Uint256,
+            _token_in: felt,
+            _token_out: felt,
+            _router: Router
+        ) -> (amount_out: Uint256) {
 
         if (_router.type == JediSwap) {
             let (path: felt*) = alloc();
@@ -223,45 +227,36 @@ namespace RouterAggregator {
             _token_in: felt,
             _token_out: felt,
             _router: Router
-        ) -> (amount_out: Uint256) {
+        ) -> (liquidity: Liquidity) {
+        alloc_locals;
 
-            if (router.type == JediSwap) {
-                let (factory_address: felt) = IJedi_router.factory(_router.address);
-                let (pair_address: felt) = IJedi_factory.get_pair(factory_address,_token_in,_token_out);
-                let (reserve0: Uint256, reserve1: Uint256,_) = IJedi_pool.get_reserves(pair_address);
-                let (token0) = IJedi_pool.token0();
-                if (token0 == _token_in) {
-                    return(Liquidity(reserve0, reserve1),);
-                } else {
-                    return(Liquidity(reserve1, reserve0),);
-                }
-                tempvar range_check_ptr = range_check_ptr;
-                tempvar syscall_ptr = syscall_ptr;
-                tempvar pedersen_ptr = pedersen_ptr;
-            } 
-            if (router.type == AlphaRoad) {
-                let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
-                let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
-                let (reserve0: Uint256, reserve1: Uint256) = IAlpha_pool.getReserves(pair_address);
-                let (token0) = IAlpha_pool.token0();
-                if (token0 == _token_in) {
-                    return(Liquidity(reserve0, reserve1),);
-                } else {
-                    return(Liquidity(reserve1, reserve0),);
-                }
+        if (_router.type == JediSwap) {
+            let (factory_address: felt) = IJedi_router.factory(_router.address);
+            let (pair_address: felt) = IJedi_factory.get_pair(factory_address,_token_in,_token_out);
+            let (local reserve0: Uint256,local reserve1: Uint256,_) = IJedi_pool.get_reserves(pair_address);
+            let (token0) = IJedi_pool.token0(pair_address);
+            if (token0 == _token_in) {
                 return(Liquidity(reserve0, reserve1),);
-                tempvar range_check_ptr = range_check_ptr;
-                tempvar syscall_ptr = syscall_ptr;
-                tempvar pedersen_ptr = pedersen_ptr;
             } else {
-                with_attr error_message("router type invalid: {ids.router.type}") {
-                    assert 1 = 0;
-                }
-                tempvar range_check_ptr = range_check_ptr;
-                tempvar syscall_ptr = syscall_ptr;
-                tempvar pedersen_ptr = pedersen_ptr;
-                return(Liquidity(0, 0),);
+                return(Liquidity(reserve1, reserve0),);
             }
+        } 
+        if (_router.type == AlphaRoad) {
+            let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
+            let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
+            let (local reserve0: Uint256,local reserve1: Uint256) = IAlpha_pool.getReserves(pair_address);
+            let (token0) = IAlpha_pool.token0(pair_address);
+            if (token0 == _token_in) {
+                return(Liquidity(reserve0, reserve1),);
+            } else {
+                return(Liquidity(reserve1, reserve0),);
+            }
+        } else {
+            with_attr error_message("router type invalid: {ids.router.type}") {
+                assert 1 = 0;
+            }
+            return(Liquidity(Uint256(0, 0),Uint256(0, 0)),);
+        }
     }
 
     // ALTERNATIVE SORTING METHOD...propably better with larger number of routers

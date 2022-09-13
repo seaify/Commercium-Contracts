@@ -39,9 +39,9 @@ namespace IHub {
     }
 
     func get_amounts_out(
-        _amountIn: Uint256, 
-        _path_len: felt, 
-        _path: felt*
+        amountIn: Uint256, 
+        path_len: felt, 
+        path: felt*
     )->(amounts_len: felt, amounts: Uint256*){
     }
 
