@@ -2,8 +2,10 @@
 
 %lang starknet
 
-const MAX_FELT = 0 - 1;
-const HALF_MAX = MAX_FELT / 2; //Does not cause underflow?
+//Not actual max felt, just a large feasible number for Uint256
+const MAX_FELT = 340282366920938463463374607431768211454;
+//Half of the number above
+const HALF_MAX = 340282366920938463463374607431768211454 / 2;
 const BASE = 1000000000000000000;  // 1e18
 
 /////////////////////

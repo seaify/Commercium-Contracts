@@ -126,6 +126,9 @@ func kick_low_amounts{range_check_ptr}(
 
     local based_amounts_out = _amounts_out[0].low * BASE;
     let (local share, _) = unsigned_div_rem(based_amounts_out, _sum);
+    with_attr error_message("share: {share}") {
+        assert 1 = 2;
+    }
     let is_below_threshold = is_le_felt(share, threshold);
 
     if (is_below_threshold == TRUE) {

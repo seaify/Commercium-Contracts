@@ -3,6 +3,7 @@
 from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import dict_write, dict_read
 from starkware.cairo.common.dict_access import DictAccess
@@ -187,7 +188,7 @@ func _swap_exact_in{
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
         let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
-        if (is_below_threshold == 0) {
+        if (is_below_threshold == TRUE) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
@@ -223,7 +224,7 @@ func _swap_exact_in{
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
         let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
-        if (is_below_threshold == 0) {
+        if (is_below_threshold == TRUE) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
             tempvar syscall_ptr = syscall_ptr;
             tempvar pedersen_ptr = pedersen_ptr;

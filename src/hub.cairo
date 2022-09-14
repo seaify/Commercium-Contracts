@@ -194,7 +194,6 @@ func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     let (received_amount: Uint256) = Hub.swap_with_solver(
         _token_in, _token_out, _amount_in, _min_amount_out, _to, _solver_id
     );
-
     return (received_amount,);
 }
 
