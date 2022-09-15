@@ -110,14 +110,14 @@ func sum_amounts{range_check_ptr}(_amounts_len: felt, _amounts: Uint256*) -> (su
 }
 
 func kick_low_amounts{range_check_ptr}(
-    _sum: felt,
-    _routers_len: felt,
-    _final_routers: Router*,
-    _routers: Router*,
-    _final_amounts_out: Uint256*,
-    _amounts_out: Uint256*,
-    _counter: felt,
-) -> (_routers_len: felt) {
+        _sum: felt,
+        _routers_len: felt,
+        _final_routers: Router*,
+        _routers: Router*,
+        _final_amounts_out: Uint256*,
+        _amounts_out: Uint256*,
+        _counter: felt,
+    ) -> (_routers_len: felt) {
     alloc_locals;
 
     if (_counter == 0) {
@@ -126,9 +126,7 @@ func kick_low_amounts{range_check_ptr}(
 
     local based_amounts_out = _amounts_out[0].low * BASE;
     let (local share, _) = unsigned_div_rem(based_amounts_out, _sum);
-    with_attr error_message("share: {share}") {
-        assert 1 = 2;
-    }
+    
     let is_below_threshold = is_le_felt(share, threshold);
 
     if (is_below_threshold == TRUE) {
@@ -159,8 +157,8 @@ func kick_low_amounts{range_check_ptr}(
 }
 
 func set_amounts{range_check_ptr}(
-    _sum: felt, _routers_len: felt, _amounts_out: Uint256*, _amounts: felt*
-) {
+        _sum: felt, _routers_len: felt, _amounts_out: Uint256*, _amounts: felt*
+    ) {
     alloc_locals;
 
     if (_routers_len == 0) {
@@ -170,6 +168,7 @@ func set_amounts{range_check_ptr}(
     local based_amounts_out = _amounts_out[0].low * BASE;
     let (local share, _) = unsigned_div_rem(based_amounts_out, _sum);
     assert _amounts[0] = share;
+    
 
     // TODO: ADD SAFE MATH CHECK
     tempvar new_sum = _sum - _amounts_out[0].low;

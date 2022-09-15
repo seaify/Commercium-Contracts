@@ -11,6 +11,9 @@ hub = [
 router_aggregator = [
     "./src/router_aggregators/router_aggregator.cairo",
 ]
+router_aggregator_proxy = [
+    "./src/router_aggregators/router_proxy.cairo",
+]
 solver_registry = [
     "./src/solver_registry.cairo",
 ]

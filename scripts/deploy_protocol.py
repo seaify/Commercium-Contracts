@@ -15,7 +15,8 @@ DAI_USD_Key = 28254602066752356
 USDC_USD_Key = 8463218501920060260
 EMPIRIC_ORACLE_ADDRESS = 536554312408700354284283040928046824434969893969739486945260186308733942996
 JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993
-execution_contract_hash = 0
+execution_contract_hash = 242426945107153255960771867351046272004977902559623537068912744283860039850
+router_aggregator_contract_hash = 128366282019189000959900597506044096446998519897774588451956949944576865420
 
 #Setup Admin Account
 private_key = 514919074163669761001641341781643512607564785866885624866019752723630562244
@@ -25,12 +26,12 @@ client = AccountClient(address=public_key, client=GatewayClient(net="testnet"), 
 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
-contractAddresses = {"hub": 12312321,
-                    "solver_registry": 0,
-                    "router_aggregator": 0,
-                    "single_swap_solver": 0,
-                    "spf_solver": 0,
-                    "heuristic_splitter_solver": 0}
+contractAddresses = {"hub": 1239839734979793769720295449576425419964934840817251849524590085431968166742,
+                    "solver_registry": 1882006508965251690485885641123166906116041092081954896070954408113553152764,
+                    "router_aggregator": 2448590369462025244879222903441322187593123184637584223065955163372978154113,
+                    "single_swap_solver": 3570901364099080073297797560913839000276060763254904810760667781305201703685,
+                    "spf_solver": 1669938796048367595768211772001259401475560614108645121815530432075956769035,
+                    "heuristic_splitter": 2157289568508390495651273650241984071263271030297552139724246128684486012095}
                     
 #######################
 #                     #
@@ -39,12 +40,6 @@ contractAddresses = {"hub": 12312321,
 #######################
 
 async def deployContracts():
-
-    print("Declaring Executor Contract")
-    compiled = Path("./build/", "trade_executor.json").read_text("utf-8")
-    signedTransaction = client.sign_declare_transaction(client=client,compiled_contract=compiled,max_fee=50000000000000000000)
-    hash = await client.declare(signedTransaction)
-    print(hash)
 
     if contractAddresses["hub"] == 0 :
         # Deploy Hub
@@ -73,9 +68,9 @@ async def deployContracts():
 
         # Deploy Router Aggregator
         print("Deploying Router Aggregator")
-        compiled = Path("./build/", "router_aggregator.json").read_text("utf-8")
+        compiled = Path("./build/", "router_aggregator_proxy.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address]
+            client, compiled_contract=compiled, constructor_args=[router_aggregator_contract_hash,account_address,account_address]
         )
         print("Waiting for acceptance...")
         await deployment_result.wait_for_acceptance()
@@ -117,7 +112,7 @@ async def deployContracts():
         await deployment_result.wait_for_acceptance()
         contract = deployment_result.deployed_contract
         print("Heuristic Splitter Address: ",contract.address)
-        contractAddresses["heuristic_splitter_solver"] = contract.address
+        contractAddresses["heuristic_splitter"] = contract.address
     
     ##########################
     #                        #
@@ -125,12 +120,12 @@ async def deployContracts():
     #                        #
     ##########################   
 
-    hubContract = await Contract.from_address(contractAddresses["hub"],client)
+    hubContract = await Contract.from_address(address=contractAddresses["hub"],client=client)
     routerAggregatorContract = await Contract.from_address(contractAddresses["router_aggregator"],client)
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
     spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
-    heurtisticSplitterContract = await Contract.from_address(contractAddresses["heuristic_splitter_solver"],client)
+    heurtisticSplitterContract = await Contract.from_address(contractAddresses["heuristic_splitter"],client)
 
     # Configure Hub
     print("...Configuring Hub...")

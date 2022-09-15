@@ -609,7 +609,7 @@
             "0x1104800180018000",
             "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff88",
             "0x480680017fff8000",
-            "0x800000000000011000000000000000000000000000000000000000000000000",
+            "0xfffffffffffffffffffffffffffffffe",
             "0x1104800180018000",
             "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffe59",
             "0x48127ffb7fff8000",
@@ -4813,7 +4813,7 @@
             },
             "src.lib.constants.HALF_MAX": {
                 "type": "const",
-                "value": 1809251394333065606848661391547535052811553607665798349986546028067936010240
+                "value": 170141183460469231731687303715884105727
             },
             "src.lib.constants.JediSwap": {
                 "type": "const",
@@ -4821,7 +4821,7 @@
             },
             "src.lib.constants.MAX_FELT": {
                 "type": "const",
-                "value": -1
+                "value": 340282366920938463463374607431768211454
             },
             "src.openzeppelin.access.ownable.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",

@@ -1,3 +1,3 @@
-from starkware.starknet.public.abi import get_selector_from_name
+from starknet_py.contract import ContractFunction
 
-print(get_selector_from_name("get_solver_result"))
+print(ContractFunction.get_selector("set_global_price"))
