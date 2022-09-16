@@ -24059,6 +24059,25 @@
                 "size": 2,
                 "type": "struct"
             },
+            "src.lib.utils.SithSwapRoutes": {
+                "full_name": "src.lib.utils.SithSwapRoutes",
+                "members": {
+                    "from_address": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "stable": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "to_address": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    }
+                },
+                "size": 3,
+                "type": "struct"
+            },
             "src.lib.utils.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"

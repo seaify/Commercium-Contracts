@@ -6,6 +6,7 @@ from starkware.cairo.common.bool import FALSE
 from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
+from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
@@ -130,15 +131,32 @@ func get_weight{
 //
 
 @external
-func add_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router_address: felt, _router_type: felt
-) {
+func add_router{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_router_address: felt, _router_type: felt){
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
     routers.write(router_len, Router(_router_address, _router_type));
     router_index_len.write(router_len + 1);
     // EMIT ADD EVENT
     return ();
+}
+
+@external
+func update_router{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_router_address: felt, _router_type: felt, id: felt){
+    Ownable.assert_only_owner();
+    let (router_len) = router_index_len.read();
+    let is_under_len = is_le_felt(id,router_len);
+    assert is_under_len = 1;
+    routers.write(id, Router(_router_address, _router_type));
+    //EMIT ADD EVENT
+    return();
 }
 
 @external

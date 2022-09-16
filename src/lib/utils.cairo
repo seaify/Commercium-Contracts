@@ -11,6 +11,12 @@ from starkware.cairo.common.uint256 import (
 )
 from starkware.cairo.common.math import unsigned_div_rem
 
+struct SithSwapRoutes {
+    from_address: felt,
+    to_address: felt,
+    stable: felt,
+}
+
 struct Router {
     address: felt,
     type: felt,

@@ -2776,6 +2776,14 @@
                 "type": "const",
                 "value": 340282366920938463463374607431768211454
             },
+            "src.lib.constants.SithSwap": {
+                "type": "const",
+                "value": 2
+            },
+            "src.lib.constants.SithSwapStable": {
+                "type": "const",
+                "value": 3
+            },
             "src.lib.utils.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
@@ -2823,6 +2831,25 @@
                     }
                 },
                 "size": 2,
+                "type": "struct"
+            },
+            "src.lib.utils.SithSwapRoutes": {
+                "full_name": "src.lib.utils.SithSwapRoutes",
+                "members": {
+                    "from_address": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "stable": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "to_address": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    }
+                },
+                "size": 3,
                 "type": "struct"
             },
             "src.lib.utils.Uint256": {

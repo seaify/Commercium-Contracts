@@ -20,14 +20,14 @@ from starkware.cairo.common.uint256 import (
 
 from src.lib.array import Array
 from src.lib.utils import Utils
-from src.lib.constants import MAX_FELT, JediSwap
+from src.lib.constants import MAX_FELT, JediSwap, SithSwap, SithSwapStable
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ISpf_solver import ISpf_solver
 from src.interfaces.ISolver_registry import ISolver_registry
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
 from src.interfaces.IERC20 import IERC20
-from src.interfaces.IRouter import IJedi_router
+from src.interfaces.IRouter import IJedi_router, ISith_router
 from src.interfaces.IHub import IHub
 
 const Vertices = 6;
@@ -134,15 +134,15 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %}
 
     // Set routers
-    let (local router_1_address) = create_router1(
+    let (local router_1_address) = create_jedi_router(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 1: ",ids.router_1_address) %}
-    let (local router_2_address) = create_router2(
+    let (local router_2_address) = create_sith_router(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 2: ",ids.router_2_address) %}
-    let (local router_3_address) = create_router3(
+    let (local router_3_address) = create_sith_stable_router(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 3: ",ids.router_3_address) %}
@@ -177,8 +177,8 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Add newly created routers to router aggregator
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_proxy_address) %}
     IRouter_aggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_2_address, JediSwap);
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_3_address, JediSwap);
+    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
+    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_3_address, SithSwapStable);
 
     // Set Price feeds at the Router
     IRouter_aggregator.set_global_price(
@@ -445,7 +445,7 @@ func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     return ();
 }
 
-func create_router1{syscall_ptr: felt*, range_check_ptr}(
+func create_jedi_router{syscall_ptr: felt*, range_check_ptr}(
     public_key_0: felt,
     ETH: felt,
     USDC: felt,
@@ -511,7 +511,7 @@ func create_router1{syscall_ptr: felt*, range_check_ptr}(
     return (router_address,);
 }
 
-func create_router2{syscall_ptr: felt*, range_check_ptr}(
+func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     public_key_0: felt,
     ETH: felt,
     USDC: felt,
@@ -524,7 +524,7 @@ func create_router2{syscall_ptr: felt*, range_check_ptr}(
 
     local router_address: felt;
     // We deploy contract and put its address into a local variable. Second argument is calldata array
-    %{ ids.router_address = deploy_contract("./src/mocks/mock_jedi_router.cairo", []).contract_address %}
+    %{ ids.router_address = deploy_contract("./src/mocks/mock_sith_router.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge
@@ -561,7 +561,7 @@ func create_router2{syscall_ptr: felt*, range_check_ptr}(
     return (router_address,);
 }
 
-func create_router3{syscall_ptr: felt*, range_check_ptr}(
+func create_sith_stable_router{syscall_ptr: felt*, range_check_ptr}(
     public_key_0: felt,
     ETH: felt,
     USDC: felt,
@@ -574,7 +574,7 @@ func create_router3{syscall_ptr: felt*, range_check_ptr}(
 
     local router_address: felt;
     // We deploy contract and put its address into a local variable. Second argument is calldata array
-    %{ ids.router_address = deploy_contract("./src/mocks/mock_jedi_router.cairo", []).contract_address %}
+    %{ ids.router_address = deploy_contract("./src/mocks/mock_sith_router.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge

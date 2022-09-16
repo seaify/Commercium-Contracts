@@ -245,6 +245,25 @@
     {
         "inputs": [
             {
+                "name": "_router_address",
+                "type": "felt"
+            },
+            {
+                "name": "_router_type",
+                "type": "felt"
+            },
+            {
+                "name": "id",
+                "type": "felt"
+            }
+        ],
+        "name": "update_router",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_index",
                 "type": "felt"
             }

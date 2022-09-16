@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.utils import SithSwapRoutes
 
 @contract_interface
 namespace IJedi_router {
@@ -133,6 +134,42 @@ namespace IAlpha_router {
     }
 
     func transferOwnership(new_owner: felt) -> (new_owner: felt){
+    }
+}
+
+@contract_interface
+namespace ISith_router {
+    func swapExactTokensForTokensSimple(
+            amount_in: Uint256,
+            amount_out_min: Uint256,
+            token_from: felt,
+            token_to: felt,
+            stable: felt,
+            to: felt,
+            deadline: felt
+        ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func getAmountOut(
+            amount_in: Uint256,
+            token_in: felt,
+            token_out: felt
+        ) -> (amount_out: Uint256, stable: felt){
+    }
+
+    func getAmountsOut(
+            amount_in: Uint256,
+            routes_len: felt,
+            routes: SithSwapRoutes*,
+            stable: felt
+        ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func get_reserves(
+            token_a: felt,
+            token_b: felt,
+            stable: felt
+        ) -> (reserve1: Uint256, reserve2: Uint256){
     }
 }
 

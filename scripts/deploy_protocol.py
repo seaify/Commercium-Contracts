@@ -152,7 +152,7 @@ async def deployContracts():
     await invocation.wait_for_acceptance()
     #Add Router
     print("Adding JediSwapRouter...")
-    invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,1,max_fee=50000000000000000000)
+    invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,0,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()    
 
     #Configure Solver Registry

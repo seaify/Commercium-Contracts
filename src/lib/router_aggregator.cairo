@@ -9,11 +9,11 @@ from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.interfaces.IRouter import IAlpha_router, IJedi_router
+from src.interfaces.IRouter import IAlpha_router, IJedi_router, ISith_router
 from src.interfaces.IFactory import IAlpha_factory, IJedi_factory
 from src.interfaces.IPool import IAlpha_pool, IJedi_pool
-from src.lib.utils import Utils, Router, Liquidity
-from src.lib.constants import (BASE, JediSwap, AlphaRoad)
+from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
+from src.lib.constants import (BASE, JediSwap, SithSwap, SithSwapStable, AlphaRoad)
 
 struct Feed {
     key: felt,
@@ -78,6 +78,7 @@ namespace RouterAggregator {
         let (res_amount, res_router) = find_best_router(
             _amount_in, _token_in, _token_out, best_amount, best_router, _counter + 1
         );
+
         return (res_amount, res_router);
     }
 
@@ -151,8 +152,11 @@ namespace RouterAggregator {
             _router: Router
         ) -> (amount_out: Uint256) {
 
+
+        let (route: SithSwapRoutes*) = alloc();
+        let (path: felt*) = alloc();
+
         if (_router.type == JediSwap) {
-            let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
             let (amounts_len: felt, amounts: Uint256*) = IJedi_router.get_amounts_out(
@@ -174,6 +178,29 @@ namespace RouterAggregator {
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;
             return (amount_token_0,);
+        }
+        if (_router.type == SithSwap) {
+            let (route: SithSwapRoutes*) = alloc();
+            assert route[0] = SithSwapRoutes(_token_in,_token_out,0);
+            let (amounts_len: felt, amounts: Uint256*) = ISith_router.getAmountsOut(
+                _router.address, 
+                _amount_in, 
+                1,
+                route,
+                0
+            );
+            return (amounts[1],);
+        } 
+        if (_router.type == SithSwapStable) {
+            assert route[0] = SithSwapRoutes(_token_in,_token_out,0);
+            let (amounts_len: felt, amounts: Uint256*) = ISith_router.getAmountsOut(
+                _router.address, 
+                _amount_in, 
+                1,
+                route,
+                1
+            );
+            return (amounts[1],);
         } else {
             with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
                 assert 1 = 2;
