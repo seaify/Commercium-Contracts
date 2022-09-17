@@ -186,19 +186,17 @@ namespace RouterAggregator {
                 _router.address, 
                 _amount_in, 
                 1,
-                route,
-                0
+                route
             );
             return (amounts[1],);
         } 
         if (_router.type == SithSwapStable) {
-            assert route[0] = SithSwapRoutes(_token_in,_token_out,0);
+            assert route[0] = SithSwapRoutes(_token_in,_token_out,1);
             let (amounts_len: felt, amounts: Uint256*) = ISith_router.getAmountsOut(
                 _router.address, 
                 _amount_in, 
                 1,
-                route,
-                1
+                route
             );
             return (amounts[1],);
         } else {

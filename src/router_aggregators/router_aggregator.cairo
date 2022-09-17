@@ -19,9 +19,11 @@ from src.lib.router_aggregator import RouterAggregator, Feed, price_feed, router
 //
 
 @view
-func get_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) -> (
-    router_address: felt
-) {
+func get_router{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_index: felt) -> (router_address: felt) {
     let (router: Router) = routers.read(_index);
 
     return (router.address,);

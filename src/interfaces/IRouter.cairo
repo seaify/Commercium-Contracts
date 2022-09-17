@@ -161,7 +161,6 @@ namespace ISith_router {
             amount_in: Uint256,
             routes_len: felt,
             routes: SithSwapRoutes*,
-            stable: felt
         ) -> (amounts_len: felt, amounts: Uint256*) {
     }
 

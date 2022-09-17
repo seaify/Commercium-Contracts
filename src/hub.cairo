@@ -184,13 +184,13 @@ func swap_tokens_for_exact_tokens{
 
 @external
 func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt,
-    _token_out: felt,
-    _amount_in: Uint256,
-    _min_amount_out: Uint256,
-    _to: felt,
-    _solver_id: felt,
-) -> (received_amount: Uint256) {
+        _token_in: felt,
+        _token_out: felt,
+        _amount_in: Uint256,
+        _min_amount_out: Uint256,
+        _to: felt,
+        _solver_id: felt,
+    ) -> (received_amount: Uint256) {
     let (received_amount: Uint256) = Hub.swap_with_solver(
         _token_in, _token_out, _amount_in, _min_amount_out, _to, _solver_id
     );

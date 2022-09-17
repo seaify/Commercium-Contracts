@@ -27,7 +27,7 @@ single_swap_solver = [
     "./src/solvers/single_swap_solver.cairo",
 ]
 heuristic_splitter = [
-    "./src/solvers/heuristic_splitter.cairo",
+    "./src/solvers/heuristic_splitterV2.cairo",
 ]
 mock_jedi_router = [
     "./src/mocks/mock_jedi_router.cairo",

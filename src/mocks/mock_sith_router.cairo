@@ -54,8 +54,7 @@ func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 func getAmountsOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     amount_in: Uint256,
     routes_len: felt,
-    routes: SithSwapRoutes*,
-    stable: felt
+    routes: SithSwapRoutes*
 ) -> (amounts_len: felt, amounts: Uint256*) {
     alloc_locals;
 
