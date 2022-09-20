@@ -20,7 +20,7 @@ from starkware.cairo.common.uint256 import (
 
 from src.lib.array import Array
 from src.lib.utils import Utils
-from src.lib.constants import MAX_FELT, JediSwap, SithSwap, SithSwapStable
+from src.lib.constants import MAX_FELT, JediSwap, SithSwap, TenK
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.interfaces.ISolver import ISolver
 from src.interfaces.ISpf_solver import ISpf_solver
@@ -142,7 +142,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 2: ",ids.router_2_address) %}
-    let (local router_3_address) = create_sith_stable_router(
+    let (local router_3_address) = create_TenK_router(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 3: ",ids.router_3_address) %}
@@ -178,7 +178,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_proxy_address) %}
     IRouter_aggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
     IRouter_aggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_3_address, SithSwapStable);
+    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
 
     // Set Price feeds at the Router
     IRouter_aggregator.set_global_price(
@@ -187,18 +187,18 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     IRouter_aggregator.set_global_price(
         router_aggregator_proxy_address, USDC, 8463218501920060260, mock_oracle_address
     );
-    IRouter_aggregator.set_global_price(
-        router_aggregator_proxy_address, USDT, 8463218574934504292, mock_oracle_address
-    );
+    //IRouter_aggregator.set_global_price(
+    //    router_aggregator_proxy_address, USDT, 8463218574934504292, mock_oracle_address
+    //);
     IRouter_aggregator.set_global_price(
         router_aggregator_proxy_address, DAI, 28254602066752356, mock_oracle_address
     );
-    IRouter_aggregator.set_global_price(
-        router_aggregator_proxy_address, shitcoin1, 99234898239, mock_oracle_address
-    );
-    IRouter_aggregator.set_global_price(
-        router_aggregator_proxy_address, shitcoin2, 23674728373, mock_oracle_address
-    );
+    //IRouter_aggregator.set_global_price(
+    //    router_aggregator_proxy_address, shitcoin1, 99234898239, mock_oracle_address
+    //);
+    //IRouter_aggregator.set_global_price(
+    //    router_aggregator_proxy_address, shitcoin2, 23674728373, mock_oracle_address
+    //);
     %{ stop_prank_callable() %}
 
     // Deploy Solvers
@@ -223,8 +223,8 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address) %}
     ISpf_solver.set_high_liq_tokens(solver2_address, 0, ETH);
     ISpf_solver.set_high_liq_tokens(solver2_address, 1, DAI);
-    ISpf_solver.set_high_liq_tokens(solver2_address, 2, USDT);
-    ISpf_solver.set_high_liq_tokens(solver2_address, 3, USDC);
+    //ISpf_solver.set_high_liq_tokens(solver2_address, 2, USDT);
+    ISpf_solver.set_high_liq_tokens(solver2_address, 2, USDC);
     %{ stop_prank_callable() %}
 
     // Set router_aggregator for solver
@@ -561,7 +561,7 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     return (router_address,);
 }
 
-func create_sith_stable_router{syscall_ptr: felt*, range_check_ptr}(
+func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     public_key_0: felt,
     ETH: felt,
     USDC: felt,
@@ -574,7 +574,7 @@ func create_sith_stable_router{syscall_ptr: felt*, range_check_ptr}(
 
     local router_address: felt;
     // We deploy contract and put its address into a local variable. Second argument is calldata array
-    %{ ids.router_address = deploy_contract("./src/mocks/mock_sith_router.cairo", []).contract_address %}
+    %{ ids.router_address = deploy_contract("./src/mocks/mock_TenK_router.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge

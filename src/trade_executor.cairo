@@ -12,11 +12,11 @@ from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.utils import Utils, Router, Path
-from src.lib.constants import BASE, AlphaRoad, JediSwap, SithSwap, SithSwapStable, MAX_FELT, HALF_MAX
+from src.lib.constants import BASE, AlphaRoad, JediSwap, SithSwap, TenK, MAX_FELT, HALF_MAX
 from src.lib.router_aggregator import RouterAggregator
 
 from src.interfaces.IERC20 import IERC20
-from src.interfaces.IRouter import (IJedi_router, IAlpha_router, ISith_router)
+from src.interfaces.IRouter import (IJedi_router, IAlpha_router, ISith_router, ITenK_router)
 from src.interfaces.IFactory import IAlpha_factory
 from src.interfaces.IPool import IAlpha_pool
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
@@ -279,35 +279,37 @@ func _swap_exact_in{
             );
             return ();
         }
-    } 
-    if (_router.type == SithSwapStable) {
+    }
+    if (_router.type == TenK) {
         //Writing to storage is expensive, so we check current allowance level before re-approving transfer
         let (this_address) = get_contract_address();
         let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        //Depending on the token we might want 
-
         let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == TRUE) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
-            ISith_router.swapExactTokensForTokensSimple(
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            ITenK_router.swapExactTokensForTokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
-                _token_in,
-                _token_out,
-                1,
+                2, 
+                path, 
                 _receiver_address, 
                 trade_deadline
             );
             return ();
         } else {
-            ISith_router.swapExactTokensForTokensSimple(
+            let (path: felt*) = alloc();
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            ITenK_router.swapExactTokensForTokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
-                _token_in,
-                _token_out,
-                1,
+                2, 
+                path, 
                 _receiver_address, 
                 trade_deadline
             );

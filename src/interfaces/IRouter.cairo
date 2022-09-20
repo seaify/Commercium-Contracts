@@ -172,3 +172,23 @@ namespace ISith_router {
     }
 }
 
+@contract_interface
+namespace ITenK_router {
+
+    func swapExactTokensForTokens(
+            amountIn: Uint256,
+            amountOutMin: Uint256,
+            path_len: felt,
+            path: felt*,
+            to: felt,
+            deadline: felt,
+        ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func getAmountsOut(
+            amountIn: Uint256, 
+            path_len: felt, 
+            path: felt*
+        ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+}

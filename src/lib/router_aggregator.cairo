@@ -9,11 +9,11 @@ from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.interfaces.IRouter import IAlpha_router, IJedi_router, ISith_router
+from src.interfaces.IRouter import IAlpha_router, IJedi_router, ISith_router, ITenK_router
 from src.interfaces.IFactory import IAlpha_factory, IJedi_factory
 from src.interfaces.IPool import IAlpha_pool, IJedi_pool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
-from src.lib.constants import (BASE, JediSwap, SithSwap, SithSwapStable, AlphaRoad)
+from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK)
 
 struct Feed {
     key: felt,
@@ -152,8 +152,6 @@ namespace RouterAggregator {
             _router: Router
         ) -> (amount_out: Uint256) {
 
-
-        let (route: SithSwapRoutes*) = alloc();
         let (path: felt*) = alloc();
 
         if (_router.type == JediSwap) {
@@ -180,23 +178,19 @@ namespace RouterAggregator {
             return (amount_token_0,);
         }
         if (_router.type == SithSwap) {
-            let (route: SithSwapRoutes*) = alloc();
-            assert route[0] = SithSwapRoutes(_token_in,_token_out,0);
-            let (amounts_len: felt, amounts: Uint256*) = ISith_router.getAmountsOut(
+            let (amount_out: Uint256, _) = ISith_router.getAmountOut(
                 _router.address, 
                 _amount_in, 
-                1,
-                route
+                _token_in,
+                _token_out
             );
-            return (amounts[1],);
-        } 
-        if (_router.type == SithSwapStable) {
-            assert route[0] = SithSwapRoutes(_token_in,_token_out,1);
-            let (amounts_len: felt, amounts: Uint256*) = ISith_router.getAmountsOut(
-                _router.address, 
-                _amount_in, 
-                1,
-                route
+            return (amount_out,);
+        }
+        if (_router.type == TenK) {
+            assert path[0] = _token_in;
+            assert path[1] = _token_out;
+            let (amounts_len: felt, amounts: Uint256*) = ITenK_router.getAmountsOut(
+                _router.address, _amount_in, 2, path
             );
             return (amounts[1],);
         } else {

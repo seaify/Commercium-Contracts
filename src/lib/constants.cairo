@@ -15,7 +15,7 @@ const BASE = 1000000000000000000;  // 1e18
 const JediSwap = 0;
 const AlphaRoad = 1;
 const SithSwap = 2;
-const SithSwapStable = 3;
+const TenK = 3;
 
 
 //@view
