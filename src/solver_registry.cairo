@@ -45,9 +45,11 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 @view
-func get_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _solver_id: felt
-) -> (solver_address: felt) {
+func get_solver{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_solver_id: felt) -> (solver_address: felt) {
     let (solver_address) = solvers.read(_solver_id);
     return (solver_address,);
 }

@@ -26,17 +26,36 @@ from src.lib.hub import Hub, Hub_trade_executor
 //
 
 @view
-func solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    solver_registry: felt
-) {
+func solver_registry{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }() -> (solver_registry: felt) {
     let (solver_registry) = Hub.solver_registry();
     return (solver_registry,);
 }
 
 @view
-func get_solver_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
-) -> (amount_out: Uint256) {
+func trade_executor{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }() -> (trade_executor: felt) {
+    let (trade_executor) = Hub.trade_executor();
+    return (trade_executor,);
+}
+
+@view
+func get_solver_amount{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_id: felt
+    ) -> (amount_out: Uint256) {
     let (amount_out) = Hub.get_solver_amount(_amount_in, _token_in, _token_out, _solver_id);
 
     return (amount_out=amount_out);
@@ -59,17 +78,24 @@ func get_solver_amount_exact_out{
 }
 
 @view
-func get_solver_amount_and_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
-) -> (
-    routers_len: felt,
-    routers: Router*,
-    path_len: felt,
-    path: Path*,
-    amounts_len: felt,
-    amounts: felt*,
-    amount_out: Uint256,
-) {
+func get_solver_amount_and_path{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_id: felt
+    ) -> (
+        routers_len: felt,
+        routers: Router*,
+        path_len: felt,
+        path: Path*,
+        amounts_len: felt,
+        amounts: felt*,
+        amount_out: Uint256,
+    ){
     let (
         routers_len: felt,
         routers: Router*,
@@ -109,6 +135,28 @@ func get_amounts_out{
     assert return_amounts[1] = amount_out;
 
     return (amounts_len=2, amounts=return_amounts);
+}
+
+//This function is mainly intended for off-chain queries
+@view 
+func get_multiple_solver_amounts{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _solver_ids_len: felt,
+        _solver_ids: felt*
+    ) -> (amounts_out_len: felt, amounts_out: Uint256*) {
+    alloc_locals;
+
+    let (amounts_out: Uint256*) = alloc();
+
+    Hub.get_multiple_solver_amounts(_amount_in, _token_in, _token_out, _solver_ids_len, _solver_ids, amounts_out);
+
+    return (_solver_ids_len, amounts_out);
 }
 
 //
@@ -278,15 +326,6 @@ func set_solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 ) -> () {
     Ownable.assert_only_owner();
     Hub.set_solver_registry(_new_registry);
-    return ();
-}
-
-@external
-func set_router_type{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router_type: felt, _router_address: felt
-) -> () {
-    Ownable.assert_only_owner();
-    Hub.set_router_type(_router_type, _router_address);
     return ();
 }
 

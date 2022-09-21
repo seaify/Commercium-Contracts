@@ -29,20 +29,27 @@ func Hub_trade_executor() -> (trade_executor_address: felt) {
 func Hub_solver_registry() -> (registry_address: felt) {
 }
 
-@storage_var
-func Hub_router_type(router_address: felt) -> (router_type: felt) {
-}
-
 namespace Hub {
     //
     // Views
     //
 
-    func solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        solver_registry: felt
-    ) {
+    func solver_registry{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }() -> (solver_registry: felt){
         let (solver_registry) = Hub_solver_registry.read();
         return (solver_registry,);
+    }
+
+    func trade_executor{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }() -> (trade_executor: felt){
+        let (trade_executor) = Hub_trade_executor.read();
+        return (trade_executor,);
     }
 
     func get_solver_amount{
@@ -88,6 +95,39 @@ namespace Hub {
         );
 
         return (amount_out,);
+    }
+ 
+    func get_multiple_solver_amounts{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }(
+            _amount_in: Uint256, 
+            _token_in: felt, 
+            _token_out: felt, 
+            _solver_ids_len: felt,
+            _solver_ids: felt*,
+            _amounts_out: Uint256*, 
+        ){
+
+        if (_solver_ids_len == 0) {
+            return();
+        }
+
+        let (amounts_out: Uint256) = Hub.get_solver_amount(_amount_in, _token_in, _token_out, _solver_ids[0]);
+
+        assert _amounts_out[0] = amounts_out;
+
+        get_multiple_solver_amounts(
+            _amount_in, 
+            _token_in, 
+            _token_out, 
+            _solver_ids_len - 1,
+            _solver_ids + 1,
+            _amounts_out + 2
+        );
+
+        return ();
     }
 
     func get_solver_amount_exact_out{
@@ -357,13 +397,6 @@ namespace Hub {
         _new_registry: felt
     ) -> () {
         Hub_solver_registry.write(_new_registry);
-        return ();
-    }
-
-    func set_router_type{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _router_type: felt, _router_address: felt
-    ) -> () {
-        Hub_router_type.write(_router_address, _router_type);
         return ();
     }
 }

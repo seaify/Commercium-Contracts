@@ -78,6 +78,18 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "trade_executor",
+        "outputs": [
+            {
+                "name": "trade_executor",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "name": "_amount_in",
@@ -211,6 +223,43 @@
             },
             {
                 "name": "amounts",
+                "type": "Uint256*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_ids_len",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_ids",
+                "type": "felt*"
+            }
+        ],
+        "name": "get_multiple_solver_amounts",
+        "outputs": [
+            {
+                "name": "amounts_out_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts_out",
                 "type": "Uint256*"
             }
         ],
@@ -432,21 +481,6 @@
             }
         ],
         "name": "set_solver_registry",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_router_type",
-                "type": "felt"
-            },
-            {
-                "name": "_router_address",
-                "type": "felt"
-            }
-        ],
-        "name": "set_router_type",
         "outputs": [],
         "type": "function"
     },

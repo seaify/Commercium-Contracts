@@ -20,6 +20,10 @@ struct Feed {
     address: felt,
 }
 
+//
+// Storage
+//
+
 @storage_var
 func price_feed(token: felt) -> (feed: Feed) {
 }
@@ -31,10 +35,6 @@ func routers(index: felt) -> (router: Router) {
 @storage_var
 func router_index_len() -> (len: felt) {
 }
-
-//
-// Storage
-//
 
 namespace RouterAggregator {
 

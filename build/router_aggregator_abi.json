@@ -2,6 +2,23 @@
     {
         "members": [
             {
+                "name": "key",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "address",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Feed",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
                 "name": "low",
                 "offset": 0,
                 "type": "felt"
@@ -68,6 +85,23 @@
     {
         "inputs": [
             {
+                "name": "_token",
+                "type": "felt"
+            }
+        ],
+        "name": "get_price_feed",
+        "outputs": [
+            {
+                "name": "feed",
+                "type": "Feed"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_index",
                 "type": "felt"
             }
@@ -76,6 +110,22 @@
         "outputs": [
             {
                 "name": "router_address",
+                "type": "felt"
+            },
+            {
+                "name": "router_type",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_router_index_len",
+        "outputs": [
+            {
+                "name": "len",
                 "type": "felt"
             }
         ],
