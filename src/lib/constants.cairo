@@ -12,6 +12,7 @@ const BASE = 1000000000000000000;  // 1e18
 //   Router Types  //
 /////////////////////
 
+//Once we have deploy scripts again, we should make this storage vars
 const JediSwap = 0;
 const AlphaRoad = 1;
 const SithSwap = 2;
