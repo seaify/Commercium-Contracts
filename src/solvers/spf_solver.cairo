@@ -13,7 +13,6 @@ from src.lib.constants import MAX_FELT, BASE
 from src.interfaces.IRouter_aggregator import IRouter_aggregator
 from src.openzeppelin.access.ownable import Ownable
 
-const MAX_VERTICES = 6;
 const Edges = 21;
 const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
@@ -88,9 +87,8 @@ func get_results{
         _token_in=_token_in,
         _token_out=_token_out,
         _tokens=tokens + 1,
-        _total_vertices=MAX_VERTICES,
         _liq_counter=0,
-        _counter=1,
+        _counter=2,
     );
 
     // Edges
@@ -791,37 +789,37 @@ func get_router_and_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
 // First token in arr needs to be in_token and last one the out_token
 func construct_token_arr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt,
-    _token_out: felt,
-    _tokens: felt*,
-    _total_vertices: felt,
-    _liq_counter: felt,
-    _counter: felt,
-) -> (vertices: felt) {
-    if (_counter == _total_vertices - 1) {
-        assert _tokens[0] = _token_out;
-        return (_total_vertices,);
-    }
+        _token_in: felt,
+        _token_out: felt,
+        _tokens: felt*,
+        _liq_counter: felt,
+        _counter: felt,
+    ) -> (vertices: felt) {
 
     let (high_liq_token) = high_liq_tokens.read(_liq_counter);
 
+    if (high_liq_token == 0) {
+        assert _tokens[0] = _token_out;
+        return (_counter,);
+    }
+
     if (_token_in == high_liq_token) {
         let (total_vertices) = construct_token_arr(
-            _token_in, _token_out, _tokens, _total_vertices - 1, _liq_counter + 1, _counter
+            _token_in, _token_out, _tokens, _liq_counter + 1, _counter
         );
         return (total_vertices,);
     }
 
     if (_token_out == high_liq_token) {
         let (total_vertices) = construct_token_arr(
-            _token_in, _token_out, _tokens, _total_vertices - 1, _liq_counter + 1, _counter
+            _token_in, _token_out, _tokens, _liq_counter + 1, _counter
         );
         return (total_vertices,);
     }
 
     assert _tokens[0] = high_liq_token;
     let (total_vertices) = construct_token_arr(
-        _token_in, _token_out, _tokens + 1, _total_vertices, _liq_counter + 1, _counter + 1
+        _token_in, _token_out, _tokens + 1, _liq_counter + 1, _counter + 1
     );
     return (total_vertices,);
 }

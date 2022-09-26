@@ -59,6 +59,11 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(path[0], path[1]);
 
     if (reserve_1.low == 0) {
+        local token1 = path[0];
+        local token2 = path[1];
+        with_attr error_message("Token Pair has no Liquidity. Token1 {token1} Token2 {token2}") {
+            assert 1 = 0;
+        }
         assert amounts[0] = Uint256(0, 0);
         assert amounts[1] = Uint256(0, 0);
         return (2, amounts);

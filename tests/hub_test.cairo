@@ -248,7 +248,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-@external
+//@external
 func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -319,7 +319,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (amount_out: Uint256) = IHub.get_solver_amount(hub_address, amount_to_trade, ETH, USDC, 2);
+    let (amount_out: Uint256) = IHub.get_solver_amount(hub_address, amount_to_trade, ETH, DAI, 2);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     // Allow hub to take tokens
@@ -332,7 +332,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     let (received_amount: Uint256) = IHub.swap_with_solver(
         hub_address,
         _token_in=ETH,
-        _token_out=USDC,
+        _token_out=DAI,
         _amount_in=amount_to_trade,
         _min_amount_out=amount_out,
         _to=public_key_0,
@@ -345,7 +345,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return ();
 }
 
-@external
+//@external
 func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 

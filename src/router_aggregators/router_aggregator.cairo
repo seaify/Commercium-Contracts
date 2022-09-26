@@ -51,8 +51,10 @@ func get_router_index_len{
 
 @view
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt
-) -> (amount_out: Uint256, router: Router) {
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (amount_out: Uint256, router: Router) {
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_router(
         _amount_in,
         _token_in,
