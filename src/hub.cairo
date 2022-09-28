@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MIT
+/// @title Main contract that acts as a security layer and the main contact point for any trader/protocol utilizing the Commercium. 
+/// @author Fresh Pizza
 
 %lang starknet
 
@@ -21,10 +23,12 @@ from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
-//
-// Views
-//
+////////////////////////
+//       Views        //
+////////////////////////
 
+/// @notice get the address of the utilized solver registry
+/// @return solver registry address
 @view
 func solver_registry{
         syscall_ptr: felt*, 
@@ -35,6 +39,8 @@ func solver_registry{
     return (solver_registry,);
 }
 
+/// @notice get the contract hash of the utilized trade executor
+/// @return trade executor hash
 @view
 func trade_executor{
         syscall_ptr: felt*, 
@@ -45,8 +51,14 @@ func trade_executor{
     return (trade_executor,);
 }
 
+/// @notice Use this function to receive the token amount that would be returned given a specific trade and solver 
+/// @param _amount_in the number of tokens that are supposed to be sold
+/// @param _token_in the address of the token that would be sold
+/// @param _token_out the address of the token that would be bought
+/// @param _solver_id the id of the solver/algorithm that will be used to dertermine the trading route 
+/// @return amount_out the number of _token_out that would be received if this trade was executed
 @view
-func get_solver_amount{
+func get_amount_out_with_solver{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
@@ -61,24 +73,17 @@ func get_solver_amount{
     return (amount_out=amount_out);
 }
 
+/// @notice Use this function to receive the token amount and trading route that would be returned given a specific trade and solver 
+/// @param _amount_in the number of tokens that are supposed to be sold
+/// @param _token_in the address of the token that would be sold
+/// @param _token_out the address of the token that would be bought
+/// @param _solver_id the id of the solver/algorithm that will be used to dertermine the trading route 
+/// @return routers the router address and router type that would be used for each trading step
+/// @return path the token address of the token being sold and bought for each trading step
+/// @return amounts the amount of tokens (in %) sold for each trading step 
+/// @return amount_out the number of _token_out that would be received if this trade was executed
 @view
-func get_solver_amount_exact_out{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }(
-            _amount_out: Uint256, 
-            _token_in: felt, 
-            _token_out: felt, 
-            _solver_id: felt
-        ) -> (amount_in: Uint256) {
-    let (amount_in) = Hub.get_solver_amount_exact_out(_amount_out, _token_in, _token_out, _solver_id);
-
-    return (amount_in=amount_in);
-}
-
-@view
-func get_solver_amount_and_path{
+func get_amount_and_path_with_solver{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
@@ -110,31 +115,21 @@ func get_solver_amount_and_path{
 }
 
 @view
-func get_amounts_out{
+func get_amount_out{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(
         amountIn: Uint256, 
-        path_len: felt, 
-        path: felt*
-    ) -> (amounts_len: felt, amounts: Uint256*) {
-    alloc_locals;
-
-    // The user only dictates in_token and out_token
-    with_attr error_message("HUB: Path should consist of exactly 2 tokens") {
-        assert path_len = 2;
-    }
+        _token_in: felt,
+        _token_out: felt
+    ) -> (amount: Uint256) {
 
     let (amount_out) = Hub.get_solver_amount(
-        _amount_in=amountIn, _token_in=path[0], _token_out=path[1], _solver_id=1
+        _amount_in=amountIn, _token_in=_token_in, _token_out=_token_out, _solver_id=1
     );
 
-    let (return_amounts: Uint256*) = alloc();
-    assert return_amounts[0] = amountIn;
-    assert return_amounts[1] = amount_out;
-
-    return (amounts_len=2, amounts=return_amounts);
+    return (amount_out,);
 }
 
 //This function is mainly intended for off-chain queries
@@ -159,9 +154,9 @@ func get_multiple_solver_amounts{
     return (_solver_ids_len, amounts_out);
 }
 
-//
-// Constructor
-//
+/////////////////////////////
+//       Constructor       //
+/////////////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
@@ -174,68 +169,34 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 @external
-func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    amountIn: Uint256, amountOutMin: Uint256, path_len: felt, path: felt*, to: felt, deadline: felt
-) -> (amounts_len: felt, amounts: Uint256*) {
-    alloc_locals;
-
-    // Check that deadline hasn't past
-
-    // Check that the proposed trade is only between two tokens
-    assert path_len = 2;
-
-    // Execute swap with solver 1 as the default
-    let (received_amount: Uint256) = swap_with_solver(
-        path[0], path[1], amountIn, amountOutMin, to, 1
-    );
-
-    // Transform output to conform with uniSwap Interface
-    let (amounts: Uint256*) = alloc();
-    assert amounts[0] = amountIn;
-    assert amounts[1] = received_amount;
-
-    return (2, amounts);
-}
-
-@external
-func swap_tokens_for_exact_tokens{
+func swap_exact_tokens_for_tokens{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(
-        amountOut: Uint256, 
-        amountInMax: Uint256, 
-        path_len: felt, 
-        path: felt*, 
-        to: felt, 
-        deadline: felt
-    )->(amounts_len: felt, amounts: Uint256*) {
-    alloc_locals;
-
-    // Check that deadline hasn't past
-
-    // Check that the proposed trade is only between two tokens
-    assert path_len = 2;
-
+        _amountIn: Uint256, 
+        _amountOutMin: Uint256, 
+        _token_in: felt,
+        _token_out: felt,
+        _to: felt
+    ) -> (amount_out: Uint256) {
     // Execute swap with solver 1 as the default
-    let (amount_in: Uint256) = swap_with_solver_exact_out(
-        path[0], path[1], amountOut, amountInMax, to, 1
+    let (received_amount: Uint256) = Hub.swap_with_solver(
+        _token_in, _token_out, _amountIn, _amountOutMin, _to, 1
     );
-
-    // Transform output to conform with uniSwap Interface
-    let (amounts: Uint256*) = alloc();
-    assert amounts[0] = amount_in;
-    assert amounts[1] = amountOut;
-
-    return (2, amounts);
+    return (received_amount,);
 }
 
 @external
-func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _token_in: felt,
-        _token_out: felt,
+func swap_exact_tokens_for_tokens_with_solver{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
         _amount_in: Uint256,
         _min_amount_out: Uint256,
+        _token_in: felt,
+        _token_out: felt,
         _to: felt,
         _solver_id: felt,
     ) -> (received_amount: Uint256) {
@@ -246,31 +207,20 @@ func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @external
-func swap_with_solver_exact_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt,
-    _token_out: felt,
-    _amount_out: Uint256,
-    _max_amount_in: Uint256,
-    _to: felt,
-    _solver_id: felt,
-) -> (in_amount: Uint256) {
-    let (in_amount: Uint256) = Hub.swap_with_solver_exact_out(
-        _token_in, _token_out, _amount_out, _max_amount_in, _to, _solver_id
-    );
-    return (in_amount,);
-}
-
-@external
-func swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _routers_len: felt,
-    _routers: Router*,
-    _path_len: felt,
-    _path: Path*,
-    _amounts_len: felt,
-    _amounts: felt*,
-    _amount_in: Uint256,
-    _min_amount_out: Uint256,
-) -> (received_amount: Uint256) {
+func swap_with_path{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(
+        _routers_len: felt,
+        _routers: Router*,
+        _path_len: felt,
+        _path: Path*,
+        _amounts_len: felt,
+        _amounts: felt*,
+        _amount_in: Uint256,
+        _min_amount_out: Uint256,
+    ) -> (received_amount: Uint256) {
     alloc_locals;
 
     ReentrancyGuard._start();

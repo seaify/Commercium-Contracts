@@ -329,12 +329,12 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
     // Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_with_solver(
+    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
         hub_address,
-        _token_in=ETH,
-        _token_out=DAI,
         _amount_in=amount_to_trade,
         _min_amount_out=amount_out,
+        _token_in=ETH,
+        _token_out=DAI,
         _to=public_key_0,
         _solver_id=2,
     );
@@ -376,7 +376,7 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 
     // Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_with_solver(
+    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
         hub_address,
         _token_in=ETH,
         _token_out=USDC,
@@ -431,11 +431,8 @@ func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     );
 
     // Using uni conform interface
-    let (path: felt*) = alloc();
-    assert path[0] = ETH;
-    assert path[1] = USDC;
     let (_, uni_view_amounts: Uint256*) = IHub.get_amounts_out(
-        hub_address, amountIn=amount_to_trade, path_len=2, path=path
+        hub_address, amountIn=amount_to_trade, ETH, USDC
     );
     %{ stop_prank_callable() %}
 
