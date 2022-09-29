@@ -50,6 +50,13 @@ func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 @view
+func ashud_dasd{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _amount_in: Uint256, _token_in_len: felt, _token_in: Reserves*, _token_out: felt
+) -> (amount_out: Uint256) {
+    return (amount_out,);
+}
+
+@view
 func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, path_len: felt, path: felt*
 ) -> (amounts_len: felt, amounts: Uint256*) {

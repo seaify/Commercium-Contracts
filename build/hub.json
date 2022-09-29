@@ -109,7 +109,7 @@
                     "type": "felt"
                 }
             ],
-            "name": "get_solver_amount",
+            "name": "get_amount_out_with_solver",
             "outputs": [
                 {
                     "name": "amount_out",
@@ -138,7 +138,7 @@
                     "type": "felt"
                 }
             ],
-            "name": "get_solver_amount_and_path",
+            "name": "get_amount_and_path_with_solver",
             "outputs": [
                 {
                     "name": "routers_len",
@@ -187,7 +187,7 @@
                     "type": "felt"
                 }
             ],
-            "name": "get_amounts_out",
+            "name": "get_amount_out",
             "outputs": [
                 {
                     "name": "amount",
@@ -413,11 +413,15 @@
         "EXTERNAL": [
             {
                 "offset": "0x48a",
-                "selector": "0x2118dd4e88e0a0899aa4bb49acfc08aded1195a43667e1c998cac7aa225677"
+                "selector": "0x1cb928d943bf93e770a54feeabdbc036464a08a3a5cc561a559b2c92898a1d"
             },
             {
                 "offset": "0x6bc",
                 "selector": "0x2d15e90b6c97950698267456915f7a71eab1e2c2d9c29adda4c64351b947f6"
+            },
+            {
+                "offset": "0x4e2",
+                "selector": "0x84bc23b17d21f204e831e7aef9f4bc120348bf431d81a59b7c7144bd1c5612"
             },
             {
                 "offset": "0x6a1",
@@ -428,12 +432,12 @@
                 "selector": "0x12b303d7b0110e41d15f21a31e7af660da6382500b5ef4ff5f1d7a16a3293e2"
             },
             {
-                "offset": "0x4e2",
-                "selector": "0x18ae5f93455866d5ad00e2e133704f0f071201085bbc74a429b8155aa981e96"
-            },
-            {
                 "offset": "0x466",
                 "selector": "0x1d850a4b8c37610bf82c6aee35bf442db4cc0e4e1232bee09a61783982c98cc"
+            },
+            {
+                "offset": "0x512",
+                "selector": "0x22db07240efd55449143fc6832df9627bb9e91ae79dd25445baafc8a6106a9a"
             },
             {
                 "offset": "0x551",
@@ -450,10 +454,6 @@
             {
                 "offset": "0x5a6",
                 "selector": "0x3276861cf5e05d6daf8f352cabb47df623eb10c383ab742fcc7abea94d5c5cc"
-            },
-            {
-                "offset": "0x512",
-                "selector": "0x369f009830bb8f441fce54d2d19216c6ab4f99a3d96f496d136d6cc4e1f589c"
             },
             {
                 "offset": "0x6d4",
@@ -2937,7 +2937,7 @@
                         "__main__",
                         "__main__",
                         "__wrappers__",
-                        "__wrappers__.get_solver_amount_encode_return"
+                        "__wrappers__.get_amount_out_with_solver_encode_return"
                     ],
                     "code": "memory[ap] = segments.add()",
                     "flow_tracking_data": {
@@ -2946,8 +2946,8 @@
                             "offset": 0
                         },
                         "reference_ids": {
-                            "__wrappers__.get_solver_amount_encode_return.range_check_ptr": 728,
-                            "__wrappers__.get_solver_amount_encode_return.ret_value": 727
+                            "__wrappers__.get_amount_out_with_solver_encode_return.range_check_ptr": 728,
+                            "__wrappers__.get_amount_out_with_solver_encode_return.ret_value": 727
                         }
                     }
                 }
@@ -2958,7 +2958,7 @@
                         "__main__",
                         "__main__",
                         "__wrappers__",
-                        "__wrappers__.get_solver_amount_and_path_encode_return"
+                        "__wrappers__.get_amount_and_path_with_solver_encode_return"
                     ],
                     "code": "memory[ap] = segments.add()",
                     "flow_tracking_data": {
@@ -2967,8 +2967,8 @@
                             "offset": 0
                         },
                         "reference_ids": {
-                            "__wrappers__.get_solver_amount_and_path_encode_return.range_check_ptr": 773,
-                            "__wrappers__.get_solver_amount_and_path_encode_return.ret_value": 772
+                            "__wrappers__.get_amount_and_path_with_solver_encode_return.range_check_ptr": 773,
+                            "__wrappers__.get_amount_and_path_with_solver_encode_return.ret_value": 772
                         }
                     }
                 }
@@ -2979,7 +2979,7 @@
                         "__main__",
                         "__main__",
                         "__wrappers__",
-                        "__wrappers__.get_amounts_out_encode_return"
+                        "__wrappers__.get_amount_out_encode_return"
                     ],
                     "code": "memory[ap] = segments.add()",
                     "flow_tracking_data": {
@@ -2988,8 +2988,8 @@
                             "offset": 0
                         },
                         "reference_ids": {
-                            "__wrappers__.get_amounts_out_encode_return.range_check_ptr": 830,
-                            "__wrappers__.get_amounts_out_encode_return.ret_value": 829
+                            "__wrappers__.get_amount_out_encode_return.range_check_ptr": 830,
+                            "__wrappers__.get_amount_out_encode_return.ret_value": 829
                         }
                     }
                 }
@@ -3381,16 +3381,24 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out": {
+            "__main__.get_amount_and_path_with_solver": {
                 "decorators": [
                     "view"
                 ],
-                "pc": 1276,
+                "pc": 1184,
                 "type": "function"
             },
-            "__main__.get_amounts_out.Args": {
-                "full_name": "__main__.get_amounts_out.Args",
+            "__main__.get_amount_and_path_with_solver.Args": {
+                "full_name": "__main__.get_amount_and_path_with_solver.Args",
                 "members": {
+                    "_amount_in": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 0
+                    },
+                    "_solver_id": {
+                        "cairo_type": "felt",
+                        "offset": 4
+                    },
                     "_token_in": {
                         "cairo_type": "felt",
                         "offset": 2
@@ -3398,17 +3406,13 @@
                     "_token_out": {
                         "cairo_type": "felt",
                         "offset": 3
-                    },
-                    "amountIn": {
-                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                        "offset": 0
                     }
                 },
-                "size": 4,
+                "size": 5,
                 "type": "struct"
             },
-            "__main__.get_amounts_out.ImplicitArgs": {
-                "full_name": "__main__.get_amounts_out.ImplicitArgs",
+            "__main__.get_amount_and_path_with_solver.ImplicitArgs": {
+                "full_name": "__main__.get_amount_and_path_with_solver.ImplicitArgs",
                 "members": {
                     "pedersen_ptr": {
                         "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
@@ -3426,17 +3430,304 @@
                 "size": 3,
                 "type": "struct"
             },
-            "__main__.get_amounts_out.Return": {
-                "cairo_type": "(amount: starkware.cairo.common.uint256.Uint256)",
+            "__main__.get_amount_and_path_with_solver.Return": {
+                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
                 "type": "type_definition"
             },
-            "__main__.get_amounts_out.SIZEOF_LOCALS": {
+            "__main__.get_amount_and_path_with_solver.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "__main__.get_amounts_out._token_in": {
+            "__main__.get_amount_and_path_with_solver._amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__main__.get_amount_and_path_with_solver._amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-7), starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver._solver_id": {
                 "cairo_type": "felt",
-                "full_name": "__main__.get_amounts_out._token_in",
+                "full_name": "__main__.get_amount_and_path_with_solver._solver_id",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver._token_in": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver._token_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-5), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver._token_out": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver._token_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.amount_out": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__main__.get_amount_and_path_with_solver.amount_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-2), starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.amounts": {
+                "cairo_type": "felt*",
+                "full_name": "__main__.get_amount_and_path_with_solver.amounts",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-3), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.amounts_len": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver.amounts_len",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.path": {
+                "cairo_type": "src.lib.utils.Path*",
+                "full_name": "__main__.get_amount_and_path_with_solver.path",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-5), src.lib.utils.Path**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.path_len": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver.path_len",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-6), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.pedersen_ptr": {
+                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                "full_name": "__main__.get_amount_and_path_with_solver.pedersen_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-9), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-10), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-8), felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-9), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.routers": {
+                "cairo_type": "src.lib.utils.Router*",
+                "full_name": "__main__.get_amount_and_path_with_solver.routers",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-7), src.lib.utils.Router**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.routers_len": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_and_path_with_solver.routers_len",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-8), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_and_path_with_solver.syscall_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__main__.get_amount_and_path_with_solver.syscall_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 78,
+                            "offset": 0
+                        },
+                        "pc": 1184,
+                        "value": "[cast(fp + (-10), felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 79,
+                            "offset": 0
+                        },
+                        "pc": 1194,
+                        "value": "[cast(ap + (-11), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out": {
+                "decorators": [
+                    "view"
+                ],
+                "pc": 1276,
+                "type": "function"
+            },
+            "__main__.get_amount_out.Args": {
+                "full_name": "__main__.get_amount_out.Args",
+                "members": {
+                    "_token_in": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "_token_out": {
+                        "cairo_type": "felt",
+                        "offset": 3
+                    },
+                    "amountIn": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 0
+                    }
+                },
+                "size": 4,
+                "type": "struct"
+            },
+            "__main__.get_amount_out.ImplicitArgs": {
+                "full_name": "__main__.get_amount_out.ImplicitArgs",
+                "members": {
+                    "pedersen_ptr": {
+                        "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                        "offset": 1
+                    },
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "syscall_ptr": {
+                        "cairo_type": "felt*",
+                        "offset": 0
+                    }
+                },
+                "size": 3,
+                "type": "struct"
+            },
+            "__main__.get_amount_out.Return": {
+                "cairo_type": "(amount: starkware.cairo.common.uint256.Uint256)",
+                "type": "type_definition"
+            },
+            "__main__.get_amount_out.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "__main__.get_amount_out._token_in": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_out._token_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3449,9 +3740,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out._token_out": {
+            "__main__.get_amount_out._token_out": {
                 "cairo_type": "felt",
-                "full_name": "__main__.get_amounts_out._token_out",
+                "full_name": "__main__.get_amount_out._token_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3464,9 +3755,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out.amountIn": {
+            "__main__.get_amount_out.amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_amounts_out.amountIn",
+                "full_name": "__main__.get_amount_out.amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3479,9 +3770,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out.amount_out": {
+            "__main__.get_amount_out.amount_out": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_amounts_out.amount_out",
+                "full_name": "__main__.get_amount_out.amount_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3494,9 +3785,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out.pedersen_ptr": {
+            "__main__.get_amount_out.pedersen_ptr": {
                 "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__main__.get_amounts_out.pedersen_ptr",
+                "full_name": "__main__.get_amount_out.pedersen_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3517,9 +3808,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out.range_check_ptr": {
+            "__main__.get_amount_out.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "__main__.get_amounts_out.range_check_ptr",
+                "full_name": "__main__.get_amount_out.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3540,9 +3831,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.get_amounts_out.syscall_ptr": {
+            "__main__.get_amount_out.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "__main__.get_amounts_out.syscall_ptr",
+                "full_name": "__main__.get_amount_out.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -3558,6 +3849,207 @@
                             "offset": 0
                         },
                         "pc": 1287,
+                        "value": "[cast(ap + (-5), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver": {
+                "decorators": [
+                    "view"
+                ],
+                "pc": 1141,
+                "type": "function"
+            },
+            "__main__.get_amount_out_with_solver.Args": {
+                "full_name": "__main__.get_amount_out_with_solver.Args",
+                "members": {
+                    "_amount_in": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 0
+                    },
+                    "_solver_id": {
+                        "cairo_type": "felt",
+                        "offset": 4
+                    },
+                    "_token_in": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "_token_out": {
+                        "cairo_type": "felt",
+                        "offset": 3
+                    }
+                },
+                "size": 5,
+                "type": "struct"
+            },
+            "__main__.get_amount_out_with_solver.ImplicitArgs": {
+                "full_name": "__main__.get_amount_out_with_solver.ImplicitArgs",
+                "members": {
+                    "pedersen_ptr": {
+                        "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                        "offset": 1
+                    },
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "syscall_ptr": {
+                        "cairo_type": "felt*",
+                        "offset": 0
+                    }
+                },
+                "size": 3,
+                "type": "struct"
+            },
+            "__main__.get_amount_out_with_solver.Return": {
+                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
+                "type": "type_definition"
+            },
+            "__main__.get_amount_out_with_solver.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "__main__.get_amount_out_with_solver._amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__main__.get_amount_out_with_solver._amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-7), starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver._solver_id": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_out_with_solver._solver_id",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver._token_in": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_out_with_solver._token_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-5), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver._token_out": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_out_with_solver._token_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver.amount_out": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__main__.get_amount_out_with_solver.amount_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 74,
+                            "offset": 0
+                        },
+                        "pc": 1151,
+                        "value": "[cast(ap + (-2), starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver.pedersen_ptr": {
+                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                "full_name": "__main__.get_amount_out_with_solver.pedersen_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-9), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 74,
+                            "offset": 0
+                        },
+                        "pc": 1151,
+                        "value": "[cast(ap + (-4), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__main__.get_amount_out_with_solver.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-8), felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 74,
+                            "offset": 0
+                        },
+                        "pc": 1151,
+                        "value": "[cast(ap + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__main__.get_amount_out_with_solver.syscall_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__main__.get_amount_out_with_solver.syscall_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 73,
+                            "offset": 0
+                        },
+                        "pc": 1141,
+                        "value": "[cast(fp + (-10), felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 74,
+                            "offset": 0
+                        },
+                        "pc": 1151,
                         "value": "[cast(ap + (-5), felt**)]"
                     }
                 ],
@@ -3819,498 +4311,6 @@
                         },
                         "pc": 1336,
                         "value": "[cast(ap + (-3), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount": {
-                "decorators": [
-                    "view"
-                ],
-                "pc": 1141,
-                "type": "function"
-            },
-            "__main__.get_solver_amount.Args": {
-                "full_name": "__main__.get_solver_amount.Args",
-                "members": {
-                    "_amount_in": {
-                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                        "offset": 0
-                    },
-                    "_solver_id": {
-                        "cairo_type": "felt",
-                        "offset": 4
-                    },
-                    "_token_in": {
-                        "cairo_type": "felt",
-                        "offset": 2
-                    },
-                    "_token_out": {
-                        "cairo_type": "felt",
-                        "offset": 3
-                    }
-                },
-                "size": 5,
-                "type": "struct"
-            },
-            "__main__.get_solver_amount.ImplicitArgs": {
-                "full_name": "__main__.get_solver_amount.ImplicitArgs",
-                "members": {
-                    "pedersen_ptr": {
-                        "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                        "offset": 1
-                    },
-                    "range_check_ptr": {
-                        "cairo_type": "felt",
-                        "offset": 2
-                    },
-                    "syscall_ptr": {
-                        "cairo_type": "felt*",
-                        "offset": 0
-                    }
-                },
-                "size": 3,
-                "type": "struct"
-            },
-            "__main__.get_solver_amount.Return": {
-                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
-                "type": "type_definition"
-            },
-            "__main__.get_solver_amount.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 0
-            },
-            "__main__.get_solver_amount._amount_in": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_solver_amount._amount_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-7), starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount._solver_id": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount._solver_id",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount._token_in": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount._token_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-5), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount._token_out": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount._token_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-4), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount.amount_out": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_solver_amount.amount_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 74,
-                            "offset": 0
-                        },
-                        "pc": 1151,
-                        "value": "[cast(ap + (-2), starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount.pedersen_ptr": {
-                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__main__.get_solver_amount.pedersen_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-9), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 74,
-                            "offset": 0
-                        },
-                        "pc": 1151,
-                        "value": "[cast(ap + (-4), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-8), felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 74,
-                            "offset": 0
-                        },
-                        "pc": 1151,
-                        "value": "[cast(ap + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount.syscall_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__main__.get_solver_amount.syscall_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 73,
-                            "offset": 0
-                        },
-                        "pc": 1141,
-                        "value": "[cast(fp + (-10), felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 74,
-                            "offset": 0
-                        },
-                        "pc": 1151,
-                        "value": "[cast(ap + (-5), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path": {
-                "decorators": [
-                    "view"
-                ],
-                "pc": 1184,
-                "type": "function"
-            },
-            "__main__.get_solver_amount_and_path.Args": {
-                "full_name": "__main__.get_solver_amount_and_path.Args",
-                "members": {
-                    "_amount_in": {
-                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                        "offset": 0
-                    },
-                    "_solver_id": {
-                        "cairo_type": "felt",
-                        "offset": 4
-                    },
-                    "_token_in": {
-                        "cairo_type": "felt",
-                        "offset": 2
-                    },
-                    "_token_out": {
-                        "cairo_type": "felt",
-                        "offset": 3
-                    }
-                },
-                "size": 5,
-                "type": "struct"
-            },
-            "__main__.get_solver_amount_and_path.ImplicitArgs": {
-                "full_name": "__main__.get_solver_amount_and_path.ImplicitArgs",
-                "members": {
-                    "pedersen_ptr": {
-                        "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                        "offset": 1
-                    },
-                    "range_check_ptr": {
-                        "cairo_type": "felt",
-                        "offset": 2
-                    },
-                    "syscall_ptr": {
-                        "cairo_type": "felt*",
-                        "offset": 0
-                    }
-                },
-                "size": 3,
-                "type": "struct"
-            },
-            "__main__.get_solver_amount_and_path.Return": {
-                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
-                "type": "type_definition"
-            },
-            "__main__.get_solver_amount_and_path.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 0
-            },
-            "__main__.get_solver_amount_and_path._amount_in": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_solver_amount_and_path._amount_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-7), starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path._solver_id": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path._solver_id",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path._token_in": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path._token_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-5), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path._token_out": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path._token_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-4), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.amount_out": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_solver_amount_and_path.amount_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-2), starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.amounts": {
-                "cairo_type": "felt*",
-                "full_name": "__main__.get_solver_amount_and_path.amounts",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-3), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.amounts_len": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path.amounts_len",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-4), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.path": {
-                "cairo_type": "src.lib.utils.Path*",
-                "full_name": "__main__.get_solver_amount_and_path.path",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-5), src.lib.utils.Path**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.path_len": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path.path_len",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-6), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.pedersen_ptr": {
-                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__main__.get_solver_amount_and_path.pedersen_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-9), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-10), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-8), felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-9), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.routers": {
-                "cairo_type": "src.lib.utils.Router*",
-                "full_name": "__main__.get_solver_amount_and_path.routers",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-7), src.lib.utils.Router**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.routers_len": {
-                "cairo_type": "felt",
-                "full_name": "__main__.get_solver_amount_and_path.routers_len",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-8), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_solver_amount_and_path.syscall_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__main__.get_solver_amount_and_path.syscall_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 78,
-                            "offset": 0
-                        },
-                        "pc": 1184,
-                        "value": "[cast(fp + (-10), felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 79,
-                            "offset": 0
-                        },
-                        "pc": 1194,
-                        "value": "[cast(ap + (-11), felt**)]"
                     }
                 ],
                 "type": "reference"
@@ -6662,36 +6662,656 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "__wrappers__.get_amounts_out": {
+            "__wrappers__.get_amount_and_path_with_solver": {
+                "decorators": [
+                    "view"
+                ],
+                "pc": 1250,
+                "type": "function"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.Args": {
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.Return": {
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
+                "type": "type_definition"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 2
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_actual_size": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_actual_size",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "cast([fp + (-3)] + 5 - [fp + (-3)], felt)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__solver_id": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__solver_id",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-3)] + 4, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__token_in": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__token_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-3)] + 2, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__token_out": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_arg__token_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-3)] + 3, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__calldata_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__calldata_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast(fp + (-3), felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "cast([fp + (-3)] + 2, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "cast([fp + (-3)] + 3, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "cast([fp + (-3)] + 4, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "cast([fp + (-3)] + 5, felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__temp81": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.__temp81",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 3
+                        },
+                        "pc": 1254,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.__wrapped_func": {
+                "destination": "__main__.get_amount_and_path_with_solver",
+                "type": "alias"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.pedersen_ptr": {
+                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.pedersen_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-5)] + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1265,
+                        "value": "[cast(ap + (-10), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1267,
+                        "value": "[cast(fp + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-5)] + 2, felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1265,
+                        "value": "[cast(ap + (-9), felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 86,
+                            "offset": 0
+                        },
+                        "pc": 1270,
+                        "value": "[cast(ap + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.ret_value": {
+                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.ret_value",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1265,
+                        "value": "[cast(ap + (-8), (routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.retdata": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.retdata",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 86,
+                            "offset": 0
+                        },
+                        "pc": 1270,
+                        "value": "[cast(ap + (-1), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.retdata_size": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.retdata_size",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 86,
+                            "offset": 0
+                        },
+                        "pc": 1270,
+                        "value": "[cast(ap + (-2), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver.syscall_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver.syscall_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 84,
+                            "offset": 2
+                        },
+                        "pc": 1252,
+                        "value": "[cast([fp + (-5)], felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1265,
+                        "value": "[cast(ap + (-11), felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 85,
+                            "offset": 0
+                        },
+                        "pc": 1266,
+                        "value": "[cast(fp, felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return": {
+                "decorators": [],
+                "pc": 1195,
+                "type": "function"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.Args": {
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.Args",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 8
+                    },
+                    "ret_value": {
+                        "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
+                        "offset": 0
+                    }
+                },
+                "size": 9,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.Return": {
+                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
+                "type": "type_definition"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 7
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 7
+                        },
+                        "pc": 1197,
+                        "value": "[cast(fp, felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 7
+                        },
+                        "pc": 1198,
+                        "value": "cast([fp] + 1, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 9
+                        },
+                        "pc": 1206,
+                        "value": "[cast(fp + 2, felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 0
+                        },
+                        "pc": 1214,
+                        "value": "cast([fp + 2] + 1, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 2
+                        },
+                        "pc": 1222,
+                        "value": "[cast(fp + 4, felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 82,
+                            "offset": 0
+                        },
+                        "pc": 1230,
+                        "value": "cast([fp + 4] + 1, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 82,
+                            "offset": 1
+                        },
+                        "pc": 1236,
+                        "value": "[cast(fp + 6, felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 83,
+                            "offset": 0
+                        },
+                        "pc": 1244,
+                        "value": "cast([fp + 6] + 2, felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr_copy": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr_copy",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 7
+                        },
+                        "pc": 1201,
+                        "value": "cast([fp] + 1, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 0
+                        },
+                        "pc": 1217,
+                        "value": "cast([fp + 2] + 1, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 82,
+                            "offset": 0
+                        },
+                        "pc": 1233,
+                        "value": "cast([fp + 4] + 1, felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr_start": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_ptr_start",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 7
+                        },
+                        "pc": 1197,
+                        "value": "[cast(fp, felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_tmp": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__return_value_tmp",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 83,
+                            "offset": 0
+                        },
+                        "pc": 1242,
+                        "value": "cast(fp + (-5), felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp75": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp75",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 8
+                        },
+                        "pc": 1203,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp76": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp76",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 9
+                        },
+                        "pc": 1205,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp77": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp77",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 1
+                        },
+                        "pc": 1219,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp78": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp78",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 2
+                        },
+                        "pc": 1221,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp79": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp79",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 82,
+                            "offset": 1
+                        },
+                        "pc": 1235,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp80": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.__temp80",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 83,
+                            "offset": 1
+                        },
+                        "pc": 1246,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 0
+                        },
+                        "pc": 1195,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 7
+                        },
+                        "pc": 1201,
+                        "value": "[cast(fp + 1, felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 81,
+                            "offset": 0
+                        },
+                        "pc": 1217,
+                        "value": "[cast(fp + 3, felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 82,
+                            "offset": 0
+                        },
+                        "pc": 1233,
+                        "value": "[cast(fp + 5, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_and_path_with_solver_encode_return.ret_value": {
+                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
+                "full_name": "__wrappers__.get_amount_and_path_with_solver_encode_return.ret_value",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 80,
+                            "offset": 0
+                        },
+                        "pc": 1195,
+                        "value": "[cast(fp + (-11), (routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out": {
                 "decorators": [
                     "view"
                 ],
                 "pc": 1298,
                 "type": "function"
             },
-            "__wrappers__.get_amounts_out.Args": {
-                "full_name": "__wrappers__.get_amounts_out.Args",
+            "__wrappers__.get_amount_out.Args": {
+                "full_name": "__wrappers__.get_amount_out.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "__wrappers__.get_amounts_out.ImplicitArgs": {
-                "full_name": "__wrappers__.get_amounts_out.ImplicitArgs",
+            "__wrappers__.get_amount_out.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_out.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "__wrappers__.get_amounts_out.Return": {
+            "__wrappers__.get_amount_out.Return": {
                 "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
                 "type": "type_definition"
             },
-            "__wrappers__.get_amounts_out.SIZEOF_LOCALS": {
+            "__wrappers__.get_amount_out.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "__wrappers__.get_amounts_out.__calldata_actual_size": {
+            "__wrappers__.get_amount_out.__calldata_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.__calldata_actual_size",
+                "full_name": "__wrappers__.get_amount_out.__calldata_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6704,9 +7324,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__calldata_arg__token_in": {
+            "__wrappers__.get_amount_out.__calldata_arg__token_in": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.__calldata_arg__token_in",
+                "full_name": "__wrappers__.get_amount_out.__calldata_arg__token_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6719,9 +7339,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__calldata_arg__token_out": {
+            "__wrappers__.get_amount_out.__calldata_arg__token_out": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.__calldata_arg__token_out",
+                "full_name": "__wrappers__.get_amount_out.__calldata_arg__token_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6734,9 +7354,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__calldata_arg_amountIn": {
+            "__wrappers__.get_amount_out.__calldata_arg_amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.get_amounts_out.__calldata_arg_amountIn",
+                "full_name": "__wrappers__.get_amount_out.__calldata_arg_amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6749,9 +7369,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__calldata_ptr": {
+            "__wrappers__.get_amount_out.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out.__calldata_ptr",
+                "full_name": "__wrappers__.get_amount_out.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6788,9 +7408,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__temp83": {
+            "__wrappers__.get_amount_out.__temp83": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.__temp83",
+                "full_name": "__wrappers__.get_amount_out.__temp83",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6803,13 +7423,13 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.__wrapped_func": {
-                "destination": "__main__.get_amounts_out",
+            "__wrappers__.get_amount_out.__wrapped_func": {
+                "destination": "__main__.get_amount_out",
                 "type": "alias"
             },
-            "__wrappers__.get_amounts_out.pedersen_ptr": {
+            "__wrappers__.get_amount_out.pedersen_ptr": {
                 "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__wrappers__.get_amounts_out.pedersen_ptr",
+                "full_name": "__wrappers__.get_amount_out.pedersen_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6830,9 +7450,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.range_check_ptr": {
+            "__wrappers__.get_amount_out.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.range_check_ptr",
+                "full_name": "__wrappers__.get_amount_out.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6861,9 +7481,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.ret_value": {
+            "__wrappers__.get_amount_out.ret_value": {
                 "cairo_type": "(amount: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_amounts_out.ret_value",
+                "full_name": "__wrappers__.get_amount_out.ret_value",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6876,9 +7496,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.retdata": {
+            "__wrappers__.get_amount_out.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out.retdata",
+                "full_name": "__wrappers__.get_amount_out.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6891,9 +7511,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.retdata_size": {
+            "__wrappers__.get_amount_out.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out.retdata_size",
+                "full_name": "__wrappers__.get_amount_out.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6906,9 +7526,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out.syscall_ptr": {
+            "__wrappers__.get_amount_out.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out.syscall_ptr",
+                "full_name": "__wrappers__.get_amount_out.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6929,13 +7549,13 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return": {
+            "__wrappers__.get_amount_out_encode_return": {
                 "decorators": [],
                 "pc": 1288,
                 "type": "function"
             },
-            "__wrappers__.get_amounts_out_encode_return.Args": {
-                "full_name": "__wrappers__.get_amounts_out_encode_return.Args",
+            "__wrappers__.get_amount_out_encode_return.Args": {
+                "full_name": "__wrappers__.get_amount_out_encode_return.Args",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -6949,23 +7569,23 @@
                 "size": 3,
                 "type": "struct"
             },
-            "__wrappers__.get_amounts_out_encode_return.ImplicitArgs": {
-                "full_name": "__wrappers__.get_amounts_out_encode_return.ImplicitArgs",
+            "__wrappers__.get_amount_out_encode_return.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_out_encode_return.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "__wrappers__.get_amounts_out_encode_return.Return": {
+            "__wrappers__.get_amount_out_encode_return.Return": {
                 "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
                 "type": "type_definition"
             },
-            "__wrappers__.get_amounts_out_encode_return.SIZEOF_LOCALS": {
+            "__wrappers__.get_amount_out_encode_return.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "__wrappers__.get_amounts_out_encode_return.__return_value_ptr": {
+            "__wrappers__.get_amount_out_encode_return.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.__return_value_ptr",
+                "full_name": "__wrappers__.get_amount_out_encode_return.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -6986,9 +7606,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return.__return_value_ptr_start": {
+            "__wrappers__.get_amount_out_encode_return.__return_value_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.__return_value_ptr_start",
+                "full_name": "__wrappers__.get_amount_out_encode_return.__return_value_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7001,9 +7621,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return.__return_value_tmp": {
+            "__wrappers__.get_amount_out_encode_return.__return_value_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.__return_value_tmp",
+                "full_name": "__wrappers__.get_amount_out_encode_return.__return_value_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7016,9 +7636,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return.__temp82": {
+            "__wrappers__.get_amount_out_encode_return.__temp82": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.__temp82",
+                "full_name": "__wrappers__.get_amount_out_encode_return.__temp82",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7031,13 +7651,13 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return.memcpy": {
+            "__wrappers__.get_amount_out_encode_return.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "__wrappers__.get_amounts_out_encode_return.range_check_ptr": {
+            "__wrappers__.get_amount_out_encode_return.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.range_check_ptr",
+                "full_name": "__wrappers__.get_amount_out_encode_return.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7050,9 +7670,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.get_amounts_out_encode_return.ret_value": {
+            "__wrappers__.get_amount_out_encode_return.ret_value": {
                 "cairo_type": "(amount: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_amounts_out_encode_return.ret_value",
+                "full_name": "__wrappers__.get_amount_out_encode_return.ret_value",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7061,6 +7681,432 @@
                         },
                         "pc": 1288,
                         "value": "[cast(fp + (-5), (amount: starkware.cairo.common.uint256.Uint256)*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver": {
+                "decorators": [
+                    "view"
+                ],
+                "pc": 1162,
+                "type": "function"
+            },
+            "__wrappers__.get_amount_out_with_solver.Args": {
+                "full_name": "__wrappers__.get_amount_out_with_solver.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_out_with_solver.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_out_with_solver.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_out_with_solver.Return": {
+                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
+                "type": "type_definition"
+            },
+            "__wrappers__.get_amount_out_with_solver.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_actual_size": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_actual_size",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "cast([fp + (-3)] + 5 - [fp + (-3)], felt)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_arg__amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_arg__amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_arg__solver_id": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_arg__solver_id",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-3)] + 4, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_arg__token_in": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_arg__token_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-3)] + 2, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_arg__token_out": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_arg__token_out",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-3)] + 3, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__calldata_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__calldata_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast(fp + (-3), felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "cast([fp + (-3)] + 2, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "cast([fp + (-3)] + 3, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "cast([fp + (-3)] + 4, felt*)"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "cast([fp + (-3)] + 5, felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__temp74": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.__temp74",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 1
+                        },
+                        "pc": 1164,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.__wrapped_func": {
+                "destination": "__main__.get_amount_out_with_solver",
+                "type": "alias"
+            },
+            "__wrappers__.get_amount_out_with_solver.pedersen_ptr": {
+                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
+                "full_name": "__wrappers__.get_amount_out_with_solver.pedersen_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-5)] + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 0
+                        },
+                        "pc": 1175,
+                        "value": "[cast(ap + (-4), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-5)] + 2, felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 0
+                        },
+                        "pc": 1175,
+                        "value": "[cast(ap + (-3), felt*)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 8
+                        },
+                        "pc": 1178,
+                        "value": "[cast(ap + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.ret_value": {
+                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
+                "full_name": "__wrappers__.get_amount_out_with_solver.ret_value",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 0
+                        },
+                        "pc": 1175,
+                        "value": "[cast(ap + (-2), (amount_out: starkware.cairo.common.uint256.Uint256)*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.retdata": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver.retdata",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 8
+                        },
+                        "pc": 1178,
+                        "value": "[cast(ap + (-1), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.retdata_size": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver.retdata_size",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 8
+                        },
+                        "pc": 1178,
+                        "value": "[cast(ap + (-2), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver.syscall_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver.syscall_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 76,
+                            "offset": 0
+                        },
+                        "pc": 1162,
+                        "value": "[cast([fp + (-5)], felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 77,
+                            "offset": 0
+                        },
+                        "pc": 1175,
+                        "value": "[cast(ap + (-5), felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return": {
+                "decorators": [],
+                "pc": 1152,
+                "type": "function"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.Args": {
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.Args",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "ret_value": {
+                        "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
+                        "offset": 0
+                    }
+                },
+                "size": 3,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.ImplicitArgs": {
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.Return": {
+                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
+                "type": "type_definition"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 1
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_ptr": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 1
+                        },
+                        "pc": 1154,
+                        "value": "[cast(fp, felt**)]"
+                    },
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 1
+                        },
+                        "pc": 1156,
+                        "value": "cast([fp] + 2, felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_ptr_start": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_ptr_start",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 1
+                        },
+                        "pc": 1154,
+                        "value": "[cast(fp, felt**)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_tmp": {
+                "cairo_type": "felt*",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.__return_value_tmp",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 1
+                        },
+                        "pc": 1154,
+                        "value": "cast(fp + (-5), felt*)"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.__temp73": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.__temp73",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 2
+                        },
+                        "pc": 1158,
+                        "value": "[cast(ap + (-1), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.range_check_ptr": {
+                "cairo_type": "felt",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.range_check_ptr",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 0
+                        },
+                        "pc": 1152,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "__wrappers__.get_amount_out_with_solver_encode_return.ret_value": {
+                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
+                "full_name": "__wrappers__.get_amount_out_with_solver_encode_return.ret_value",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 75,
+                            "offset": 0
+                        },
+                        "pc": 1152,
+                        "value": "[cast(fp + (-5), (amount_out: starkware.cairo.common.uint256.Uint256)*)]"
                     }
                 ],
                 "type": "reference"
@@ -7625,1052 +8671,6 @@
                         },
                         "pc": 1339,
                         "value": "[cast(fp + (-5), (amounts_out_len: felt, amounts_out: starkware.cairo.common.uint256.Uint256*)*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount": {
-                "decorators": [
-                    "view"
-                ],
-                "pc": 1162,
-                "type": "function"
-            },
-            "__wrappers__.get_solver_amount.Args": {
-                "full_name": "__wrappers__.get_solver_amount.Args",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount.ImplicitArgs": {
-                "full_name": "__wrappers__.get_solver_amount.ImplicitArgs",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount.Return": {
-                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
-                "type": "type_definition"
-            },
-            "__wrappers__.get_solver_amount.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 0
-            },
-            "__wrappers__.get_solver_amount.__calldata_actual_size": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_actual_size",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "cast([fp + (-3)] + 5 - [fp + (-3)], felt)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__calldata_arg__amount_in": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_arg__amount_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__calldata_arg__solver_id": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_arg__solver_id",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-3)] + 4, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__calldata_arg__token_in": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_arg__token_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-3)] + 2, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__calldata_arg__token_out": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_arg__token_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-3)] + 3, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__calldata_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount.__calldata_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast(fp + (-3), felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "cast([fp + (-3)] + 2, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "cast([fp + (-3)] + 3, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "cast([fp + (-3)] + 4, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "cast([fp + (-3)] + 5, felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__temp74": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.__temp74",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 1
-                        },
-                        "pc": 1164,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.__wrapped_func": {
-                "destination": "__main__.get_solver_amount",
-                "type": "alias"
-            },
-            "__wrappers__.get_solver_amount.pedersen_ptr": {
-                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__wrappers__.get_solver_amount.pedersen_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-5)] + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 0
-                        },
-                        "pc": 1175,
-                        "value": "[cast(ap + (-4), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-5)] + 2, felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 0
-                        },
-                        "pc": 1175,
-                        "value": "[cast(ap + (-3), felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 8
-                        },
-                        "pc": 1178,
-                        "value": "[cast(ap + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.ret_value": {
-                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_solver_amount.ret_value",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 0
-                        },
-                        "pc": 1175,
-                        "value": "[cast(ap + (-2), (amount_out: starkware.cairo.common.uint256.Uint256)*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.retdata": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount.retdata",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 8
-                        },
-                        "pc": 1178,
-                        "value": "[cast(ap + (-1), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.retdata_size": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount.retdata_size",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 8
-                        },
-                        "pc": 1178,
-                        "value": "[cast(ap + (-2), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount.syscall_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount.syscall_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 76,
-                            "offset": 0
-                        },
-                        "pc": 1162,
-                        "value": "[cast([fp + (-5)], felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 77,
-                            "offset": 0
-                        },
-                        "pc": 1175,
-                        "value": "[cast(ap + (-5), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path": {
-                "decorators": [
-                    "view"
-                ],
-                "pc": 1250,
-                "type": "function"
-            },
-            "__wrappers__.get_solver_amount_and_path.Args": {
-                "full_name": "__wrappers__.get_solver_amount_and_path.Args",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_and_path.ImplicitArgs": {
-                "full_name": "__wrappers__.get_solver_amount_and_path.ImplicitArgs",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_and_path.Return": {
-                "cairo_type": "(syscall_ptr: felt*, pedersen_ptr: starkware.cairo.common.cairo_builtins.HashBuiltin*, range_check_ptr: felt, size: felt, retdata: felt*)",
-                "type": "type_definition"
-            },
-            "__wrappers__.get_solver_amount_and_path.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 2
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_actual_size": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_actual_size",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "cast([fp + (-3)] + 5 - [fp + (-3)], felt)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_arg__amount_in": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_arg__amount_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_arg__solver_id": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_arg__solver_id",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-3)] + 4, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_arg__token_in": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_arg__token_in",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-3)] + 2, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_arg__token_out": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_arg__token_out",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-3)] + 3, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__calldata_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__calldata_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast(fp + (-3), felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "cast([fp + (-3)] + 2, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "cast([fp + (-3)] + 3, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "cast([fp + (-3)] + 4, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "cast([fp + (-3)] + 5, felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__temp81": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.__temp81",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 3
-                        },
-                        "pc": 1254,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.__wrapped_func": {
-                "destination": "__main__.get_solver_amount_and_path",
-                "type": "alias"
-            },
-            "__wrappers__.get_solver_amount_and_path.pedersen_ptr": {
-                "cairo_type": "starkware.cairo.common.cairo_builtins.HashBuiltin*",
-                "full_name": "__wrappers__.get_solver_amount_and_path.pedersen_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-5)] + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1265,
-                        "value": "[cast(ap + (-10), starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1267,
-                        "value": "[cast(fp + 1, starkware.cairo.common.cairo_builtins.HashBuiltin**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-5)] + 2, felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1265,
-                        "value": "[cast(ap + (-9), felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 86,
-                            "offset": 0
-                        },
-                        "pc": 1270,
-                        "value": "[cast(ap + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.ret_value": {
-                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_solver_amount_and_path.ret_value",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1265,
-                        "value": "[cast(ap + (-8), (routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.retdata": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path.retdata",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 86,
-                            "offset": 0
-                        },
-                        "pc": 1270,
-                        "value": "[cast(ap + (-1), felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.retdata_size": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path.retdata_size",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 86,
-                            "offset": 0
-                        },
-                        "pc": 1270,
-                        "value": "[cast(ap + (-2), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path.syscall_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path.syscall_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 84,
-                            "offset": 2
-                        },
-                        "pc": 1252,
-                        "value": "[cast([fp + (-5)], felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1265,
-                        "value": "[cast(ap + (-11), felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 85,
-                            "offset": 0
-                        },
-                        "pc": 1266,
-                        "value": "[cast(fp, felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return": {
-                "decorators": [],
-                "pc": 1195,
-                "type": "function"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.Args": {
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.Args",
-                "members": {
-                    "range_check_ptr": {
-                        "cairo_type": "felt",
-                        "offset": 8
-                    },
-                    "ret_value": {
-                        "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
-                        "offset": 0
-                    }
-                },
-                "size": 9,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.ImplicitArgs": {
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.ImplicitArgs",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.Return": {
-                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
-                "type": "type_definition"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 7
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 7
-                        },
-                        "pc": 1197,
-                        "value": "[cast(fp, felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 7
-                        },
-                        "pc": 1198,
-                        "value": "cast([fp] + 1, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 9
-                        },
-                        "pc": 1206,
-                        "value": "[cast(fp + 2, felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 0
-                        },
-                        "pc": 1214,
-                        "value": "cast([fp + 2] + 1, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 2
-                        },
-                        "pc": 1222,
-                        "value": "[cast(fp + 4, felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 82,
-                            "offset": 0
-                        },
-                        "pc": 1230,
-                        "value": "cast([fp + 4] + 1, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 82,
-                            "offset": 1
-                        },
-                        "pc": 1236,
-                        "value": "[cast(fp + 6, felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 83,
-                            "offset": 0
-                        },
-                        "pc": 1244,
-                        "value": "cast([fp + 6] + 2, felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr_copy": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr_copy",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 7
-                        },
-                        "pc": 1201,
-                        "value": "cast([fp] + 1, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 0
-                        },
-                        "pc": 1217,
-                        "value": "cast([fp + 2] + 1, felt*)"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 82,
-                            "offset": 0
-                        },
-                        "pc": 1233,
-                        "value": "cast([fp + 4] + 1, felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr_start": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_ptr_start",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 7
-                        },
-                        "pc": 1197,
-                        "value": "[cast(fp, felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_tmp": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__return_value_tmp",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 83,
-                            "offset": 0
-                        },
-                        "pc": 1242,
-                        "value": "cast(fp + (-5), felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp75": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp75",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 8
-                        },
-                        "pc": 1203,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp76": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp76",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 9
-                        },
-                        "pc": 1205,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp77": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp77",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 1
-                        },
-                        "pc": 1219,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp78": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp78",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 2
-                        },
-                        "pc": 1221,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp79": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp79",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 82,
-                            "offset": 1
-                        },
-                        "pc": 1235,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.__temp80": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.__temp80",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 83,
-                            "offset": 1
-                        },
-                        "pc": 1246,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.memcpy": {
-                "destination": "starkware.cairo.common.memcpy.memcpy",
-                "type": "alias"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 0
-                        },
-                        "pc": 1195,
-                        "value": "[cast(fp + (-3), felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 7
-                        },
-                        "pc": 1201,
-                        "value": "[cast(fp + 1, felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 81,
-                            "offset": 0
-                        },
-                        "pc": 1217,
-                        "value": "[cast(fp + 3, felt*)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 82,
-                            "offset": 0
-                        },
-                        "pc": 1233,
-                        "value": "[cast(fp + 5, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_and_path_encode_return.ret_value": {
-                "cairo_type": "(routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_solver_amount_and_path_encode_return.ret_value",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 80,
-                            "offset": 0
-                        },
-                        "pc": 1195,
-                        "value": "[cast(fp + (-11), (routers_len: felt, routers: src.lib.utils.Router*, path_len: felt, path: src.lib.utils.Path*, amounts_len: felt, amounts: felt*, amount_out: starkware.cairo.common.uint256.Uint256)*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return": {
-                "decorators": [],
-                "pc": 1152,
-                "type": "function"
-            },
-            "__wrappers__.get_solver_amount_encode_return.Args": {
-                "full_name": "__wrappers__.get_solver_amount_encode_return.Args",
-                "members": {
-                    "range_check_ptr": {
-                        "cairo_type": "felt",
-                        "offset": 2
-                    },
-                    "ret_value": {
-                        "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
-                        "offset": 0
-                    }
-                },
-                "size": 3,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_encode_return.ImplicitArgs": {
-                "full_name": "__wrappers__.get_solver_amount_encode_return.ImplicitArgs",
-                "members": {},
-                "size": 0,
-                "type": "struct"
-            },
-            "__wrappers__.get_solver_amount_encode_return.Return": {
-                "cairo_type": "(range_check_ptr: felt, data_len: felt, data: felt*)",
-                "type": "type_definition"
-            },
-            "__wrappers__.get_solver_amount_encode_return.SIZEOF_LOCALS": {
-                "type": "const",
-                "value": 1
-            },
-            "__wrappers__.get_solver_amount_encode_return.__return_value_ptr": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.__return_value_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 1
-                        },
-                        "pc": 1154,
-                        "value": "[cast(fp, felt**)]"
-                    },
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 1
-                        },
-                        "pc": 1156,
-                        "value": "cast([fp] + 2, felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return.__return_value_ptr_start": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.__return_value_ptr_start",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 1
-                        },
-                        "pc": 1154,
-                        "value": "[cast(fp, felt**)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return.__return_value_tmp": {
-                "cairo_type": "felt*",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.__return_value_tmp",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 1
-                        },
-                        "pc": 1154,
-                        "value": "cast(fp + (-5), felt*)"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return.__temp73": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.__temp73",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 2
-                        },
-                        "pc": 1158,
-                        "value": "[cast(ap + (-1), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return.memcpy": {
-                "destination": "starkware.cairo.common.memcpy.memcpy",
-                "type": "alias"
-            },
-            "__wrappers__.get_solver_amount_encode_return.range_check_ptr": {
-                "cairo_type": "felt",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.range_check_ptr",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 0
-                        },
-                        "pc": 1152,
-                        "value": "[cast(fp + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_solver_amount_encode_return.ret_value": {
-                "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256)",
-                "full_name": "__wrappers__.get_solver_amount_encode_return.ret_value",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 75,
-                            "offset": 0
-                        },
-                        "pc": 1152,
-                        "value": "[cast(fp + (-5), (amount_out: starkware.cairo.common.uint256.Uint256)*)]"
                     }
                 ],
                 "type": "reference"
