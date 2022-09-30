@@ -8,10 +8,10 @@ from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address
 
-from src.interfaces.ISolver import ISolver
-from src.interfaces.ISolver_registry import ISolver_registry
-from src.interfaces.IERC20 import IERC20
-from src.interfaces.ITrade_executor import ITrade_executor
+from src.interfaces.i_solver import ISolver
+from src.interfaces.i_solver_registry import ISolverRegistry
+from src.interfaces.i_erc20 import IERC20
+from src.interfaces.i_trade_executor import ITradeExecutor
 from src.lib.utils import Router, Path
 
 const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984;
@@ -65,7 +65,7 @@ namespace Hub {
         alloc_locals;
 
         let (solver_registry) = Hub.solver_registry();
-        let (local solver_address) = ISolver_registry.get_solver(solver_registry, _solver_id);
+        let (local solver_address) = ISolverRegistry.get_solver(solver_registry, _solver_id);
         with_attr error_message("solver ID invalid") {
             assert_not_equal(solver_address, FALSE);
         }
@@ -83,7 +83,7 @@ namespace Hub {
         let (trade_executor_hash) = Hub_trade_executor.read();
 
         // Execute Trades
-        let (amount_out: Uint256) = ITrade_executor.library_call_simulate_multi_swap(
+        let (amount_out: Uint256) = ITradeExecutor.library_call_simulate_multi_swap(
             trade_executor_hash,
             routers_len,
             routers,
@@ -144,7 +144,7 @@ namespace Hub {
         alloc_locals;
 
         let (solver_registry) = Hub.solver_registry();
-        let (local solver_address) = ISolver_registry.get_solver(solver_registry, _solver_id);
+        let (local solver_address) = ISolverRegistry.get_solver(solver_registry, _solver_id);
         with_attr error_message("solver ID invalid") {
             assert_not_equal(solver_address, FALSE);
         }
@@ -162,7 +162,7 @@ namespace Hub {
         let (trade_executor_hash) = Hub_trade_executor.read();
 
         // Execute Trades
-        let (amount_out: Uint256) = ITrade_executor.library_call_simulate_multi_swap(
+        let (amount_out: Uint256) = ITradeExecutor.library_call_simulate_multi_swap(
             trade_executor_hash,
             routers_len,
             routers,
@@ -198,7 +198,7 @@ namespace Hub {
 
         // Get Solver address that will be used
         let (solver_registry) = Hub.solver_registry();
-        let (local solver_address) = ISolver_registry.get_solver(solver_registry, _solver_id);
+        let (local solver_address) = ISolverRegistry.get_solver(solver_registry, _solver_id);
         with_attr error_message("solver ID invalid") {
             assert_not_equal(solver_address, FALSE);
         }
@@ -228,7 +228,7 @@ namespace Hub {
         let (trade_executor_hash) = Hub_trade_executor.read();
 
         // Delegate Call: Execute transactions
-        ITrade_executor.library_call_multi_swap(
+        ITradeExecutor.library_call_multi_swap(
             trade_executor_hash,
             routers_len,
             routers,

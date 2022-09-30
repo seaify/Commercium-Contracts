@@ -20,6 +20,9 @@ solver_registry = [
 trade_executor = [
     "./src/trade_executor.cairo",
 ]
+solver = [
+    "./src/solvers/solver.cairo",
+]
 spf_solver = [
     "./src/solvers/spf_solver.cairo",
 ]
@@ -28,12 +31,6 @@ single_swap_solver = [
 ]
 heuristic_splitter = [
     "./src/solvers/heuristic_splitterV2.cairo",
-]
-mock_jedi_router = [
-    "./src/mocks/mock_jedi_router.cairo",
-]
-mock_price_oracle = [
-    "./src/mocks/mock_price_oracle.cairo",
 ]
 
 [profile.devnet.protostar.deploy]

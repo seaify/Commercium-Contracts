@@ -7,8 +7,8 @@ from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math_cmp import is_le_felt
 
-from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.IERC20 import IERC20
+from src.interfaces.i_router_aggregator import IRouterAggregator
+from src.interfaces.i_erc20 import IERC20
 from src.openzeppelin.access.ownable import Ownable
 from src.lib.utils import Router, Liquidity, Path
 from src.lib.constants import BASE
@@ -57,7 +57,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         amounts_in: Uint256*, 
         routers_len: felt, 
         routers: Router*
-    ) = IRouter_aggregator.get_all_routers_and_amounts_in(
+    ) = IRouterAggregator.get_all_routers_and_amounts_in(
         router_aggregator_address, 
         _amount_out, 
         _token_in, 

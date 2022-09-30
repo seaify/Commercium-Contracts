@@ -14,8 +14,8 @@ from starkware.starknet.common.syscalls import (
     library_call,
 )
 
-from src.interfaces.ITrade_executor import ITrade_executor
-from src.interfaces.IERC20 import IERC20
+from src.interfaces.i_trade_executor import ITradeExecutor
+from src.interfaces.i_erc20 import IERC20
 
 from src.openzeppelin.access.ownable import Ownable
 from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
@@ -238,7 +238,7 @@ func swap_with_path{
     let (trade_executor_hash) = Hub_trade_executor.read();
 
     // Execute Trades
-    ITrade_executor.library_call_multi_swap(
+    ITradeExecutor.library_call_multi_swap(
         trade_executor_hash,
         _routers_len,
         _routers,

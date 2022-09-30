@@ -3736,7 +3736,7 @@
                 "type": "alias"
             },
             "__main__.IEmpiric_oracle": {
-                "destination": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle",
+                "destination": "src.interfaces.i_empiric_oracle.IEmpiric_oracle",
                 "type": "alias"
             },
             "__main__.Liquidity": {
@@ -10603,52 +10603,52 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle": {
                 "type": "namespace"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.Args": {
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.Args",
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.Args": {
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.GET_VALUE_SELECTOR": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.GET_VALUE_SELECTOR": {
                 "type": "const",
                 "value": 1088514629534027837943348492744869453336870381453867699032131389309368223152
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.ImplicitArgs": {
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.ImplicitArgs",
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.ImplicitArgs": {
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.Return": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.SET_TOKEN_PRICE_SELECTOR": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.SET_TOKEN_PRICE_SELECTOR": {
                 "type": "const",
                 "value": 179275759764329300091265303407898230681857879272690726961805305233955850660
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.SIZEOF_LOCALS": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.alloc": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.call_contract": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value": {
                 "decorators": [],
                 "pc": 728,
                 "type": "function"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.Args": {
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.Args",
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.Args": {
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.Args",
                 "members": {
                     "aggregation_mode": {
                         "cairo_type": "felt",
@@ -10666,8 +10666,8 @@
                 "size": 3,
                 "type": "struct"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.ImplicitArgs": {
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.ImplicitArgs",
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.ImplicitArgs": {
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -10681,17 +10681,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.Return": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.Return": {
                 "cairo_type": "(value: felt, decimals: felt, last_updated_timestamp: felt, num_sources_aggregated: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.SIZEOF_LOCALS": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__calldata_ptr": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__calldata_ptr",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10720,9 +10720,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_actual_size": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_actual_size",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10735,9 +10735,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_decimals": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_decimals": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_decimals",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_decimals",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10750,9 +10750,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_last_updated_timestamp": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_last_updated_timestamp": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_last_updated_timestamp",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_last_updated_timestamp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10765,9 +10765,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_num_sources_aggregated": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_num_sources_aggregated": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_num_sources_aggregated",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_num_sources_aggregated",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10780,9 +10780,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_value": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_value": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_value",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_arg_value",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10795,9 +10795,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_ptr": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__return_value_ptr",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10842,9 +10842,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__temp85": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__temp85": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__temp85",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__temp85",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10857,9 +10857,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__temp86": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__temp86": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.__temp86",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.__temp86",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10872,9 +10872,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.aggregation_mode": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.aggregation_mode": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.aggregation_mode",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.aggregation_mode",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10887,9 +10887,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.calldata_ptr_start": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.calldata_ptr_start",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10910,9 +10910,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.contract_address": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.contract_address",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10925,9 +10925,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.key": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.key": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.key",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.key",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10940,9 +10940,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.range_check_ptr": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.range_check_ptr",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10955,9 +10955,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.retdata": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.retdata",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10970,9 +10970,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.retdata_size": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.retdata_size",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -10985,9 +10985,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.syscall_ptr": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.get_value.syscall_ptr",
+                "full_name": "src.interfaces.i_empiric_oracle.IEmpiric_oracle.get_value.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11008,60 +11008,60 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.library_call": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IEmpiric_oracle.IEmpiric_oracle.memcpy": {
+            "src.interfaces.i_empiric_oracle.IEmpiric_oracle.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IEmpiric_oracle.Uint256": {
+            "src.interfaces.i_empiric_oracle.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IAlpha_factory": {
+            "src.interfaces.i_factory.IAlpha_factory": {
                 "type": "namespace"
             },
-            "src.interfaces.IFactory.IAlpha_factory.Args": {
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.Args",
+            "src.interfaces.i_factory.IAlpha_factory.Args": {
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IAlpha_factory.GETPOOL_SELECTOR": {
+            "src.interfaces.i_factory.IAlpha_factory.GETPOOL_SELECTOR": {
                 "type": "const",
                 "value": 913452321097840459620906965491631667865143333949285015030060970872642081353
             },
-            "src.interfaces.IFactory.IAlpha_factory.ImplicitArgs": {
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.ImplicitArgs",
+            "src.interfaces.i_factory.IAlpha_factory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IAlpha_factory.Return": {
+            "src.interfaces.i_factory.IAlpha_factory.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IFactory.IAlpha_factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IAlpha_factory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IFactory.IAlpha_factory.alloc": {
+            "src.interfaces.i_factory.IAlpha_factory.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IAlpha_factory.call_contract": {
+            "src.interfaces.i_factory.IAlpha_factory.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool": {
                 "decorators": [],
                 "pc": 980,
                 "type": "function"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.Args": {
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.Args",
+            "src.interfaces.i_factory.IAlpha_factory.getPool.Args": {
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -11079,8 +11079,8 @@
                 "size": 3,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.ImplicitArgs": {
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.ImplicitArgs",
+            "src.interfaces.i_factory.IAlpha_factory.getPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -11094,17 +11094,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.Return": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.Return": {
                 "cairo_type": "(pool: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__calldata_ptr": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__calldata_ptr",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11133,9 +11133,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_actual_size": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_actual_size",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11148,9 +11148,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_arg_pool": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_arg_pool": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_arg_pool",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_arg_pool",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11163,9 +11163,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_ptr": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__return_value_ptr",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11186,9 +11186,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__temp103": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__temp103": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__temp103",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__temp103",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11201,9 +11201,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.__temp104": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.__temp104": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.__temp104",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.__temp104",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11216,9 +11216,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.calldata_ptr_start": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.calldata_ptr_start",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11239,9 +11239,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.contract_address": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.contract_address",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11254,9 +11254,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.range_check_ptr": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.range_check_ptr",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11269,9 +11269,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.retdata": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.retdata",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11284,9 +11284,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.retdata_size": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.retdata_size",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11299,9 +11299,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.syscall_ptr": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.syscall_ptr",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11322,9 +11322,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.token0": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.token0": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.token0",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.token0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11337,9 +11337,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.getPool.token1": {
+            "src.interfaces.i_factory.IAlpha_factory.getPool.token1": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IAlpha_factory.getPool.token1",
+                "full_name": "src.interfaces.i_factory.IAlpha_factory.getPool.token1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11352,56 +11352,56 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IAlpha_factory.library_call": {
+            "src.interfaces.i_factory.IAlpha_factory.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IAlpha_factory.memcpy": {
+            "src.interfaces.i_factory.IAlpha_factory.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IJedi_factory": {
+            "src.interfaces.i_factory.IJedi_factory": {
                 "type": "namespace"
             },
-            "src.interfaces.IFactory.IJedi_factory.Args": {
-                "full_name": "src.interfaces.IFactory.IJedi_factory.Args",
+            "src.interfaces.i_factory.IJedi_factory.Args": {
+                "full_name": "src.interfaces.i_factory.IJedi_factory.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IJedi_factory.GET_PAIR_SELECTOR": {
+            "src.interfaces.i_factory.IJedi_factory.GET_PAIR_SELECTOR": {
                 "type": "const",
                 "value": 1361884049818391466621639291137266571310943900493453366512002203017825139028
             },
-            "src.interfaces.IFactory.IJedi_factory.ImplicitArgs": {
-                "full_name": "src.interfaces.IFactory.IJedi_factory.ImplicitArgs",
+            "src.interfaces.i_factory.IJedi_factory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IJedi_factory.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IJedi_factory.Return": {
+            "src.interfaces.i_factory.IJedi_factory.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IFactory.IJedi_factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IJedi_factory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IFactory.IJedi_factory.alloc": {
+            "src.interfaces.i_factory.IJedi_factory.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IJedi_factory.call_contract": {
+            "src.interfaces.i_factory.IJedi_factory.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair": {
                 "decorators": [],
                 "pc": 1004,
                 "type": "function"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.Args": {
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.Args",
+            "src.interfaces.i_factory.IJedi_factory.get_pair.Args": {
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -11419,8 +11419,8 @@
                 "size": 3,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.ImplicitArgs": {
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.ImplicitArgs",
+            "src.interfaces.i_factory.IJedi_factory.get_pair.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -11434,17 +11434,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.Return": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.Return": {
                 "cairo_type": "(pair: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__calldata_ptr": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__calldata_ptr",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11473,9 +11473,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_actual_size": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_actual_size",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11488,9 +11488,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_arg_pair": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_arg_pair": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_arg_pair",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_arg_pair",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11503,9 +11503,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_ptr": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__return_value_ptr",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11526,9 +11526,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__temp105": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__temp105": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__temp105",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__temp105",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11541,9 +11541,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.__temp106": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.__temp106": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.__temp106",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.__temp106",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11556,9 +11556,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.calldata_ptr_start": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.calldata_ptr_start",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11579,9 +11579,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.contract_address": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.contract_address",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11594,9 +11594,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.range_check_ptr": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.range_check_ptr",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11609,9 +11609,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.retdata": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.retdata",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11624,9 +11624,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.retdata_size": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.retdata_size",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11639,9 +11639,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.syscall_ptr": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.syscall_ptr",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11662,9 +11662,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.token0": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.token0": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.token0",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.token0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11677,9 +11677,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.get_pair.token1": {
+            "src.interfaces.i_factory.IJedi_factory.get_pair.token1": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IFactory.IJedi_factory.get_pair.token1",
+                "full_name": "src.interfaces.i_factory.IJedi_factory.get_pair.token1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11692,64 +11692,64 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IFactory.IJedi_factory.library_call": {
+            "src.interfaces.i_factory.IJedi_factory.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.IJedi_factory.memcpy": {
+            "src.interfaces.i_factory.IJedi_factory.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IFactory.Uint256": {
+            "src.interfaces.i_factory.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IAlpha_pool": {
+            "src.interfaces.i_pool.IAlpha_pool": {
                 "type": "namespace"
             },
-            "src.interfaces.IPool.IAlpha_pool.Args": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.Args",
+            "src.interfaces.i_pool.IAlpha_pool.Args": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.GETRESERVES_SELECTOR": {
+            "src.interfaces.i_pool.IAlpha_pool.GETRESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1702419044747976007584230836122646470486578302666401771824479622279811552262
             },
-            "src.interfaces.IPool.IAlpha_pool.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.ImplicitArgs",
+            "src.interfaces.i_pool.IAlpha_pool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.Return": {
+            "src.interfaces.i_pool.IAlpha_pool.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IAlpha_pool.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IAlpha_pool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IPool.IAlpha_pool.TOKEN0_SELECTOR": {
+            "src.interfaces.i_pool.IAlpha_pool.TOKEN0_SELECTOR": {
                 "type": "const",
                 "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
             },
-            "src.interfaces.IPool.IAlpha_pool.alloc": {
+            "src.interfaces.i_pool.IAlpha_pool.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IAlpha_pool.call_contract": {
+            "src.interfaces.i_pool.IAlpha_pool.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves": {
                 "decorators": [],
                 "pc": 1048,
                 "type": "function"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.Args": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.Args",
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.Args": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -11759,8 +11759,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.ImplicitArgs",
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -11774,17 +11774,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.Return": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.Return": {
                 "cairo_type": "(reserve_token_0: starkware.cairo.common.uint256.Uint256, reserve_token_1: starkware.cairo.common.uint256.Uint256)",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__calldata_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__calldata_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11797,9 +11797,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_actual_size": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_actual_size",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11812,9 +11812,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_0": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_0",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11827,9 +11827,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_1": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_1": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_1",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_arg_reserve_token_1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11842,9 +11842,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__return_value_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11873,9 +11873,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.__temp108": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.__temp108": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.__temp108",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.__temp108",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11888,9 +11888,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.calldata_ptr_start": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.calldata_ptr_start",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11911,9 +11911,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.contract_address": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.contract_address",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11926,9 +11926,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.range_check_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.range_check_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11941,9 +11941,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.retdata": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.retdata",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11956,9 +11956,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.retdata_size": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.retdata_size",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11971,9 +11971,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.getReserves.syscall_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.getReserves.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.getReserves.syscall_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.getReserves.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -11994,21 +11994,21 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.library_call": {
+            "src.interfaces.i_pool.IAlpha_pool.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IAlpha_pool.memcpy": {
+            "src.interfaces.i_pool.IAlpha_pool.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0": {
+            "src.interfaces.i_pool.IAlpha_pool.token0": {
                 "decorators": [],
                 "pc": 1028,
                 "type": "function"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.Args": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.Args",
+            "src.interfaces.i_pool.IAlpha_pool.token0.Args": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -12018,8 +12018,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.ImplicitArgs",
+            "src.interfaces.i_pool.IAlpha_pool.token0.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -12033,17 +12033,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.Return": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.Return": {
                 "cairo_type": "(token0: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.__calldata_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.__calldata_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12056,9 +12056,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.__return_value_actual_size": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.__return_value_actual_size",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12071,9 +12071,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.__return_value_arg_token0": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_arg_token0": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.__return_value_arg_token0",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_arg_token0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12086,9 +12086,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.__return_value_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.__return_value_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12109,9 +12109,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.__temp107": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.__temp107": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.__temp107",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.__temp107",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12124,9 +12124,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.calldata_ptr_start": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.calldata_ptr_start",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12147,9 +12147,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.contract_address": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.contract_address",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12162,9 +12162,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.range_check_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.range_check_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12177,9 +12177,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.retdata": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.retdata",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12192,9 +12192,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.retdata_size": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.retdata_size",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12207,9 +12207,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IAlpha_pool.token0.syscall_ptr": {
+            "src.interfaces.i_pool.IAlpha_pool.token0.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IAlpha_pool.token0.syscall_ptr",
+                "full_name": "src.interfaces.i_pool.IAlpha_pool.token0.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12230,52 +12230,52 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool": {
+            "src.interfaces.i_pool.IJedi_pool": {
                 "type": "namespace"
             },
-            "src.interfaces.IPool.IJedi_pool.Args": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.Args",
+            "src.interfaces.i_pool.IJedi_pool.Args": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_pool.IJedi_pool.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.IPool.IJedi_pool.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.ImplicitArgs",
+            "src.interfaces.i_pool.IJedi_pool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.Return": {
+            "src.interfaces.i_pool.IJedi_pool.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IJedi_pool.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IJedi_pool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IPool.IJedi_pool.TOKEN0_SELECTOR": {
+            "src.interfaces.i_pool.IJedi_pool.TOKEN0_SELECTOR": {
                 "type": "const",
                 "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
             },
-            "src.interfaces.IPool.IJedi_pool.alloc": {
+            "src.interfaces.i_pool.IJedi_pool.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IJedi_pool.call_contract": {
+            "src.interfaces.i_pool.IJedi_pool.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves": {
                 "decorators": [],
                 "pc": 1091,
                 "type": "function"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.Args": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.Args",
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.Args": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -12285,8 +12285,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.ImplicitArgs",
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -12300,17 +12300,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.Return": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.Return": {
                 "cairo_type": "(reserve0: starkware.cairo.common.uint256.Uint256, reserve1: starkware.cairo.common.uint256.Uint256, block_timestamp_last: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__calldata_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__calldata_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12323,9 +12323,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_actual_size": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_actual_size",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12338,9 +12338,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_block_timestamp_last": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_block_timestamp_last": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_block_timestamp_last",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_block_timestamp_last",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12353,9 +12353,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_reserve0": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_reserve0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_reserve0",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_reserve0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12368,9 +12368,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_reserve1": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_reserve1": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_arg_reserve1",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_arg_reserve1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12383,9 +12383,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__return_value_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12422,9 +12422,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.__temp110": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.__temp110": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.__temp110",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.__temp110",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12437,9 +12437,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.calldata_ptr_start": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.calldata_ptr_start",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12460,9 +12460,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.contract_address": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.contract_address",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12475,9 +12475,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.range_check_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.range_check_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12490,9 +12490,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.retdata": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.retdata",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12505,9 +12505,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.retdata_size": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.retdata_size",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12520,9 +12520,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.get_reserves.syscall_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.get_reserves.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.get_reserves.syscall_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.get_reserves.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12543,21 +12543,21 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.library_call": {
+            "src.interfaces.i_pool.IJedi_pool.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IJedi_pool.memcpy": {
+            "src.interfaces.i_pool.IJedi_pool.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IPool.IJedi_pool.token0": {
+            "src.interfaces.i_pool.IJedi_pool.token0": {
                 "decorators": [],
                 "pc": 1071,
                 "type": "function"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.Args": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.Args",
+            "src.interfaces.i_pool.IJedi_pool.token0.Args": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -12567,8 +12567,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.ImplicitArgs": {
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.ImplicitArgs",
+            "src.interfaces.i_pool.IJedi_pool.token0.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -12582,17 +12582,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.Return": {
+            "src.interfaces.i_pool.IJedi_pool.token0.Return": {
                 "cairo_type": "(token0: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IJedi_pool.token0.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IPool.IJedi_pool.token0.__calldata_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.token0.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.__calldata_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12605,9 +12605,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.__return_value_actual_size": {
+            "src.interfaces.i_pool.IJedi_pool.token0.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.__return_value_actual_size",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12620,9 +12620,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.__return_value_arg_token0": {
+            "src.interfaces.i_pool.IJedi_pool.token0.__return_value_arg_token0": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.__return_value_arg_token0",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.__return_value_arg_token0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12635,9 +12635,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.__return_value_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.token0.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.__return_value_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12658,9 +12658,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.__temp109": {
+            "src.interfaces.i_pool.IJedi_pool.token0.__temp109": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.__temp109",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.__temp109",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12673,9 +12673,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.calldata_ptr_start": {
+            "src.interfaces.i_pool.IJedi_pool.token0.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.calldata_ptr_start",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12696,9 +12696,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.contract_address": {
+            "src.interfaces.i_pool.IJedi_pool.token0.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.contract_address",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12711,9 +12711,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.range_check_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.token0.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.range_check_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12726,9 +12726,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.retdata": {
+            "src.interfaces.i_pool.IJedi_pool.token0.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.retdata",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12741,9 +12741,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.retdata_size": {
+            "src.interfaces.i_pool.IJedi_pool.token0.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.retdata_size",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12756,9 +12756,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.IJedi_pool.token0.syscall_ptr": {
+            "src.interfaces.i_pool.IJedi_pool.token0.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IPool.IJedi_pool.token0.syscall_ptr",
+                "full_name": "src.interfaces.i_pool.IJedi_pool.token0.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12779,88 +12779,88 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IPool.Uint256": {
+            "src.interfaces.i_pool.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IAlpha_router": {
+            "src.interfaces.i_router.IAlpha_router": {
                 "type": "namespace"
             },
-            "src.interfaces.IRouter.IAlpha_router.ADDLIQUIDITY_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.ADDLIQUIDITY_SELECTOR": {
                 "type": "const",
                 "value": 1786929337764331755288631088384162565804011657876312230156914670942513011210
             },
-            "src.interfaces.IRouter.IAlpha_router.Args": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.Args",
+            "src.interfaces.i_router.IAlpha_router.Args": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.GETFACTORY_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.GETFACTORY_SELECTOR": {
                 "type": "const",
                 "value": 1398347236525453617119732714544395438038703363453746266606119774772655272361
             },
-            "src.interfaces.IRouter.IAlpha_router.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.ImplicitArgs",
+            "src.interfaces.i_router.IAlpha_router.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.QUOTE_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.QUOTE_SELECTOR": {
                 "type": "const",
                 "value": 1602234863239929103146996131120769161547061307423597441505064026012741843711
             },
-            "src.interfaces.IRouter.IAlpha_router.REMOVELIQUIDITYQUOTEBYPOOL_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITYQUOTEBYPOOL_SELECTOR": {
                 "type": "const",
                 "value": 650478413380129456635829560829568936849964451764888867598179241405869867774
             },
-            "src.interfaces.IRouter.IAlpha_router.REMOVELIQUIDITYQUOTE_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITYQUOTE_SELECTOR": {
                 "type": "const",
                 "value": 477759646189946434215406752054746367905277328091943408875251029685900577768
             },
-            "src.interfaces.IRouter.IAlpha_router.REMOVELIQUIDITY_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITY_SELECTOR": {
                 "type": "const",
                 "value": 579509000452441748561987543659273806280744713042676747900052335371877851386
             },
-            "src.interfaces.IRouter.IAlpha_router.Return": {
+            "src.interfaces.i_router.IAlpha_router.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IAlpha_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlpha_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IRouter.IAlpha_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1245570219085329014176261566038427188720157448719795888519090757413574003847
             },
-            "src.interfaces.IRouter.IAlpha_router.SWAPTOKENSFOREXACTTOKENS_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.SWAPTOKENSFOREXACTTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1651397250640202934028488220770713386002201807284424460985469595487432173851
             },
-            "src.interfaces.IRouter.IAlpha_router.TRANSFEROWNERSHIP_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.TRANSFEROWNERSHIP_SELECTOR": {
                 "type": "const",
                 "value": 583453339648053255507186511820051151480363716848694991370856878234313202015
             },
-            "src.interfaces.IRouter.IAlpha_router.UPDATEFACTORY_SELECTOR": {
+            "src.interfaces.i_router.IAlpha_router.UPDATEFACTORY_SELECTOR": {
                 "type": "const",
                 "value": 854410833810253915887022258793707410678398161949341105625518895481528933123
             },
-            "src.interfaces.IRouter.IAlpha_router.alloc": {
+            "src.interfaces.i_router.IAlpha_router.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IAlpha_router.call_contract": {
+            "src.interfaces.i_router.IAlpha_router.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory": {
+            "src.interfaces.i_router.IAlpha_router.getFactory": {
                 "decorators": [],
                 "pc": 859,
                 "type": "function"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.Args": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.Args",
+            "src.interfaces.i_router.IAlpha_router.getFactory.Args": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -12870,8 +12870,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.ImplicitArgs",
+            "src.interfaces.i_router.IAlpha_router.getFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -12885,17 +12885,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.Return": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.Return": {
                 "cairo_type": "(factory_address: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.__calldata_ptr": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12908,9 +12908,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_actual_size": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12923,9 +12923,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_arg_factory_address": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_arg_factory_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_arg_factory_address",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_arg_factory_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12938,9 +12938,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_ptr": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12961,9 +12961,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.__temp93": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.__temp93": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.__temp93",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__temp93",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12976,9 +12976,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.calldata_ptr_start": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12999,9 +12999,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.contract_address": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.contract_address",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13014,9 +13014,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.range_check_ptr": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13029,9 +13029,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.retdata": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.retdata",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13044,9 +13044,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.retdata_size": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.retdata_size",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13059,9 +13059,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.getFactory.syscall_ptr": {
+            "src.interfaces.i_router.IAlpha_router.getFactory.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.getFactory.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13082,21 +13082,21 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.library_call": {
+            "src.interfaces.i_router.IAlpha_router.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IAlpha_router.memcpy": {
+            "src.interfaces.i_router.IAlpha_router.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote": {
+            "src.interfaces.i_router.IAlpha_router.quote": {
                 "decorators": [],
                 "pc": 879,
                 "type": "function"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.Args": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.Args",
+            "src.interfaces.i_router.IAlpha_router.quote.Args": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.Args",
                 "members": {
                     "amount_token_0": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -13118,8 +13118,8 @@
                 "size": 7,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.ImplicitArgs",
+            "src.interfaces.i_router.IAlpha_router.quote.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13133,17 +13133,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.Return": {
+            "src.interfaces.i_router.IAlpha_router.quote.Return": {
                 "cairo_type": "(amount_token_0: starkware.cairo.common.uint256.Uint256)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlpha_router.quote.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__calldata_ptr": {
+            "src.interfaces.i_router.IAlpha_router.quote.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13180,9 +13180,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__calldata_tmp": {
+            "src.interfaces.i_router.IAlpha_router.quote.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13211,9 +13211,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__return_value_actual_size": {
+            "src.interfaces.i_router.IAlpha_router.quote.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13226,9 +13226,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__return_value_arg_amount_token_0": {
+            "src.interfaces.i_router.IAlpha_router.quote.__return_value_arg_amount_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__return_value_arg_amount_token_0",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_arg_amount_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13241,9 +13241,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__return_value_ptr": {
+            "src.interfaces.i_router.IAlpha_router.quote.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13264,9 +13264,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__temp94": {
+            "src.interfaces.i_router.IAlpha_router.quote.__temp94": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__temp94",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__temp94",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13279,9 +13279,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.__temp95": {
+            "src.interfaces.i_router.IAlpha_router.quote.__temp95": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.__temp95",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__temp95",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13294,9 +13294,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.amount_token_0": {
+            "src.interfaces.i_router.IAlpha_router.quote.amount_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.amount_token_0",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.amount_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13309,9 +13309,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.calldata_ptr_start": {
+            "src.interfaces.i_router.IAlpha_router.quote.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13332,9 +13332,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.contract_address": {
+            "src.interfaces.i_router.IAlpha_router.quote.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.contract_address",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13347,9 +13347,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.range_check_ptr": {
+            "src.interfaces.i_router.IAlpha_router.quote.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13362,9 +13362,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.reserve_token_0": {
+            "src.interfaces.i_router.IAlpha_router.quote.reserve_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.reserve_token_0",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.reserve_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13377,9 +13377,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.reserve_token_1": {
+            "src.interfaces.i_router.IAlpha_router.quote.reserve_token_1": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.reserve_token_1",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.reserve_token_1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13392,9 +13392,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.retdata": {
+            "src.interfaces.i_router.IAlpha_router.quote.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.retdata",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13407,9 +13407,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.retdata_size": {
+            "src.interfaces.i_router.IAlpha_router.quote.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.retdata_size",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13422,9 +13422,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IAlpha_router.quote.syscall_ptr": {
+            "src.interfaces.i_router.IAlpha_router.quote.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IAlpha_router.quote.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IAlpha_router.quote.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13445,84 +13445,84 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router": {
+            "src.interfaces.i_router.IJedi_router": {
                 "type": "namespace"
             },
-            "src.interfaces.IRouter.IJedi_router.Args": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.Args",
+            "src.interfaces.i_router.IJedi_router.Args": {
+                "full_name": "src.interfaces.i_router.IJedi_router.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.FACTORY_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.FACTORY_SELECTOR": {
                 "type": "const",
                 "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
             },
-            "src.interfaces.IRouter.IJedi_router.GET_AMOUNTS_IN_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_AMOUNTS_IN_SELECTOR": {
                 "type": "const",
                 "value": 717090642240829889410633465689384004503418412794176969541863322742007450725
             },
-            "src.interfaces.IRouter.IJedi_router.GET_AMOUNTS_OUT_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_AMOUNTS_OUT_SELECTOR": {
                 "type": "const",
                 "value": 1544114163115011815335571033296884160831958766777219908207586860250867652764
             },
-            "src.interfaces.IRouter.IJedi_router.GET_AMOUNT_IN_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_AMOUNT_IN_SELECTOR": {
                 "type": "const",
                 "value": 1369314955784310940486616110116205110380568797587200238122714365430329737222
             },
-            "src.interfaces.IRouter.IJedi_router.GET_AMOUNT_OUT_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_AMOUNT_OUT_SELECTOR": {
                 "type": "const",
                 "value": 985351602711163636936891036462748731517852321990405299395721200665734703770
             },
-            "src.interfaces.IRouter.IJedi_router.GET_POOL_STATS_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_POOL_STATS_SELECTOR": {
                 "type": "const",
                 "value": 919685578388693842969456998838892869826956689199637724149505276692272720754
             },
-            "src.interfaces.IRouter.IJedi_router.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.IRouter.IJedi_router.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.ImplicitArgs",
+            "src.interfaces.i_router.IJedi_router.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJedi_router.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.Return": {
+            "src.interfaces.i_router.IJedi_router.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IJedi_router.SET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.SET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 385827236906745258426684796102845689672024359440920269358901198005285598390
             },
-            "src.interfaces.IRouter.IJedi_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJedi_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IRouter.IJedi_router.SWAP_EXACT_TOKENS_FOR_TOKENS_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.SWAP_EXACT_TOKENS_FOR_TOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1426565999849372202067242202088433764048928624912224385906297528280239424972
             },
-            "src.interfaces.IRouter.IJedi_router.SWAP_TOKENS_FOR_EXACT_TOKENS_SELECTOR": {
+            "src.interfaces.i_router.IJedi_router.SWAP_TOKENS_FOR_EXACT_TOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1670990928140491877826167847134796336079252006762544052648932373014744390317
             },
-            "src.interfaces.IRouter.IJedi_router.alloc": {
+            "src.interfaces.i_router.IJedi_router.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IJedi_router.call_contract": {
+            "src.interfaces.i_router.IJedi_router.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IJedi_router.factory": {
+            "src.interfaces.i_router.IJedi_router.factory": {
                 "decorators": [],
                 "pc": 839,
                 "type": "function"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.Args": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.Args",
+            "src.interfaces.i_router.IJedi_router.factory.Args": {
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -13532,8 +13532,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.ImplicitArgs",
+            "src.interfaces.i_router.IJedi_router.factory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13547,17 +13547,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.Return": {
+            "src.interfaces.i_router.IJedi_router.factory.Return": {
                 "cairo_type": "(address: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJedi_router.factory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IRouter.IJedi_router.factory.__calldata_ptr": {
+            "src.interfaces.i_router.IJedi_router.factory.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13570,9 +13570,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.__return_value_actual_size": {
+            "src.interfaces.i_router.IJedi_router.factory.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13585,9 +13585,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.__return_value_arg_address": {
+            "src.interfaces.i_router.IJedi_router.factory.__return_value_arg_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.__return_value_arg_address",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_arg_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13600,9 +13600,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.__return_value_ptr": {
+            "src.interfaces.i_router.IJedi_router.factory.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13623,9 +13623,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.__temp92": {
+            "src.interfaces.i_router.IJedi_router.factory.__temp92": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.__temp92",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.__temp92",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13638,9 +13638,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.calldata_ptr_start": {
+            "src.interfaces.i_router.IJedi_router.factory.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13661,9 +13661,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.contract_address": {
+            "src.interfaces.i_router.IJedi_router.factory.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.contract_address",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13676,9 +13676,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.range_check_ptr": {
+            "src.interfaces.i_router.IJedi_router.factory.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13691,9 +13691,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.retdata": {
+            "src.interfaces.i_router.IJedi_router.factory.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.retdata",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13706,9 +13706,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.retdata_size": {
+            "src.interfaces.i_router.IJedi_router.factory.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.retdata_size",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13721,9 +13721,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.factory.syscall_ptr": {
+            "src.interfaces.i_router.IJedi_router.factory.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.factory.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.factory.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13744,13 +13744,13 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out": {
                 "decorators": [],
                 "pc": 795,
                 "type": "function"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.Args": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.Args",
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.Args": {
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.Args",
                 "members": {
                     "amountIn": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -13772,8 +13772,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.ImplicitArgs",
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13787,17 +13787,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.Return": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.Return": {
                 "cairo_type": "(amounts_len: felt, amounts: starkware.cairo.common.uint256.Uint256*)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 3
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_ptr": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13834,9 +13834,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_ptr_copy": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr_copy": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_ptr_copy",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr_copy",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13849,9 +13849,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_tmp": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13864,9 +13864,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_actual_size": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13879,9 +13879,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_arg_amounts": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_arg_amounts",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13894,9 +13894,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_arg_amounts_len": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_arg_amounts_len",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13909,9 +13909,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_ptr": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13940,9 +13940,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp87": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp87": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp87",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp87",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13955,9 +13955,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp88": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp88": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp88",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp88",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13970,9 +13970,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp89": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp89": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp89",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp89",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13985,9 +13985,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp90": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp90": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp90",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp90",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14000,9 +14000,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp91": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp91": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.__temp91",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp91",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14015,9 +14015,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.amountIn": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.amountIn",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14030,9 +14030,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.calldata_ptr_start": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14053,9 +14053,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.contract_address": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.contract_address",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14068,9 +14068,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.path": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.path": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.path",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.path",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14083,9 +14083,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.path_len": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.path_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.path_len",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.path_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14098,9 +14098,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.range_check_ptr": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14129,9 +14129,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.retdata": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.retdata",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14144,9 +14144,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.retdata_size": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.retdata_size",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14159,9 +14159,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.get_amounts_out.syscall_ptr": {
+            "src.interfaces.i_router.IJedi_router.get_amounts_out.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.IJedi_router.get_amounts_out.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14182,68 +14182,68 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.IJedi_router.library_call": {
+            "src.interfaces.i_router.IJedi_router.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.IJedi_router.memcpy": {
+            "src.interfaces.i_router.IJedi_router.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ISith_router": {
+            "src.interfaces.i_router.ISith_router": {
                 "type": "namespace"
             },
-            "src.interfaces.IRouter.ISith_router.Args": {
-                "full_name": "src.interfaces.IRouter.ISith_router.Args",
+            "src.interfaces.i_router.ISith_router.Args": {
+                "full_name": "src.interfaces.i_router.ISith_router.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ISith_router.GETAMOUNTOUT_SELECTOR": {
+            "src.interfaces.i_router.ISith_router.GETAMOUNTOUT_SELECTOR": {
                 "type": "const",
                 "value": 1647692170524927662824575722070532547943707424812990004302008033607933887818
             },
-            "src.interfaces.IRouter.ISith_router.GETAMOUNTSOUT_SELECTOR": {
+            "src.interfaces.i_router.ISith_router.GETAMOUNTSOUT_SELECTOR": {
                 "type": "const",
                 "value": 1531259267651688670952745651083569853049302364518094342387488919399204396207
             },
-            "src.interfaces.IRouter.ISith_router.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.ISith_router.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.IRouter.ISith_router.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.ISith_router.ImplicitArgs",
+            "src.interfaces.i_router.ISith_router.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ISith_router.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ISith_router.Return": {
+            "src.interfaces.i_router.ISith_router.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.ISith_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ISith_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IRouter.ISith_router.SWAPEXACTTOKENSFORTOKENSSIMPLE_SELECTOR": {
+            "src.interfaces.i_router.ISith_router.SWAPEXACTTOKENSFORTOKENSSIMPLE_SELECTOR": {
                 "type": "const",
                 "value": 856040231041481176831004985476341677033328156757611315316932129639803229780
             },
-            "src.interfaces.IRouter.ISith_router.alloc": {
+            "src.interfaces.i_router.ISith_router.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ISith_router.call_contract": {
+            "src.interfaces.i_router.ISith_router.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut": {
+            "src.interfaces.i_router.ISith_router.getAmountOut": {
                 "decorators": [],
                 "pc": 908,
                 "type": "function"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.Args": {
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.Args",
+            "src.interfaces.i_router.ISith_router.getAmountOut.Args": {
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.Args",
                 "members": {
                     "amount_in": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -14265,8 +14265,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.ImplicitArgs",
+            "src.interfaces.i_router.ISith_router.getAmountOut.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -14280,17 +14280,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.Return": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.Return": {
                 "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256, stable: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__calldata_ptr": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14327,9 +14327,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__calldata_tmp": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14342,9 +14342,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_actual_size": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14357,9 +14357,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_arg_amount_out": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_amount_out": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_arg_amount_out",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_amount_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14372,9 +14372,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_arg_stable": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_stable": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_arg_stable",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_stable",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14387,9 +14387,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_ptr": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14418,9 +14418,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__temp96": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__temp96": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__temp96",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__temp96",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14433,9 +14433,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.__temp97": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.__temp97": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.__temp97",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__temp97",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14448,9 +14448,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.amount_in": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.amount_in": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.amount_in",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.amount_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14463,9 +14463,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.calldata_ptr_start": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14486,9 +14486,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.contract_address": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.contract_address",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14501,9 +14501,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.range_check_ptr": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.range_check_ptr",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14516,9 +14516,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.retdata": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.retdata",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14531,9 +14531,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.retdata_size": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.retdata_size",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14546,9 +14546,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.syscall_ptr": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.syscall_ptr",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14569,9 +14569,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.token_in": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.token_in": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.token_in",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.token_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14584,9 +14584,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.getAmountOut.token_out": {
+            "src.interfaces.i_router.ISith_router.getAmountOut.token_out": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ISith_router.getAmountOut.token_out",
+                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.token_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14599,60 +14599,60 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ISith_router.library_call": {
+            "src.interfaces.i_router.ISith_router.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ISith_router.memcpy": {
+            "src.interfaces.i_router.ISith_router.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ITenK_router": {
+            "src.interfaces.i_router.ITenK_router": {
                 "type": "namespace"
             },
-            "src.interfaces.IRouter.ITenK_router.Args": {
-                "full_name": "src.interfaces.IRouter.ITenK_router.Args",
+            "src.interfaces.i_router.ITenK_router.Args": {
+                "full_name": "src.interfaces.i_router.ITenK_router.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ITenK_router.GETAMOUNTSOUT_SELECTOR": {
+            "src.interfaces.i_router.ITenK_router.GETAMOUNTSOUT_SELECTOR": {
                 "type": "const",
                 "value": 1531259267651688670952745651083569853049302364518094342387488919399204396207
             },
-            "src.interfaces.IRouter.ITenK_router.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.ITenK_router.ImplicitArgs",
+            "src.interfaces.i_router.ITenK_router.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ITenK_router.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ITenK_router.Return": {
+            "src.interfaces.i_router.ITenK_router.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.ITenK_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ITenK_router.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.IRouter.ITenK_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
+            "src.interfaces.i_router.ITenK_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1245570219085329014176261566038427188720157448719795888519090757413574003847
             },
-            "src.interfaces.IRouter.ITenK_router.alloc": {
+            "src.interfaces.i_router.ITenK_router.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ITenK_router.call_contract": {
+            "src.interfaces.i_router.ITenK_router.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut": {
                 "decorators": [],
                 "pc": 936,
                 "type": "function"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.Args": {
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.Args",
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.Args": {
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.Args",
                 "members": {
                     "amountIn": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -14674,8 +14674,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.ImplicitArgs": {
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.ImplicitArgs",
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -14689,17 +14689,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.Return": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.Return": {
                 "cairo_type": "(amounts_len: felt, amounts: starkware.cairo.common.uint256.Uint256*)",
                 "type": "type_definition"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 3
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_ptr": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14736,9 +14736,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_ptr_copy": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr_copy": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_ptr_copy",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr_copy",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14751,9 +14751,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_tmp": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14766,9 +14766,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_actual_size": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14781,9 +14781,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_arg_amounts": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_arg_amounts",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14796,9 +14796,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_arg_amounts_len": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_arg_amounts_len",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14811,9 +14811,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_ptr": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14842,9 +14842,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp100": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp100": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp100",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp100",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14857,9 +14857,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp101": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp101": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp101",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp101",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14872,9 +14872,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp102": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp102": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp102",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp102",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14887,9 +14887,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp98": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp98": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp98",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp98",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14902,9 +14902,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp99": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp99": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.__temp99",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp99",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14917,9 +14917,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.amountIn": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.amountIn",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14932,9 +14932,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.calldata_ptr_start": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14955,9 +14955,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.contract_address": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.contract_address",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14970,9 +14970,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.path": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.path": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.path",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.path",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14985,9 +14985,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.path_len": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.path_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.path_len",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.path_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15000,9 +15000,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.range_check_ptr": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.range_check_ptr",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15031,9 +15031,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.retdata": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.retdata",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15046,9 +15046,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.retdata_size": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.retdata_size",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15061,9 +15061,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.getAmountsOut.syscall_ptr": {
+            "src.interfaces.i_router.ITenK_router.getAmountsOut.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.IRouter.ITenK_router.getAmountsOut.syscall_ptr",
+                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15084,19 +15084,19 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.IRouter.ITenK_router.library_call": {
+            "src.interfaces.i_router.ITenK_router.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.ITenK_router.memcpy": {
+            "src.interfaces.i_router.ITenK_router.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.SithSwapRoutes": {
+            "src.interfaces.i_router.SithSwapRoutes": {
                 "destination": "src.lib.utils.SithSwapRoutes",
                 "type": "alias"
             },
-            "src.interfaces.IRouter.Uint256": {
+            "src.interfaces.i_router.Uint256": {
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
@@ -15160,39 +15160,39 @@
                 "type": "alias"
             },
             "src.lib.router_aggregator.IAlpha_factory": {
-                "destination": "src.interfaces.IFactory.IAlpha_factory",
+                "destination": "src.interfaces.i_factory.IAlpha_factory",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IAlpha_pool": {
-                "destination": "src.interfaces.IPool.IAlpha_pool",
+                "destination": "src.interfaces.i_pool.IAlpha_pool",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IAlpha_router": {
-                "destination": "src.interfaces.IRouter.IAlpha_router",
+                "destination": "src.interfaces.i_router.IAlpha_router",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IEmpiric_oracle": {
-                "destination": "src.interfaces.IEmpiric_oracle.IEmpiric_oracle",
+                "destination": "src.interfaces.i_empiric_oracle.IEmpiric_oracle",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IJedi_factory": {
-                "destination": "src.interfaces.IFactory.IJedi_factory",
+                "destination": "src.interfaces.i_factory.IJedi_factory",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IJedi_pool": {
-                "destination": "src.interfaces.IPool.IJedi_pool",
+                "destination": "src.interfaces.i_pool.IJedi_pool",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IJedi_router": {
-                "destination": "src.interfaces.IRouter.IJedi_router",
+                "destination": "src.interfaces.i_router.IJedi_router",
                 "type": "alias"
             },
             "src.lib.router_aggregator.ISith_router": {
-                "destination": "src.interfaces.IRouter.ISith_router",
+                "destination": "src.interfaces.i_router.ISith_router",
                 "type": "alias"
             },
             "src.lib.router_aggregator.ITenK_router": {
-                "destination": "src.interfaces.IRouter.ITenK_router",
+                "destination": "src.interfaces.i_router.ITenK_router",
                 "type": "alias"
             },
             "src.lib.router_aggregator.JediSwap": {

@@ -4,8 +4,8 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
-from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.IERC20 import IERC20
+from src.interfaces.i_router_aggregator import IRouterAggregator
+from src.interfaces.i_erc20 import IERC20
 from src.lib.utils import Router, Path
 from src.lib.constants import BASE
 
@@ -35,7 +35,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     let (router_aggregator_address) = router_aggregator.read();
 
-    let (_, router: Router) = IRouter_aggregator.get_single_best_router(
+    let (_, router: Router) = IRouterAggregator.get_single_best_router(
         router_aggregator_address, _amount_in, _token_in, _token_out
     );
 

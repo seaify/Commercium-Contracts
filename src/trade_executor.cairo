@@ -15,10 +15,10 @@ from src.lib.utils import Utils, Router, Path
 from src.lib.constants import BASE, AlphaRoad, JediSwap, SithSwap, TenK, MAX_FELT, HALF_MAX
 from src.lib.router_aggregator import RouterAggregator
 
-from src.interfaces.IERC20 import IERC20
-from src.interfaces.IRouter import (IJedi_router, IAlpha_router, ISith_router, ITenK_router)
-from src.interfaces.IFactory import IAlpha_factory
-from src.interfaces.IPool import IAlpha_pool
+from src.interfaces.i_erc20 import IERC20
+from src.interfaces.i_router import (IJediRouter, IAlphaRouter, ISithRouter, ITenKRouter)
+from src.interfaces.i_factory import IAlphaFactory
+from src.interfaces.i_pool import IAlphaPool
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
 
 @view
@@ -193,7 +193,7 @@ func _swap_exact_in{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            IJedi_router.swap_exact_tokens_for_tokens(
+            IJediRouter.swap_exact_tokens_for_tokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -207,7 +207,7 @@ func _swap_exact_in{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            IJedi_router.swap_exact_tokens_for_tokens(
+            IJediRouter.swap_exact_tokens_for_tokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -234,7 +234,7 @@ func _swap_exact_in{
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;
         }
-        IAlpha_router.swapExactTokensForTokens(
+        IAlphaRouter.swapExactTokensForTokens(
             _router.address,
             _token_in,
             _token_out,
@@ -255,7 +255,7 @@ func _swap_exact_in{
         let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
         if (is_below_threshold == TRUE) {
             IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
-            ISith_router.swapExactTokensForTokensSimple(
+            ISithRouter.swapExactTokensForTokensSimple(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -267,7 +267,7 @@ func _swap_exact_in{
             );
             return ();
         } else {
-            ISith_router.swapExactTokensForTokensSimple(
+            ISithRouter.swapExactTokensForTokensSimple(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -290,7 +290,7 @@ func _swap_exact_in{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            ITenK_router.swapExactTokensForTokens(
+            ITenKRouter.swapExactTokensForTokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -304,7 +304,7 @@ func _swap_exact_in{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            ITenK_router.swapExactTokensForTokens(
+            ITenKRouter.swapExactTokensForTokens(
                 _router.address, 
                 _amount_in, 
                 Uint256(0, 0), 
@@ -348,7 +348,7 @@ func _swap_exact_out{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            IJedi_router.swap_tokens_for_exact_tokens(
+            IJediRouter.swap_tokens_for_exact_tokens(
                 _router.address,
                 _amount_out,
                 Uint256(MAX_FELT, 0),
@@ -362,7 +362,7 @@ func _swap_exact_out{
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            IJedi_router.swap_tokens_for_exact_tokens(
+            IJediRouter.swap_tokens_for_exact_tokens(
                 _router.address,
                 _amount_out,
                 Uint256(MAX_FELT, 0),
@@ -388,7 +388,7 @@ func _swap_exact_out{
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;
         }
-        IAlpha_router.swapTokensForExactTokens(
+        IAlphaRouter.swapTokensForExactTokens(
             _router.address,
             _token_in,
             _token_out,

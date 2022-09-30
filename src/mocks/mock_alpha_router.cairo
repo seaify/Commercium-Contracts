@@ -10,7 +10,7 @@ from starkware.starknet.common.syscalls import get_caller_address, get_contract_
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
-from src.interfaces.IERC20 import IERC20
+from src.interfaces.i_erc20 import IERC20
 
 struct Pair {
     token_1: felt,

@@ -10,7 +10,7 @@ from starkware.cairo.common.uint256 import Uint256, uint256_eq
 from src.lib.array import Array
 from src.lib.utils import Utils, Router, Path
 from src.lib.constants import MAX_FELT, BASE
-from src.interfaces.IRouter_aggregator import IRouter_aggregator
+from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.openzeppelin.access.ownable import Ownable
 
 const Edges = 21;
@@ -98,7 +98,7 @@ func get_results{
     // transform input amount to USD amount
     // As of now all Empiric prices are scaled to 18 decimal places
     let (router_aggregator_address) = router_aggregator.read();
-    let (price: Uint256, _) = IRouter_aggregator.get_global_price(
+    let (price: Uint256, _) = IRouterAggregator.get_global_price(
         router_aggregator_address, tokens[0]
     );
     let (amount_in_usd: Uint256) = Utils.fmul(price, _amount_in, Uint256(BASE, 0));
@@ -302,7 +302,7 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         let (router_aggregator_address) = router_aggregator.read();
         let (
             local amount_out: Uint256, local router: Router
-        ) = IRouter_aggregator.get_single_best_router(
+        ) = IRouterAggregator.get_single_best_router(
             router_aggregator_address, _amount_in, _tokens[_src_counter], _tokens[_dst_counter]
         );
         let (amount_is_zero) = uint256_eq(amount_out, Uint256(0, 0));
@@ -313,7 +313,7 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
             tempvar range_check_ptr = range_check_ptr;
             assert we_are_not_advancing = 1;
         } else {
-            let (local weight: felt) = IRouter_aggregator.get_weight(
+            let (local weight: felt) = IRouterAggregator.get_weight(
                 router_aggregator_address,
                 _amount_in_usd,
                 amount_out,

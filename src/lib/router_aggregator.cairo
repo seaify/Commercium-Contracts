@@ -8,10 +8,10 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.interfaces.IRouter import IAlpha_router, IJedi_router, ISith_router, ITenK_router
-from src.interfaces.IFactory import IAlpha_factory, IJedi_factory
-from src.interfaces.IPool import IAlpha_pool, IJedi_pool
+from src.interfaces.i_empiric_oracle import IEmpiric_oracle
+from src.interfaces.i_router import IAlpha_router, IJedi_router, ISith_router, ITenK_router
+from src.interfaces.i_factory import IAlpha_factory, IJedi_factory
+from src.interfaces.i_pool import IAlpha_pool, IJedi_pool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
 from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK)
 

@@ -9,7 +9,7 @@ from starkware.cairo.common.usort import usort
 from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
+from src.interfaces.i_empiric_oracle import IEmpiric_oracle
 from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE
 from src.lib.router_aggregator import RouterAggregator, Feed, price_feed, routers, router_index_len
