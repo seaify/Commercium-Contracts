@@ -58,8 +58,9 @@ struct Edge {
 //
 
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt, _router_aggregator: felt) {
     Ownable.initializer(_owner);
+    router_aggregator.write(_router_aggregator);
     return ();
 }
 
@@ -827,15 +828,6 @@ func construct_token_arr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 //
 // Admin
 //
-
-@external
-func set_router_aggregator{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _new_router_aggregator_address: felt
-) {
-    Ownable.assert_only_owner();
-    router_aggregator.write(_new_router_aggregator_address);
-    return ();
-}
 
 @external
 func set_high_liq_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

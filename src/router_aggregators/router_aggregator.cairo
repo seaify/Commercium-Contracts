@@ -9,7 +9,7 @@ from starkware.cairo.common.usort import usort
 from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.i_empiric_oracle import IEmpiric_oracle
+from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE
 from src.lib.router_aggregator import RouterAggregator, Feed, price_feed, routers, router_index_len
@@ -115,7 +115,7 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     alloc_locals;
 
     let (feed: Feed) = price_feed.read(_token);
-    let (price, decimals, _, _) = IEmpiric_oracle.get_value(feed.address, feed.key, 0);
+    let (price, decimals, _, _) = IEmpiricOracle.get_value(feed.address, feed.key, 0);
 
     // IF EMPIRIC INTORDUCES DIFFERENT DECIMALS, WE HAVE TO DO A TRANSFORMATION HERE
 

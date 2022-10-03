@@ -1,6 +1,9 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.router_aggregator import Feed
+from src.lib.utils import Router, Liquidity
+
 
 @contract_interface
 namespace IRouterAggregator {

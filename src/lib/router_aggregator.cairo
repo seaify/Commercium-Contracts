@@ -8,7 +8,6 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.i_empiric_oracle import IEmpiric_oracle
 from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITenKRouter
 from src.interfaces.i_factory import IAlpha_factory, IJedi_factory
 from src.interfaces.i_pool import IAlpha_pool, IJedi_pool

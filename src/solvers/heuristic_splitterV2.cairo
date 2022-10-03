@@ -25,8 +25,8 @@ func router_aggregator() -> (router_aggregator_address: felt) {
 //
 
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
-    Ownable.initializer(_owner);
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_router_aggregator: felt) {
+    router_aggregator.write(_router_aggregator);
     return ();
 }
 
@@ -81,18 +81,6 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         amounts_len=final_routers_len,
         amounts=amounts,
     );
-}
-
-//
-// Admin
-//
-
-@external
-func set_router_aggregator{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router_aggregator: felt
-) {
-    router_aggregator.write(_router_aggregator);
-    return ();
 }
 
 //

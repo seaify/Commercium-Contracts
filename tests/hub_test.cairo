@@ -21,7 +21,7 @@ from starkware.cairo.common.uint256 import (
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.lib.constants import MAX_FELT, JediSwap, SithSwap, TenK
-from src.interfaces.i_router_aggregator import IRouter_aggregator
+from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.interfaces.i_solver import ISolver
 from src.interfaces.i_spf_solver import ISpfSolver
 from src.interfaces.i_solver_registry import ISolverRegistry
@@ -29,6 +29,7 @@ from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_router import IJediRouter, ISithRouter
 from src.interfaces.i_hub import IHub
+from src.lib.utils import Router, Path
 
 const Vertices = 6;
 const Edges = 21;
@@ -176,27 +177,27 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
     // Add newly created routers to router aggregator
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_proxy_address) %}
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
-    IRouter_aggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
+    IRouterAggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
+    IRouterAggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
+    IRouterAggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
 
     // Set Price feeds at the Router
-    IRouter_aggregator.set_global_price(
+    IRouterAggregator.set_global_price(
         router_aggregator_proxy_address, ETH, 28556963469423460, mock_oracle_address
     );
-    IRouter_aggregator.set_global_price(
+    IRouterAggregator.set_global_price(
         router_aggregator_proxy_address, USDC, 8463218501920060260, mock_oracle_address
     );
-    //IRouter_aggregator.set_global_price(
+    //IRouterAggregator.set_global_price(
     //    router_aggregator_proxy_address, USDT, 8463218574934504292, mock_oracle_address
     //);
-    IRouter_aggregator.set_global_price(
+    IRouterAggregator.set_global_price(
         router_aggregator_proxy_address, DAI, 28254602066752356, mock_oracle_address
     );
-    //IRouter_aggregator.set_global_price(
+    //IRouterAggregator.set_global_price(
     //    router_aggregator_proxy_address, shitcoin1, 99234898239, mock_oracle_address
     //);
-    //IRouter_aggregator.set_global_price(
+    //IRouterAggregator.set_global_price(
     //    router_aggregator_proxy_address, shitcoin2, 23674728373, mock_oracle_address
     //);
     %{ stop_prank_callable() %}
@@ -204,17 +205,17 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Deploy Solvers
     local solver1_address: felt;
     %{
-        context.solver1_address = deploy_contract("./src/solvers/single_swap_solver.cairo", []).contract_address 
+        context.solver1_address = deploy_contract("./src/solvers/single_swap_solver.cairo", [ids.router_aggregator_proxy_address]).contract_address 
         ids.solver1_address = context.solver1_address
     %}
     local solver2_address: felt;
     %{
-        context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0]).contract_address 
+        context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0,ids.router_aggregator_proxy_address]).contract_address 
         ids.solver2_address = context.solver2_address
     %}
     local solver3_address: felt;
     %{
-        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV2.cairo", [ids.public_key_0]).contract_address 
+        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV2.cairo", [ids.router_aggregator_proxy_address]).contract_address 
         ids.solver3_address = context.solver3_address
     %}
 
@@ -227,17 +228,6 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ISpfSolver.set_high_liq_tokens(solver2_address, 2, USDC);
     %{ stop_prank_callable() %}
 
-    // Set router_aggregator for solver
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver1_address) %}
-    ISolver.set_router_aggregator(solver1_address, router_aggregator_proxy_address);
-    %{ stop_prank_callable() %}
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address) %}
-    ISolver.set_router_aggregator(solver2_address, router_aggregator_proxy_address);
-    %{ stop_prank_callable() %}
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver3_address) %}
-    ISolver.set_router_aggregator(solver3_address, router_aggregator_proxy_address);
-    %{ stop_prank_callable() %}
-
     // Add solver to solver_registry
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver_registry_address) %}
     ISolverRegistry.set_solver(solver_registry_address, 1, solver1_address);
@@ -248,7 +238,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-//@external
+@external
 func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -269,7 +259,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (_amount_out: Uint256) = IHub.get_solver_amount(hub_address, amount_to_trade, ETH, USDC, 1);
+    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, USDC, 1);
     %{ print("Get_out amount: ",ids._amount_out.low) %}
 
     // Allow hub to take tokens
@@ -279,12 +269,12 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     // Execute Solver via Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_with_solver(
+    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
         hub_address,
-        _token_in=ETH,
-        _token_out=USDC,
         _amount_in=amount_to_trade,
         _min_amount_out=_amount_out,
+        _token_in=ETH,
+        _token_out=USDC,
         _to=public_key_0,
         _solver_id=1,
     );
@@ -319,7 +309,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (amount_out: Uint256) = IHub.get_solver_amount(hub_address, amount_to_trade, ETH, DAI, 2);
+    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     // Allow hub to take tokens
@@ -345,7 +335,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return ();
 }
 
-//@external
+@external
 func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -366,7 +356,7 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (amount_out: Uint256) = IHub.get_solver_amount(hub_address, amount_to_trade, ETH, USDC, 3);
+    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, USDC, 3);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     // Allow hub to take tokens
@@ -378,10 +368,10 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
     let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
         hub_address,
-        _token_in=ETH,
-        _token_out=USDC,
         _amount_in=amount_to_trade,
         _min_amount_out=amount_out,
+        _token_in=ETH,
+        _token_out=USDC,
         _to=public_key_0,
         _solver_id=3,
     );
@@ -392,6 +382,7 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     return ();
 }
 
+//@external
 func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -424,7 +415,7 @@ func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
         amounts_len: felt,
         amounts: felt*,
         amount_out: Uint256
-    ) = i_hub.get_amount_and_path_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
+    ) = IHub.get_amount_and_path_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
     
     return ();
 }
@@ -463,18 +454,17 @@ func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     // Get amount out
     // Using custom interface
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.get_solver_amount(
+    let (received_amount: Uint256) = IHub.get_amount_out_with_solver(
         hub_address, _amount_in=amount_to_trade, _token_in=ETH, _token_out=USDC, _solver_id=1
     );
 
     // Using uni conform interface
-    let (_, uni_view_amounts: Uint256*) = IHub.get_amounts_out(
-        hub_address, amountIn=amount_to_trade, ETH, USDC
+    let (return_amount: Uint256) = IHub.get_amount_out(
+        hub_address, amount_to_trade, ETH, DAI
     );
     %{ stop_prank_callable() %}
 
-    assert uni_view_amounts[1] = received_amount;
-    %{ print("received_amount: ",ids.received_amount.low) %}
+    %{ print("received_amount: ",ids.return_amount.low) %}
 
     return ();
 }

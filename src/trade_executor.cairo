@@ -17,8 +17,6 @@ from src.lib.router_aggregator import RouterAggregator
 
 from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_router import (IJediRouter, IAlphaRouter, ISithRouter, ITenKRouter)
-from src.interfaces.i_factory import IAlphaFactory
-from src.interfaces.i_pool import IAlphaPool
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
 
 @view

@@ -31,6 +31,11 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         amounts_len: felt,
         amounts: felt*,
     ) {
+    alloc_locals;
+
+    let (routers: Router*) = alloc();
+    let (path: Path*) = alloc();
+    let (amounts: felt*) = alloc();
 
     return (1, routers, 1, path, 1, amounts);
 }

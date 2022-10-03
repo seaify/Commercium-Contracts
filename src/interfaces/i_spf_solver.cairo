@@ -1,6 +1,8 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from src.lib.utils import Router
+from src.lib.utils import Path
 
 @contract_interface
 namespace ISpfSolver {
@@ -12,9 +14,6 @@ namespace ISpfSolver {
         amounts_len: felt,
         amounts: felt*,
     ) {
-    }
-
-    func set_router_aggregator(_new_router_aggregator_address: felt) {
     }
 
     func set_high_liq_tokens(_index: felt, _high_liq_tokens: felt) {
