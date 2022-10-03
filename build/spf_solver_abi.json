@@ -70,6 +70,10 @@
             {
                 "name": "_owner",
                 "type": "felt"
+            },
+            {
+                "name": "_router_aggregator",
+                "type": "felt"
             }
         ],
         "name": "constructor",
@@ -119,17 +123,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_new_router_aggregator_address",
-                "type": "felt"
-            }
-        ],
-        "name": "set_router_aggregator",
-        "outputs": [],
         "type": "function"
     },
     {

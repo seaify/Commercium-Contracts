@@ -12,7 +12,7 @@ from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE
-from src.lib.router_aggregator import RouterAggregator, Feed, price_feed, routers, router_index_len
+from src.lib.router_aggregator import (RouterAggregator, Feed, price_feed, routers, router_index_len, top_routers, top_router_index_len)
 
 //
 // Views
@@ -56,6 +56,24 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
         _token_out: felt
     ) -> (amount_out: Uint256, router: Router) {
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_router(
+        _amount_in,
+        _token_in,
+        _token_out,
+        _best_amount=Uint256(0, 0),
+        _router=Router(0, 0),
+        _counter=0,
+    );
+
+    return (res_amount, res_router);
+}
+
+@view
+func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (amount_out: Uint256, router: Router) {
+    let (res_amount: Uint256, res_router) = RouterAggregator.find_best_top_router(
         _amount_in,
         _token_in,
         _token_out,
@@ -191,6 +209,47 @@ func remove_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     routers.write(_index, last_router);
     routers.write(router_len, Router(0, 0));
     router_index_len.write(router_len - 1);
+    // EMIT REMOVE EVENT
+    return ();
+}
+
+@external
+func add_top_router{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_router_address: felt, _router_type: felt){
+    Ownable.assert_only_owner();
+    let (router_len) = top_router_index_len.read();
+    top_routers.write(router_len, Router(_router_address, _router_type));
+    top_router_index_len.write(router_len + 1);
+    // EMIT ADD EVENT
+    return ();
+}
+
+@external
+func update_top_router{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(_router_address: felt, _router_type: felt, id: felt){
+    Ownable.assert_only_owner();
+    let (router_len) = top_router_index_len.read();
+    let is_under_len = is_le_felt(id,router_len);
+    assert is_under_len = 1;
+    top_routers.write(id, Router(_router_address, _router_type));
+    //EMIT ADD EVENT
+    return();
+}
+
+@external
+func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) {
+    Ownable.assert_only_owner();
+    let (router_len) = router_index_len.read();
+    let (last_router: Router) = top_routers.read(router_len);
+    top_routers.write(_index, last_router);
+    top_routers.write(router_len, Router(0, 0));
+    top_router_index_len.write(router_len - 1);
     // EMIT REMOVE EVENT
     return ();
 }

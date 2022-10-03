@@ -68,6 +68,17 @@
     {
         "inputs": [
             {
+                "name": "_router_aggregator",
+                "type": "felt"
+            }
+        ],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
                 "name": "_amount_in",
                 "type": "Uint256"
             },
@@ -108,17 +119,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "_router_aggregator",
-                "type": "felt"
-            }
-        ],
-        "name": "set_router_aggregator",
-        "outputs": [],
         "type": "function"
     }
 ]
