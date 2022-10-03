@@ -9,7 +9,7 @@ from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.i_empiric_oracle import IEmpiric_oracle
-from src.interfaces.i_router import IAlpha_router, IJedi_router, ISith_router, ITenK_router
+from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITenKRouter
 from src.interfaces.i_factory import IAlpha_factory, IJedi_factory
 from src.interfaces.i_pool import IAlpha_pool, IJedi_pool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
@@ -157,16 +157,16 @@ namespace RouterAggregator {
         if (_router.type == JediSwap) {
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            let (amounts_len: felt, amounts: Uint256*) = IJedi_router.get_amounts_out(
+            let (amounts_len: felt, amounts: Uint256*) = IJediRouter.get_amounts_out(
                 _router.address, _amount_in, 2, path
             );
             return (amounts[1],);
         }
         if (_router.type == AlphaRoad){
-            let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
+            let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
             let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
             let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlpha_pool.getReserves(pair_address);
-            let (amount_token_0: Uint256) = IAlpha_router.quote(
+            let (amount_token_0: Uint256) = IAlphaRouter.quote(
                 _router.address,
                 _amount_in, 
                 reserve_token_0, 
@@ -178,7 +178,7 @@ namespace RouterAggregator {
             return (amount_token_0,);
         }
         if (_router.type == SithSwap) {
-            let (amount_out: Uint256, _) = ISith_router.getAmountOut(
+            let (amount_out: Uint256, _) = ISithRouter.getAmountOut(
                 _router.address, 
                 _amount_in, 
                 _token_in,
@@ -189,7 +189,7 @@ namespace RouterAggregator {
         if (_router.type == TenK) {
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            let (amounts_len: felt, amounts: Uint256*) = ITenK_router.getAmountsOut(
+            let (amounts_len: felt, amounts: Uint256*) = ITenKRouter.getAmountsOut(
                 _router.address, _amount_in, 2, path
             );
             return (amounts[1],);
@@ -215,7 +215,7 @@ namespace RouterAggregator {
             let (path: felt*) = alloc();
             assert path[0] = _token_in;
             assert path[1] = _token_out;
-            let (amounts_len: felt, amounts: Uint256*) = IJedi_router.get_amounts_in(
+            let (amounts_len: felt, amounts: Uint256*) = IJediRouter.get_amounts_in(
                 _router.address, _amount_out, 2, path
             );
             return (amounts[0],);
@@ -250,7 +250,7 @@ namespace RouterAggregator {
         alloc_locals;
 
         if (_router.type == JediSwap) {
-            let (factory_address: felt) = IJedi_router.factory(_router.address);
+            let (factory_address: felt) = IJediRouter.factory(_router.address);
             let (pair_address: felt) = IJedi_factory.get_pair(factory_address,_token_in,_token_out);
             let (local reserve0: Uint256,local reserve1: Uint256,_) = IJedi_pool.get_reserves(pair_address);
             let (token0) = IJedi_pool.token0(pair_address);
@@ -261,7 +261,7 @@ namespace RouterAggregator {
             }
         } 
         if (_router.type == AlphaRoad) {
-            let (factory_address: felt) = IAlpha_router.getFactory(_router.address);
+            let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
             let (pair_address: felt) = IAlpha_factory.getPool(factory_address,_token_in,_token_out);
             let (local reserve0: Uint256,local reserve1: Uint256) = IAlpha_pool.getReserves(pair_address);
             let (token0) = IAlpha_pool.token0(pair_address);

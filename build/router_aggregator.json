@@ -12783,84 +12783,84 @@
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IAlpha_router": {
+            "src.interfaces.i_router.IAlphaRouter": {
                 "type": "namespace"
             },
-            "src.interfaces.i_router.IAlpha_router.ADDLIQUIDITY_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.ADDLIQUIDITY_SELECTOR": {
                 "type": "const",
                 "value": 1786929337764331755288631088384162565804011657876312230156914670942513011210
             },
-            "src.interfaces.i_router.IAlpha_router.Args": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.Args",
+            "src.interfaces.i_router.IAlphaRouter.Args": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.GETFACTORY_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.GETFACTORY_SELECTOR": {
                 "type": "const",
                 "value": 1398347236525453617119732714544395438038703363453746266606119774772655272361
             },
-            "src.interfaces.i_router.IAlpha_router.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.ImplicitArgs",
+            "src.interfaces.i_router.IAlphaRouter.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.QUOTE_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.QUOTE_SELECTOR": {
                 "type": "const",
                 "value": 1602234863239929103146996131120769161547061307423597441505064026012741843711
             },
-            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITYQUOTEBYPOOL_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.REMOVELIQUIDITYQUOTEBYPOOL_SELECTOR": {
                 "type": "const",
                 "value": 650478413380129456635829560829568936849964451764888867598179241405869867774
             },
-            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITYQUOTE_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.REMOVELIQUIDITYQUOTE_SELECTOR": {
                 "type": "const",
                 "value": 477759646189946434215406752054746367905277328091943408875251029685900577768
             },
-            "src.interfaces.i_router.IAlpha_router.REMOVELIQUIDITY_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.REMOVELIQUIDITY_SELECTOR": {
                 "type": "const",
                 "value": 579509000452441748561987543659273806280744713042676747900052335371877851386
             },
-            "src.interfaces.i_router.IAlpha_router.Return": {
+            "src.interfaces.i_router.IAlphaRouter.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IAlpha_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlphaRouter.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_router.IAlpha_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1245570219085329014176261566038427188720157448719795888519090757413574003847
             },
-            "src.interfaces.i_router.IAlpha_router.SWAPTOKENSFOREXACTTOKENS_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.SWAPTOKENSFOREXACTTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1651397250640202934028488220770713386002201807284424460985469595487432173851
             },
-            "src.interfaces.i_router.IAlpha_router.TRANSFEROWNERSHIP_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.TRANSFEROWNERSHIP_SELECTOR": {
                 "type": "const",
                 "value": 583453339648053255507186511820051151480363716848694991370856878234313202015
             },
-            "src.interfaces.i_router.IAlpha_router.UPDATEFACTORY_SELECTOR": {
+            "src.interfaces.i_router.IAlphaRouter.UPDATEFACTORY_SELECTOR": {
                 "type": "const",
                 "value": 854410833810253915887022258793707410678398161949341105625518895481528933123
             },
-            "src.interfaces.i_router.IAlpha_router.alloc": {
+            "src.interfaces.i_router.IAlphaRouter.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IAlpha_router.call_contract": {
+            "src.interfaces.i_router.IAlphaRouter.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory": {
                 "decorators": [],
                 "pc": 859,
                 "type": "function"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.Args": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.Args",
+            "src.interfaces.i_router.IAlphaRouter.getFactory.Args": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -12870,8 +12870,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.ImplicitArgs",
+            "src.interfaces.i_router.IAlphaRouter.getFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -12885,17 +12885,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.Return": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.Return": {
                 "cairo_type": "(factory_address: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.__calldata_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12908,9 +12908,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_actual_size": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12923,9 +12923,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_arg_factory_address": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_arg_factory_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_arg_factory_address",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_arg_factory_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12938,9 +12938,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12961,9 +12961,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.__temp93": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.__temp93": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.__temp93",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.__temp93",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12976,9 +12976,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.calldata_ptr_start": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -12999,9 +12999,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.contract_address": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.contract_address",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13014,9 +13014,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.range_check_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13029,9 +13029,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.retdata": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.retdata",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13044,9 +13044,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.retdata_size": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.retdata_size",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13059,9 +13059,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.getFactory.syscall_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.getFactory.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.getFactory.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.getFactory.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13082,21 +13082,21 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.library_call": {
+            "src.interfaces.i_router.IAlphaRouter.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IAlpha_router.memcpy": {
+            "src.interfaces.i_router.IAlphaRouter.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IAlpha_router.quote": {
+            "src.interfaces.i_router.IAlphaRouter.quote": {
                 "decorators": [],
                 "pc": 879,
                 "type": "function"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.Args": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.Args",
+            "src.interfaces.i_router.IAlphaRouter.quote.Args": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.Args",
                 "members": {
                     "amount_token_0": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -13118,8 +13118,8 @@
                 "size": 7,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.ImplicitArgs",
+            "src.interfaces.i_router.IAlphaRouter.quote.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13133,17 +13133,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.Return": {
+            "src.interfaces.i_router.IAlphaRouter.quote.Return": {
                 "cairo_type": "(amount_token_0: starkware.cairo.common.uint256.Uint256)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IAlphaRouter.quote.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__calldata_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13180,9 +13180,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__calldata_tmp": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13211,9 +13211,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__return_value_actual_size": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13226,9 +13226,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__return_value_arg_amount_token_0": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__return_value_arg_amount_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_arg_amount_token_0",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__return_value_arg_amount_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13241,9 +13241,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__return_value_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13264,9 +13264,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__temp94": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__temp94": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__temp94",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__temp94",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13279,9 +13279,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.__temp95": {
+            "src.interfaces.i_router.IAlphaRouter.quote.__temp95": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.__temp95",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.__temp95",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13294,9 +13294,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.amount_token_0": {
+            "src.interfaces.i_router.IAlphaRouter.quote.amount_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.amount_token_0",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.amount_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13309,9 +13309,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.calldata_ptr_start": {
+            "src.interfaces.i_router.IAlphaRouter.quote.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13332,9 +13332,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.contract_address": {
+            "src.interfaces.i_router.IAlphaRouter.quote.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.contract_address",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13347,9 +13347,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.range_check_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.quote.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13362,9 +13362,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.reserve_token_0": {
+            "src.interfaces.i_router.IAlphaRouter.quote.reserve_token_0": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.reserve_token_0",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.reserve_token_0",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13377,9 +13377,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.reserve_token_1": {
+            "src.interfaces.i_router.IAlphaRouter.quote.reserve_token_1": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.reserve_token_1",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.reserve_token_1",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13392,9 +13392,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.retdata": {
+            "src.interfaces.i_router.IAlphaRouter.quote.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.retdata",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13407,9 +13407,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.retdata_size": {
+            "src.interfaces.i_router.IAlphaRouter.quote.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.retdata_size",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13422,9 +13422,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IAlpha_router.quote.syscall_ptr": {
+            "src.interfaces.i_router.IAlphaRouter.quote.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IAlpha_router.quote.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IAlphaRouter.quote.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13445,84 +13445,84 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router": {
+            "src.interfaces.i_router.IJediRouter": {
                 "type": "namespace"
             },
-            "src.interfaces.i_router.IJedi_router.Args": {
-                "full_name": "src.interfaces.i_router.IJedi_router.Args",
+            "src.interfaces.i_router.IJediRouter.Args": {
+                "full_name": "src.interfaces.i_router.IJediRouter.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.FACTORY_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.FACTORY_SELECTOR": {
                 "type": "const",
                 "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
             },
-            "src.interfaces.i_router.IJedi_router.GET_AMOUNTS_IN_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_AMOUNTS_IN_SELECTOR": {
                 "type": "const",
                 "value": 717090642240829889410633465689384004503418412794176969541863322742007450725
             },
-            "src.interfaces.i_router.IJedi_router.GET_AMOUNTS_OUT_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_AMOUNTS_OUT_SELECTOR": {
                 "type": "const",
                 "value": 1544114163115011815335571033296884160831958766777219908207586860250867652764
             },
-            "src.interfaces.i_router.IJedi_router.GET_AMOUNT_IN_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_AMOUNT_IN_SELECTOR": {
                 "type": "const",
                 "value": 1369314955784310940486616110116205110380568797587200238122714365430329737222
             },
-            "src.interfaces.i_router.IJedi_router.GET_AMOUNT_OUT_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_AMOUNT_OUT_SELECTOR": {
                 "type": "const",
                 "value": 985351602711163636936891036462748731517852321990405299395721200665734703770
             },
-            "src.interfaces.i_router.IJedi_router.GET_POOL_STATS_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_POOL_STATS_SELECTOR": {
                 "type": "const",
                 "value": 919685578388693842969456998838892869826956689199637724149505276692272720754
             },
-            "src.interfaces.i_router.IJedi_router.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.i_router.IJedi_router.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IJedi_router.ImplicitArgs",
+            "src.interfaces.i_router.IJediRouter.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJediRouter.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.Return": {
+            "src.interfaces.i_router.IJediRouter.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IJedi_router.SET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.SET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 385827236906745258426684796102845689672024359440920269358901198005285598390
             },
-            "src.interfaces.i_router.IJedi_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJediRouter.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_router.IJedi_router.SWAP_EXACT_TOKENS_FOR_TOKENS_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.SWAP_EXACT_TOKENS_FOR_TOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1426565999849372202067242202088433764048928624912224385906297528280239424972
             },
-            "src.interfaces.i_router.IJedi_router.SWAP_TOKENS_FOR_EXACT_TOKENS_SELECTOR": {
+            "src.interfaces.i_router.IJediRouter.SWAP_TOKENS_FOR_EXACT_TOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1670990928140491877826167847134796336079252006762544052648932373014744390317
             },
-            "src.interfaces.i_router.IJedi_router.alloc": {
+            "src.interfaces.i_router.IJediRouter.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IJedi_router.call_contract": {
+            "src.interfaces.i_router.IJediRouter.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IJedi_router.factory": {
+            "src.interfaces.i_router.IJediRouter.factory": {
                 "decorators": [],
                 "pc": 839,
                 "type": "function"
             },
-            "src.interfaces.i_router.IJedi_router.factory.Args": {
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.Args",
+            "src.interfaces.i_router.IJediRouter.factory.Args": {
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.Args",
                 "members": {
                     "contract_address": {
                         "cairo_type": "felt",
@@ -13532,8 +13532,8 @@
                 "size": 1,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.factory.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.ImplicitArgs",
+            "src.interfaces.i_router.IJediRouter.factory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13547,17 +13547,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.factory.Return": {
+            "src.interfaces.i_router.IJediRouter.factory.Return": {
                 "cairo_type": "(address: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IJedi_router.factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJediRouter.factory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.i_router.IJedi_router.factory.__calldata_ptr": {
+            "src.interfaces.i_router.IJediRouter.factory.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13570,9 +13570,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.__return_value_actual_size": {
+            "src.interfaces.i_router.IJediRouter.factory.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13585,9 +13585,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.__return_value_arg_address": {
+            "src.interfaces.i_router.IJediRouter.factory.__return_value_arg_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_arg_address",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.__return_value_arg_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13600,9 +13600,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.__return_value_ptr": {
+            "src.interfaces.i_router.IJediRouter.factory.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13623,9 +13623,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.__temp92": {
+            "src.interfaces.i_router.IJediRouter.factory.__temp92": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.__temp92",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.__temp92",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13638,9 +13638,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.calldata_ptr_start": {
+            "src.interfaces.i_router.IJediRouter.factory.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13661,9 +13661,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.contract_address": {
+            "src.interfaces.i_router.IJediRouter.factory.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.contract_address",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13676,9 +13676,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.range_check_ptr": {
+            "src.interfaces.i_router.IJediRouter.factory.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13691,9 +13691,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.retdata": {
+            "src.interfaces.i_router.IJediRouter.factory.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.retdata",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13706,9 +13706,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.retdata_size": {
+            "src.interfaces.i_router.IJediRouter.factory.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.retdata_size",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13721,9 +13721,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.factory.syscall_ptr": {
+            "src.interfaces.i_router.IJediRouter.factory.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.factory.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.factory.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13744,13 +13744,13 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out": {
                 "decorators": [],
                 "pc": 795,
                 "type": "function"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.Args": {
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.Args",
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.Args": {
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.Args",
                 "members": {
                     "amountIn": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -13772,8 +13772,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.ImplicitArgs",
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -13787,17 +13787,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.Return": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.Return": {
                 "cairo_type": "(amounts_len: felt, amounts: starkware.cairo.common.uint256.Uint256*)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 3
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13834,9 +13834,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr_copy": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_ptr_copy": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_ptr_copy",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_ptr_copy",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13849,9 +13849,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_tmp": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13864,9 +13864,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_actual_size": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13879,9 +13879,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_arg_amounts": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_arg_amounts",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13894,9 +13894,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts_len": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_arg_amounts_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_arg_amounts_len",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_arg_amounts_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13909,9 +13909,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_ptr": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13940,9 +13940,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp87": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp87": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp87",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp87",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13955,9 +13955,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp88": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp88": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp88",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp88",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13970,9 +13970,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp89": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp89": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp89",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp89",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -13985,9 +13985,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp90": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp90": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp90",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp90",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14000,9 +14000,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp91": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp91": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.__temp91",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.__temp91",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14015,9 +14015,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.amountIn": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.amountIn",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14030,9 +14030,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.calldata_ptr_start": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14053,9 +14053,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.contract_address": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.contract_address",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14068,9 +14068,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.path": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.path": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.path",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.path",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14083,9 +14083,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.path_len": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.path_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.path_len",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.path_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14098,9 +14098,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.range_check_ptr": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.range_check_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14129,9 +14129,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14144,9 +14144,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata_size": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.retdata_size",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14159,9 +14159,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.get_amounts_out.syscall_ptr": {
+            "src.interfaces.i_router.IJediRouter.get_amounts_out.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.IJedi_router.get_amounts_out.syscall_ptr",
+                "full_name": "src.interfaces.i_router.IJediRouter.get_amounts_out.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14182,68 +14182,68 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.IJedi_router.library_call": {
+            "src.interfaces.i_router.IJediRouter.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_router.IJedi_router.memcpy": {
+            "src.interfaces.i_router.IJediRouter.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ISith_router": {
+            "src.interfaces.i_router.ISithRouter": {
                 "type": "namespace"
             },
-            "src.interfaces.i_router.ISith_router.Args": {
-                "full_name": "src.interfaces.i_router.ISith_router.Args",
+            "src.interfaces.i_router.ISithRouter.Args": {
+                "full_name": "src.interfaces.i_router.ISithRouter.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ISith_router.GETAMOUNTOUT_SELECTOR": {
+            "src.interfaces.i_router.ISithRouter.GETAMOUNTOUT_SELECTOR": {
                 "type": "const",
                 "value": 1647692170524927662824575722070532547943707424812990004302008033607933887818
             },
-            "src.interfaces.i_router.ISith_router.GETAMOUNTSOUT_SELECTOR": {
+            "src.interfaces.i_router.ISithRouter.GETAMOUNTSOUT_SELECTOR": {
                 "type": "const",
                 "value": 1531259267651688670952745651083569853049302364518094342387488919399204396207
             },
-            "src.interfaces.i_router.ISith_router.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_router.ISithRouter.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.i_router.ISith_router.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.ISith_router.ImplicitArgs",
+            "src.interfaces.i_router.ISithRouter.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ISithRouter.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ISith_router.Return": {
+            "src.interfaces.i_router.ISithRouter.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.ISith_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ISithRouter.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_router.ISith_router.SWAPEXACTTOKENSFORTOKENSSIMPLE_SELECTOR": {
+            "src.interfaces.i_router.ISithRouter.SWAPEXACTTOKENSFORTOKENSSIMPLE_SELECTOR": {
                 "type": "const",
                 "value": 856040231041481176831004985476341677033328156757611315316932129639803229780
             },
-            "src.interfaces.i_router.ISith_router.alloc": {
+            "src.interfaces.i_router.ISithRouter.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ISith_router.call_contract": {
+            "src.interfaces.i_router.ISithRouter.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut": {
                 "decorators": [],
                 "pc": 908,
                 "type": "function"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.Args": {
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.Args",
+            "src.interfaces.i_router.ISithRouter.getAmountOut.Args": {
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.Args",
                 "members": {
                     "amount_in": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -14265,8 +14265,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.ImplicitArgs",
+            "src.interfaces.i_router.ISithRouter.getAmountOut.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -14280,17 +14280,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.Return": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.Return": {
                 "cairo_type": "(amount_out: starkware.cairo.common.uint256.Uint256, stable: felt)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 1
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_ptr": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14327,9 +14327,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_tmp": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14342,9 +14342,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_actual_size": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14357,9 +14357,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_amount_out": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_arg_amount_out": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_amount_out",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_arg_amount_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14372,9 +14372,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_stable": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_arg_stable": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_arg_stable",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_arg_stable",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14387,9 +14387,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_ptr": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14418,9 +14418,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__temp96": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__temp96": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__temp96",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__temp96",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14433,9 +14433,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.__temp97": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.__temp97": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.__temp97",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.__temp97",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14448,9 +14448,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.amount_in": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.amount_in": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.amount_in",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.amount_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14463,9 +14463,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.calldata_ptr_start": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14486,9 +14486,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.contract_address": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.contract_address",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14501,9 +14501,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.range_check_ptr": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.range_check_ptr",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14516,9 +14516,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.retdata": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.retdata",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14531,9 +14531,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.retdata_size": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.retdata_size",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14546,9 +14546,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.syscall_ptr": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.syscall_ptr",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14569,9 +14569,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.token_in": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.token_in": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.token_in",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.token_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14584,9 +14584,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.getAmountOut.token_out": {
+            "src.interfaces.i_router.ISithRouter.getAmountOut.token_out": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ISith_router.getAmountOut.token_out",
+                "full_name": "src.interfaces.i_router.ISithRouter.getAmountOut.token_out",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14599,60 +14599,60 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ISith_router.library_call": {
+            "src.interfaces.i_router.ISithRouter.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ISith_router.memcpy": {
+            "src.interfaces.i_router.ISithRouter.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ITenK_router": {
+            "src.interfaces.i_router.ITenKRouter": {
                 "type": "namespace"
             },
-            "src.interfaces.i_router.ITenK_router.Args": {
-                "full_name": "src.interfaces.i_router.ITenK_router.Args",
+            "src.interfaces.i_router.ITenKRouter.Args": {
+                "full_name": "src.interfaces.i_router.ITenKRouter.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ITenK_router.GETAMOUNTSOUT_SELECTOR": {
+            "src.interfaces.i_router.ITenKRouter.GETAMOUNTSOUT_SELECTOR": {
                 "type": "const",
                 "value": 1531259267651688670952745651083569853049302364518094342387488919399204396207
             },
-            "src.interfaces.i_router.ITenK_router.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.ITenK_router.ImplicitArgs",
+            "src.interfaces.i_router.ITenKRouter.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ITenKRouter.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ITenK_router.Return": {
+            "src.interfaces.i_router.ITenKRouter.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.ITenK_router.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ITenKRouter.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_router.ITenK_router.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
+            "src.interfaces.i_router.ITenKRouter.SWAPEXACTTOKENSFORTOKENS_SELECTOR": {
                 "type": "const",
                 "value": 1245570219085329014176261566038427188720157448719795888519090757413574003847
             },
-            "src.interfaces.i_router.ITenK_router.alloc": {
+            "src.interfaces.i_router.ITenKRouter.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ITenK_router.call_contract": {
+            "src.interfaces.i_router.ITenKRouter.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut": {
                 "decorators": [],
                 "pc": 936,
                 "type": "function"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.Args": {
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.Args",
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.Args": {
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.Args",
                 "members": {
                     "amountIn": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
@@ -14674,8 +14674,8 @@
                 "size": 5,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.ImplicitArgs": {
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.ImplicitArgs",
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.ImplicitArgs",
                 "members": {
                     "range_check_ptr": {
                         "cairo_type": "felt",
@@ -14689,17 +14689,17 @@
                 "size": 2,
                 "type": "struct"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.Return": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.Return": {
                 "cairo_type": "(amounts_len: felt, amounts: starkware.cairo.common.uint256.Uint256*)",
                 "type": "type_definition"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.SIZEOF_LOCALS": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 3
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14736,9 +14736,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr_copy": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_ptr_copy": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_ptr_copy",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_ptr_copy",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14751,9 +14751,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_tmp": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_tmp": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__calldata_tmp",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__calldata_tmp",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14766,9 +14766,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_actual_size": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_actual_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_actual_size",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_actual_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14781,9 +14781,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_arg_amounts": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_arg_amounts",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14796,9 +14796,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts_len": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_arg_amounts_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_arg_amounts_len",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_arg_amounts_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14811,9 +14811,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_ptr": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__return_value_ptr",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__return_value_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14842,9 +14842,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp100": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp100": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp100",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp100",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14857,9 +14857,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp101": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp101": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp101",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp101",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14872,9 +14872,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp102": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp102": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp102",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp102",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14887,9 +14887,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp98": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp98": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp98",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp98",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14902,9 +14902,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp99": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp99": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.__temp99",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.__temp99",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14917,9 +14917,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.amountIn": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.amountIn": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.amountIn",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.amountIn",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14932,9 +14932,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.calldata_ptr_start": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.calldata_ptr_start": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.calldata_ptr_start",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.calldata_ptr_start",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14955,9 +14955,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.contract_address": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.contract_address": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.contract_address",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.contract_address",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14970,9 +14970,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.path": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.path": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.path",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.path",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -14985,9 +14985,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.path_len": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.path_len": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.path_len",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.path_len",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15000,9 +15000,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.range_check_ptr": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.range_check_ptr": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.range_check_ptr",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.range_check_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15031,9 +15031,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.retdata": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.retdata",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15046,9 +15046,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata_size": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.retdata_size": {
                 "cairo_type": "felt",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.retdata_size",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.retdata_size",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15061,9 +15061,9 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.getAmountsOut.syscall_ptr": {
+            "src.interfaces.i_router.ITenKRouter.getAmountsOut.syscall_ptr": {
                 "cairo_type": "felt*",
-                "full_name": "src.interfaces.i_router.ITenK_router.getAmountsOut.syscall_ptr",
+                "full_name": "src.interfaces.i_router.ITenKRouter.getAmountsOut.syscall_ptr",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -15084,11 +15084,11 @@
                 ],
                 "type": "reference"
             },
-            "src.interfaces.i_router.ITenK_router.library_call": {
+            "src.interfaces.i_router.ITenKRouter.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_router.ITenK_router.memcpy": {
+            "src.interfaces.i_router.ITenKRouter.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
@@ -15159,6 +15159,10 @@
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
             },
+            "src.lib.router_aggregator.IAlphaRouter": {
+                "destination": "src.interfaces.i_router.IAlphaRouter",
+                "type": "alias"
+            },
             "src.lib.router_aggregator.IAlpha_factory": {
                 "destination": "src.interfaces.i_factory.IAlpha_factory",
                 "type": "alias"
@@ -15167,12 +15171,12 @@
                 "destination": "src.interfaces.i_pool.IAlpha_pool",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IAlpha_router": {
-                "destination": "src.interfaces.i_router.IAlpha_router",
-                "type": "alias"
-            },
             "src.lib.router_aggregator.IEmpiric_oracle": {
                 "destination": "src.interfaces.i_empiric_oracle.IEmpiric_oracle",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.IJediRouter": {
+                "destination": "src.interfaces.i_router.IJediRouter",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IJedi_factory": {
@@ -15183,16 +15187,12 @@
                 "destination": "src.interfaces.i_pool.IJedi_pool",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IJedi_router": {
-                "destination": "src.interfaces.i_router.IJedi_router",
+            "src.lib.router_aggregator.ISithRouter": {
+                "destination": "src.interfaces.i_router.ISithRouter",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.ISith_router": {
-                "destination": "src.interfaces.i_router.ISith_router",
-                "type": "alias"
-            },
-            "src.lib.router_aggregator.ITenK_router": {
-                "destination": "src.interfaces.i_router.ITenK_router",
+            "src.lib.router_aggregator.ITenKRouter": {
+                "destination": "src.interfaces.i_router.ITenKRouter",
                 "type": "alias"
             },
             "src.lib.router_aggregator.JediSwap": {

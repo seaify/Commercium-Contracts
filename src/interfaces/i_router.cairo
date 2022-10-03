@@ -4,7 +4,7 @@ from starkware.cairo.common.uint256 import Uint256
 from src.lib.utils import SithSwapRoutes
 
 @contract_interface
-namespace IJedi_router {
+namespace IJediRouter {
     func swap_exact_tokens_for_tokens(
             amountIn: Uint256,
             amountOutMin: Uint256,
@@ -69,7 +69,7 @@ namespace IJedi_router {
 }
 
 @contract_interface
-namespace IAlpha_router {
+namespace IAlphaRouter {
     
     func getFactory() -> (factory_address: felt){
     }
@@ -138,7 +138,7 @@ namespace IAlpha_router {
 }
 
 @contract_interface
-namespace ISith_router {
+namespace ISithRouter {
     func swapExactTokensForTokensSimple(
             amount_in: Uint256,
             amount_out_min: Uint256,
@@ -173,7 +173,7 @@ namespace ISith_router {
 }
 
 @contract_interface
-namespace ITenK_router {
+namespace ITenKRouter {
 
     func swapExactTokensForTokens(
             amountIn: Uint256,

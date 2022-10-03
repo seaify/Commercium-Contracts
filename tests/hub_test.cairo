@@ -21,14 +21,14 @@ from starkware.cairo.common.uint256 import (
 from src.lib.array import Array
 from src.lib.utils import Utils
 from src.lib.constants import MAX_FELT, JediSwap, SithSwap, TenK
-from src.interfaces.IRouter_aggregator import IRouter_aggregator
-from src.interfaces.ISolver import ISolver
-from src.interfaces.ISpf_solver import ISpf_solver
-from src.interfaces.ISolver_registry import ISolver_registry
-from src.interfaces.IEmpiric_oracle import IEmpiric_oracle
-from src.interfaces.IERC20 import IERC20
-from src.interfaces.IRouter import IJedi_router, ISith_router
-from src.interfaces.IHub import IHub
+from src.interfaces.i_router_aggregator import IRouter_aggregator
+from src.interfaces.i_solver import ISolver
+from src.interfaces.i_spf_solver import ISpfSolver
+from src.interfaces.i_solver_registry import ISolverRegistry
+from src.interfaces.i_empiric_oracle import IEmpiricOracle
+from src.interfaces.i_erc20 import IERC20
+from src.interfaces.i_router import IJediRouter, ISithRouter
+from src.interfaces.i_hub import IHub
 
 const Vertices = 6;
 const Edges = 21;
@@ -161,17 +161,17 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Set Global Prices for Mock ERC20s in Mock_Price_Feed
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.mock_oracle_address) %}
     // ETH/USD, key: 28556963469423460
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 28556963469423460, 0, 1000 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 0, 1000 * base, 18);
     // USDC/USD, key: 8463218501920060260
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 8463218501920060260, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 0, 1 * base, 18);
     // USDT/USD, key: 8463218574934504292
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 8463218574934504292, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 0, 1 * base, 18);
     // DAI/USD, key: 28254602066752356
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 28254602066752356, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 0, 1 * base, 18);
     // Shitcoin1/USD, key: 99234898239
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 99234898239, 0, 10 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 0, 10 * base, 18);
     // Shitcoin2/USD, key: 23674728373
-    IEmpiric_oracle.set_token_price(mock_oracle_address, 23674728373, 0, 10 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 0, 10 * base, 18);
     %{ stop_prank_callable() %}
 
     // Add newly created routers to router aggregator
@@ -221,10 +221,10 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Configure SPF
     // Set high Liq tokens for spf_solver
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address) %}
-    ISpf_solver.set_high_liq_tokens(solver2_address, 0, ETH);
-    ISpf_solver.set_high_liq_tokens(solver2_address, 1, DAI);
-    //ISpf_solver.set_high_liq_tokens(solver2_address, 2, USDT);
-    ISpf_solver.set_high_liq_tokens(solver2_address, 2, USDC);
+    ISpfSolver.set_high_liq_tokens(solver2_address, 0, ETH);
+    ISpfSolver.set_high_liq_tokens(solver2_address, 1, DAI);
+    //ISpfSolver.set_high_liq_tokens(solver2_address, 2, USDT);
+    ISpfSolver.set_high_liq_tokens(solver2_address, 2, USDC);
     %{ stop_prank_callable() %}
 
     // Set router_aggregator for solver
@@ -240,9 +240,9 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
     // Add solver to solver_registry
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver_registry_address) %}
-    ISolver_registry.set_solver(solver_registry_address, 1, solver1_address);
-    ISolver_registry.set_solver(solver_registry_address, 2, solver2_address);
-    ISolver_registry.set_solver(solver_registry_address, 3, solver3_address);
+    ISolverRegistry.set_solver(solver_registry_address, 1, solver1_address);
+    ISolverRegistry.set_solver(solver_registry_address, 2, solver2_address);
+    ISolverRegistry.set_solver(solver_registry_address, 3, solver3_address);
     %{ stop_prank_callable() %}
 
     return ();
@@ -392,6 +392,43 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     return ();
 }
 
+func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    alloc_locals;
+
+    local public_key_0;
+    %{ ids.public_key_0 = context.public_key_0 %}
+
+    local hub_address;
+    %{ ids.hub_address = context.hub_address %}
+
+    local ETH;
+    %{ ids.ETH = context.ETH %}
+    local DAI;
+    %{ ids.DAI = context.DAI %}
+    local USDC;
+    %{ ids.USDC = context.USDC %}
+    local USDT;
+    %{ ids.USDT = context.USDT %}
+    local shitcoin1;
+    %{ ids.shitcoin1 = context.shitcoin1 %}
+    local shitcoin2;
+    %{ ids.shitcoin2 = context.shitcoin2 %}
+
+    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+
+    let (
+        routers_len: felt,
+        routers: Router*,
+        path_len: felt,
+        path: Path*,
+        amounts_len: felt,
+        amounts: felt*,
+        amount_out: Uint256
+    ) = i_hub.get_amount_and_path_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
+    
+    return ();
+}
+
 // @external
 func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
@@ -465,17 +502,17 @@ func create_jedi_router{syscall_ptr: felt*, range_check_ptr}(
     // shitcoin2 = 10$
 
     // Set Reserves
-    IJedi_router.set_reserves(router_address, shitcoin1, ETH, Uint256(10000 * base, 0), Uint256(100 * base, 0));  // 100,000
-    IJedi_router.set_reserves(router_address, shitcoin1, DAI, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, shitcoin1, ETH, Uint256(10000 * base, 0), Uint256(100 * base, 0));  // 100,000
+    IJediRouter.set_reserves(router_address, shitcoin1, DAI, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJedi_router.set_reserves(router_address, ETH, USDT, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
-    IJedi_router.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
-    IJedi_router.set_reserves(router_address, ETH, DAI, Uint256(10 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, ETH, USDT, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    IJediRouter.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(10 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJedi_router.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJedi_router.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
 
-    IJedi_router.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
@@ -530,12 +567,12 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     // USDC = 1$
     // shitcoin2 = 10$
 
-    IJedi_router.set_reserves(router_address, ETH, DAI, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
+    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
 
-    IJedi_router.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJedi_router.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
 
-    IJedi_router.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
@@ -580,18 +617,18 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     // USDC = 1$
     // shitcoin2 = 10$
 
-    IJedi_router.set_reserves(router_address, shitcoin1, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, shitcoin1, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJedi_router.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
-    IJedi_router.set_reserves(router_address, ETH, DAI, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    IJediRouter.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
 
-    IJedi_router.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJedi_router.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
 
-    IJedi_router.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
 
-    IJedi_router.set_reserves(router_address, shitcoin2, DAI, Uint256(10000 * base, 0), Uint256(100000 * base, 0));  // 100,000
-    IJedi_router.set_reserves(router_address, shitcoin2, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediRouter.set_reserves(router_address, shitcoin2, DAI, Uint256(10000 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    IJediRouter.set_reserves(router_address, shitcoin2, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin2) %}
