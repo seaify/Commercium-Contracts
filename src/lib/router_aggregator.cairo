@@ -12,7 +12,7 @@ from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITen
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
 from src.interfaces.i_pool import IAlphaPool, IJediPool, ISithPool, ITenKPool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
-from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK)
+from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap)
 
 struct Feed {
     key: felt,
@@ -233,6 +233,28 @@ namespace RouterAggregator {
                 _router.address, _amount_in, 2, path
             );
             return (amounts[1],);
+        }
+        if (_router.type == StarkSwap) {
+            let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
+            if (pair_address == 0) {
+                return (Uint256(0,0),);
+            }
+
+            let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1)
+            let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2)
+
+            let (token1: felt) = IStarkPool.TokenA(pair_address)
+
+            if (token1 == _token_in) {
+                let (amount_out: Uint256) = IStarkPair.getInputPrice(
+                    pair_address, _amount_in, reserve1, reserve2
+                );
+                return (amount_out,);
+            }
+            let (amount_out: Uint256) = IStarkPair.getInputPrice(
+                pair_address, _amount_in, reserve2, reserve1
+            );
+            return (amount_out,);
         } else {
             with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
                 assert 1 = 2;

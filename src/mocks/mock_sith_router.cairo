@@ -88,9 +88,9 @@ func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 @view
 func factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
-    let (address) = factory_address.read();
+    let (address_this) = get_contract_address();
 
-    return (address,);
+    return (address_this,);
 }
 
 @external
@@ -127,4 +127,25 @@ func swapExactTokensForTokensSimple{syscall_ptr: felt*, pedersen_ptr: HashBuilti
     let (amounts: Uint256*) = alloc();
     assert amounts[0] = amount_out;
     return (1, amounts);
+}
+
+//
+// FACTORY FUNCTIONS
+//
+
+func pairFor{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(token0: felt, token1: felt, stable: felt)->(pair:felt){
+    //We ignore stable for now
+    
+    //We missuse the reserves amounts to check if the pair exists
+    let (reserves_amount:Uint256) = get_reserves(token0,token1);
+    if(reserves_amount.low == 0){
+        return 0;
+    } 
+    //This address also acts as the pair contract
+    let (address_this) = get_contract_address()
+    return address_this;
 }

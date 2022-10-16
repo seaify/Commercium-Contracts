@@ -74,15 +74,6 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @view
-func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt, _token_out: felt
-) -> (reserve1: Uint256, reserve2: Uint256) {
-    let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
-
-    return (token_reserves.reserve_1, token_reserves.reserve_2);
-}
-
-@view
 func factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
     let (address) = factory_address.read();
 
@@ -122,4 +113,38 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     let (amounts: Uint256*) = alloc();
     assert amounts[0] = amount_out;
     return (1, amounts);
+}
+
+
+//
+// FACTORY FUNCTIONS
+//
+
+func getPool{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(token1: felt, token2: felt)->(pair:felt){
+    //We missuse the reserves amounts to check if the pair exists
+    let (reserves_amount:Uint256) = get_reserves(token1,token2);
+    if(reserves_amount.low == 0){
+        return 0;
+    } 
+    //This address also acts as the pair contract
+    let (address_this) = get_contract_address()
+    return address_this;
+}
+
+
+//
+// POOL FUNCTIONS
+//
+
+@view
+func getReserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token_in: felt, _token_out: felt
+) -> (reserve1: Uint256, reserve2: Uint256) {
+    let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
+
+    return (token_reserves.reserve_1, token_reserves.reserve_2);
 }

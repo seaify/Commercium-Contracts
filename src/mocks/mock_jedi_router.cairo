@@ -36,8 +36,8 @@ func factory_address() -> (address: felt) {
 
 @view
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, _token_in: felt, _token_out: felt
-) -> (amount_out: Uint256) {
+     _amount_in: Uint256, _token_in: felt, _token_out: felt
+    ) -> (amount_out: Uint256) {
     alloc_locals;
     let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(_token_in, _token_out);
 
@@ -94,9 +94,9 @@ func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 @view
 func factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
-    let (address) = factory_address.read();
+    let (address_this) = get_contract_address();
 
-    return (address,);
+    return (address_this,);
 }
 
 @external
