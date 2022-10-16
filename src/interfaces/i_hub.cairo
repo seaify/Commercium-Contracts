@@ -32,7 +32,10 @@ namespace IHub {
     ) {
     }
 
-    func get_amount_out(amountIn: Uint256, _token_in: felt, _token_out: felt) -> (amount: Uint256) {
+    func get_amount_out(
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt) -> (amount: Uint256) {
     }
 
     func get_multiple_solver_amounts(
@@ -45,7 +48,11 @@ namespace IHub {
     }
 
     func swap_exact_tokens_for_tokens(
-        _amountIn: Uint256, _amountOutMin: Uint256, _token_in: felt, _token_out: felt, _to: felt
+        _amount_in: Uint256, 
+        _amount_out_min: Uint256, 
+        _token_in: felt, 
+        _token_out: felt, 
+        _to: felt
     ) -> (amount_out: Uint256) {
     }
 

@@ -17,6 +17,7 @@ const JediSwap = 0;
 const AlphaRoad = 1;
 const SithSwap = 2;
 const TenK = 3;
+const StarkSwap = 4;
 
 
 //@view

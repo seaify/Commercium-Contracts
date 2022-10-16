@@ -4827,6 +4827,10 @@
                 "type": "const",
                 "value": 2
             },
+            "src.lib.constants.StarkSwap": {
+                "type": "const",
+                "value": 4
+            },
             "src.lib.constants.TenK": {
                 "type": "const",
                 "value": 3

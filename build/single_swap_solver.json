@@ -2319,89 +2319,222 @@
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IAlpha_factory": {
+            "src.interfaces.i_factory.IAlphaFactory": {
                 "type": "namespace"
             },
-            "src.interfaces.i_factory.IAlpha_factory.Args": {
-                "full_name": "src.interfaces.i_factory.IAlpha_factory.Args",
+            "src.interfaces.i_factory.IAlphaFactory.Args": {
+                "full_name": "src.interfaces.i_factory.IAlphaFactory.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_factory.IAlpha_factory.GETPOOL_SELECTOR": {
+            "src.interfaces.i_factory.IAlphaFactory.GETPOOL_SELECTOR": {
                 "type": "const",
                 "value": 913452321097840459620906965491631667865143333949285015030060970872642081353
             },
-            "src.interfaces.i_factory.IAlpha_factory.ImplicitArgs": {
-                "full_name": "src.interfaces.i_factory.IAlpha_factory.ImplicitArgs",
+            "src.interfaces.i_factory.IAlphaFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IAlphaFactory.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_factory.IAlpha_factory.Return": {
+            "src.interfaces.i_factory.IAlphaFactory.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_factory.IAlpha_factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IAlphaFactory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_factory.IAlpha_factory.alloc": {
+            "src.interfaces.i_factory.IAlphaFactory.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IAlpha_factory.call_contract": {
+            "src.interfaces.i_factory.IAlphaFactory.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IAlpha_factory.library_call": {
+            "src.interfaces.i_factory.IAlphaFactory.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IAlpha_factory.memcpy": {
+            "src.interfaces.i_factory.IAlphaFactory.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IJedi_factory": {
+            "src.interfaces.i_factory.IJediFactory": {
                 "type": "namespace"
             },
-            "src.interfaces.i_factory.IJedi_factory.Args": {
-                "full_name": "src.interfaces.i_factory.IJedi_factory.Args",
+            "src.interfaces.i_factory.IJediFactory.Args": {
+                "full_name": "src.interfaces.i_factory.IJediFactory.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_factory.IJedi_factory.GET_PAIR_SELECTOR": {
+            "src.interfaces.i_factory.IJediFactory.GET_PAIR_SELECTOR": {
                 "type": "const",
                 "value": 1361884049818391466621639291137266571310943900493453366512002203017825139028
             },
-            "src.interfaces.i_factory.IJedi_factory.ImplicitArgs": {
-                "full_name": "src.interfaces.i_factory.IJedi_factory.ImplicitArgs",
+            "src.interfaces.i_factory.IJediFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IJediFactory.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_factory.IJedi_factory.Return": {
+            "src.interfaces.i_factory.IJediFactory.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_factory.IJedi_factory.SIZEOF_LOCALS": {
+            "src.interfaces.i_factory.IJediFactory.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_factory.IJedi_factory.alloc": {
+            "src.interfaces.i_factory.IJediFactory.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IJedi_factory.call_contract": {
+            "src.interfaces.i_factory.IJediFactory.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IJedi_factory.library_call": {
+            "src.interfaces.i_factory.IJediFactory.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_factory.IJedi_factory.memcpy": {
+            "src.interfaces.i_factory.IJediFactory.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ISithFactory": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_factory.ISithFactory.Args": {
+                "full_name": "src.interfaces.i_factory.ISithFactory.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.ISithFactory.ISPAIR_SELECTOR": {
+                "type": "const",
+                "value": 376364162166151949156115527910156310914337853435916351293451165610750350298
+            },
+            "src.interfaces.i_factory.ISithFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.ISithFactory.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.ISithFactory.PAIRFOR_SELECTOR": {
+                "type": "const",
+                "value": 822747057647343436156385314075918362626494709665854928328082402402625418275
+            },
+            "src.interfaces.i_factory.ISithFactory.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_factory.ISithFactory.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_factory.ISithFactory.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ISithFactory.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ISithFactory.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ISithFactory.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.IStarkFactory": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_factory.IStarkFactory.Args": {
+                "full_name": "src.interfaces.i_factory.IStarkFactory.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.IStarkFactory.GETPAIR_SELECTOR": {
+                "type": "const",
+                "value": 1221262729450801860458445172230674312268302991778694548256355434648242063707
+            },
+            "src.interfaces.i_factory.IStarkFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.IStarkFactory.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.IStarkFactory.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_factory.IStarkFactory.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_factory.IStarkFactory.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.IStarkFactory.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.IStarkFactory.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.IStarkFactory.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ITenKFactory": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_factory.ITenKFactory.Args": {
+                "full_name": "src.interfaces.i_factory.ITenKFactory.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.ITenKFactory.GETPAIR_SELECTOR": {
+                "type": "const",
+                "value": 1221262729450801860458445172230674312268302991778694548256355434648242063707
+            },
+            "src.interfaces.i_factory.ITenKFactory.ImplicitArgs": {
+                "full_name": "src.interfaces.i_factory.ITenKFactory.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_factory.ITenKFactory.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_factory.ITenKFactory.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_factory.ITenKFactory.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ITenKFactory.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ITenKFactory.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_factory.ITenKFactory.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
@@ -2409,97 +2542,191 @@
                 "destination": "starkware.cairo.common.uint256.Uint256",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IAlpha_pool": {
+            "src.interfaces.i_pool.IAlphaPool": {
                 "type": "namespace"
             },
-            "src.interfaces.i_pool.IAlpha_pool.Args": {
-                "full_name": "src.interfaces.i_pool.IAlpha_pool.Args",
+            "src.interfaces.i_pool.IAlphaPool.Args": {
+                "full_name": "src.interfaces.i_pool.IAlphaPool.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_pool.IAlpha_pool.GETRESERVES_SELECTOR": {
+            "src.interfaces.i_pool.IAlphaPool.GETRESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1702419044747976007584230836122646470486578302666401771824479622279811552262
             },
-            "src.interfaces.i_pool.IAlpha_pool.ImplicitArgs": {
-                "full_name": "src.interfaces.i_pool.IAlpha_pool.ImplicitArgs",
+            "src.interfaces.i_pool.IAlphaPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IAlphaPool.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_pool.IAlpha_pool.Return": {
+            "src.interfaces.i_pool.IAlphaPool.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_pool.IAlpha_pool.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IAlphaPool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_pool.IAlpha_pool.TOKEN0_SELECTOR": {
+            "src.interfaces.i_pool.IAlphaPool.TOKEN0_SELECTOR": {
                 "type": "const",
                 "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
             },
-            "src.interfaces.i_pool.IAlpha_pool.alloc": {
+            "src.interfaces.i_pool.IAlphaPool.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IAlpha_pool.call_contract": {
+            "src.interfaces.i_pool.IAlphaPool.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IAlpha_pool.library_call": {
+            "src.interfaces.i_pool.IAlphaPool.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IAlpha_pool.memcpy": {
+            "src.interfaces.i_pool.IAlphaPool.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IJedi_pool": {
+            "src.interfaces.i_pool.IJediPool": {
                 "type": "namespace"
             },
-            "src.interfaces.i_pool.IJedi_pool.Args": {
-                "full_name": "src.interfaces.i_pool.IJedi_pool.Args",
+            "src.interfaces.i_pool.IJediPool.Args": {
+                "full_name": "src.interfaces.i_pool.IJediPool.Args",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_pool.IJedi_pool.GET_RESERVES_SELECTOR": {
+            "src.interfaces.i_pool.IJediPool.GET_RESERVES_SELECTOR": {
                 "type": "const",
                 "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
             },
-            "src.interfaces.i_pool.IJedi_pool.ImplicitArgs": {
-                "full_name": "src.interfaces.i_pool.IJedi_pool.ImplicitArgs",
+            "src.interfaces.i_pool.IJediPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IJediPool.ImplicitArgs",
                 "members": {},
                 "size": 0,
                 "type": "struct"
             },
-            "src.interfaces.i_pool.IJedi_pool.Return": {
+            "src.interfaces.i_pool.IJediPool.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
             },
-            "src.interfaces.i_pool.IJedi_pool.SIZEOF_LOCALS": {
+            "src.interfaces.i_pool.IJediPool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
             },
-            "src.interfaces.i_pool.IJedi_pool.TOKEN0_SELECTOR": {
+            "src.interfaces.i_pool.IJediPool.TOKEN0_SELECTOR": {
                 "type": "const",
                 "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
             },
-            "src.interfaces.i_pool.IJedi_pool.alloc": {
+            "src.interfaces.i_pool.IJediPool.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IJedi_pool.call_contract": {
+            "src.interfaces.i_pool.IJediPool.call_contract": {
                 "destination": "starkware.starknet.common.syscalls.call_contract",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IJedi_pool.library_call": {
+            "src.interfaces.i_pool.IJediPool.library_call": {
                 "destination": "starkware.starknet.common.syscalls.library_call",
                 "type": "alias"
             },
-            "src.interfaces.i_pool.IJedi_pool.memcpy": {
+            "src.interfaces.i_pool.IJediPool.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ISithPool": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_pool.ISithPool.Args": {
+                "full_name": "src.interfaces.i_pool.ISithPool.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.ISithPool.GETRESERVES_SELECTOR": {
+                "type": "const",
+                "value": 1702419044747976007584230836122646470486578302666401771824479622279811552262
+            },
+            "src.interfaces.i_pool.ISithPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.ISithPool.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.ISithPool.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_pool.ISithPool.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_pool.ISithPool.TOKEN0_SELECTOR": {
+                "type": "const",
+                "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
+            },
+            "src.interfaces.i_pool.ISithPool.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ISithPool.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ISithPool.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ISithPool.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ITenKPool": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_pool.ITenKPool.Args": {
+                "full_name": "src.interfaces.i_pool.ITenKPool.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.ITenKPool.GET_RESERVES_SELECTOR": {
+                "type": "const",
+                "value": 1715705677754146725544391220708589383422824993050994982749243481839397737234
+            },
+            "src.interfaces.i_pool.ITenKPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.ITenKPool.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.ITenKPool.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_pool.ITenKPool.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_pool.ITenKPool.TOKEN0_SELECTOR": {
+                "type": "const",
+                "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
+            },
+            "src.interfaces.i_pool.ITenKPool.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ITenKPool.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ITenKPool.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.ITenKPool.memcpy": {
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
@@ -2519,6 +2746,10 @@
                 "members": {},
                 "size": 0,
                 "type": "struct"
+            },
+            "src.interfaces.i_router.IAlphaRouter.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
             },
             "src.interfaces.i_router.IAlphaRouter.GETFACTORY_SELECTOR": {
                 "type": "const",
@@ -2674,6 +2905,10 @@
                 "size": 0,
                 "type": "struct"
             },
+            "src.interfaces.i_router.ISithRouter.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
+            },
             "src.interfaces.i_router.ISithRouter.GETAMOUNTOUT_SELECTOR": {
                 "type": "const",
                 "value": 1647692170524927662824575722070532547943707424812990004302008033607933887818
@@ -2720,6 +2955,49 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
+            "src.interfaces.i_router.IStarkRouter": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_router.IStarkRouter.Args": {
+                "full_name": "src.interfaces.i_router.IStarkRouter.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_router.IStarkRouter.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
+            },
+            "src.interfaces.i_router.IStarkRouter.ImplicitArgs": {
+                "full_name": "src.interfaces.i_router.IStarkRouter.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_router.IStarkRouter.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_router.IStarkRouter.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_router.IStarkRouter.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_router.IStarkRouter.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_router.IStarkRouter.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_router.IStarkRouter.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
             "src.interfaces.i_router.ITenKRouter": {
                 "type": "namespace"
             },
@@ -2728,6 +3006,10 @@
                 "members": {},
                 "size": 0,
                 "type": "struct"
+            },
+            "src.interfaces.i_router.ITenKRouter.FACTORY_SELECTOR": {
+                "type": "const",
+                "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
             },
             "src.interfaces.i_router.ITenKRouter.GETAMOUNTSOUT_SELECTOR": {
                 "type": "const",
@@ -2795,10 +3077,6 @@
             "src.interfaces.i_router_aggregator.IRouterAggregator.GET_ALL_ROUTERS_AND_AMOUNTS_SELECTOR": {
                 "type": "const",
                 "value": 1055041434692396921541409867421803162049518285711295672054607682863391179284
-            },
-            "src.interfaces.i_router_aggregator.IRouterAggregator.GET_ALL_ROUTERS_AND_LIQUIDITY_SELECTOR": {
-                "type": "const",
-                "value": 1073670106913225651422852345583780087560485434739790819325864515815978672137
             },
             "src.interfaces.i_router_aggregator.IRouterAggregator.GET_GLOBAL_PRICE_SELECTOR": {
                 "type": "const",
@@ -3264,6 +3542,10 @@
                 "type": "const",
                 "value": 2
             },
+            "src.lib.constants.StarkSwap": {
+                "type": "const",
+                "value": 4
+            },
             "src.lib.constants.TenK": {
                 "type": "const",
                 "value": 3
@@ -3299,32 +3581,48 @@
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
             },
+            "src.lib.router_aggregator.IAlphaFactory": {
+                "destination": "src.interfaces.i_factory.IAlphaFactory",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.IAlphaPool": {
+                "destination": "src.interfaces.i_pool.IAlphaPool",
+                "type": "alias"
+            },
             "src.lib.router_aggregator.IAlphaRouter": {
                 "destination": "src.interfaces.i_router.IAlphaRouter",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IAlpha_factory": {
-                "destination": "src.interfaces.i_factory.IAlpha_factory",
+            "src.lib.router_aggregator.IJediFactory": {
+                "destination": "src.interfaces.i_factory.IJediFactory",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IAlpha_pool": {
-                "destination": "src.interfaces.i_pool.IAlpha_pool",
+            "src.lib.router_aggregator.IJediPool": {
+                "destination": "src.interfaces.i_pool.IJediPool",
                 "type": "alias"
             },
             "src.lib.router_aggregator.IJediRouter": {
                 "destination": "src.interfaces.i_router.IJediRouter",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IJedi_factory": {
-                "destination": "src.interfaces.i_factory.IJedi_factory",
+            "src.lib.router_aggregator.ISithFactory": {
+                "destination": "src.interfaces.i_factory.ISithFactory",
                 "type": "alias"
             },
-            "src.lib.router_aggregator.IJedi_pool": {
-                "destination": "src.interfaces.i_pool.IJedi_pool",
+            "src.lib.router_aggregator.ISithPool": {
+                "destination": "src.interfaces.i_pool.ISithPool",
                 "type": "alias"
             },
             "src.lib.router_aggregator.ISithRouter": {
                 "destination": "src.interfaces.i_router.ISithRouter",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.ITenKFactory": {
+                "destination": "src.interfaces.i_factory.ITenKFactory",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.ITenKPool": {
+                "destination": "src.interfaces.i_pool.ITenKPool",
                 "type": "alias"
             },
             "src.lib.router_aggregator.ITenKRouter": {

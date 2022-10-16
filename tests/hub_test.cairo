@@ -257,14 +257,14 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     local USDT;
     %{ ids.USDT = context.USDT %}
 
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(100 * small_base, 0);
 
-    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, USDC, 1);
+    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, USDC, ETH, 1);
     %{ print("Get_out amount: ",ids._amount_out.low) %}
 
     // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
+    IERC20.approve(USDC, hub_address, amount_to_trade);
     %{ stop_prank_callable() %}
 
     // Execute Solver via Hub
@@ -273,8 +273,8 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         hub_address,
         _amount_in=amount_to_trade,
         _min_amount_out=_amount_out,
-        _token_in=ETH,
-        _token_out=USDC,
+        _token_in=USDC,
+        _token_out=ETH,
         _to=public_key_0,
         _solver_id=1,
     );
@@ -284,7 +284,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return ();
 }
 
-@external
+//@external
 func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -335,7 +335,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return ();
 }
 
-@external
+//@external
 func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 

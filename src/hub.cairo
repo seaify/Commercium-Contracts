@@ -120,13 +120,13 @@ func get_amount_out{
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(
-        amountIn: Uint256, 
+        _amount_in: Uint256, 
         _token_in: felt,
         _token_out: felt
     ) -> (amount: Uint256) {
 
     let (amount_out) = Hub.get_solver_amount(
-        _amount_in=amountIn, _token_in=_token_in, _token_out=_token_out, _solver_id=1
+        _amount_in=_amount_in, _token_in=_token_in, _token_out=_token_out, _solver_id=1
     );
 
     return (amount_out,);
@@ -174,15 +174,15 @@ func swap_exact_tokens_for_tokens{
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(
-        _amountIn: Uint256, 
-        _amountOutMin: Uint256, 
+        _amount_in: Uint256, 
+        _amount_out_min: Uint256, 
         _token_in: felt,
         _token_out: felt,
         _to: felt
     ) -> (amount_out: Uint256) {
     // Execute swap with solver 1 as the default
     let (received_amount: Uint256) = Hub.swap_with_solver(
-        _token_in, _token_out, _amountIn, _amountOutMin, _to, 1
+        _token_in, _token_out, _amount_in, _amount_out_min, _to, 1
     );
     return (received_amount,);
 }

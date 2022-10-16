@@ -105,26 +105,6 @@ func get_all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     return (routers_len, amounts, routers_len, routers);
 }
 
-@view
-func get_all_routers_and_liquidity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt, _token_out: felt
-) -> (liquidity_len: felt, liquidity: Liquidity*, routers_len: felt, routers: Router*) {
-    alloc_locals;
-
-    let (liquidity: Liquidity*) = alloc();
-    let (routers: Router*) = alloc();
-
-    // Number of saved routers
-    let (routers_len: felt) = router_index_len.read();
-
-    // Fill amounts and router arrs, get
-    RouterAggregator.all_routers_and_liquidity(
-        _token_in, _token_out, liquidity, routers, routers_len
-    );
-
-    return (routers_len, liquidity, routers_len, routers);
-}
-
 // Returns token price in USD
 @view
 func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

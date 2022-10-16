@@ -175,7 +175,7 @@
         {
             "inputs": [
                 {
-                    "name": "amountIn",
+                    "name": "_amount_in",
                     "type": "Uint256"
                 },
                 {
@@ -248,11 +248,11 @@
         {
             "inputs": [
                 {
-                    "name": "_amountIn",
+                    "name": "_amount_in",
                     "type": "Uint256"
                 },
                 {
-                    "name": "_amountOutMin",
+                    "name": "_amount_out_min",
                     "type": "Uint256"
                 },
                 {
@@ -3682,6 +3682,10 @@
             "__main__.get_amount_out.Args": {
                 "full_name": "__main__.get_amount_out.Args",
                 "members": {
+                    "_amount_in": {
+                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                        "offset": 0
+                    },
                     "_token_in": {
                         "cairo_type": "felt",
                         "offset": 2
@@ -3689,10 +3693,6 @@
                     "_token_out": {
                         "cairo_type": "felt",
                         "offset": 3
-                    },
-                    "amountIn": {
-                        "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                        "offset": 0
                     }
                 },
                 "size": 4,
@@ -3725,6 +3725,21 @@
                 "type": "const",
                 "value": 0
             },
+            "__main__.get_amount_out._amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__main__.get_amount_out._amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 87,
+                            "offset": 0
+                        },
+                        "pc": 1276,
+                        "value": "[cast(fp + (-6), starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
             "__main__.get_amount_out._token_in": {
                 "cairo_type": "felt",
                 "full_name": "__main__.get_amount_out._token_in",
@@ -3751,21 +3766,6 @@
                         },
                         "pc": 1276,
                         "value": "[cast(fp + (-3), felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__main__.get_amount_out.amountIn": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.get_amount_out.amountIn",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 87,
-                            "offset": 0
-                        },
-                        "pc": 1276,
-                        "value": "[cast(fp + (-6), starkware.cairo.common.uint256.Uint256*)]"
                     }
                 ],
                 "type": "reference"
@@ -4945,11 +4945,11 @@
             "__main__.swap_exact_tokens_for_tokens.Args": {
                 "full_name": "__main__.swap_exact_tokens_for_tokens.Args",
                 "members": {
-                    "_amountIn": {
+                    "_amount_in": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
                         "offset": 0
                     },
-                    "_amountOutMin": {
+                    "_amount_out_min": {
                         "cairo_type": "starkware.cairo.common.uint256.Uint256",
                         "offset": 2
                     },
@@ -4996,9 +4996,9 @@
                 "type": "const",
                 "value": 0
             },
-            "__main__.swap_exact_tokens_for_tokens._amountIn": {
+            "__main__.swap_exact_tokens_for_tokens._amount_in": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.swap_exact_tokens_for_tokens._amountIn",
+                "full_name": "__main__.swap_exact_tokens_for_tokens._amount_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -5011,9 +5011,9 @@
                 ],
                 "type": "reference"
             },
-            "__main__.swap_exact_tokens_for_tokens._amountOutMin": {
+            "__main__.swap_exact_tokens_for_tokens._amount_out_min": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__main__.swap_exact_tokens_for_tokens._amountOutMin",
+                "full_name": "__main__.swap_exact_tokens_for_tokens._amount_out_min",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -7324,6 +7324,21 @@
                 ],
                 "type": "reference"
             },
+            "__wrappers__.get_amount_out.__calldata_arg__amount_in": {
+                "cairo_type": "starkware.cairo.common.uint256.Uint256",
+                "full_name": "__wrappers__.get_amount_out.__calldata_arg__amount_in",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 90,
+                            "offset": 0
+                        },
+                        "pc": 1298,
+                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
+                    }
+                ],
+                "type": "reference"
+            },
             "__wrappers__.get_amount_out.__calldata_arg__token_in": {
                 "cairo_type": "felt",
                 "full_name": "__wrappers__.get_amount_out.__calldata_arg__token_in",
@@ -7350,21 +7365,6 @@
                         },
                         "pc": 1298,
                         "value": "[cast([fp + (-3)] + 3, felt*)]"
-                    }
-                ],
-                "type": "reference"
-            },
-            "__wrappers__.get_amount_out.__calldata_arg_amountIn": {
-                "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.get_amount_out.__calldata_arg_amountIn",
-                "references": [
-                    {
-                        "ap_tracking_data": {
-                            "group": 90,
-                            "offset": 0
-                        },
-                        "pc": 1298,
-                        "value": "[cast([fp + (-3)], starkware.cairo.common.uint256.Uint256*)]"
                     }
                 ],
                 "type": "reference"
@@ -9892,9 +9892,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amountIn": {
+            "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amount_in": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amountIn",
+                "full_name": "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amount_in",
                 "references": [
                     {
                         "ap_tracking_data": {
@@ -9907,9 +9907,9 @@
                 ],
                 "type": "reference"
             },
-            "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amountOutMin": {
+            "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amount_out_min": {
                 "cairo_type": "starkware.cairo.common.uint256.Uint256",
-                "full_name": "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amountOutMin",
+                "full_name": "__wrappers__.swap_exact_tokens_for_tokens.__calldata_arg__amount_out_min",
                 "references": [
                     {
                         "ap_tracking_data": {

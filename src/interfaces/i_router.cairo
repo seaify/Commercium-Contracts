@@ -135,6 +135,9 @@ namespace IAlphaRouter {
 
     func transferOwnership(new_owner: felt) -> (new_owner: felt){
     }
+
+    func factory() -> (address: felt) {
+    }
 }
 
 @contract_interface
@@ -170,6 +173,9 @@ namespace ISithRouter {
             stable: felt
         ) -> (reserve1: Uint256, reserve2: Uint256){
     }
+
+    func factory() -> (address: felt) {
+    }
 }
 
 @contract_interface
@@ -190,5 +196,15 @@ namespace ITenKRouter {
             path_len: felt, 
             path: felt*
         ) -> (amounts_len: felt, amounts: Uint256*) {
+    }
+
+    func factory() -> (address: felt) {
+    }
+}
+
+@contract_interface
+namespace IStarkRouter {
+
+    func factory() -> (address: felt) {
     }
 }
