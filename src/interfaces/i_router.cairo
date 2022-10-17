@@ -138,6 +138,13 @@ namespace IAlphaRouter {
 
     func factory() -> (address: felt) {
     }
+
+    func set_pair(
+        _token1: felt, 
+        _token2: felt,
+        _pair_address: felt
+    ){
+    }
 }
 
 @contract_interface
@@ -206,5 +213,8 @@ namespace ITenKRouter {
 namespace IStarkRouter {
 
     func factory() -> (address: felt) {
+    }
+
+    func getPair(token_in: felt, token_out: felt) -> (pair: felt){
     }
 }

@@ -11,6 +11,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.i_erc20 import IERC20
+from src.interfaces.i_pool import IAlphaPool
 
 struct Pair {
     token_1: felt,
@@ -28,13 +29,20 @@ func reserves(pair: Pair) -> (reserves: Reserves) {
 
 @storage_var
 func factory_address() -> (address: felt) {
+}
+
+@storage_var
+func pairs(pair: Pair) -> (pair_address: felt) {
+}
 
 @view
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amount_out: Uint256) {
     alloc_locals;
-    let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(_token_in, _token_out);
+
+    let (pair_address) = pairs.read(Pair(_token_in,_token_out));
+    let (reserve_1: Uint256, reserve_2: Uint256) = IAlphaPool.getReserves(pair_address);
 
     if (reserve_1.low == 0) {
         return (Uint256(0, 0),);
@@ -55,7 +63,8 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     alloc_locals;
 
     let (local amounts: Uint256*) = alloc();
-    let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(path[0], path[1]);
+    let (pair_address) = pairs.read(Pair(path[0],path[1]));
+    let (reserve_1: Uint256, reserve_2: Uint256) = IAlphaPool.getReserves(pair_address);
 
     if (reserve_1.low == 0) {
         assert amounts[0] = Uint256(0, 0);
@@ -74,7 +83,7 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @view
-func factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
+func getFactory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
     let (address) = factory_address.read();
 
     return (address,);
@@ -87,6 +96,16 @@ func set_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     reserves.write(Pair(_token_in, _token_out), Reserves(_reserve_1, _reserve_2));
     reserves.write(Pair(_token_out, _token_in), Reserves(_reserve_2, _reserve_1));
     return ();
+}
+
+@external
+func set_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _token1: felt, 
+        _token2: felt,
+        _pair_address: felt
+    ) {
+    pairs.write(Pair(_token1,_token2),_pair_address);    
+    return();
 }
 
 @external
@@ -105,6 +124,7 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     _deadline: felt,
 ) -> (amounts_len: felt, amounts: Uint256*) {
     alloc_locals;
+    //Currently isn't reducing reserve amounts
     let (amount_out: Uint256) = get_amount_out(_amount_in, _path[0], _path[1]);
     let (caller_address) = get_caller_address();
     let (this_address) = get_contract_address();
@@ -120,31 +140,21 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 // FACTORY FUNCTIONS
 //
 
+@view
 func getPool{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(token1: felt, token2: felt)->(pair:felt){
     //We missuse the reserves amounts to check if the pair exists
-    let (reserves_amount:Uint256) = get_reserves(token1,token2);
-    if(reserves_amount.low == 0){
-        return 0;
+    let (pair_address) = pairs.read(Pair(token1,token2));
+    let (token_reserve_1: Uint256,_) = IAlphaPool.getReserves(pair_address);
+    if(token_reserve_1.low == 0){
+        return (0,);
     } 
     //This address also acts as the pair contract
-    let (address_this) = get_contract_address()
-    return address_this;
+    let (address_this) = get_contract_address();
+    return (address_this,);
 }
 
 
-//
-// POOL FUNCTIONS
-//
-
-@view
-func getReserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _token_in: felt, _token_out: felt
-) -> (reserve1: Uint256, reserve2: Uint256) {
-    let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
-
-    return (token_reserves.reserve_1, token_reserves.reserve_2);
-}

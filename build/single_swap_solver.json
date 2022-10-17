@@ -2555,6 +2555,10 @@
                 "type": "const",
                 "value": 1702419044747976007584230836122646470486578302666401771824479622279811552262
             },
+            "src.interfaces.i_pool.IAlphaPool.GETTOKEN0_SELECTOR": {
+                "type": "const",
+                "value": 1414475474014248891583421327414134934812009357746682408189827793715963334544
+            },
             "src.interfaces.i_pool.IAlphaPool.ImplicitArgs": {
                 "full_name": "src.interfaces.i_pool.IAlphaPool.ImplicitArgs",
                 "members": {},
@@ -2565,13 +2569,17 @@
                 "cairo_type": "()",
                 "type": "type_definition"
             },
+            "src.interfaces.i_pool.IAlphaPool.SET_RESERVES_SELECTOR": {
+                "type": "const",
+                "value": 385827236906745258426684796102845689672024359440920269358901198005285598390
+            },
+            "src.interfaces.i_pool.IAlphaPool.SET_TOKEN0_SELECTOR": {
+                "type": "const",
+                "value": 1114755598841282951210128502876889879797351921325435121300484781499488925533
+            },
             "src.interfaces.i_pool.IAlphaPool.SIZEOF_LOCALS": {
                 "type": "const",
                 "value": 0
-            },
-            "src.interfaces.i_pool.IAlphaPool.TOKEN0_SELECTOR": {
-                "type": "const",
-                "value": 306308096504161546251901005091271441295396480158438431145345649511043910176
             },
             "src.interfaces.i_pool.IAlphaPool.alloc": {
                 "destination": "starkware.cairo.common.alloc.alloc",
@@ -2683,6 +2691,57 @@
                 "destination": "starkware.cairo.common.memcpy.memcpy",
                 "type": "alias"
             },
+            "src.interfaces.i_pool.IStarkPool": {
+                "type": "namespace"
+            },
+            "src.interfaces.i_pool.IStarkPool.Args": {
+                "full_name": "src.interfaces.i_pool.IStarkPool.Args",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.IStarkPool.GETINPUTPRICE_SELECTOR": {
+                "type": "const",
+                "value": 292991903329393378682918404049644281505501189322259714417370366974716836640
+            },
+            "src.interfaces.i_pool.IStarkPool.ImplicitArgs": {
+                "full_name": "src.interfaces.i_pool.IStarkPool.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "src.interfaces.i_pool.IStarkPool.POOLTOKENBALANCE_SELECTOR": {
+                "type": "const",
+                "value": 1285044428806782924815120839421335131637052914800264785176044786884263655147
+            },
+            "src.interfaces.i_pool.IStarkPool.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "src.interfaces.i_pool.IStarkPool.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "src.interfaces.i_pool.IStarkPool.TOKENA_SELECTOR": {
+                "type": "const",
+                "value": 346392012337648079839581601005480123406841431118569188886198211905501128849
+            },
+            "src.interfaces.i_pool.IStarkPool.alloc": {
+                "destination": "starkware.cairo.common.alloc.alloc",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.IStarkPool.call_contract": {
+                "destination": "starkware.starknet.common.syscalls.call_contract",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.IStarkPool.library_call": {
+                "destination": "starkware.starknet.common.syscalls.library_call",
+                "type": "alias"
+            },
+            "src.interfaces.i_pool.IStarkPool.memcpy": {
+                "destination": "starkware.cairo.common.memcpy.memcpy",
+                "type": "alias"
+            },
             "src.interfaces.i_pool.ITenKPool": {
                 "type": "namespace"
             },
@@ -2780,6 +2839,10 @@
             "src.interfaces.i_router.IAlphaRouter.Return": {
                 "cairo_type": "()",
                 "type": "type_definition"
+            },
+            "src.interfaces.i_router.IAlphaRouter.SET_PAIR_SELECTOR": {
+                "type": "const",
+                "value": 365796601569773292162591051312555906912484677782041809910708246319280492706
             },
             "src.interfaces.i_router.IAlphaRouter.SIZEOF_LOCALS": {
                 "type": "const",
@@ -2967,6 +3030,10 @@
             "src.interfaces.i_router.IStarkRouter.FACTORY_SELECTOR": {
                 "type": "const",
                 "value": 1538326912630455655856823982658914110649009515883772798902956386584370530161
+            },
+            "src.interfaces.i_router.IStarkRouter.GETPAIR_SELECTOR": {
+                "type": "const",
+                "value": 1221262729450801860458445172230674312268302991778694548256355434648242063707
             },
             "src.interfaces.i_router.IStarkRouter.ImplicitArgs": {
                 "full_name": "src.interfaces.i_router.IStarkRouter.ImplicitArgs",
@@ -3617,6 +3684,14 @@
                 "destination": "src.interfaces.i_router.ISithRouter",
                 "type": "alias"
             },
+            "src.lib.router_aggregator.IStarkPool": {
+                "destination": "src.interfaces.i_pool.IStarkPool",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.IStarkRouter": {
+                "destination": "src.interfaces.i_router.IStarkRouter",
+                "type": "alias"
+            },
             "src.lib.router_aggregator.ITenKFactory": {
                 "destination": "src.interfaces.i_factory.ITenKFactory",
                 "type": "alias"
@@ -3674,6 +3749,10 @@
             },
             "src.lib.router_aggregator.SithSwapRoutes": {
                 "destination": "src.lib.utils.SithSwapRoutes",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.StarkSwap": {
+                "destination": "src.lib.constants.StarkSwap",
                 "type": "alias"
             },
             "src.lib.router_aggregator.TenK": {

@@ -20,15 +20,16 @@ from starkware.cairo.common.uint256 import (
 
 from src.lib.array import Array
 from src.lib.utils import Utils
-from src.lib.constants import MAX_FELT, JediSwap, SithSwap, TenK
+from src.lib.constants import MAX_FELT, JediSwap, SithSwap, TenK, AlphaRoad
 from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.interfaces.i_solver import ISolver
 from src.interfaces.i_spf_solver import ISpfSolver
 from src.interfaces.i_solver_registry import ISolverRegistry
 from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.interfaces.i_erc20 import IERC20
-from src.interfaces.i_router import IJediRouter, ISithRouter
+from src.interfaces.i_router import IJediRouter, ISithRouter, IAlphaRouter
 from src.interfaces.i_hub import IHub
+from src.interfaces.i_pool import IAlphaPool
 from src.lib.utils import Router, Path
 
 const Vertices = 6;
@@ -147,10 +148,14 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
     );
     // %{ print("Router 3: ",ids.router_3_address) %}
+    let (local router_4_address) = create_alpha_router(
+        public_key_0, ETH, USDC, USDT, DAI, shitcoin1, shitcoin2
+    );
 
     %{ context.router_1_address = ids.router_1_address %}
     %{ context.router_2_address = ids.router_2_address %}
     %{ context.router_3_address = ids.router_3_address %}
+    %{ context.router_4_address = ids.router_4_address %}
 
     // Deploy Price Oracle
     local mock_oracle_address: felt;
@@ -180,6 +185,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     IRouterAggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
     IRouterAggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
     IRouterAggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
+    IRouterAggregator.add_router(router_aggregator_proxy_address, router_4_address, AlphaRoad);
 
     // Set Price feeds at the Router
     IRouterAggregator.set_global_price(
@@ -528,6 +534,94 @@ func create_jedi_router{syscall_ptr: felt*, range_check_ptr}(
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
     IERC20.transfer(DAI, router_address, Uint256(10000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(10000 * base, 0));
+    IERC20.transfer(DAI, router_address, Uint256(80000 * base, 0));
+    IERC20.transfer(DAI, router_address, Uint256(90000 * base, 0));
+    %{ stop_prank_callable() %}
+
+    return (router_address,);
+}
+
+func create_alpha_router{syscall_ptr: felt*, range_check_ptr}(
+    public_key_0: felt,
+    ETH: felt,
+    USDC: felt,
+    USDT: felt,
+    DAI: felt,
+    shitcoin1: felt,
+    shitcoin2: felt,
+) -> (router_address: felt) {
+    alloc_locals;
+
+    local router_address: felt;
+    %{ ids.router_address = deploy_contract("./src/mocks/mock_alpha_router.cairo", []).contract_address %}
+
+    local eth_dai_pair: felt;
+    %{ ids.eth_dai_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+    
+    local eth_usdt_pair: felt;
+    %{ ids.eth_usdt_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+
+    local eth_usdc_pair: felt;
+    %{ ids.eth_usdc_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+
+    local dai_usdc_pair: felt;
+    %{ ids.dai_usdc_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+
+    local dai_usdt_pair: felt;
+    %{ ids.dai_usdt_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+
+    local usdc_usdt_pair: felt;
+    %{ ids.usdc_usdt_pair = deploy_contract("./src/mocks/mock_alpha_pair.cairo", []).contract_address %}
+
+    // shitcoin1 = 10$
+    // ETH = 1000$ ....sadge
+    // DAI = 1$
+    // USDT = 1$
+    // USDC = 1$
+    // shitcoin2 = 10$
+
+
+    //CONFIGURE ROUTER AND PAIRS
+    IAlphaRouter.set_pair(router_address, ETH, DAI, eth_dai_pair);
+    IAlphaRouter.set_pair(router_address, ETH, USDC, eth_usdc_pair);
+    IAlphaRouter.set_pair(router_address, ETH, USDT, eth_usdt_pair);
+    IAlphaRouter.set_pair(router_address, DAI, USDC, dai_usdc_pair);
+    IAlphaRouter.set_pair(router_address, DAI, USDT, dai_usdt_pair);
+    IAlphaRouter.set_pair(router_address, USDC, USDT, usdc_usdt_pair);
+
+    IAlphaPool.set_token0(eth_dai_pair,ETH);
+    IAlphaPool.set_token0(eth_usdc_pair,ETH);
+    IAlphaPool.set_token0(eth_usdt_pair,ETH);
+    IAlphaPool.set_token0(dai_usdc_pair,DAI);
+    IAlphaPool.set_token0(dai_usdt_pair,DAI);
+    IAlphaPool.set_token0(usdc_usdt_pair,USDC);
+
+
+    //1: ETH 2: DAI
+    IAlphaPool.set_reserves(eth_dai_pair, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
+
+    //1: USDT 2: USDC
+    IAlphaPool.set_reserves(usdc_usdt_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    //1: USDT 2: DAI
+    IAlphaPool.set_reserves(dai_usdt_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+
+    //1: USDC 2: DAI
+    IAlphaPool.set_reserves(dai_usdc_pair, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+
+    // Transfer tokens to router
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
+    IERC20.transfer(ETH, router_address, Uint256(1000 * base, 0));
+    %{ stop_prank_callable() %}
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
+    IERC20.transfer(USDC, router_address, Uint256(80000 * small_base, 0));
+    IERC20.transfer(USDC, router_address, Uint256(80000 * small_base, 0));
+    %{ stop_prank_callable() %}
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDT) %}
+    IERC20.transfer(USDT, router_address, Uint256(80000 * base, 0));
+    IERC20.transfer(USDT, router_address, Uint256(90000 * base, 0));
+    %{ stop_prank_callable() %}
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
+    IERC20.transfer(DAI, router_address, Uint256(1000000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(80000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}

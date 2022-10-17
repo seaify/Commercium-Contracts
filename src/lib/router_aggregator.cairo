@@ -8,9 +8,9 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITenKRouter
+from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITenKRouter, IStarkRouter
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
-from src.interfaces.i_pool import IAlphaPool, IJediPool, ISithPool, ITenKPool
+from src.interfaces.i_pool import IAlphaPool, IJediPool, ISithPool, ITenKPool, IStarkPool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
 from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap)
 
@@ -195,16 +195,31 @@ namespace RouterAggregator {
                 return (Uint256(0,0),);
             }
             let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(pair_address);
-            let (amount_token_0: Uint256) = IAlphaRouter.quote(
-                _router.address,
-                _amount_in, 
-                reserve_token_0, 
-                reserve_token_1
-            );
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-            tempvar range_check_ptr = range_check_ptr;
-            return (amount_token_0,);
+            let (token0: felt) = IAlphaPool.getToken0(pair_address);
+            if (token0 == _token_in) {
+                let (amount_token_0: Uint256) = IAlphaRouter.quote(
+                    _router.address,
+                    _amount_in, 
+                    reserve_token_0, 
+                    reserve_token_1
+                );
+                tempvar syscall_ptr = syscall_ptr;
+                tempvar pedersen_ptr = pedersen_ptr;
+                tempvar range_check_ptr = range_check_ptr;
+                return (amount_token_0,);
+            }else{
+                let (amount_token_0: Uint256) = IAlphaRouter.quote(
+                    _router.address,
+                    _amount_in, 
+                    reserve_token_1, 
+                    reserve_token_0
+                );
+                tempvar syscall_ptr = syscall_ptr;
+                tempvar pedersen_ptr = pedersen_ptr;
+                tempvar range_check_ptr = range_check_ptr;
+                return (amount_token_0,);
+            }
+            
         }
         if (_router.type == SithSwap) {
             let (factory_address) = ISithRouter.factory(_router.address);
@@ -235,26 +250,26 @@ namespace RouterAggregator {
             return (amounts[1],);
         }
         if (_router.type == StarkSwap) {
-            let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
-            if (pair_address == 0) {
-                return (Uint256(0,0),);
-            }
+        //    let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
+        //    if (pair_address == 0) {
+        //        return (Uint256(0,0),);
+        //    }
 
-            let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1)
-            let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2)
+        //    let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1);
+        //    let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2);
 
-            let (token1: felt) = IStarkPool.TokenA(pair_address)
+        //    let (token1: felt) = IStarkPool.TokenA(pair_address);
 
-            if (token1 == _token_in) {
-                let (amount_out: Uint256) = IStarkPair.getInputPrice(
-                    pair_address, _amount_in, reserve1, reserve2
-                );
-                return (amount_out,);
-            }
-            let (amount_out: Uint256) = IStarkPair.getInputPrice(
-                pair_address, _amount_in, reserve2, reserve1
-            );
-            return (amount_out,);
+        //    if (token1 == _token_in) {
+        //        let (amount_out: Uint256) = IStarkPool.getInputPrice(
+        //            pair_address, _amount_in, reserve1, reserve2
+        //        );
+        //        return (amount_out,);
+        //    }
+        //    let (amount_out: Uint256) = IStarkPool.getInputPrice(
+        //        pair_address, _amount_in, reserve2, reserve1
+        //    );
+            return (Uint256(0,0),);
         } else {
             with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
                 assert 1 = 2;

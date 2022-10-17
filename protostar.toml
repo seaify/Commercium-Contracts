@@ -5,6 +5,7 @@ protostar_version = "v0.4.2"
 libs_path = "lib"
 
 ["protostar.contracts"]
+
 hub = [
     "./src/hub.cairo",
 ]

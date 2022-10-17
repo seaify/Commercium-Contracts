@@ -133,19 +133,24 @@ func swapExactTokensForTokensSimple{syscall_ptr: felt*, pedersen_ptr: HashBuilti
 // FACTORY FUNCTIONS
 //
 
+@view
 func pairFor{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
     }(token0: felt, token1: felt, stable: felt)->(pair:felt){
-    //We ignore stable for now
-    
-    //We missuse the reserves amounts to check if the pair exists
-    let (reserves_amount:Uint256) = get_reserves(token0,token1);
-    if(reserves_amount.low == 0){
-        return 0;
-    } 
     //This address also acts as the pair contract
-    let (address_this) = get_contract_address()
-    return address_this;
+    let (address_this) = get_contract_address();
+    return (address_this,);
+}
+
+@view
+func isPair{
+        syscall_ptr: felt*, 
+        pedersen_ptr: HashBuiltin*, 
+        range_check_ptr
+    }(pair_address: felt)->(is_pair:felt){
+    //Not sure how else to do this atm
+    //We just assume that every pair exists
+    return (1,);
 }

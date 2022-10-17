@@ -12,6 +12,39 @@ from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.i_erc20 import IERC20
 
+struct Pair {
+    token_1: felt,
+    token_2: felt,
+}
+
+struct Reserves {
+    reserve_1: Uint256,
+    reserve_2: Uint256,
+}
+
+@storage_var
+func reserves(pair: Pair) -> (reserves: Reserves) {
+}
+
+@storage_var
+func factory_address() -> (address: felt) {
+}
+
+@external
+func set_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token_in: felt, _token_out: felt, _reserve_1: Uint256, _reserve_2: Uint256
+) {
+    reserves.write(Pair(_token_in, _token_out), Reserves(_reserve_1, _reserve_2));
+    reserves.write(Pair(_token_out, _token_in), Reserves(_reserve_2, _reserve_1));
+    return ();
+}
+
+@external
+func set_factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) {
+    factory_address.write(address);
+    return ();
+}
+
 //
 // ROUTER FUNCTIONS
 //
@@ -30,12 +63,12 @@ func get_pair{
         range_check_ptr
     }(token1: felt, token2: felt)->(pair:felt){
     //We missuse the reserves amounts to check if the pair exists
-    let (reserves_amount:Uint256) = get_reserves(token1,token2);
-    if(reserves_amount.low == 0){
+    let (current_reserves: Reserves) = reserves.read(Pair(token1,token2));
+    if(current_reserves.reserve_1.low == 0){
         return 0;
     } 
     //This address also acts as the pair contract
-    let (address_this) = get_contract_address()
+    let (address_this) = get_contract_address();
     return address_this;
 }
 
@@ -43,17 +76,18 @@ func get_pair{
 // PAIR FUNCTIONS
 //
 
-func get_reserves{
+func poolTokenBalance{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
         range_check_ptr
-    }(token1: felt, token2: felt)->(pair:felt){
+    }(_token_id: felt)->(balance:Uint256){
     //We missuse the reserves amounts to check if the pair exists
-    let (reserves_amount:Uint256) = get_reserves(token1,token2);
-    if(reserves_amount.low == 0){
-        return 0;
-    } 
-    //This address also acts as the pair contract
-    let (address_this) = get_contract_address()
-    return address_this;
+    let (current_reserves: Reserves) = reserves.read(Pair(token1,token2));
+
+    if (_token_id == 1){
+        return (current_reserves.reserve_1);
+    }else{
+        assert _token_id = 2;
+        return (current_reserves.reserve_2);
+    }
 }
