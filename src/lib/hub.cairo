@@ -213,7 +213,7 @@ namespace Hub {
         // Check current token balance
         // (Used to determine received amount)
         let (original_balance: Uint256) = IERC20.balanceOf(_token_out, this_address);
-
+        
         // Get trading path from the selected solver
         let (
             routers_len: felt,

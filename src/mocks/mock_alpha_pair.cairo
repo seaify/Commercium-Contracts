@@ -50,7 +50,7 @@ func set_token0{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 @view
 func getToken0{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()->(token0: felt){
     let (token0_address) = token0.read();
-    return(token0_address);
+    return(token0_address,);
 }
 
 @view
@@ -59,6 +59,6 @@ func getReserves{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
     }() -> (reserve1: Uint256, reserve2: Uint256){
-    let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
-    return (token_reserves.reserve_1, token_reserves.reserve_2);
+    let (current_reserves: Reserves) = reserves.read();
+    return (current_reserves.reserve_1, current_reserves.reserve_2);
 }

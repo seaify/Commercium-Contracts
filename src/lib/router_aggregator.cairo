@@ -173,7 +173,7 @@ namespace RouterAggregator {
             _token_out: felt,
             _router: Router
         ) -> (amount_out: Uint256) {
-
+        alloc_locals;
         let (path: felt*) = alloc();
         if (_router.type == JediSwap) {
             let (factory_address) = IJediRouter.factory(_router.address);
@@ -190,12 +190,15 @@ namespace RouterAggregator {
         }
         if (_router.type == AlphaRoad){
             let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
+
             let (pair_address: felt) = IAlphaFactory.getPool(factory_address,_token_in,_token_out);
             if(pair_address == 0){
                 return (Uint256(0,0),);
             }
             let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(pair_address);
-            let (token0: felt) = IAlphaPool.getToken0(pair_address);
+
+            let (local token0: felt) = IAlphaPool.getToken0(pair_address);
+            
             if (token0 == _token_in) {
                 let (amount_token_0: Uint256) = IAlphaRouter.quote(
                     _router.address,

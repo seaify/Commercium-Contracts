@@ -28,10 +28,6 @@ func reserves(pair: Pair) -> (reserves: Reserves) {
 }
 
 @storage_var
-func factory_address() -> (address: felt) {
-}
-
-@storage_var
 func pairs(pair: Pair) -> (pair_address: felt) {
 }
 
@@ -84,7 +80,7 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 
 @view
 func getFactory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
-    let (address) = factory_address.read();
+    let (address) = get_contract_address();
 
     return (address,);
 }
@@ -105,36 +101,44 @@ func set_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _pair_address: felt
     ) {
     pairs.write(Pair(_token1,_token2),_pair_address);    
+    pairs.write(Pair(_token2,_token1),_pair_address);
     return();
 }
 
 @external
-func set_factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) {
-    factory_address.write(address);
-    return ();
-}
-
-@external
-func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256,
-    _min_amount_out: Uint256,
-    _path_len: felt,
-    _path: felt*,
-    _receiver_address: felt,
-    _deadline: felt,
-) -> (amounts_len: felt, amounts: Uint256*) {
+func swapExactTokensForTokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_from_address: felt,
+        token_to_address: felt,
+        amount_token_from: Uint256,
+        amount_token_to_min: Uint256
+    ) -> (amount_out_received: Uint256){
     alloc_locals;
     //Currently isn't reducing reserve amounts
-    let (amount_out: Uint256) = get_amount_out(_amount_in, _path[0], _path[1]);
+    let (amount_out: Uint256) = get_amount_out(amount_token_from, token_from_address, token_to_address);
     let (caller_address) = get_caller_address();
     let (this_address) = get_contract_address();
-    IERC20.transferFrom(_path[0], caller_address, this_address, _amount_in);
-    IERC20.transfer(_path[1], caller_address, amount_out);
-    let (amounts: Uint256*) = alloc();
-    assert amounts[0] = amount_out;
-    return (1, amounts);
+    IERC20.transferFrom(token_from_address, caller_address, this_address, amount_token_from);
+    IERC20.transfer(token_to_address, caller_address, amount_out);
+    return (amount_out,);
 }
 
+@view
+func quote{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    amount_token_0: Uint256, 
+    reserve_token_0: Uint256, 
+    reserve_token_1: Uint256) 
+    -> (amount_token_0: Uint256){
+    if (reserve_token_0.low == 0) {
+        return (Uint256(0, 0),);
+    } else {
+        let (feed_amount: Uint256, _) = uint256_mul(amount_token_0, Uint256(997, 0));
+        let (numerator, _) = uint256_mul(feed_amount, reserve_token_1);
+        let (feed_reserve, _) = uint256_mul(reserve_token_0, Uint256(1000, 0));
+        let (denominator, _) = uint256_add(feed_reserve, feed_amount);
+        let (amount_out, _) = uint256_unsigned_div_rem(numerator, denominator);
+        return (amount_out,);
+    }
+}
 
 //
 // FACTORY FUNCTIONS
@@ -147,14 +151,15 @@ func getPool{
         range_check_ptr
     }(token1: felt, token2: felt)->(pair:felt){
     //We missuse the reserves amounts to check if the pair exists
+
     let (pair_address) = pairs.read(Pair(token1,token2));
+    
     let (token_reserve_1: Uint256,_) = IAlphaPool.getReserves(pair_address);
+    
     if(token_reserve_1.low == 0){
         return (0,);
     } 
-    //This address also acts as the pair contract
-    let (address_this) = get_contract_address();
-    return (address_this,);
+    return (pair_address,);
 }
 
 
