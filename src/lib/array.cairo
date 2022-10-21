@@ -87,17 +87,4 @@ namespace Array {
 
         return (return_val,);
     }
-
-    // Get element at index position
-    func get_at_index{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _arr_len: felt, _arr: felt*, _index: felt, _counter: felt
-    ) -> (res: felt) {
-        if (_index == _counter) {
-            return (_arr[0],);
-        }
-
-        let (res: felt) = get_at_index(_arr_len, _arr + 1, _index, _counter + 1);
-
-        return (res,);
-    }
 }

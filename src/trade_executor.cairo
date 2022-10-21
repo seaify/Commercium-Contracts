@@ -41,8 +41,11 @@ func simulate_multi_swap{
     // Set initial balance of token_in
     dict_write{dict_ptr=token_balances}(key=_path[0].token_in, new_value=_amount_in.low);
 
+    //The last token traded to should always be the token that the user wants to receive
+    tempvar _token_out = _path[_path_len-1].token_out;
+
     let (amount_out: Uint256, final_token_balances: DictAccess*) = _simulate_multi_swap(
-        _routers_len, _routers, _path_len, _path, _amounts_len, _amounts, token_balances
+        _routers_len, _routers, _path_len, _path, _amounts_len, _amounts, _token_out, token_balances
     );
 
     default_dict_finalize(token_balances_start, final_token_balances, 0);
@@ -72,7 +75,7 @@ func multi_swap{
 
     let (init_amount: Uint256) = IERC20.balanceOf(_path[0].token_in, _receiver_address);
 
-    let (trade_amount) = Utils.fmul(init_amount, Uint256(_amounts[0], 0), Uint256(BASE, 0));
+    let (trade_amount: Uint256) = Utils.fmul(init_amount, Uint256(_amounts[0], 0), Uint256(BASE, 0));
 
     _swap_exact_in(_routers[0], trade_amount, _path[0].token_in, _path[0].token_out, _receiver_address);
 
@@ -275,6 +278,7 @@ func _simulate_multi_swap{
         _path: Path*,
         _amounts_len: felt,
         _amounts: felt*,
+        _token_out: felt,
         _token_balances: DictAccess*,
     ) -> (amount_out: Uint256, final_token_balances: DictAccess*) {
     alloc_locals;
@@ -308,10 +312,15 @@ func _simulate_multi_swap{
         _path + 2,
         _amounts_len,
         _amounts + 1,
+        _token_out,
         _token_balances,
     );
 
-    let (final_sum: Uint256, _) = uint256_add(amount_out, sum);
-
-    return (final_sum, final_token_balances);
+    if (_token_out == _path[0].token_out) {
+        let (final_sum: Uint256, _) = uint256_add(amount_out, sum);
+        return (final_sum, final_token_balances);
+    }else{
+        let (final_sum: Uint256, _) = uint256_add(Uint256(0,0), sum);
+        return (final_sum, final_token_balances);
+    }
 }

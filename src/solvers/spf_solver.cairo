@@ -118,7 +118,7 @@ func get_results{
         _src_counter=0,
         _total_counter=0,
     );
-
+    
     // Initialize inQueue Array to false
     let (distances: felt*) = alloc();
     let (predecessors: felt*) = alloc();
@@ -265,18 +265,18 @@ func get_results{
 // We use _dst_counter to track the number of destinations we have checked for each source (We check vertices 1-5)
 // We use _src_couter to track the number of sources we have checked (We check vertices 0-4)
 func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256,
-    _amount_in_usd: Uint256,
-    _vertices: felt,
-    _tokens: felt*,
-    _src_len: felt,
-    _src: Source*,
-    _edge_len: felt,
-    _edge: Edge*,
-    _dst_counter: felt,
-    _src_counter: felt,
-    _total_counter: felt,
-) -> () {
+        _amount_in: Uint256,
+        _amount_in_usd: Uint256,
+        _vertices: felt,
+        _tokens: felt*,
+        _src_len: felt,
+        _src: Source*,
+        _edge_len: felt,
+        _edge: Edge*,
+        _dst_counter: felt,
+        _src_counter: felt,
+        _total_counter: felt,
+    ) -> () {
     alloc_locals;
 
     if (_src_counter == _vertices - 1) {
@@ -301,6 +301,8 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         assert we_are_not_advancing = 0;
     } else {
         let (router_aggregator_address) = router_aggregator.read();
+        local tester1 = _tokens[_src_counter];
+        local tester2 = _tokens[_dst_counter];
         let (
             local amount_out: Uint256, local router: Router
         ) = IRouterAggregator.get_single_best_router(
@@ -423,19 +425,19 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 func shortest_path_faster{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}(
-    _distances_len: felt,
-    _distances: felt*,
-    _is_in_queue_len: felt,
-    _is_in_queue: felt*,
-    _queue_len: felt,
-    _queue: felt*,
-    _vertices: felt,
-    _src: Source*,
-    _edge: Edge*,
-    _predecessors_len: felt,
-    _predecessors: felt*,
-) -> (final_distances: felt*) {
+    }(
+        _distances_len: felt,
+        _distances: felt*,
+        _is_in_queue_len: felt,
+        _is_in_queue: felt*,
+        _queue_len: felt,
+        _queue: felt*,
+        _vertices: felt,
+        _src: Source*,
+        _edge: Edge*,
+        _predecessors_len: felt,
+        _predecessors: felt*,
+    ) -> (final_distances: felt*) {
     alloc_locals;
 
     // If there is no destination left in the queue we can stop the procedure
@@ -464,7 +466,7 @@ func shortest_path_faster{
     let current_source: Source* = _src + (src_nr * 2);
     tempvar offset = current_source[0].start;
 
-    let (current_distance: felt) = Array.get_at_index(_distances_len, _distances, src_nr, 0);
+    tempvar current_distance = _distances[src_nr];
 
     // Determine if there is a shorter distance to its different destinations
     let (
@@ -511,30 +513,30 @@ func shortest_path_faster{
 
 func determine_distances{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}(
-    _distances_len: felt,
-    _distances: felt*,
-    _queue_len: felt,
-    _queue: felt*,
-    _is_in_queue_len: felt,
-    _is_in_queue: felt*,
-    _vertices: felt,
-    _edge: Edge*,
-    _predecessors_len: felt,
-    _predecessors: felt*,
-    _dst_stop: felt,
-    _src_nr: felt,
-    _current_distance: felt,
-) -> (
-    _distances_len: felt,
-    _distances: felt*,
-    _queue_len: felt,
-    _queue: felt*,
-    _is_in_queue_len: felt,
-    _is_in_queue: felt*,
-    res_predecessors_len: felt,
-    res_predecessors: felt*,
-) {
+    }(
+        _distances_len: felt,
+        _distances: felt*,
+        _queue_len: felt,
+        _queue: felt*,
+        _is_in_queue_len: felt,
+        _is_in_queue: felt*,
+        _vertices: felt,
+        _edge: Edge*,
+        _predecessors_len: felt,
+        _predecessors: felt*,
+        _dst_stop: felt,
+        _src_nr: felt,
+        _current_distance: felt,
+    ) -> (
+        _distances_len: felt,
+        _distances: felt*,
+        _queue_len: felt,
+        _queue: felt*,
+        _is_in_queue_len: felt,
+        _is_in_queue: felt*,
+        res_predecessors_len: felt,
+        res_predecessors: felt*,
+    ) {
     alloc_locals;
 
     if (_dst_stop == 0) {
@@ -714,18 +716,18 @@ func determine_distances{
 }
 
 func init_arrays{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _distances_len: felt,
-    _distances: felt*,
-    _predecessors: felt*,
-    _is_in_queue: felt*,
-    _queue: felt*,
-    _counter: felt,
-) -> () {
+        _distances_len: felt,
+        _distances: felt*,
+        _predecessors: felt*,
+        _is_in_queue: felt*,
+        _queue: felt*,
+        _counter: felt,
+    ) -> () {
     if (_counter == _distances_len) {
         return ();
     }
 
-    if (_counter == 1) {
+    if (_counter == 0) {
         assert _distances[0] = 0;  // Source Token
         assert _queue[0] = 0;  // In token is only token in queue
         assert _predecessors[0] = 0;

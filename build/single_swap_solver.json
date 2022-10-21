@@ -3617,6 +3617,10 @@
                 "type": "const",
                 "value": 3
             },
+            "src.lib.constants.TenKFactory": {
+                "type": "const",
+                "value": -559875020017647477508461142249379075584737172933317602249201119027985804537
+            },
             "src.lib.router_aggregator.AlphaRoad": {
                 "destination": "src.lib.constants.AlphaRoad",
                 "type": "alias"
@@ -3757,6 +3761,10 @@
             },
             "src.lib.router_aggregator.TenK": {
                 "destination": "src.lib.constants.TenK",
+                "type": "alias"
+            },
+            "src.lib.router_aggregator.TenKFactory": {
+                "destination": "src.lib.constants.TenKFactory",
                 "type": "alias"
             },
             "src.lib.router_aggregator.Uint256": {

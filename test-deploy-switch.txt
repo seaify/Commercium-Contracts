@@ -1,0 +1,6 @@
+lib/router_aggregator:
+
+let (factory_address) = ITenKRouter.factory(_router.address);
+let (pair_address) = ITenKFactory.getPair(factory_address,_token_in,_token_out);
+VS
+let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_in,_token_out);

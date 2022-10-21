@@ -14,13 +14,13 @@ ETH_USD_Key = 28556963469423460
 DAI_USD_Key = 28254602066752356
 USDC_USD_Key = 8463218501920060260
 EMPIRIC_ORACLE_ADDRESS = 536554312408700354284283040928046824434969893969739486945260186308733942996
-JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993
-SithSwapRouter = 613949494660459508506795653074444441520878567657307565614735576897368804941
-TenKRouter = 267408615217810058547382786818850841436210122758739315180755587026551752292 
-StarkSwapFactory = 
-AlphaFactory = 
-execution_contract_hash = 2032713593507808284182517340973952218645684941574514214579184653429499031220 #0x047e79a1a2e15757b01133b9d398b2ffe701f38b0d6efc43179aafcf3ac4eeb4
-router_aggregator_contract_hash = 2142082874301946878448248470368908189433629508984675061261861742626779907 #0x0001365e450cca9282818dfbcec722141177b2d230687ef073717eef703cb303
+JediSwapRouter = 528330283628715324117473561763116327110398297690851013171802704612289884993 #0x012b063b60553c91ed237d8905dff412fba830c5716b17821063176c6c073341
+SithSwapRouter = 613949494660459508506795653074444441520878567657307565614735576897368804941 #0x015b7bac6b05fcb24f33011fefb592bf0579dae1d1f2a7d6645dda49849ece4d
+TenKRouter = 267408615217810058547382786818850841436210122758739315180755587026551752292 #0x00975910cd99bc56bd289eaaa5cee6cd557f0ddafdb2ce6ebea15b158eb2c664
+StarkSwapFactory = 0 #0x
+AlphaRouter = 2118057930243295689209699260109286459508439101415299206807991604654635117418 #0x04aec73f0611a9be0524e7ef21ab1679bdf9c97dc7d72614f15373d431226b6a
+execution_contract_hash = 1732073610248511674811290648671968077467369994580880265034892474171516948274 #0x03d451a4e2c1eb46424daed0d51d066c7c6b4360ee3e9fe6242884b50b628f32
+router_aggregator_contract_hash = 1493724358487246524740862515688018880561932060018213207540353152755385899269 #0x034d6b03c781dacec6b96d3f4b4749d48b57b6743fed67236f7037e1b78a1905
 
 #Setup Admin Account
 private_key = 514919074163669761001641341781643512607564785866885624866019752723630562244
@@ -31,12 +31,12 @@ client = AccountClient(address=public_key, client=GatewayClient(net="testnet"), 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
 contractAddresses = {
-                    "hub": 195676955388641969910971142725788696336641048491385389846694951076261197764, #0x006ebfcdaa2d47342f321249a0024e1f778894a05b8bed8393ba60d6f36af7c4
-                    "solver_registry": 1158496595100949956285385094834746919293397342197235621735292995323969857338, #0x028faf92f6035c779291d3815ea1e5736ad8f9023c5ef0138bed11c1534ee73a
-                    "router_aggregator": 1382653231822326866149049255933993724241685476625671975132788115005722069472, #0x030e8dd2b7a9a24cdb0a28d59ee51211e24453599b3021a97c591095a82809e0
-                    "single_swap_solver": 964741909191253954736952351625934561864974584204796917548090532924918607817, #0x0222064a3be631f4fc4ec5fe713781f22a3c713f6ceea26d82ef8fe76f702fc9
-                    "spf_solver": 2580270806115429774936965201374112037628046643803501003428903830093897636138, #0x05b461ab71e014550942da01bc9d72f8f4baf621b94e66889964f95e8823992a
-                    "heuristic_splitter": 623197502784579584450398684832949545841380877718155062741899362229954450451 #0x0160b7a01aade703fb09eb7073316bc15aa1871afbe45fc5c3a0ec36bb0a9413
+                    "hub": 274692304459003283793059090670630100894454073216364957955103066536672045174, #0x009b7867da3ab62a5fc5720e05dc8f65ce11023e2b80a4d40df05407acbd2876
+                    "solver_registry": 1739533146778955178914359505356608475491000623024368656149497309490122490040, #0x03d88a76793bfa98ae8b2aa20ead91c724640b3d1668e8c5eba69982856280b8
+                    "router_aggregator": 2735043677472181060562604494041866139075777317052714635582567658651033845047, #0x060bfad84f0c925dcbe2f6cb0f9cc8b9f4c2aee5e6c7848ee0e8218446c4bd37
+                    "single_swap_solver": 1010565484178145392627352663020261903255420392590902869754524420180555497354, #0x023bf5b5188a4610be88c293315bd2c092ce00e671dc9c410fe7e25ddeb67f8a
+                    "spf_solver": 1839651039311515750393348194795615040334675018164158440929873934945956386101, #0x041134a180570508050520524d7f2e76056d0f6feca8507240d593a18d6bd535
+                    "heuristic_splitter": 1633056736795720238243193650918956488659335775891031465579536540405582730030, #0x039c4700ece9c6d56d50fdcf49c7c6119f8c6dbac92393ab3a221a94a933132e
                     }
                     
 #######################
@@ -88,7 +88,7 @@ async def deployContracts():
         print("Deploying Single Swap Solver")
         compiled = Path("./build/", "single_swap_solver.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[]
+            client, compiled_contract=compiled, constructor_args=[contractAddresses["router_aggregator"]]
         )
         print("Waiting for acceptance...")
         await deployment_result.wait_for_acceptance()
@@ -100,7 +100,7 @@ async def deployContracts():
         print("Deploying SPF Solver")
         compiled = Path("./build/", "spf_solver.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address]
+            client, compiled_contract=compiled, constructor_args=[account_address,contractAddresses["router_aggregator"]]
         )
         print("Waiting for acceptance...")
         await deployment_result.wait_for_acceptance()
@@ -112,7 +112,7 @@ async def deployContracts():
         print("Deploying Heuristic Splitter Solver")
         compiled = Path("./build/", "heuristic_splitter.json").read_text("utf-8")
         deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address]
+            client, compiled_contract=compiled, constructor_args=[contractAddresses["router_aggregator"]]
         )
         print("Waiting for acceptance...")
         await deployment_result.wait_for_acceptance()
@@ -165,7 +165,10 @@ async def deployContracts():
     await invocation.wait_for_acceptance()
     print("Adding TenKRouter...")
     invocation = await routerAggregatorContract.functions["add_router"].invoke(TenKRouter,3,max_fee=50000000000000000000)
-    await invocation.wait_for_acceptance()    
+    await invocation.wait_for_acceptance()
+    print("Adding AlphaRouter...")
+    invocation = await routerAggregatorContract.functions["add_router"].invoke(AlphaRouter,1,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()        
 
     #Configure Solver Registry
     print("...Configuring Solver Registry...")
@@ -182,16 +185,6 @@ async def deployContracts():
 
     #Configure Solvers
     print("...Configuring Solvers...")
-    #Setting Router Aggregator
-    print("Setting Router Aggregator for Single Swap Solver...")
-    invocation = await singleSwapSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
-    await invocation.wait_for_acceptance()
-    print("Setting Router Aggregator for SPF Solver...")
-    invocation = await spfSolverContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
-    await invocation.wait_for_acceptance()
-    print("Setting Router Aggregator for Heuristic Splitter Solver...")
-    invocation = await heurtisticSplitterContract.functions["set_router_aggregator"].invoke(routerAggregatorContract.address,max_fee=50000000000000000000)
-    await invocation.wait_for_acceptance()
     #Set high liq tokens for spf solver
     print("Setting High liq tokens for SPF Solver...")
     invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("0",ethAddress,max_fee=50000000000000000000)

@@ -12,7 +12,7 @@ from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITen
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
 from src.interfaces.i_pool import IAlphaPool, IJediPool, ISithPool, ITenKPool, IStarkPool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
-from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap)
+from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap, TenKFactory)
 
 struct Feed {
     key: felt,
@@ -90,13 +90,13 @@ namespace RouterAggregator {
     }
 
     func find_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256,
-        _token_in: felt,
-        _token_out: felt,
-        _best_amount: Uint256,
-        _router: Router,
-        _counter: felt,
-    ) -> (amount_out: Uint256, router: Router) {
+            _amount_in: Uint256,
+            _token_in: felt,
+            _token_out: felt,
+            _best_amount: Uint256,
+            _router: Router,
+            _counter: felt,
+        ) -> (amount_out: Uint256, router: Router) {
         alloc_locals;
 
         let (index) = top_router_index_len.read();
@@ -134,13 +134,13 @@ namespace RouterAggregator {
     }
 
     func all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256,
-        _token_in: felt,
-        _token_out: felt,
-        _amounts: Uint256*,
-        _routers: Router*,
-        _routers_len: felt,
-    ) {
+            _amount_in: Uint256,
+            _token_in: felt,
+            _token_out: felt,
+            _amounts: Uint256*,
+            _routers: Router*,
+            _routers_len: felt,
+        ){
         alloc_locals;
 
         if (0 == _routers_len) {
@@ -190,7 +190,6 @@ namespace RouterAggregator {
         }
         if (_router.type == AlphaRoad){
             let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
-
             let (pair_address: felt) = IAlphaFactory.getPool(factory_address,_token_in,_token_out);
             if(pair_address == 0){
                 return (Uint256(0,0),);
@@ -227,8 +226,7 @@ namespace RouterAggregator {
         if (_router.type == SithSwap) {
             let (factory_address) = ISithRouter.factory(_router.address);
             let (pair_address) = ISithFactory.pairFor(factory_address,_token_in,_token_out,0);
-            let (is_pair) = ISithFactory.isPair(factory_address,pair_address);
-            if (is_pair == 0) {
+            if (pair_address == 0) {
                 return (Uint256(0,0),);
             }
             let (amount_out: Uint256, _) = ISithRouter.getAmountOut(
@@ -240,8 +238,10 @@ namespace RouterAggregator {
             return (amount_out,);
         }
         if (_router.type == TenK) {
+            //Surely that will change in the future
             let (factory_address) = ITenKRouter.factory(_router.address);
             let (pair_address) = ITenKFactory.getPair(factory_address,_token_in,_token_out);
+            //let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_in,_token_out);
             if (pair_address == 0) {
                 return (Uint256(0,0),);
             }

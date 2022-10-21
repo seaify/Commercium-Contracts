@@ -4835,6 +4835,10 @@
                 "type": "const",
                 "value": 3
             },
+            "src.lib.constants.TenKFactory": {
+                "type": "const",
+                "value": -559875020017647477508461142249379075584737172933317602249201119027985804537
+            },
             "src.openzeppelin.access.ownable.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"

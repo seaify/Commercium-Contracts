@@ -19,6 +19,8 @@ const SithSwap = 2;
 const TenK = 3;
 const StarkSwap = 4;
 
+//Factories
+const TenKFactory = 3058627768648483736188861640845691030038370042398279097723890937107886215944; //0x06c31f39524388c982045988de3788530605ed08b10389def2e7b1dd09d19308
 
 //@view
 //func read_felts{}()->(max_felt: felt, half_max: felt){

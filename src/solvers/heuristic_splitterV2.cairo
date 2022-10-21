@@ -32,17 +32,17 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in: Uint256, 
-    _token_in: felt, 
-    _token_out: felt
-) -> (
-    routers_len: felt,
-    routers: Router*,
-    path_len: felt,
-    path: Path*,
-    amounts_len: felt,
-    amounts: felt*
-) {
+        _amount_in: Uint256, 
+        _token_in: felt, 
+        _token_out: felt
+    ) -> (
+        routers_len: felt,
+        routers: Router*,
+        path_len: felt,
+        path: Path*,
+        amounts_len: felt,
+        amounts: felt*
+    ) {
     alloc_locals;
 
     let (amounts: felt*) = alloc();

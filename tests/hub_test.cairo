@@ -156,6 +156,10 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %{ context.router_2_address = ids.router_2_address %}
     %{ context.router_3_address = ids.router_3_address %}
     %{ context.router_4_address = ids.router_4_address %}
+    %{ print("Jedi Router: ",ids.router_1_address) %}
+    %{ print("Sith Router: ",ids.router_2_address) %}
+    %{ print("TenK Router: ",ids.router_3_address) %}
+    %{ print("Alpha Router: ",ids.router_4_address) %}
 
     // Deploy Price Oracle
     local mock_oracle_address: felt;
@@ -244,7 +248,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-@external
+//@external
 func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -263,14 +267,18 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     local USDT;
     %{ ids.USDT = context.USDT %}
 
+    // SET TOKENS TO TRADE
+    local token_to_sell = ETH;
+    local token_to_buy = DAI;
+
     local amount_to_trade: Uint256 = Uint256(100 * base, 0);
 
-    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, DAI, 1);
+    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 1);
     %{ print("Get_out amount: ",ids._amount_out.low) %}
 
     // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.token_to_sell) %}
+    IERC20.approve(token_to_sell, hub_address, amount_to_trade);
     %{ stop_prank_callable() %}
 
     // Execute Solver via Hub
@@ -279,8 +287,8 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         hub_address,
         _amount_in=amount_to_trade,
         _min_amount_out=_amount_out,
-        _token_in=ETH,
-        _token_out=DAI,
+        _token_in=token_to_sell,
+        _token_out=token_to_buy,
         _to=public_key_0,
         _solver_id=1,
     );
@@ -313,14 +321,19 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     local shitcoin2;
     %{ ids.shitcoin2 = context.shitcoin2 %}
 
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+    // SET TOKENS TO TRADE
+    local token_to_sell = ETH;
+    local token_to_buy = shitcoin2;
 
-    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
+    // SET AMOUNTS TO TRADE
+    local amount_to_trade: Uint256 = Uint256(100000 * base, 0);
+
+    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 2);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.token_to_sell) %}
+    IERC20.approve(token_to_sell, hub_address, amount_to_trade);
     %{ stop_prank_callable() %}
 
     // Execute Solver via Hub
@@ -329,8 +342,8 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
         hub_address,
         _amount_in=amount_to_trade,
         _min_amount_out=amount_out,
-        _token_in=ETH,
-        _token_out=DAI,
+        _token_in=token_to_sell,
+        _token_out=token_to_buy,
         _to=public_key_0,
         _solver_id=2,
     );
@@ -341,7 +354,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return ();
 }
 
-@external
+//@external
 func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -388,7 +401,7 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     return ();
 }
 
-@external
+//@external
 func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -426,7 +439,7 @@ func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     return ();
 }
 
-// @external
+//@external
 func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -598,7 +611,7 @@ func create_alpha_router{syscall_ptr: felt*, range_check_ptr}(
 
 
     //1: ETH 2: DAI
-    IAlphaPool.set_reserves(eth_dai_pair, Uint256(100000 * base, 0), Uint256(100000000 * base, 0));  // 100,000,000
+    IAlphaPool.set_reserves(eth_dai_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
 
     //1: USDT 2: USDC
     IAlphaPool.set_reserves(usdc_usdt_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
@@ -610,7 +623,7 @@ func create_alpha_router{syscall_ptr: felt*, range_check_ptr}(
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.transfer(ETH, router_address, Uint256(100000 * base, 0));
+    IERC20.transfer(ETH, router_address, Uint256(100 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
     IERC20.transfer(USDC, router_address, Uint256(80000 * small_base, 0));
@@ -621,7 +634,7 @@ func create_alpha_router{syscall_ptr: felt*, range_check_ptr}(
     IERC20.transfer(USDT, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
-    IERC20.transfer(DAI, router_address, Uint256(1000000 * base, 0));
+    IERC20.transfer(DAI, router_address, Uint256(100000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(80000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}

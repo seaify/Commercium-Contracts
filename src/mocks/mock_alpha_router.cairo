@@ -81,7 +81,6 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 @view
 func getFactory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
     let (address) = get_contract_address();
-
     return (address,);
 }
 
@@ -153,6 +152,9 @@ func getPool{
     //We missuse the reserves amounts to check if the pair exists
 
     let (pair_address) = pairs.read(Pair(token1,token2));
+    if(pair_address == 0){
+        return (0,);
+    } 
     
     let (token_reserve_1: Uint256,_) = IAlphaPool.getReserves(pair_address);
     
