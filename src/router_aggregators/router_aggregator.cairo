@@ -119,13 +119,19 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     }
     let (price, decimals, _, _) = IEmpiricOracle.get_value(feed.address, feed.key, 0);
 
-    // IF EMPIRIC INTORDUCES DIFFERENT DECIMALS, WE HAVE TO DO A TRANSFORMATION HERE
-
     with_attr error_message("price_feed result invalid, token: {_token}") {
         assert_not_equal(price, FALSE);
     }
 
-    return (Uint256(price, 0), decimals);
+    // We only have 8 decimals atm
+    if (decimals == 8) {
+        let (transformed_price) = Utils.felt_fmul(price,BASE,BASE);
+        tempvar final_price = Uint256(transformed_price,0);
+        return (final_price, decimals);
+    }else{
+        tempvar final_price = Uint256(price,0);
+        return (final_price, decimals);
+    }
 }
 
 @view

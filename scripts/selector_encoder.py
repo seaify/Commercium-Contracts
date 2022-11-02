@@ -1,3 +1,3 @@
 from starknet_py.contract import ContractFunction
 
-print(ContractFunction.get_selector("swapExactTokensForTokensSimple"))
+print(ContractFunction.get_selector("balance(address)"))

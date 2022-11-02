@@ -271,7 +271,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     local token_to_sell = ETH;
     local token_to_buy = DAI;
 
-    local amount_to_trade: Uint256 = Uint256(100 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
     let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 1);
     %{ print("Get_out amount: ",ids._amount_out.low) %}
@@ -323,10 +323,10 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
     // SET TOKENS TO TRADE
     local token_to_sell = ETH;
-    local token_to_buy = shitcoin2;
+    local token_to_buy = DAI;
 
     // SET AMOUNTS TO TRADE
-    local amount_to_trade: Uint256 = Uint256(100000 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
     let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 2);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
