@@ -4,7 +4,6 @@ from starkware.cairo.common.uint256 import Uint256
 from src.lib.router_aggregator import Feed
 from src.lib.utils import Router, Liquidity
 
-
 @contract_interface
 namespace IRouterAggregator {
     func get_price_feed(_token: felt) -> (feed: Feed) {

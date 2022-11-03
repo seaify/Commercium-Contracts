@@ -25,24 +25,24 @@ func router_aggregator() -> (router_aggregator_address: felt) {
 //
 
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_router_aggregator: felt) {
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_aggregator: felt
+) {
     router_aggregator.write(_router_aggregator);
     return ();
 }
 
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256, 
-        _token_in: felt, 
-        _token_out: felt
-    ) -> (
-        routers_len: felt,
-        routers: Router*,
-        path_len: felt,
-        path: Path*,
-        amounts_len: felt,
-        amounts: felt*
-    ) {
+    _amount_in: Uint256, _token_in: felt, _token_out: felt
+) -> (
+    routers_len: felt,
+    routers: Router*,
+    path_len: felt,
+    path: Path*,
+    amounts_len: felt,
+    amounts: felt*,
+) {
     alloc_locals;
 
     let (amounts: felt*) = alloc();
@@ -53,10 +53,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (router_aggregator_address) = router_aggregator.read();
 
     let (
-        amounts_out_len: felt, 
-        amounts_out: Uint256*, 
-        routers_len: felt, 
-        routers: Router*
+        amounts_out_len: felt, amounts_out: Uint256*, routers_len: felt, routers: Router*
     ) = IRouterAggregator.get_all_routers_and_amounts(
         router_aggregator_address, _amount_in, _token_in, _token_out
     );
@@ -89,7 +86,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
 func sum_amounts{range_check_ptr}(_amounts_len: felt, _amounts: Uint256*) -> (sum: Uint256) {
     if (_amounts_len == 0) {
-        return (Uint256(0,0),);
+        return (Uint256(0, 0),);
     }
 
     let (sum: Uint256) = sum_amounts(_amounts_len - 1, _amounts + 2);
@@ -98,14 +95,14 @@ func sum_amounts{range_check_ptr}(_amounts_len: felt, _amounts: Uint256*) -> (su
 }
 
 func kick_low_amounts{range_check_ptr}(
-        _sum: felt,
-        _routers_len: felt,
-        _final_routers: Router*,
-        _routers: Router*,
-        _final_amounts_out: Uint256*,
-        _amounts_out: Uint256*,
-        _counter: felt,
-    ) -> (_routers_len: felt) {
+    _sum: felt,
+    _routers_len: felt,
+    _final_routers: Router*,
+    _routers: Router*,
+    _final_amounts_out: Uint256*,
+    _amounts_out: Uint256*,
+    _counter: felt,
+) -> (_routers_len: felt) {
     alloc_locals;
 
     if (_counter == 0) {
@@ -114,7 +111,7 @@ func kick_low_amounts{range_check_ptr}(
 
     local based_amounts_out = _amounts_out[0].low * BASE;
     let (local share, _) = unsigned_div_rem(based_amounts_out, _sum);
-    
+
     let is_below_threshold = is_le_felt(share, threshold);
 
     if (is_below_threshold == TRUE) {
@@ -145,8 +142,8 @@ func kick_low_amounts{range_check_ptr}(
 }
 
 func set_amounts{range_check_ptr}(
-        _sum: felt, _routers_len: felt, _amounts_out: Uint256*, _amounts: felt*
-    ) {
+    _sum: felt, _routers_len: felt, _amounts_out: Uint256*, _amounts: felt*
+) {
     alloc_locals;
 
     if (_routers_len == 0) {
@@ -156,7 +153,6 @@ func set_amounts{range_check_ptr}(
     local based_amounts_out = _amounts_out[0].low * BASE;
     let (local share, _) = unsigned_div_rem(based_amounts_out, _sum);
     assert _amounts[0] = share;
-    
 
     // TODO: ADD SAFE MATH CHECK
     tempvar new_sum = _sum - _amounts_out[0].low;

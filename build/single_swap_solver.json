@@ -3593,6 +3593,10 @@
                 "type": "const",
                 "value": 1000000000000000000
             },
+            "src.lib.constants.BASE_8": {
+                "type": "const",
+                "value": 100000000
+            },
             "src.lib.constants.HALF_MAX": {
                 "type": "const",
                 "value": 170141183460469231731687303715884105727

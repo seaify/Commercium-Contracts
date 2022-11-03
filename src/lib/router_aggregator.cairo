@@ -8,11 +8,17 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
 from src.openzeppelin.access.ownable import Ownable
-from src.interfaces.i_router import IAlphaRouter, IJediRouter, ISithRouter, ITenKRouter, IStarkRouter
+from src.interfaces.i_router import (
+    IAlphaRouter,
+    IJediRouter,
+    ISithRouter,
+    ITenKRouter,
+    IStarkRouter,
+)
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
 from src.interfaces.i_pool import IAlphaPool, IJediPool, ISithPool, ITenKPool, IStarkPool
 from src.lib.utils import Utils, Router, Liquidity, SithSwapRoutes
-from src.lib.constants import (BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap, TenKFactory)
+from src.lib.constants import BASE, JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap, TenKFactory
 
 struct Feed {
     key: felt,
@@ -44,7 +50,6 @@ func top_router_index_len() -> (len: felt) {
 }
 
 namespace RouterAggregator {
-
     func find_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256,
         _token_in: felt,
@@ -67,7 +72,7 @@ namespace RouterAggregator {
         local best_amount: Uint256;
         local best_router: Router;
 
-        let (amount: Uint256) = get_router_amount(_amount_in,_token_in,_token_out,router);
+        let (amount: Uint256) = get_router_amount(_amount_in, _token_in, _token_out, router);
 
         let (is_new_amount_better) = uint256_le(_best_amount, amount);
         if (is_new_amount_better == 1) {
@@ -90,13 +95,13 @@ namespace RouterAggregator {
     }
 
     func find_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-            _amount_in: Uint256,
-            _token_in: felt,
-            _token_out: felt,
-            _best_amount: Uint256,
-            _router: Router,
-            _counter: felt,
-        ) -> (amount_out: Uint256, router: Router) {
+        _amount_in: Uint256,
+        _token_in: felt,
+        _token_out: felt,
+        _best_amount: Uint256,
+        _router: Router,
+        _counter: felt,
+    ) -> (amount_out: Uint256, router: Router) {
         alloc_locals;
 
         let (index) = top_router_index_len.read();
@@ -111,7 +116,7 @@ namespace RouterAggregator {
         local best_amount: Uint256;
         local best_router: Router;
 
-        let (amount: Uint256) = get_router_amount(_amount_in,_token_in,_token_out,router);
+        let (amount: Uint256) = get_router_amount(_amount_in, _token_in, _token_out, router);
 
         let (is_new_amount_better) = uint256_le(_best_amount, amount);
         if (is_new_amount_better == 1) {
@@ -134,13 +139,13 @@ namespace RouterAggregator {
     }
 
     func all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-            _amount_in: Uint256,
-            _token_in: felt,
-            _token_out: felt,
-            _amounts: Uint256*,
-            _routers: Router*,
-            _routers_len: felt,
-        ){
+        _amount_in: Uint256,
+        _token_in: felt,
+        _token_out: felt,
+        _amounts: Uint256*,
+        _routers: Router*,
+        _routers_len: felt,
+    ) {
         alloc_locals;
 
         if (0 == _routers_len) {
@@ -153,7 +158,7 @@ namespace RouterAggregator {
         // Add rounter to routers arr
         assert _routers[0] = router;
 
-        let (amount: Uint256) = get_router_amount(_amount_in,_token_in,_token_out,router);
+        let (amount: Uint256) = get_router_amount(_amount_in, _token_in, _token_out, router);
         assert _amounts[0] = amount;
 
         all_routers_and_amounts(
@@ -163,23 +168,16 @@ namespace RouterAggregator {
         return ();
     }
 
-    func get_router_amount{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }(
-            _amount_in: Uint256,
-            _token_in: felt,
-            _token_out: felt,
-            _router: Router
-        ) -> (amount_out: Uint256) {
+    func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _amount_in: Uint256, _token_in: felt, _token_out: felt, _router: Router
+    ) -> (amount_out: Uint256) {
         alloc_locals;
         let (path: felt*) = alloc();
         if (_router.type == JediSwap) {
             let (factory_address) = IJediRouter.factory(_router.address);
-            let (pair_address) = IJediFactory.get_pair(factory_address,_token_in,_token_out);
+            let (pair_address) = IJediFactory.get_pair(factory_address, _token_in, _token_out);
             if (pair_address == 0) {
-                return (Uint256(0,0),);
+                return (Uint256(0, 0),);
             }
             assert path[0] = _token_in;
             assert path[1] = _token_out;
@@ -188,62 +186,56 @@ namespace RouterAggregator {
             );
             return (amounts[1],);
         }
-        if (_router.type == AlphaRoad){
+        if (_router.type == AlphaRoad) {
             let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
-            let (pair_address: felt) = IAlphaFactory.getPool(factory_address,_token_in,_token_out);
-            if(pair_address == 0){
-                return (Uint256(0,0),);
+            let (pair_address: felt) = IAlphaFactory.getPool(
+                factory_address, _token_in, _token_out
+            );
+            if (pair_address == 0) {
+                return (Uint256(0, 0),);
             }
-            let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(pair_address);
+            let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(
+                pair_address
+            );
 
             let (local token0: felt) = IAlphaPool.getToken0(pair_address);
-            
+
             if (token0 == _token_in) {
                 let (amount_token_0: Uint256) = IAlphaRouter.quote(
-                    _router.address,
-                    _amount_in, 
-                    reserve_token_0, 
-                    reserve_token_1
+                    _router.address, _amount_in, reserve_token_0, reserve_token_1
                 );
                 tempvar syscall_ptr = syscall_ptr;
                 tempvar pedersen_ptr = pedersen_ptr;
                 tempvar range_check_ptr = range_check_ptr;
                 return (amount_token_0,);
-            }else{
+            } else {
                 let (amount_token_0: Uint256) = IAlphaRouter.quote(
-                    _router.address,
-                    _amount_in, 
-                    reserve_token_1, 
-                    reserve_token_0
+                    _router.address, _amount_in, reserve_token_1, reserve_token_0
                 );
                 tempvar syscall_ptr = syscall_ptr;
                 tempvar pedersen_ptr = pedersen_ptr;
                 tempvar range_check_ptr = range_check_ptr;
                 return (amount_token_0,);
             }
-            
         }
         if (_router.type == SithSwap) {
             let (factory_address) = ISithRouter.factory(_router.address);
-            let (pair_address) = ISithFactory.pairFor(factory_address,_token_in,_token_out,0);
+            let (pair_address) = ISithFactory.pairFor(factory_address, _token_in, _token_out, 0);
             if (pair_address == 0) {
-                return (Uint256(0,0),);
+                return (Uint256(0, 0),);
             }
             let (amount_out: Uint256, _) = ISithRouter.getAmountOut(
-                _router.address, 
-                _amount_in, 
-                _token_in,
-                _token_out
+                _router.address, _amount_in, _token_in, _token_out
             );
             return (amount_out,);
         }
         if (_router.type == TenK) {
-            //Surely that will change in the future
+            // Surely that will change in the future
             let (factory_address) = ITenKRouter.factory(_router.address);
-            let (pair_address) = ITenKFactory.getPair(factory_address,_token_in,_token_out);
+            let (pair_address) = ITenKFactory.getPair(factory_address, _token_in, _token_out);
             //let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_in,_token_out);
             if (pair_address == 0) {
-                return (Uint256(0,0),);
+                return (Uint256(0, 0),);
             }
             assert path[0] = _token_in;
             assert path[1] = _token_out;
@@ -253,26 +245,26 @@ namespace RouterAggregator {
             return (amounts[1],);
         }
         if (_router.type == StarkSwap) {
-        //    let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
-        //    if (pair_address == 0) {
-        //        return (Uint256(0,0),);
-        //    }
+            // let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
+            //    if (pair_address == 0) {
+            //        return (Uint256(0,0),);
+            //    }
 
-        //    let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1);
-        //    let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2);
+            // let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1);
+            //    let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2);
 
-        //    let (token1: felt) = IStarkPool.TokenA(pair_address);
+            // let (token1: felt) = IStarkPool.TokenA(pair_address);
 
-        //    if (token1 == _token_in) {
-        //        let (amount_out: Uint256) = IStarkPool.getInputPrice(
-        //            pair_address, _amount_in, reserve1, reserve2
-        //        );
-        //        return (amount_out,);
-        //    }
-        //    let (amount_out: Uint256) = IStarkPool.getInputPrice(
-        //        pair_address, _amount_in, reserve2, reserve1
-        //    );
-            return (Uint256(0,0),);
+            // if (token1 == _token_in) {
+            //        let (amount_out: Uint256) = IStarkPool.getInputPrice(
+            //            pair_address, _amount_in, reserve1, reserve2
+            //        );
+            //        return (amount_out,);
+            //    }
+            //    let (amount_out: Uint256) = IStarkPool.getInputPrice(
+            //        pair_address, _amount_in, reserve2, reserve1
+            //    );
+            return (Uint256(0, 0),);
         } else {
             with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
                 assert 1 = 2;
@@ -280,8 +272,7 @@ namespace RouterAggregator {
             tempvar syscall_ptr = syscall_ptr;
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;
-            return (Uint256(0,0),);
+            return (Uint256(0, 0),);
         }
     }
-
 }
