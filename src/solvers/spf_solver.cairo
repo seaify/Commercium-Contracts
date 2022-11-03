@@ -58,7 +58,9 @@ struct Edge {
 //
 
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt, _router_aggregator: felt) {
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _owner: felt, _router_aggregator: felt
+) {
     Ownable.initializer(_owner);
     router_aggregator.write(_router_aggregator);
     return ();
@@ -85,11 +87,7 @@ func get_results{
     assert tokens[0] = _token_in;
 
     let (Vertices) = construct_token_arr(
-        _token_in=_token_in,
-        _token_out=_token_out,
-        _tokens=tokens + 1,
-        _liq_counter=0,
-        _counter=2,
+        _token_in=_token_in, _token_out=_token_out, _tokens=tokens + 1, _liq_counter=0, _counter=2
     );
 
     // Edges
@@ -118,7 +116,7 @@ func get_results{
         _src_counter=0,
         _total_counter=0,
     );
-    
+
     // Initialize inQueue Array to false
     let (distances: felt*) = alloc();
     let (predecessors: felt*) = alloc();
@@ -265,18 +263,18 @@ func get_results{
 // We use _dst_counter to track the number of destinations we have checked for each source (We check vertices 1-5)
 // We use _src_couter to track the number of sources we have checked (We check vertices 0-4)
 func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256,
-        _amount_in_usd: Uint256,
-        _vertices: felt,
-        _tokens: felt*,
-        _src_len: felt,
-        _src: Source*,
-        _edge_len: felt,
-        _edge: Edge*,
-        _dst_counter: felt,
-        _src_counter: felt,
-        _total_counter: felt,
-    ) -> () {
+    _amount_in: Uint256,
+    _amount_in_usd: Uint256,
+    _vertices: felt,
+    _tokens: felt*,
+    _src_len: felt,
+    _src: Source*,
+    _edge_len: felt,
+    _edge: Edge*,
+    _dst_counter: felt,
+    _src_counter: felt,
+    _total_counter: felt,
+) -> () {
     alloc_locals;
 
     if (_src_counter == _vertices - 1) {
@@ -317,10 +315,7 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
             assert we_are_not_advancing = 1;
         } else {
             let (local weight: felt) = IRouterAggregator.get_weight(
-                router_aggregator_address,
-                _amount_in_usd,
-                amount_out,
-                _tokens[_dst_counter],
+                router_aggregator_address, _amount_in_usd, amount_out, _tokens[_dst_counter]
             );
             if (_src_counter == 0) {
                 assert _edge[0] = Edge(_dst_counter, router, weight + EXTRA_BASE);
@@ -425,19 +420,19 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 func shortest_path_faster{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }(
-        _distances_len: felt,
-        _distances: felt*,
-        _is_in_queue_len: felt,
-        _is_in_queue: felt*,
-        _queue_len: felt,
-        _queue: felt*,
-        _vertices: felt,
-        _src: Source*,
-        _edge: Edge*,
-        _predecessors_len: felt,
-        _predecessors: felt*,
-    ) -> (final_distances: felt*) {
+}(
+    _distances_len: felt,
+    _distances: felt*,
+    _is_in_queue_len: felt,
+    _is_in_queue: felt*,
+    _queue_len: felt,
+    _queue: felt*,
+    _vertices: felt,
+    _src: Source*,
+    _edge: Edge*,
+    _predecessors_len: felt,
+    _predecessors: felt*,
+) -> (final_distances: felt*) {
     alloc_locals;
 
     // If there is no destination left in the queue we can stop the procedure
@@ -513,30 +508,30 @@ func shortest_path_faster{
 
 func determine_distances{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }(
-        _distances_len: felt,
-        _distances: felt*,
-        _queue_len: felt,
-        _queue: felt*,
-        _is_in_queue_len: felt,
-        _is_in_queue: felt*,
-        _vertices: felt,
-        _edge: Edge*,
-        _predecessors_len: felt,
-        _predecessors: felt*,
-        _dst_stop: felt,
-        _src_nr: felt,
-        _current_distance: felt,
-    ) -> (
-        _distances_len: felt,
-        _distances: felt*,
-        _queue_len: felt,
-        _queue: felt*,
-        _is_in_queue_len: felt,
-        _is_in_queue: felt*,
-        res_predecessors_len: felt,
-        res_predecessors: felt*,
-    ) {
+}(
+    _distances_len: felt,
+    _distances: felt*,
+    _queue_len: felt,
+    _queue: felt*,
+    _is_in_queue_len: felt,
+    _is_in_queue: felt*,
+    _vertices: felt,
+    _edge: Edge*,
+    _predecessors_len: felt,
+    _predecessors: felt*,
+    _dst_stop: felt,
+    _src_nr: felt,
+    _current_distance: felt,
+) -> (
+    _distances_len: felt,
+    _distances: felt*,
+    _queue_len: felt,
+    _queue: felt*,
+    _is_in_queue_len: felt,
+    _is_in_queue: felt*,
+    res_predecessors_len: felt,
+    res_predecessors: felt*,
+) {
     alloc_locals;
 
     if (_dst_stop == 0) {
@@ -716,13 +711,13 @@ func determine_distances{
 }
 
 func init_arrays{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _distances_len: felt,
-        _distances: felt*,
-        _predecessors: felt*,
-        _is_in_queue: felt*,
-        _queue: felt*,
-        _counter: felt,
-    ) -> () {
+    _distances_len: felt,
+    _distances: felt*,
+    _predecessors: felt*,
+    _is_in_queue: felt*,
+    _queue: felt*,
+    _counter: felt,
+) -> () {
     if (_counter == _distances_len) {
         return ();
     }
@@ -792,13 +787,8 @@ func get_router_and_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
 // First token in arr needs to be in_token and last one the out_token
 func construct_token_arr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _token_in: felt,
-        _token_out: felt,
-        _tokens: felt*,
-        _liq_counter: felt,
-        _counter: felt,
-    ) -> (vertices: felt) {
-
+    _token_in: felt, _token_out: felt, _tokens: felt*, _liq_counter: felt, _counter: felt
+) -> (vertices: felt) {
     let (high_liq_token) = high_liq_tokens.read(_liq_counter);
 
     if (high_liq_token == 0) {

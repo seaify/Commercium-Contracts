@@ -11,50 +11,50 @@ from starkware.cairo.common.math_cmp import is_le_felt
 from src.openzeppelin.access.ownable import Ownable
 from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.lib.utils import Utils, Router, Liquidity
-from src.lib.constants import BASE
-from src.lib.router_aggregator import (RouterAggregator, Feed, price_feed, routers, router_index_len, top_routers, top_router_index_len)
+from src.lib.constants import BASE, BASE_8
+from src.lib.router_aggregator import (
+    RouterAggregator,
+    Feed,
+    price_feed,
+    routers,
+    router_index_len,
+    top_routers,
+    top_router_index_len,
+)
 
 //
 // Views
 //
 
 @view
-func get_price_feed{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_token: felt) -> (feed: Feed){
+func get_price_feed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token: felt
+) -> (feed: Feed) {
     let (feed: Feed) = price_feed.read(_token);
-    return(feed,);
+    return (feed,);
 }
 
 @view
-func get_router{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_index: felt) -> (router_address: felt, router_type: felt) {
+func get_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) -> (
+    router_address: felt, router_type: felt
+) {
     let (router: Router) = routers.read(_index);
 
-    return (router.address,router.type);
+    return (router.address, router.type);
 }
 
-@view 
-func get_router_index_len{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }()->(len: felt){
+@view
+func get_router_index_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    len: felt
+) {
     let (len) = router_index_len.read();
-    return(len,);
+    return (len,);
 }
 
 @view
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256, 
-        _token_in: felt, 
-        _token_out: felt
-    ) -> (amount_out: Uint256, router: Router) {
+    _amount_in: Uint256, _token_in: felt, _token_out: felt
+) -> (amount_out: Uint256, router: Router) {
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_router(
         _amount_in,
         _token_in,
@@ -69,10 +69,8 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
 @view
 func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256, 
-        _token_in: felt, 
-        _token_out: felt
-    ) -> (amount_out: Uint256, router: Router) {
+    _amount_in: Uint256, _token_in: felt, _token_out: felt
+) -> (amount_out: Uint256, router: Router) {
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_top_router(
         _amount_in,
         _token_in,
@@ -113,9 +111,9 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     alloc_locals;
 
     let (feed: Feed) = price_feed.read(_token);
-    if (feed.address == 0){
-        //let (res_amount: Uint256,_) = get_single_best_router(1*BASE,_token,ETH)
-        return (Uint256(100*BASE, 0), 0);
+    if (feed.address == 0) {
+        // let (res_amount: Uint256,_) = get_single_best_router(1*BASE,_token,ETH)
+        return (Uint256(100 * BASE_8, 0), 0);
     }
     let (price, decimals, _, _) = IEmpiricOracle.get_value(feed.address, feed.key, 0);
 
@@ -125,25 +123,19 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     // We only have 8 decimals atm
     if (decimals == 8) {
-        let (transformed_price) = Utils.felt_fmul(price,BASE,BASE);
-        tempvar final_price = Uint256(transformed_price,0);
+        let (transformed_price) = Utils.felt_fmul(price, BASE, BASE_8);
+        tempvar final_price = Uint256(transformed_price, 0);
         return (final_price, decimals);
-    }else{
-        tempvar final_price = Uint256(price,0);
+    } else {
+        tempvar final_price = Uint256(price, 0);
         return (final_price, decimals);
     }
 }
 
 @view
-func get_weight{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(
-        _amount_in_usd: Uint256, 
-        _amount_out: Uint256, 
-        _token_out: felt
-    )->(weight: felt) {
+func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _amount_in_usd: Uint256, _amount_out: Uint256, _token_out: felt
+) -> (weight: felt) {
     alloc_locals;
 
     // Transform Token Amount to USD Amount
@@ -163,11 +155,9 @@ func get_weight{
 //
 
 @external
-func add_router{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_router_address: felt, _router_type: felt){
+func add_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_address: felt, _router_type: felt
+) {
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
     routers.write(router_len, Router(_router_address, _router_type));
@@ -177,18 +167,16 @@ func add_router{
 }
 
 @external
-func update_router{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_router_address: felt, _router_type: felt, id: felt){
+func update_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_address: felt, _router_type: felt, id: felt
+) {
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
-    let is_under_len = is_le_felt(id,router_len);
+    let is_under_len = is_le_felt(id, router_len);
     assert is_under_len = 1;
     routers.write(id, Router(_router_address, _router_type));
-    //EMIT ADD EVENT
-    return();
+    // EMIT ADD EVENT
+    return ();
 }
 
 @external
@@ -204,11 +192,9 @@ func remove_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 @external
-func add_top_router{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_router_address: felt, _router_type: felt){
+func add_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_address: felt, _router_type: felt
+) {
     Ownable.assert_only_owner();
     let (router_len) = top_router_index_len.read();
     top_routers.write(router_len, Router(_router_address, _router_type));
@@ -218,22 +204,22 @@ func add_top_router{
 }
 
 @external
-func update_top_router{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_router_address: felt, _router_type: felt, id: felt){
+func update_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_address: felt, _router_type: felt, id: felt
+) {
     Ownable.assert_only_owner();
     let (router_len) = top_router_index_len.read();
-    let is_under_len = is_le_felt(id,router_len);
+    let is_under_len = is_le_felt(id, router_len);
     assert is_under_len = 1;
     top_routers.write(id, Router(_router_address, _router_type));
-    //EMIT ADD EVENT
-    return();
+    // EMIT ADD EVENT
+    return ();
 }
 
 @external
-func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) {
+func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _index: felt
+) {
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
     let (last_router: Router) = top_routers.read(router_len);

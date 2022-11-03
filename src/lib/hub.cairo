@@ -34,34 +34,23 @@ namespace Hub {
     // Views
     //
 
-    func solver_registry{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }() -> (solver_registry: felt){
+    func solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        solver_registry: felt
+    ) {
         let (solver_registry) = Hub_solver_registry.read();
         return (solver_registry,);
     }
 
-    func trade_executor{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }() -> (trade_executor: felt){
+    func trade_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        trade_executor: felt
+    ) {
         let (trade_executor) = Hub_trade_executor.read();
         return (trade_executor,);
     }
 
-    func get_solver_amount{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }(
-            _amount_in: Uint256, 
-            _token_in: felt, 
-            _token_out: felt, 
-            _solver_id: felt
-        ) -> (amount_out: Uint256) {
+    func get_solver_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
+    ) -> (amount_out: Uint256) {
         alloc_locals;
 
         let (solver_registry) = Hub.solver_registry();
@@ -91,40 +80,39 @@ namespace Hub {
             path,
             amounts_len,
             amounts,
-            _amount_in
+            _amount_in,
         );
 
         return (amount_out,);
     }
- 
-    func get_multiple_solver_amounts{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }(
-            _amount_in: Uint256, 
-            _token_in: felt, 
-            _token_out: felt, 
-            _solver_ids_len: felt,
-            _solver_ids: felt*,
-            _amounts_out: Uint256*, 
-        ){
 
+    func get_multiple_solver_amounts{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(
+        _amount_in: Uint256,
+        _token_in: felt,
+        _token_out: felt,
+        _solver_ids_len: felt,
+        _solver_ids: felt*,
+        _amounts_out: Uint256*,
+    ) {
         if (_solver_ids_len == 0) {
-            return();
+            return ();
         }
 
-        let (amounts_out: Uint256) = Hub.get_solver_amount(_amount_in, _token_in, _token_out, _solver_ids[0]);
+        let (amounts_out: Uint256) = Hub.get_solver_amount(
+            _amount_in, _token_in, _token_out, _solver_ids[0]
+        );
 
         assert _amounts_out[0] = amounts_out;
 
         get_multiple_solver_amounts(
-            _amount_in, 
-            _token_in, 
-            _token_out, 
+            _amount_in,
+            _token_in,
+            _token_out,
             _solver_ids_len - 1,
             _solver_ids + 1,
-            _amounts_out + 2
+            _amounts_out + 2,
         );
 
         return ();
@@ -180,18 +168,14 @@ namespace Hub {
     // Externals
     //
 
-    func swap_with_solver{
-            syscall_ptr: felt*, 
-            pedersen_ptr: HashBuiltin*, 
-            range_check_ptr
-        }(
-            _token_in: felt,
-            _token_out: felt,
-            _amount_in: Uint256,
-            _min_amount_out: Uint256,
-            _to: felt,
-            _solver_id: felt,
-        ) -> (received_amount: Uint256) {
+    func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _token_in: felt,
+        _token_out: felt,
+        _amount_in: Uint256,
+        _min_amount_out: Uint256,
+        _to: felt,
+        _solver_id: felt,
+    ) -> (received_amount: Uint256) {
         alloc_locals;
 
         ReentrancyGuard._start();
@@ -213,7 +197,7 @@ namespace Hub {
         // Check current token balance
         // (Used to determine received amount)
         let (original_balance: Uint256) = IERC20.balanceOf(_token_out, this_address);
-        
+
         // Get trading path from the selected solver
         let (
             routers_len: felt,
@@ -236,7 +220,7 @@ namespace Hub {
             path,
             amounts_len,
             amounts,
-            this_address
+            this_address,
         );
 
         // Check received Amount

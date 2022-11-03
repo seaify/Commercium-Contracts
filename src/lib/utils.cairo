@@ -33,7 +33,6 @@ struct Path {
 }
 
 namespace Utils {
-
     func not_equal{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         x: felt, y: felt
     ) -> (z: felt) {

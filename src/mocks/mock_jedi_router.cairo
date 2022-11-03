@@ -36,8 +36,8 @@ func factory_address() -> (address: felt) {
 
 @view
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-     _amount_in: Uint256, _token_in: felt, _token_out: felt
-    ) -> (amount_out: Uint256) {
+    _amount_in: Uint256, _token_in: felt, _token_out: felt
+) -> (amount_out: Uint256) {
     alloc_locals;
     let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(_token_in, _token_out);
 
@@ -121,7 +121,7 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     _path_len: felt,
     _path: felt*,
     _receiver_address: felt,
-    _deadline: felt
+    _deadline: felt,
 ) -> (amounts_len: felt, amounts: Uint256*) {
     alloc_locals;
     let (amount_out: Uint256) = get_amount_out(_amount_in, _path[0], _path[1]);
@@ -139,17 +139,15 @@ func swap_exact_tokens_for_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 //
 
 @view
-func get_pair{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(token1: felt, token2: felt)->(pair:felt){
-    //We missuse the reserves amounts to check if the pair exists
-    let (reserves1:Uint256,_) = get_reserves(token1,token2);
-    if(reserves1.low == 0){
+func get_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token1: felt, token2: felt
+) -> (pair: felt) {
+    // We missuse the reserves amounts to check if the pair exists
+    let (reserves1: Uint256, _) = get_reserves(token1, token2);
+    if (reserves1.low == 0) {
         return (0,);
     }
-    //This address also acts as the pair contract
+    // This address also acts as the pair contract
     let (address_this) = get_contract_address();
     return (address_this,);
 }
