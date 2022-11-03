@@ -30,6 +30,6 @@ jobs:
       - name: Check Format
         run: |
           make format-check
-        name: Check Format
+      - name: Build Project
         run: |
           make build  
