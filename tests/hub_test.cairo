@@ -172,17 +172,17 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Set Global Prices for Mock ERC20s in Mock_Price_Feed
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.mock_oracle_address) %}
     // ETH/USD, key: 28556963469423460
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 0, 1000 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 1000 * base_8, 8);
     // USDC/USD, key: 8463218501920060260
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 0, 1 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 1 * base_8, 8);
     // USDT/USD, key: 8463218574934504292
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 0, 1 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 1 * base_8, 8);
     // DAI/USD, key: 28254602066752356
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 0, 1 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 1 * base_8, 8);
     // Shitcoin1/USD, key: 99234898239
-    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 0, 10 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 10 * base_8, 8);
     // Shitcoin2/USD, key: 23674728373
-    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 0, 10 * base_8, 8);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 10 * base_8, 8);
     %{ stop_prank_callable() %}
 
     // Add newly created routers to router aggregator

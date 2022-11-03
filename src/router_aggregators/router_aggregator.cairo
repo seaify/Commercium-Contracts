@@ -115,7 +115,7 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         // let (res_amount: Uint256,_) = get_single_best_router(1*BASE,_token,ETH)
         return (Uint256(100 * BASE_8, 0), 0);
     }
-    let (price, decimals, _, _) = IEmpiricOracle.get_value(feed.address, feed.key, 0);
+    let (price, decimals, _, _) = IEmpiricOracle.get_spot_median(feed.address, feed.key);
 
     with_attr error_message("price_feed result invalid, token: {_token}") {
         assert_not_equal(price, FALSE);

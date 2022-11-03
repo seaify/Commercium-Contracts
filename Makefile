@@ -9,7 +9,7 @@ setup:
 	
 	
 test:
-	
+	protostar test ./tests
 
 format:
 	cairo-format src/**/*.cairo -i
