@@ -49,25 +49,30 @@ func set_factory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 // ROUTER FUNCTIONS
 //
 
-func executeExactToMinRoute(input_token,input_token_amount,output_token,min_output_token_amount,recipient,route_array_len,route_array){
+func executeExactToMinRoute(
+    input_token,
+    input_token_amount,
+    output_token,
+    min_output_token_amount,
+    recipient,
+    route_array_len,
+    route_array,
+) {
 }
-
 
 //
 // FACTORY FUNCTIONS
 //
 
-func get_pair{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(token1: felt, token2: felt)->(pair:felt){
-    //We missuse the reserves amounts to check if the pair exists
-    let (current_reserves: Reserves) = reserves.read(Pair(token1,token2));
-    if(current_reserves.reserve_1.low == 0){
+func get_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token1: felt, token2: felt
+) -> (pair: felt) {
+    // We missuse the reserves amounts to check if the pair exists
+    let (current_reserves: Reserves) = reserves.read(Pair(token1, token2));
+    if (current_reserves.reserve_1.low == 0) {
         return 0;
-    } 
-    //This address also acts as the pair contract
+    }
+    // This address also acts as the pair contract
     let (address_this) = get_contract_address();
     return address_this;
 }
@@ -76,17 +81,15 @@ func get_pair{
 // PAIR FUNCTIONS
 //
 
-func poolTokenBalance{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(_token_id: felt)->(balance:Uint256){
-    //We missuse the reserves amounts to check if the pair exists
-    let (current_reserves: Reserves) = reserves.read(Pair(token1,token2));
+func poolTokenBalance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token_id: felt
+) -> (balance: Uint256) {
+    // We missuse the reserves amounts to check if the pair exists
+    let (current_reserves: Reserves) = reserves.read(Pair(token1, token2));
 
-    if (_token_id == 1){
+    if (_token_id == 1) {
         return (current_reserves.reserve_1);
-    }else{
+    } else {
         assert _token_id = 2;
         return (current_reserves.reserve_2);
     }

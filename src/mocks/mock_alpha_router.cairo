@@ -37,7 +37,7 @@ func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 ) -> (amount_out: Uint256) {
     alloc_locals;
 
-    let (pair_address) = pairs.read(Pair(_token_in,_token_out));
+    let (pair_address) = pairs.read(Pair(_token_in, _token_out));
     let (reserve_1: Uint256, reserve_2: Uint256) = IAlphaPool.getReserves(pair_address);
 
     if (reserve_1.low == 0) {
@@ -59,7 +59,7 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     alloc_locals;
 
     let (local amounts: Uint256*) = alloc();
-    let (pair_address) = pairs.read(Pair(path[0],path[1]));
+    let (pair_address) = pairs.read(Pair(path[0], path[1]));
     let (reserve_1: Uint256, reserve_2: Uint256) = IAlphaPool.getReserves(pair_address);
 
     if (reserve_1.low == 0) {
@@ -79,7 +79,9 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @view
-func getFactory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (address: felt) {
+func getFactory{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    address: felt
+) {
     let (address) = get_contract_address();
     return (address,);
 }
@@ -95,25 +97,25 @@ func set_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 @external
 func set_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _token1: felt, 
-        _token2: felt,
-        _pair_address: felt
-    ) {
-    pairs.write(Pair(_token1,_token2),_pair_address);    
-    pairs.write(Pair(_token2,_token1),_pair_address);
-    return();
+    _token1: felt, _token2: felt, _pair_address: felt
+) {
+    pairs.write(Pair(_token1, _token2), _pair_address);
+    pairs.write(Pair(_token2, _token1), _pair_address);
+    return ();
 }
 
 @external
 func swapExactTokensForTokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        token_from_address: felt,
-        token_to_address: felt,
-        amount_token_from: Uint256,
-        amount_token_to_min: Uint256
-    ) -> (amount_out_received: Uint256){
+    token_from_address: felt,
+    token_to_address: felt,
+    amount_token_from: Uint256,
+    amount_token_to_min: Uint256,
+) -> (amount_out_received: Uint256) {
     alloc_locals;
-    //Currently isn't reducing reserve amounts
-    let (amount_out: Uint256) = get_amount_out(amount_token_from, token_from_address, token_to_address);
+    // Currently isn't reducing reserve amounts
+    let (amount_out: Uint256) = get_amount_out(
+        amount_token_from, token_from_address, token_to_address
+    );
     let (caller_address) = get_caller_address();
     let (this_address) = get_contract_address();
     IERC20.transferFrom(token_from_address, caller_address, this_address, amount_token_from);
@@ -123,10 +125,8 @@ func swapExactTokensForTokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 
 @view
 func quote{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    amount_token_0: Uint256, 
-    reserve_token_0: Uint256, 
-    reserve_token_1: Uint256) 
-    -> (amount_token_0: Uint256){
+    amount_token_0: Uint256, reserve_token_0: Uint256, reserve_token_1: Uint256
+) -> (amount_token_0: Uint256) {
     if (reserve_token_0.low == 0) {
         return (Uint256(0, 0),);
     } else {
@@ -144,24 +144,20 @@ func quote{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //
 
 @view
-func getPool{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(token1: felt, token2: felt)->(pair:felt){
-    //We missuse the reserves amounts to check if the pair exists
+func getPool{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token1: felt, token2: felt
+) -> (pair: felt) {
+    // We missuse the reserves amounts to check if the pair exists
 
-    let (pair_address) = pairs.read(Pair(token1,token2));
-    if(pair_address == 0){
+    let (pair_address) = pairs.read(Pair(token1, token2));
+    if (pair_address == 0) {
         return (0,);
-    } 
-    
-    let (token_reserve_1: Uint256,_) = IAlphaPool.getReserves(pair_address);
-    
-    if(token_reserve_1.low == 0){
+    }
+
+    let (token_reserve_1: Uint256, _) = IAlphaPool.getReserves(pair_address);
+
+    if (token_reserve_1.low == 0) {
         return (0,);
-    } 
+    }
     return (pair_address,);
 }
-
-

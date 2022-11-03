@@ -20,24 +20,25 @@ from src.lib.constants import BASE
 func router_aggregator() -> (router_aggregator_address: felt) {
 }
 
-
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_router_aggregator: felt) {
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_aggregator: felt
+) {
     router_aggregator.write(_router_aggregator);
     return ();
 }
 
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        _amount_in: Uint256, _token_in: felt, _token_out: felt
-    ) -> (
-        routers_len: felt,
-        routers: Router*,
-        path_len: felt,
-        path: Path*,
-        amounts_len: felt,
-        amounts: felt*,
-    ) {
+    _amount_in: Uint256, _token_in: felt, _token_out: felt
+) -> (
+    routers_len: felt,
+    routers: Router*,
+    path_len: felt,
+    path: Path*,
+    amounts_len: felt,
+    amounts: felt*,
+) {
     alloc_locals;
 
     let (router_aggregator_address) = router_aggregator.read();

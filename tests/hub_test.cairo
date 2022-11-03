@@ -36,6 +36,7 @@ const Vertices = 6;
 const Edges = 21;
 
 const base = 1000000000000000000;  // 1e18
+const base_8 = 100000000;
 const small_base = 1000000;  // 1e6
 const extra_base = 100000000000000000000;  // We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
@@ -171,17 +172,17 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Set Global Prices for Mock ERC20s in Mock_Price_Feed
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.mock_oracle_address) %}
     // ETH/USD, key: 28556963469423460
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 0, 1000 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 0, 1000 * base_8, 8);
     // USDC/USD, key: 8463218501920060260
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 0, 1 * base_8, 8);
     // USDT/USD, key: 8463218574934504292
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 0, 1 * base_8, 8);
     // DAI/USD, key: 28254602066752356
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 0, 1 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 0, 1 * base_8, 8);
     // Shitcoin1/USD, key: 99234898239
-    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 0, 10 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 0, 10 * base_8, 8);
     // Shitcoin2/USD, key: 23674728373
-    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 0, 10 * base, 18);
+    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 0, 10 * base_8, 8);
     %{ stop_prank_callable() %}
 
     // Add newly created routers to router aggregator
@@ -248,7 +249,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-//@external
+@external
 func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -354,7 +355,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return ();
 }
 
-//@external
+@external
 func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
