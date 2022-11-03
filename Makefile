@@ -12,10 +12,10 @@ test:
 	protostar test ./tests
 
 format:
-	cairo-format src/**/*.cairo -i
+	poetry run cairo-format src/**/*.cairo -i
 
 format-check:
-	cairo-format src/**/*.cairo -c
+	poetry run cairo-format src/**/*.cairo -c
 
 clean:
 	rm -rf build
