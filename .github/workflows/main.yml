@@ -27,10 +27,11 @@ jobs:
       - name: Install dependencies
         run: |
           make setup
-	        source /home/runner/.bashrc
       - name: Check Format
         run: |
           make format-check
       - name: Build Project
         run: |
-          make build  
+          for filename in $(find ./src/ -type f -name '*.cairo');
+          do echo $(basename -- $filename) && starknet-compile $filename --cairo_path ./src --disable_hint_validation >/dev/null;
+          done;
