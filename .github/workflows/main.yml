@@ -27,6 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           make setup
+	        source /home/runner/.bashrc
       - name: Check Format
         run: |
           make format-check

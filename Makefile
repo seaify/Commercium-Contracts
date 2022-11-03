@@ -7,7 +7,6 @@ build:
 setup:
 	poetry install --no-root
 	curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash
-	source /home/runner/.bashrc
 	
 test:
 	protostar test ./tests
