@@ -20,7 +20,7 @@ TenKRouter = int("0x00975910cd99bc56bd289eaaa5cee6cd557f0ddafdb2ce6ebea15b158eb2
 StarkSwapFactory = 0 #0x
 AlphaRouter = int("0x04aec73f0611a9be0524e7ef21ab1679bdf9c97dc7d72614f15373d431226b6a",16)
 execution_contract_hash = int("0x03d451a4e2c1eb46424daed0d51d066c7c6b4360ee3e9fe6242884b50b628f32",16)
-router_aggregator_contract_hash = int("0x045f49e7813d20444c98704a532b884d65989d251ee009c701a0fadb259e5017",16)
+router_aggregator_contract_hash = int("0x029facf61d340fa7ae41dc4512fc9d211616a441d42ebe5b0ef0fa4c32197143",16)
 
 #Setup Admin Account
 private_key = Path("./.secret")
