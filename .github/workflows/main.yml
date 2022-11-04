@@ -4,32 +4,26 @@ on: [push, pull_request, pull_request_target]
 
 jobs:
   compilation-tests:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: Set up Python 3.9
-          uses: actions/setup-python@v4
-          with:
-            python-version: 3.9
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-            virtualenvs-in-project: false
-            virtualenvs-path: ~/.virtualenvs
-        - name: Cache Poetry env
-          uses: actions/cache@v1
-          id: cache
-          with:
-            path: ~/.virtualenvs
-            key: poetry-${{ hashFiles('**/poetry.lock') }}
-            restore-keys: |
-              poetry-${{ hashFiles('**/poetry.lock') }}
-        - name: Install dependencies
-          run: |
-            make setup
-        - name: Compile all the cairo files
-          run: |
-            make format-check
-            for filename in $(find ./src/ -type f -name '*.cairo');
-            do echo $(basename -- $filename) && starknet-compile $filename --cairo_path ./src --disable_hint_validation >/dev/null;
-            done;
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+      - name: Cache Poetry env
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: ~/.virtualenvs
+          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: |
+          make setup
