@@ -8,11 +8,11 @@ from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.lib.utils import Router, Path
 from src.lib.constants import BASE
 
-//##################################################################################
-//                                                                                 #
-//   THIS IS THE SIMPLEST AND MOST FLEXIBLE SOLVER FOR INTEGRATION WITH PROTOCOLS  #
-//                                                                                 #
-//##################################################################################
+/////////////////////////////////////////////////////////////////////////////////////
+//                                                                                 //
+//   THIS IS THE SIMPLEST AND MOST FLEXIBLE SOLVER FOR INTEGRATION WITH PROTOCOLS  //
+//                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////
 
 // This should be a const, but easier like this for testing
 @storage_var
