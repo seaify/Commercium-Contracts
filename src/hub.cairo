@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /// @title Main contract that acts as a security layer and the main contact point for any trader/protocol utilizing the Commercium. 
-/// @author Fresh Pizza
+/// @author FreshPizza
 
 %lang starknet
 
@@ -23,11 +23,12 @@ from openzeppelin.security.safemath.library import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
-
 /////////////////////////////
 //       Constructor       //
 /////////////////////////////
 
+//@notice initialize the HUB contract
+//@param _owner - The initial owner of the Hub contract
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
     Ownable.initializer(_owner);
@@ -153,7 +154,7 @@ func get_amount_out{
 // @param _token_in - The address of the token that would be sold
 // @param _token_out - The address of the token that would be bought
 // @param _solver_ids_ - The IDs of the solvers to be used for the different trades
-// @return amounts_out - The token return amounts for each solver
+// @return amounts_out - An array of tokens returned by each solver
 @view 
 func get_multiple_solver_amounts{
         syscall_ptr: felt*, 
@@ -187,7 +188,7 @@ func get_multiple_solver_amounts{
 // @param _token_in - The address of the token that would be sold
 // @param _token_out - The address of the token that would be bought
 // @param _to - The receiver address of the bought tokens
-// @return amounts_out - The token return amounts for each solver
+// @return received_amount - The token return amounts for each solver
 @external
 func swap_exact_tokens_for_tokens{
         syscall_ptr: felt*, 
@@ -215,7 +216,7 @@ func swap_exact_tokens_for_tokens{
 // @param _token_out - The address of the token that would be bought
 // @param _to - The receiver address of the bought tokens
 // @param _solver_id - The ID of the solver that will be used to find the best trading path
-// @return amounts_out - The token return amounts for each solver
+// @return received_amount - The token return amounts for each solver
 @external
 func swap_exact_tokens_for_tokens_with_solver{
         syscall_ptr: felt*, 
@@ -235,6 +236,13 @@ func swap_exact_tokens_for_tokens_with_solver{
     return (received_amount,);
 }
 
+// @notice Swap between two tokens by providing the exact routers and token address to be used. Aka the exat path to take.
+// @param _routers - An array of routers to be used for the trades
+// @param _path - An array of token pairs to trade
+// @param _amounts - An array of token amounts (in %) to sell
+// @param _amount_in - The initial token to sell
+// @param _min_amount_out - The minimum amount of tokens to receive (will be the path.token_out of the last item in the path array)
+// @return received_amount - The token return amounts for each solver
 @external
 func swap_with_path{
         syscall_ptr: felt*, 
@@ -300,6 +308,8 @@ func swap_with_path{
 // Admin functions
 //
 
+// @notice Set the address of the solver registry which will be used to validate solver IDs
+// @param _new_registry - The address of the new solver registry 
 @external
 func set_solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _new_registry: felt
@@ -309,6 +319,8 @@ func set_solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     return ();
 }
 
+// @notice Set the new execution logic for trades
+// @param _executor_hash - The class hash of the new transaction execution logic
 @external
 func set_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _executor_hash: felt
@@ -318,10 +330,14 @@ func set_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return ();
 }
 
+// @notice Set the new execution logic for trades
+// @param _token - An array of tokens to retrieve from this contract
+// @param _token_amount - An array of token amounts to retrieve
 @external
 func retrieve_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token_len: felt, _token: felt*, _token_amount_len: felt, _token_amount: Uint256*
 ) -> () {
     Ownable.assert_only_owner();
+    //ToDo implement token retieval logic
     return ();
 }
