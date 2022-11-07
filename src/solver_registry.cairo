@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MIT
+/// @title Registry that mapps IDs to solver addresses.  
+/// @author FreshPizza
 
 %lang starknet
 

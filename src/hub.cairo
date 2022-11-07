@@ -23,6 +23,14 @@ from openzeppelin.security.safemath.library import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
+//
+// Events
+//
+
+@event
+func swap_executed(solver_used: felt, amount_traded: Uint256) {
+}
+
 /////////////////////////////
 //       Constructor       //
 /////////////////////////////
@@ -205,6 +213,9 @@ func swap_exact_tokens_for_tokens{
     let (received_amount: Uint256) = Hub.swap_with_solver(
         _token_in, _token_out, _amount_in, _amount_out_min, _to, 1
     );
+    // Log swap
+    swap_executed.emit(solver_used=0, amount_traded=_amount_in);
+
     return (received_amount,);
 }
 
