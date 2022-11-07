@@ -43,29 +43,29 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 ) {
     alloc_locals;
 
+    // Allocate arrs
     let (amounts: felt*) = alloc();
     let (final_routers: Router*) = alloc();
     let (final_amounts_out: Uint256*) = alloc();
     let (path: Path*) = alloc();
 
+    // Get results from all routers
     let (router_aggregator_address) = router_aggregator.read();
-
     let (
         amounts_out_len: felt, amounts_out: Uint256*, routers_len: felt, routers: Router*
     ) = IRouterAggregator.get_all_routers_and_amounts(
         router_aggregator_address, _amount_in, _token_in, _token_out
     );
 
+    // Disregard routers with low results
     let (sum: Uint256) = sum_amounts(amounts_out_len, amounts_out);
-
     let (final_routers_len: felt) = kick_low_amounts(
         sum.low, routers_len, final_routers, routers, final_amounts_out, amounts_out, routers_len
     );
 
+    // Split trading amount among Routers according to initial result
     let (final_sum: Uint256) = sum_amounts(final_routers_len, final_amounts_out);
-
     set_amounts(final_sum.low, final_routers_len, final_amounts_out, amounts);
-
     set_path(final_routers_len, path, _token_in, _token_out);
 
     return (

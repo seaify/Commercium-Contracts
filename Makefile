@@ -6,6 +6,7 @@ build:
 
 setup:
 	poetry install --no-root
+	curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash
 	protostar install OpenZeppelin/cairo-contracts@v0.5.0
 
 format:
