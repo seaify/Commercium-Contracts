@@ -10,7 +10,7 @@ python = "^3.9"
 cairo-lang = "^0.10.1"
 
 [tool.poetry.group.dev.dependencies]
-cairo-coverage = "^0.1.0"
+cairo-coverage = "^0.1.4"
 black = "^22.10.0"
 isort = "^5.10.1"
 marshmallow-dataclass = "^8.5.9"
