@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: MIT
-/// @title This contract holds the logic to perform trades on the different StarkNet AMMs
-/// @author FreshPizza
-
+// @author FreshPizza
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256, uint256_add
@@ -21,6 +19,12 @@ from src.lib.router_aggregator import RouterAggregator
 from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_router import (IJediRouter, IAlphaRouter, ISithRouter, ITenKRouter)
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
+
+///////////////////////////////////////////////////////////////////////////////////////
+//                                                                                   //
+//   This contract holds the logic to perform trades on the different StarkNet AMMs  //
+//                                                                                   // 
+///////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////
 //       Views        //

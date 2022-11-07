@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: MIT
-/// @title Main contract that acts as a security layer and the main contact point for any trader/protocol utilizing the Commercium. 
 /// @author FreshPizza
 
 %lang starknet
@@ -23,9 +22,15 @@ from openzeppelin.security.safemath.library import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
-//
-// Events
-//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                             //
+//   Main contract that acts as a security layer and the main contact point for any trader/protocol utilizing the Commercium.  //
+//                                                                                                                             // 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////
+//       Events        //
+/////////////////////////
 
 @event
 func swap_executed(solver_used: felt, amount_traded: Uint256) {

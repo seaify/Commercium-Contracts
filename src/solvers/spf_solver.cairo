@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+/// @author FreshPizza
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
@@ -15,13 +17,17 @@ from openzeppelin.access.ownable.library import Ownable
 const Edges = 21;
 const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
-// Token addresses
-// const USDT = 12345
-// const USDC = 12346
-// const DAI = 12347
-// const ETH = 12348
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                             //
+//                      DEX aggregation algorithm that makes use of the Shortest Path Faster algorithm.                        //
+//           See here for alternate implementations: https://www.geeksforgeeks.org/shortest-path-faster-algorithm/             //
+//                                                                                                                             // 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Storage Setup
+/////////////////////
+//  Storage Setup  //
+/////////////////////
+//
 //  src[0] [0, 2]:
 //  src[1] [2, 3]:
 //

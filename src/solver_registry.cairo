@@ -1,6 +1,5 @@
-// SPDX-License-Identifier: MIT
-/// @title Registry that mapps IDs to solver addresses.  
-/// @author FreshPizza
+// SPDX-License-Identifier: MIT  
+// @author FreshPizza
 
 %lang starknet
 
@@ -8,6 +7,12 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from openzeppelin.access.ownable.library import Ownable
 from starkware.cairo.common.math import assert_le, assert_not_equal
 from src.lib.constants import MAX_FELT
+
+/////////////////////////////////////////////////////
+//                                                 //
+//   Registry that mapps IDs to solver addresses.  //
+//                                                 // 
+/////////////////////////////////////////////////////
 
 @event
 func unofficial_solver_added(solver_address: felt, solver_id: felt) {
