@@ -23,12 +23,23 @@ from openzeppelin.security.safemath.library import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
+
+/////////////////////////////
+//       Constructor       //
+/////////////////////////////
+
+@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
+    Ownable.initializer(_owner);
+    return ();
+}
+
 ////////////////////////
 //       Views        //
 ////////////////////////
 
-/// @notice get the address of the utilized solver registry
-/// @return solver registry address
+// @notice get the address of the utilized solver registry
+// @return solver registry address
 @view
 func solver_registry{
         syscall_ptr: felt*, 
@@ -39,8 +50,8 @@ func solver_registry{
     return (solver_registry,);
 }
 
-/// @notice get the contract hash of the utilized trade executor
-/// @return trade executor hash
+// @notice get the contract hash of the utilized trade executor
+// @return trade executor hash
 @view
 func trade_executor{
         syscall_ptr: felt*, 
@@ -51,12 +62,12 @@ func trade_executor{
     return (trade_executor,);
 }
 
-/// @notice Use this function to receive the token amount that would be returned given a specific trade and solver 
-/// @param _amount_in the number of tokens that are supposed to be sold
-/// @param _token_in the address of the token that would be sold
-/// @param _token_out the address of the token that would be bought
-/// @param _solver_id the id of the solver/algorithm that will be used to dertermine the trading route 
-/// @return amount_out the number of _token_out that would be received if this trade was executed
+// @notice Use this function to receive the token amount that would be returned given a specific trade and solver 
+// @param _amount_in the number of tokens that are supposed to be sold
+// @param _token_in the address of the token that would be sold
+// @param _token_out the address of the token that would be bought
+// @param _solver_id the id of the solver/algorithm that will be used to dertermine the trading route 
+// @return amount_out the number of _token_out that would be received if this trade was executed
 @view
 func get_amount_out_with_solver{
         syscall_ptr: felt*, 
@@ -73,15 +84,15 @@ func get_amount_out_with_solver{
     return (amount_out=amount_out);
 }
 
-/// @notice Use this function to receive the token amount and trading route that would be returned given a specific trade and solver 
-/// @param _amount_in the number of tokens that are supposed to be sold
-/// @param _token_in the address of the token that would be sold
-/// @param _token_out the address of the token that would be bought
-/// @param _solver_id the id of the solver/algorithm that will be used to dertermine the trading route 
-/// @return routers the router address and router type that would be used for each trading step
-/// @return path the token address of the token being sold and bought for each trading step
-/// @return amounts the amount of tokens (in %) sold for each trading step 
-/// @return amount_out the number of _token_out that would be received if this trade was executed
+// @notice Use this function to receive the token amount and trading route that would be returned given a specific trade and solver 
+// @param _amount_in - The number of tokens that are supposed to be sold
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param _solver_id - The id of the solver/algorithm that will be used to dertermine the trading route 
+// @return routers - The router address and router type that would be used for each trading step
+// @return path - The token address of the token being sold and bought for each trading step
+// @return amounts - The amount of tokens (in %) sold for each trading step 
+// @return amount_out - The number of _token_out that would be received if this trade was executed
 @view
 func get_amount_and_path_with_solver{
         syscall_ptr: felt*, 
@@ -114,6 +125,11 @@ func get_amount_and_path_with_solver{
     return (routers_len, routers, path_len, path, amounts_len, amounts, amount_out);
 }
 
+// @notice This function returns the expected return amount for a given trade when using the default solver
+// @param _amount_in - The number of tokens that are supposed to be sold
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @return amount - The estimated amount of tokens received 
 @view
 func get_amount_out{
         syscall_ptr: felt*, 
@@ -132,7 +148,12 @@ func get_amount_out{
     return (amount_out,);
 }
 
-//This function is mainly intended for off-chain queries
+// @notice Receive multiple solver results with one query
+// @param _amount_in - The number of tokens that are supposed to be sold
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param _solver_ids_ - The IDs of the solvers to be used for the different trades
+// @return amounts_out - The token return amounts for each solver
 @view 
 func get_multiple_solver_amounts{
         syscall_ptr: felt*, 
@@ -154,20 +175,19 @@ func get_multiple_solver_amounts{
     return (_solver_ids_len, amounts_out);
 }
 
-/////////////////////////////
-//       Constructor       //
-/////////////////////////////
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
-    Ownable.initializer(_owner);
-    return ();
-}
+////////////////////////////
+//       Externals        //
+////////////////////////////
 
-//
-// Externals
-//
-
+// @notice Swap an exact amount of a token for largest possible amount of another token.
+//         This function makes use of the default solver
+// @param _amount_in - The number of tokens that are supposed to be sold
+// @param _amount_out_min - The minimum number of _token_out that have to be bought (fails if not reached)
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param _to - The receiver address of the bought tokens
+// @return amounts_out - The token return amounts for each solver
 @external
 func swap_exact_tokens_for_tokens{
         syscall_ptr: felt*, 
@@ -187,6 +207,15 @@ func swap_exact_tokens_for_tokens{
     return (received_amount,);
 }
 
+// @notice Swap an exact amount of a token for largest possible amount of another token.
+//         This allows the user to specify the solver ID which will be used to find the best trading path
+// @param _amount_in - The number of tokens that are supposed to be sold
+// @param _amount_out_min - The minimum number of _token_out that have to be bought (fails if not reached)
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param _to - The receiver address of the bought tokens
+// @param _solver_id - The ID of the solver that will be used to find the best trading path
+// @return amounts_out - The token return amounts for each solver
 @external
 func swap_exact_tokens_for_tokens_with_solver{
         syscall_ptr: felt*, 
