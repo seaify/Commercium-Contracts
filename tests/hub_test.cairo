@@ -49,27 +49,27 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
     // Deploy Mock_Tokens
     local shitcoin1: felt;
-    %{ ids.shitcoin1 = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12343,343,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.shitcoin1 = deploy_contract("./lib/cairo_contracts/src/openzeppelin/token/erc20/presets/ERC20.cairo", [12343,343,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.shitcoin1 = ids.shitcoin1 %}
     // %{ print("shitcoin1 Address: ",ids.shitcoin1) %}
     local shitcoin2: felt;
-    %{ ids.shitcoin2 = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12344,344,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.shitcoin2 = deploy_contract("./lib/cairo_contracts//src/openzeppelin/token/erc20/presets/ERC20.cairo", [12344,344,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.shitcoin2 = ids.shitcoin2 %}
     // %{ print("shitcoin2 Address: ",ids.shitcoin2) %}
     local USDC: felt;
-    %{ ids.USDC = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12345,345,6,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
+    %{ ids.USDC = deploy_contract("./lib/cairo_contracts//src/openzeppelin/token/erc20/presets/ERC20.cairo", [12345,345,6,100000000*ids.small_base,0,ids.public_key_0]).contract_address %}
     %{ context.USDC = ids.USDC %}
     // %{ print("USDC Address: ",ids.USDC) %}
     local ETH: felt;
-    %{ ids.ETH = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12346,346,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.ETH = deploy_contract("./lib/cairo_contracts//src/openzeppelin/token/erc20/presets/ERC20.cairo", [12346,346,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.ETH = ids.ETH %}
     // %{ print("ETH Address: ",ids.ETH) %}
     local USDT: felt;
-    %{ ids.USDT = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12347,347,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.USDT = deploy_contract("./lib/cairo_contracts//src/openzeppelin/token/erc20/presets/ERC20.cairo", [12347,347,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.USDT = ids.USDT %}
     // %{ print("USDT Address: ",ids.USDT) %}
     local DAI: felt;
-    %{ ids.DAI = deploy_contract("./src/openzeppelin/token/erc20/ERC20.cairo", [12348,348,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
+    %{ ids.DAI = deploy_contract("./lib/cairo_contracts//src/openzeppelin/token/erc20/presets/ERC20.cairo", [12348,348,18,100000000*ids.base,0,ids.public_key_0]).contract_address %}
     %{ context.DAI = ids.DAI %}
     // %{ print("DAI Address: ",ids.DAI) %}
 
