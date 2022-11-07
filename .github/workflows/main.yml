@@ -34,8 +34,8 @@ jobs:
         args: https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh
     - name: Enable protostar usage
       run: |
-        source ~/.bashrc
-        protostar -h  
+        source /home/runner/.bashrc  
+        protostar -h
     #----------------------------------------------
     # install further dependencies
     #----------------------------------------------    
