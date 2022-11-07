@@ -10,7 +10,7 @@ from src.lib.array import Array
 from src.lib.utils import Utils, Router, Path
 from src.lib.constants import MAX_FELT, BASE
 from src.interfaces.i_router_aggregator import IRouterAggregator
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable.library import Ownable
 
 const Edges = 21;
 const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows

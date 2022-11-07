@@ -1643,10 +1643,6 @@ numpy = [
     {file = "numpy-1.23.4-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:4d52914c88b4930dafb6c48ba5115a96cbab40f45740239d9f4159c4ba779962"},
     {file = "numpy-1.23.4.tar.gz", hash = "sha256:ed2cc92af0efad20198638c69bb0fc2870a58dabfba6eb722c933b48556c686c"},
 ]
-openzeppelin-cairo-contracts = [
-    {file = "openzeppelin-cairo-contracts-0.4.0.tar.gz", hash = "sha256:be73033b10631c2ea05e1ed57f9579ec57b59f850c1af072429819c57b7a0b7c"},
-    {file = "openzeppelin_cairo_contracts-0.4.0-py3-none-any.whl", hash = "sha256:c2a6d3271823bc350c9af626ed25099f8caf2ecdec2fc85694818373a00b21ea"},
-]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},

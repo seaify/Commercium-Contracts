@@ -17,9 +17,9 @@ from starkware.starknet.common.syscalls import (
 from src.interfaces.i_trade_executor import ITradeExecutor
 from src.interfaces.i_erc20 import IERC20
 
-from openzeppelin.access.ownable import Ownable
-from openzeppelin.security.reentrancy_guard import ReentrancyGuard
-from openzeppelin.security.safemath import SafeUint256
+from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
+from openzeppelin.security.safemath.library import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 
@@ -223,7 +223,7 @@ func swap_with_path{
     ) -> (received_amount: Uint256) {
     alloc_locals;
 
-    ReentrancyGuard._start();
+    ReentrancyGuard.start();
 
     // Get Caller Address
     let (caller_address) = get_caller_address();
@@ -261,7 +261,7 @@ func swap_with_path{
     // Transfer _token_out back to caller
     IERC20.transfer(_path[_path_len - 1].token_out, caller_address, received_amount);
 
-    ReentrancyGuard._end();
+    ReentrancyGuard.end();
 
     return (received_amount,);
 }

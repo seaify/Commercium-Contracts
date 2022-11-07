@@ -3,7 +3,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from src.openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable.library import Ownable
 from starkware.cairo.common.math import assert_le, assert_not_equal
 from src.lib.constants import MAX_FELT
 

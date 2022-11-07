@@ -8,7 +8,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 from starkware.cairo.common.math_cmp import is_le_felt
 
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable.library import Ownable
 from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.lib.utils import Utils, Router, Liquidity
 from src.lib.constants import BASE, BASE_8

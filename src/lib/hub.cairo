@@ -1,8 +1,8 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
-from src.openzeppelin.security.safemath import SafeUint256
+from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
+from openzeppelin.security.safemath.library import SafeUint256
 from starkware.cairo.common.uint256 import Uint256, uint256_le, uint256_eq, uint256_sub
 from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.bool import TRUE, FALSE
@@ -178,7 +178,7 @@ namespace Hub {
     ) -> (received_amount: Uint256) {
         alloc_locals;
 
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // Get Solver address that will be used
         let (solver_registry) = Hub.solver_registry();
@@ -238,7 +238,7 @@ namespace Hub {
         // Transfer _token_out back to caller
         IERC20.transfer(_token_out, _to, received_amount);
 
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (received_amount,);
     }

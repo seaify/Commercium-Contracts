@@ -7,7 +7,7 @@ from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.usort import usort
 
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable.library import Ownable
 from src.interfaces.i_router import (
     IAlphaRouter,
     IJediRouter,
