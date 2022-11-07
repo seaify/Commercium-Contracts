@@ -4,6 +4,8 @@ on: [push, pull_request, pull_request_target]
 
 jobs:
   compilation-tests:
+    runs-on: ubuntu-latest
+    steps:
     #----------------------------------------------
     #       check-out repo and set-up python
     #----------------------------------------------
