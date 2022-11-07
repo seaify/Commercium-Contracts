@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         run: |
           make setup
-      - name: Build Projects
-        run: |
-          make build
 
   analyze-code:
     runs-on: ubuntu-latest
