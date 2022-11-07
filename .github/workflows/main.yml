@@ -44,6 +44,9 @@ jobs:
     #----------------------------------------------
     # Compile Contracts
     #----------------------------------------------
+    - name: Check Format
+      run: |
+        make format-check   
 
   analyze-code:
     runs-on: ubuntu-latest
@@ -61,6 +64,3 @@ jobs:
         with:
           sarif_file: ${{ steps.amarna.outputs.sarif }}
           checkout_path: '/github/workspace'
-      - name: Check Format
-        run: |
-          make format-check   
