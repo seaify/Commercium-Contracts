@@ -27,4 +27,3 @@ jobs:
       - name: Install dependencies
         run: |
           make setup
-      - name: Compile all the cairo files
