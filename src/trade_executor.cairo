@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+/// @title This contract holds the logic to perform trades on the different StarkNet AMMs
+/// @author FreshPizza
+
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256, uint256_add
@@ -18,6 +22,16 @@ from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_router import (IJediRouter, IAlphaRouter, ISithRouter, ITenKRouter)
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
 
+////////////////////////
+//       Views        //
+////////////////////////
+
+// @notice Simulate how many tokens one would receive when performing multiple specified swaps
+// @param _routers - An array of routers to be used for the trades
+// @param _path - An array of token pairs to trade
+// @param _amounts - An array of token amounts (in %) to sell
+// @param _amount_in - The initial token to sell
+// @return amount_out - The token return amounts for each solver
 @view
 func simulate_multi_swap{
         syscall_ptr: felt*, 
@@ -52,6 +66,15 @@ func simulate_multi_swap{
     return (amount_out,);
 }
 
+////////////////////////////
+//       Externals        //
+////////////////////////////
+
+// @notice Perform multiple token swap given a specified trading path
+// @param _routers - An array of routers to be used for the trades
+// @param _path - An array of token pairs to trade
+// @param _amounts - An array of token amounts (in %) to sell
+// @param _receiver_address - Address to receive the bought tokens
 @external
 func multi_swap{
         syscall_ptr: felt*, 
@@ -91,11 +114,16 @@ func multi_swap{
     return ();
 }
 
-//
-// Internal
-//
+////////////////////////////
+//       Internal         //
+////////////////////////////
 
-//Perform swap given an exact input amount
+// @notice Perform a single swap with the exact tokens to sell being specified
+// @param _router - The address of the router used for the trade
+// @param _amount_in - The number of _token_in to be sould
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param _receiver_address - Address to receive the bought tokens
 func _swap_exact_in{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
@@ -250,6 +278,12 @@ func _swap_exact_in{
     }
 }
 
+// @notice Simulate a single swap with the exact tokens to sell being specified
+// @param _router - The address of the router used for the trade
+// @param _amount_in - The number of _token_in to be sould
+// @param _token_in - The address of the token that would be sold
+// @param _token_out - The address of the token that would be bought
+// @param amount_out - The exepcted amount of tokens to be received for the trade
 func _simulate_swap_exact_in{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
@@ -266,6 +300,15 @@ func _simulate_swap_exact_in{
     return(amount_out,);
 }
 
+// @notice Simulate how many tokens one would receive when performing multiple specified swaps
+// @param _routers - An array of routers to be used for the trades
+// @param _path - An array of token pairs to trade
+// @param _amounts - An array of token amounts (in %) to sell
+// @param _token_out - The address of the final token to buy
+// @param _token_balances - A dictionary of token address and their amounts posessed by the function executor
+// @return amount_out - The expected received amount of the final token to be bought 
+// @return final_token_balances - A dictionary of token addresses and balances that this contract would posess after each consecutive trade 
+//         This variable is only used to track the balances during the iterations and should simply be squashed after this function is executed
 func _simulate_multi_swap{
         syscall_ptr: felt*, 
         pedersen_ptr: HashBuiltin*, 
