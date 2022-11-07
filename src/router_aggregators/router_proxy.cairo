@@ -5,8 +5,8 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import library_call
-from src.openzeppelin.upgrades.library import Proxy
-from src.openzeppelin.access.ownable import Ownable
+from openzeppelin.upgrades.library import Proxy
+from openzeppelin.access.ownable import Ownable
 
 //
 // Views

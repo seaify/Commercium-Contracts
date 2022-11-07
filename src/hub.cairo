@@ -17,9 +17,9 @@ from starkware.starknet.common.syscalls import (
 from src.interfaces.i_trade_executor import ITradeExecutor
 from src.interfaces.i_erc20 import IERC20
 
-from src.openzeppelin.access.ownable import Ownable
-from src.openzeppelin.security.reentrancy_guard import ReentrancyGuard
-from src.openzeppelin.security.safemath import SafeUint256
+from openzeppelin.access.ownable import Ownable
+from openzeppelin.security.reentrancy_guard import ReentrancyGuard
+from openzeppelin.security.safemath import SafeUint256
 from src.lib.utils import Router, Path
 from src.lib.hub import Hub, Hub_trade_executor
 

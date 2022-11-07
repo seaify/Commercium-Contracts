@@ -9,7 +9,7 @@ from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.interfaces.i_erc20 import IERC20
-from src.openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable import Ownable
 from src.lib.utils import Router, Liquidity, Path
 from src.lib.constants import BASE
 
