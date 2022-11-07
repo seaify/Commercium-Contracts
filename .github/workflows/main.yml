@@ -41,11 +41,9 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
-      run: make setup
     #----------------------------------------------
     # Compile Contracts
     #----------------------------------------------
-    - name: Build Projecy
 
   analyze-code:
     runs-on: ubuntu-latest
@@ -54,7 +52,7 @@ jobs:
       - name: Run Amarna
         uses: crytic/amarna-action@v0.1.1
         id: amarna
-        continue-on-error: true
+        continue-on-error: false
         with:
           sarif: results.sarif
           target: 'src/'

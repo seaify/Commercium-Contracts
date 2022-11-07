@@ -5,7 +5,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.i_router_aggregator import IRouterAggregator
-from src.interfaces.i_erc20 import IERC20
 from src.lib.utils import Router, Path
 from src.lib.constants import BASE
 

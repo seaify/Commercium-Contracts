@@ -1,7 +1,6 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
-from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le_felt
 from starkware.cairo.common.bitwise import bitwise_or
 from starkware.cairo.common.alloc import alloc

@@ -1,6 +1,6 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub
+from starkware.cairo.common.uint256 import Uint256, uint256_add
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE
@@ -10,7 +10,6 @@ from starkware.cairo.common.dict_access import DictAccess
 from starkware.starknet.common.syscalls import get_contract_address
 from starkware.cairo.common.math_cmp import is_le_felt
 
-from src.openzeppelin.security.safemath import SafeUint256
 from src.lib.utils import Utils, Router, Path
 from src.lib.constants import BASE, AlphaRoad, JediSwap, SithSwap, TenK, MAX_FELT, HALF_MAX
 from src.lib.router_aggregator import RouterAggregator
