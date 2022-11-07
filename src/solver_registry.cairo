@@ -29,9 +29,10 @@ func solvers(index: felt) -> (solver_address: felt) {
 func solvers_len() -> (len: felt) {
 }
 
-//
-// Constructor
-//
+//////////////////////////////
+//       Constructor        //
+//////////////////////////////
+
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
@@ -42,10 +43,13 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return ();
 }
 
-//
-// View
-//
+////////////////////////
+//       Views        //
+////////////////////////
 
+// @notice Fetch the solver address for a given ID
+// @param _solver_id - The for which to get the solver contract address
+// @return solver_address - The solver contract address associated with the provided ID
 @view
 func get_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _solver_id: felt
@@ -54,6 +58,8 @@ func get_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return (solver_address,);
 }
 
+// @notice Get the ID that will be assigend to the next (unofficial) solver to be registered
+// @return solver_id - The ID of the next solver to be registered
 @view
 func get_next_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     solver_id: felt
@@ -62,10 +68,14 @@ func get_next_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return (solver_id,);
 }
 
-//
-// External
-//
 
+///////////////////////////
+//       External        //
+///////////////////////////
+
+// @notice Add an unofficial solver to the registry
+// @param _solver_address - The address of the solver to be added
+// @return id - The id that was assigned to the provided solver address
 @external
 func add_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _solver_address: felt
@@ -82,18 +92,23 @@ func add_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return (len,);
 }
 
+// @notice Add an official solver to the registry
+// @dev Can be used to assign any id (under 100) to a solver address
+//      Meaning it can be used to override official solver IDs.
+// @param _solver_id - The ID of the solver to be registered
+// @param _solver_address - The address of the solver to be registered
 @external
 func set_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _solver_index: felt, _solver_address: felt
+    _solver_id: felt, _solver_address: felt
 ) {
     Ownable.assert_only_owner();
     // As 0 is the default value, we shouldn't use it as a solver_ID
-    assert_not_equal(_solver_index, 0);
+    assert_not_equal(_solver_id, 0);
     // Official solvers are in the range of 0 and 100
-    assert_le(_solver_index, 100);
+    assert_le(_solver_id, 100);
 
-    solvers.write(_solver_index, _solver_address);
+    solvers.write(_solver_id, _solver_address);
 
-    official_solver_added.emit(solver_address=_solver_address, solver_id=_solver_index);
+    official_solver_added.emit(solver_address=_solver_address, solver_id=_solver_id);
     return ();
 }
