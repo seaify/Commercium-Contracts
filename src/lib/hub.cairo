@@ -3,7 +3,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 from openzeppelin.security.safemath.library import SafeUint256
-from starkware.cairo.common.uint256 import Uint256, uint256_le, uint256_eq, uint256_sub
+from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.starknet.common.syscalls import get_contract_address, get_caller_address

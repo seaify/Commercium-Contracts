@@ -55,7 +55,7 @@ jobs:
       - name: Run Amarna
         uses: crytic/amarna-action@v0.1.1
         id: amarna
-        continue-on-error: false
+        continue-on-error: true
         with:
           sarif: results.sarif
           target: 'src/'
