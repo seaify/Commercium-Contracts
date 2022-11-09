@@ -37,12 +37,10 @@ const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weigh
 //          1src -> 3:[23133]
 //          1src -> 4:[2323]
 
-// Used for testing, should be hard coded
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt) {
 }
 
-// Used for testing, should be hard coded
 @storage_var
 func high_liq_tokens(index: felt) -> (token: felt) {
 }
@@ -58,9 +56,9 @@ struct Edge {
     weight: felt,
 }
 
-//
-// Constructor
-//
+/////////////////////////////
+//       Constructor       //
+/////////////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -71,10 +69,17 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return ();
 }
 
-//
-// Views
-//
+////////////////////////
+//       Views        //
+////////////////////////
 
+// @notice Find the optimal trading path using the SPF algorithm
+// @param _amount_in - Number of tokens to be sold
+// @param _token_in - Address of the token to be sold
+// @param _token_out - Address of the token to be bougth
+// @return routers - Array of routers that are used in the trading path
+// @return path - Array of token pairs that are used in the trading path
+// @return amounts - Array of token amount that are used in the trading path
 @view
 func get_results{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
@@ -259,14 +264,20 @@ func get_results{
     return (0, routers, 0, final_tokens, 0, amounts);
 }
 
-//
-// Internals
-//
+/////////////////////////
+//       Interals      //
+/////////////////////////
 
-// @notice
-// We use _dst_len to track every src->dst edge that is not 0
-// We use _dst_counter to track the number of destinations we have checked for each source (We check vertices 1-5)
-// We use _src_couter to track the number of sources we have checked (We check vertices 0-4)
+// @notice Generate graph that will be used for the spf algorithm
+// @param _amount_in - The amount of the token that a user wants to sell
+// @param _amount_in_usd - The amount of the token that a user wants to sell (is used to set weights)
+// @param _vertices - number of vercies/routers in the graph
+// @param _tokens - array of tokens/vertices that make up the graph
+// @param _src - array of Edge ranges. Used to map edges to a vertice
+// @param _edge - array of graph Edges
+// @param _dst_counter - counter used to iterate through destination vertices for each source vertex
+// @param _src_counter - counter used to iterate through the source vertices/tokens
+// @param _total_counter - counter used to find the correct start of each vertex in the Edge array
 func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256,
     _amount_in_usd: Uint256,
@@ -423,6 +434,14 @@ func set_edges{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
+// @notice SPF algortihm logic
+// @param _distances - An array of "distance" for each vertex to the origin
+// @param _is_in_queue - An array of bools that is used to determine whether a vertex is currently in the spf queue
+// @param _queue - An array of tokens that makes up the spf queue
+// @param _vertices - number of vercies/routers in the graph
+// @param _src - array of Edge ranges. Used to map edges to a vertice
+// @param _edge - array of graph Edges
+// @param _predecessors - array that contains the vertices of the shortest path
 func shortest_path_faster{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }(
@@ -511,6 +530,19 @@ func shortest_path_faster{
     return (predecessors,);
 }
 
+// @notice For a given vertex determine the distances to its neighbors
+// @param _distances - An array of "distance" for each vertex to the origin
+// @param _queue - An array of tokens that makes up the spf queue
+// @param _is_in_queue - An array of bools that is used to determine whether a vertex is currently in the spf queue
+// @param _vertices - number of vercies/routers in the graph
+// @param _edge - array of graph Edges
+// @param _predecessors - array that contains the vertices of the shortest path
+// @param _dst_stop - The lenght of the neighbors/destinations that we iterate through
+// @param _src_nr - The index of the vertex in question in the Source arr
+// @param _current_distance - The current distance of the vertex in question
+// @return routers - Array of routers that are used in the trading path
+// @return path - Array of token pairs that are used in the trading path
+// @return amounts - Array of token amount that are used in the trading path
 func determine_distances{
     syscall_ptr: felt*, bitwise_ptr: BitwiseBuiltin*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }(
@@ -715,6 +747,12 @@ func determine_distances{
     }
 }
 
+// @notice Initialize all relevant Arrays used by the SPF algorithm
+// @param _distances - An array of "distance" for each vertex to the origin
+// @param _predecessors - An Array that contains the vertices of the shortest path
+// @param _is_in_queue - An array of bools that is used to determine whether a vertex is currently in the spf queue
+// @param _queue - An array of tokens that makes up the spf queue
+// @param _counter - A counter used to track the number of iterations
 func init_arrays{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _distances_len: felt,
     _distances: felt*,
@@ -757,6 +795,11 @@ func init_arrays{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }
 }
 
+// @notice Extract the router type and address from provided edges
+// @param _src - An array of Edge ranges. Used to map edges to a vertice
+// @param _edge - An array of graph Edges
+// @param _tokens - array of tokens that discribe the trading path
+// @param _routers - An (empty) array of routers
 func set_routers_from_edge{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _src_len: felt, _src: Source*, _edge: Edge*, _tokens: felt*, _routers: Router*
 ) {
@@ -773,6 +816,11 @@ func set_routers_from_edge{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     return ();
 }
 
+// @notice For a given token trading pair we find the relevant edge and save the router information 
+// @param _src - An array of Edge ranges. Used to map edges to a vertice
+// @param _edge - An array of graph Edges
+// @param _tokens - array of tokens that discribe the trading path
+// @param _routers - An array of routers that are used for each token pair trade
 func get_router_and_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _src: Source*, _edge: Edge*, _tokens: felt*, _routers: Router*, _counter: felt
 ) {
@@ -790,7 +838,13 @@ func get_router_and_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     }
 }
 
-// First token in arr needs to be in_token and last one the out_token
+// @notice From a given input and output token we construct an array of relevant tokens/vertices that will
+//         be considered when building the graph
+// @param _token_in - Token sold / Origin vertex
+// @param _token_out - Token bought / Destination vertex
+// @param _tokens - An (empty) array of tokens that will be used as the arr of vertices
+// @param _liq_counter - Tracker of stored liquidations tokens that we have added to the tokens/vertex array
+// @param _counter - General counter to track the iteration through this function
 func construct_token_arr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token_in: felt, _token_out: felt, _tokens: felt*, _liq_counter: felt, _counter: felt
 ) -> (vertices: felt) {
@@ -822,10 +876,16 @@ func construct_token_arr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     return (total_vertices,);
 }
 
-//
-// Admin
-//
+////////////////////////
+//       Admin        //
+////////////////////////
 
+// @notice Store a token that is considered as liquid and will always be part of the array of vertices
+// @dev admin function that can be used to override existing mappings or add a new high liquidity token.
+//      The high_liq_tokens mapping is used as an array. So the admin has to ensure that there is no gap 
+//      in the list of indices.
+// @param _index - Token sold / Origin vertex
+// @param _high_liq_tokens - Token bought / Destination vertex
 @external
 func set_high_liq_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _index: felt, _high_liq_tokens: felt
