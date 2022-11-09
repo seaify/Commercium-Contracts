@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-/// @author FreshPizza
+// @author FreshPizza
 
 %lang starknet
 
@@ -320,9 +320,9 @@ func swap_with_path{
 }
 
 
-//
-// Admin functions
-//
+////////////////////////
+//       Admin        //
+////////////////////////
 
 // @notice Set the address of the solver registry which will be used to validate solver IDs
 // @param _new_registry - The address of the new solver registry 

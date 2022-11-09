@@ -27,6 +27,9 @@ solver = [
 spf_solver = [
     "./src/solvers/spf_solver.cairo",
 ]
+dijkstra_solver.cairo = [
+    "./src/solvers/dijkstra_solver.cairo",
+]
 single_swap_solver = [
     "./src/solvers/single_swap_solver.cairo",
 ]
