@@ -157,9 +157,7 @@ namespace ISithRouter {
     ) {
     }
 
-    func get_reserves(token_a: felt, token_b: felt, stable: felt) -> (
-        reserve1: Uint256, reserve2: Uint256
-    ) {
+    func getReserves(token_a, token_b, stable) -> (reserve1: Uint256, reserve2: Uint256) {
     }
 
     func factory() -> (address: felt) {

@@ -11,16 +11,15 @@ from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.lib.utils import Router, Path
 from src.lib.constants import BASE
 
-const threshold = 100000000000000000;  // 1e17
+const threshold = 100000000000000000;  // 1e17 / 10%
 
-// This should be a const, but easier like this for testing
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt) {
 }
 
-//
-// Constructor
-//
+// ///////////////////////////
+//       Constructor       //
+// ///////////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -78,9 +77,9 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     );
 }
 
-//
-// Internals
-//
+// ///////////////////////////
+//         Internals        //
+// ///////////////////////////
 
 func sum_amounts{range_check_ptr}(_amounts_len: felt, _amounts: Uint256*) -> (sum: Uint256) {
     if (_amounts_len == 0) {

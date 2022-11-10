@@ -1,4 +1,19 @@
-1. Check that HALF_MAX doesn't underflow
-2. Swap Exact Out
-3. Work on Docs
-4. Write Hooks for Website
+--Splitter V3--
+1. Build algo
+
+--Indexing--
+1. Setup Node
+2. Learn and apply Apibara
+
+--Dijkstra--
+1. MaxHeap lib
+2. Build algo
+
+--StatsPage--
+1. Prerequesit: Indexing
+2. Index Hub trads (requires new deployment)
+3. Build front-end
+
+--Learn Rust--
+1. Finish Docs
+2. Build Bot (Finish indexing so that we have a dataset)

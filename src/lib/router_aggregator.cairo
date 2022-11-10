@@ -12,7 +12,7 @@ from src.interfaces.i_router import (
     IStarkRouter,
 )
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
-from src.interfaces.i_pool import IAlphaPool, IStarkPool
+from src.interfaces.i_pool import IAlphaPool, IStarkPool, IJediPool, ITenKPool
 from src.lib.utils import Router
 from src.lib.constants import JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap, TenKFactory
 
@@ -164,6 +164,47 @@ namespace RouterAggregator {
         return ();
     }
 
+    // @notice for a given token pair, get all reserves and router for each DEX
+    // @param token_a - The address of token A
+    // @param token_b - The address of token B
+    // @param reserves
+    // @param _reserves_a - An empty array of token_a reserves, that will be filled by this function
+    // @param _reserves_b - An empty array of token_b reserves, that will be filled by this function
+    // @param router - The address and router type of a DEX router
+    // @param routers_len - The number of routers to iterate through
+    func all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _token_in: felt,
+        _token_out: felt,
+        _reserves_a: Uint256*,
+        _reserves_b: Uint256*,
+        _routers: Router*,
+        _routers_len: felt,
+    ) {
+        alloc_locals;
+
+        if (0 == _routers_len) {
+            return ();
+        }
+
+        // Get router
+        let (router: Router) = routers.read(_routers_len - 1);
+
+        // Add rounter to routers arr
+        assert _routers[0] = router;
+
+        let (reserve_a: Uint256, reserve_b: Uint256) = get_router_reserves(
+            _token_in, _token_out, router
+        );
+        assert _reserves_a[0] = reserve_a;
+        assert _reserves_b[0] = reserve_b;
+
+        all_routers_and_reserves(
+            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers + 2, _routers_len - 1
+        );
+
+        return ();
+    }
+
     func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256, _token_in: felt, _token_out: felt, _router: Router
     ) -> (amount_out: Uint256) {
@@ -269,6 +310,90 @@ namespace RouterAggregator {
             tempvar pedersen_ptr = pedersen_ptr;
             tempvar range_check_ptr = range_check_ptr;
             return (Uint256(0, 0),);
+        }
+    }
+
+    // @notice for a given token pair and router, return the available token reserves
+    // @param token_a - The address of token A
+    // @param token_b - The address of token B
+    // @param router - The address and router type of a DEX router
+    // @return reserve_a - The amount of token_a that are available in the token pair
+    // @return reserve_b - The amount of token_b that are available in the token pair
+    func get_router_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        _token_a: felt, _token_b: felt, _router: Router
+    ) -> (reserve_a: Uint256, reserve_b: Uint256) {
+        alloc_locals;
+        if (_router.type == JediSwap) {
+            let (factory_address) = IJediRouter.factory(_router.address);
+            let (pair_address) = IJediFactory.get_pair(factory_address, _token_a, _token_b);
+            if (pair_address == 0) {
+                return (Uint256(0, 0), Uint256(0, 0));
+            }
+            let (reserve_a: Uint256, reserve_b: Uint256, _) = IJediPool.get_reserves(pair_address);
+            return (reserve_a, reserve_b);
+        }
+        if (_router.type == AlphaRoad) {
+            let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
+            let (pair_address: felt) = IAlphaFactory.getPool(factory_address, _token_a, _token_b);
+            if (pair_address == 0) {
+                return (Uint256(0, 0), Uint256(0, 0));
+            }
+            let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(
+                pair_address
+            );
+            return (reserve_token_0, reserve_token_1);
+        }
+        if (_router.type == SithSwap) {
+            let (factory_address) = ISithRouter.factory(_router.address);
+            let (pair_address) = ISithFactory.pairFor(factory_address, _token_a, _token_b, 0);
+            if (pair_address == 0) {
+                return (Uint256(0, 0), Uint256(0, 0));
+            }
+            let (reserve_token_0, reserve_token_1) = ISithRouter.getReserves(
+                _router.address, token_a=_token_a, token_b=_token_b, stable=0
+            );
+            return (reserve_token_0, reserve_token_1);
+        }
+        if (_router.type == TenK) {
+            // Surely that will change in the future
+            let (factory_address) = ITenKRouter.factory(_router.address);
+            let (pair_address) = ITenKFactory.getPair(factory_address, _token_a, _token_b);
+            // let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_a,_token_b);
+            if (pair_address == 0) {
+                return (Uint256(0, 0), Uint256(0, 0));
+            }
+            let (reserve_a, reserve_b, _) = ITenKPool.getReserves(pair_address);
+            return (reserve_a, reserve_b);
+        }
+        if (_router.type == StarkSwap) {
+            // let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);
+            //    if (pair_address == 0) {
+            //        return (Uint256(0,0),);
+            //    }
+
+            // let (reserve1: Uint256) = IStarkPool.poolTokenBalance(1);
+            //    let (reserve2: Uint256) = IStarkPool.poolTokenBalance(2);
+
+            // let (token1: felt) = IStarkPool.TokenA(pair_address);
+
+            // if (token1 == _token_in) {
+            //        let (amount_out: Uint256) = IStarkPool.getInputPrice(
+            //            pair_address, _amount_in, reserve1, reserve2
+            //        );
+            //        return (amount_out,);
+            //    }
+            //    let (amount_out: Uint256) = IStarkPool.getInputPrice(
+            //        pair_address, _amount_in, reserve2, reserve1
+            //    );
+            return (Uint256(0, 0), Uint256(0, 0));
+        } else {
+            with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
+                assert 1 = 2;
+            }
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+            return (Uint256(0, 0), Uint256(0, 0));
         }
     }
 }

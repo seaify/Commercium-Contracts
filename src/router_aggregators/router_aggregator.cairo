@@ -50,6 +50,47 @@ func get_router_index_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     return (len,);
 }
 
+// @notice function to get the return amounts for a number of specified trades
+// @param _routers - The router types and router addresses of the DEX routers to utilize
+// @param _token_in - The address of the token to sell
+// @param _token_out - The address of the token to buy
+// @param _amount_in - The amount of token_in to sell
+// @param _amount_out - An array of amounts of token_out that would be received for each given trade
+@view
+func get_amount_from_provided_routers{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}(
+    _routers_len: felt,
+    _routers: Router*,
+    _token_in: felt,
+    _token_out: felt,
+    _amount_in: Uint256,
+    _amounts_out_len: felt,
+    _amounts_out: Uint256*,
+) {
+    if (_routers_len == 0) {
+        return ();
+    }
+
+    let (amount: Uint256) = RouterAggregator.get_router_amount(
+        _amount_in, _token_in, _token_out, _routers[0]
+    );
+
+    assert _amounts_out[0] = amount;
+
+    get_amount_from_provided_routers(
+        _routers_len - 1,
+        _routers + 2,
+        _token_in,
+        _token_out,
+        _amount_in,
+        _amounts_out_len,
+        _amounts_out + 2,
+    );
+
+    return ();
+}
+
 @view
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
@@ -100,6 +141,39 @@ func get_all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     );
 
     return (routers_len, amounts, routers_len, routers);
+}
+
+// @notice for a given token pair, return the available token reserves of each DEX
+// @param token_a - The address of token A
+// @param token_b - The address of token B
+// @return reserve_a - The amount of token_a that are available in the token pair
+// @return reserve_b - The amount of token_b that are available in the token pair
+@view
+func get_all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token_a: felt, _token_b: felt
+) -> (
+    reserves_a_len: felt,
+    reserves_a: felt*,
+    reserves_b_len: felt,
+    reserves_b: felt*,
+    routers_len: felt,
+    routers: Router*,
+) {
+    alloc_locals;
+
+    let (reserves_a: Uint256*) = alloc();
+    let (reserves_b: Uint256*) = alloc();
+    let (routers: Router*) = alloc();
+
+    // Number of saved routers
+    let (routers_len: felt) = router_index_len.read();
+
+    // Fill amounts and router arrs
+    RouterAggregator.all_routers_and_reserves(
+        _token_a, _token_b, reserves_a, reserves_b, routers, routers_len
+    );
+
+    return (routers_len, reserves_a, routers_len, reserves_b, routers_len, routers);
 }
 
 // Returns token price in USD

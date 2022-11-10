@@ -32,7 +32,7 @@ const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weigh
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _owner: felt, _router_aggregator: felt
 ) {
-    GraphConstructor.init(_owner,_router_aggregator);
+    GraphConstructor.init(_owner, _router_aggregator);
     return ();
 }
 
@@ -73,7 +73,7 @@ func get_results{
 
     // transform input amount to USD amount (Used for determining edge weights)
     let (router_aggregator_address) = router_aggregator.read();
-    //Price is scaled by 1e18
+    // Price is scaled by 1e18
     let (price: Uint256, _) = IRouterAggregator.get_global_price(
         router_aggregator_address, tokens[0]
     );

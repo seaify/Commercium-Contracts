@@ -16,15 +16,14 @@ from openzeppelin.access.ownable.library import Ownable
 //                                                                                                                             //
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-struct Heap{
-	value felt,
-	nodes felt*,
+struct Heap {
+    value: felt,
+    nodes: felt*,
 }
 
-/////////////////////////////
+// ///////////////////////////
 //       Constructor       //
-/////////////////////////////
+// ///////////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -61,7 +60,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     // transform input amount to USD amount (Used for determining edge weights)
     let (router_aggregator_address) = router_aggregator.read();
-    //Price is scaled by 1e18
+    // Price is scaled by 1e18
     let (price: Uint256, _) = IRouterAggregator.get_global_price(
         router_aggregator_address, tokens[0]
     );
@@ -130,7 +129,7 @@ func init_arrays{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     if (_counter == 0) {
         assert _distances[0] = 0;
-        assert _queue[0] = Heap(0,0);  // value = 0, nodes = origin
+        assert _queue[0] = Heap(0, 0);  // value = 0, nodes = origin
         assert _predecessors[0] = 0;
         assert _was_visited[0] = 0;
         init_arrays(
@@ -199,7 +198,7 @@ func dijkstra{
 
     // Check if removed item was already visited
     if (_was_visited[src_nr] == 1) {
-        //if yes, <continue>
+        // if yes, <continue>
         let (predecessors) = dijkstra(
             _distances_len,
             _distances,
@@ -213,7 +212,7 @@ func dijkstra{
             _predecessors_len,
             _predecessors,
         );
-        return(predecessors);
+        return (predecessors);
     }
 
     // Stop algorithm if we've reached the destination vertex
@@ -355,8 +354,7 @@ func determine_distances{
         tempvar range_check_ptr = range_check_ptr;
     }
 
-
-    // If nvertex was never visited, add new distance
+    // If vertex was never visited, add new distance
     if (_was_visited[_edge[0].dst] == 0) {
         // destination vertex weight = origin vertex + edge weight
         Array.update(
@@ -380,13 +378,7 @@ func determine_distances{
         assert new_queue_len = _queue_len + 1;
 
         Array.update(
-            _is_in_queue_len,
-            new_is_in_queue,
-            _is_in_queue_len,
-            _is_in_queue,
-            _edge[0].dst,
-            1,
-            0,
+            _is_in_queue_len, new_is_in_queue, _is_in_queue_len, _is_in_queue, _edge[0].dst, 1, 0
         );
 
         let (
@@ -423,7 +415,6 @@ func determine_distances{
             res_predecessors_len,
             res_predecessors,
         );
-        
     } else {
         let (
             res_distance_len,

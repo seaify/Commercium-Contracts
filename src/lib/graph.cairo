@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-/// @author FreshPizza
+// / @author FreshPizza
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -13,15 +13,15 @@ const EXTRA_BASE = BASE * 100;
 
 from openzeppelin.access.ownable.library import Ownable
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                             //
 //                  Graph building library focused on building a graph of DEXes to be used within the Commercium               //
-//                                                                                                                             // 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                             //
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////
+// ///////////////////
 //  Storage Setup  //
-/////////////////////
+// ///////////////////
 //
 //  src[0] [0, 2]:
 //  src[1] [2, 3]:
@@ -52,10 +52,9 @@ struct Edge {
 }
 
 namespace GraphConstructor {
-
-    /////////////////////////////
+    // ///////////////////////////
     //       Constructor       //
-    /////////////////////////////
+    // ///////////////////////////
 
     func init{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _owner: felt, _router_aggregator: felt
@@ -65,9 +64,9 @@ namespace GraphConstructor {
         return ();
     }
 
-    /////////////////////////
+    // ///////////////////////
     //       Interals      //
-    /////////////////////////
+    // ///////////////////////
 
     // @notice Generate graph that will be used for the spf algorithm
     // @param _amount_in - The amount of the token that a user wants to sell
@@ -271,13 +270,13 @@ namespace GraphConstructor {
         return (total_vertices,);
     }
 
-    ////////////////////////
+    // //////////////////////
     //       Admin        //
-    ////////////////////////
+    // //////////////////////
 
     // @notice Store a token that is considered as liquid and will always be part of the array of vertices
     // @dev admin function that can be used to override existing mappings or add a new high liquidity token.
-    //      The high_liq_tokens mapping is used as an array. So the admin has to ensure that there is no gap 
+    //      The high_liq_tokens mapping is used as an array. So the admin has to ensure that there is no gap
     //      in the list of indices.
     // @param _index - Token sold / Origin vertex
     // @param _high_liq_tokens - Token bought / Destination vertex
@@ -288,7 +287,4 @@ namespace GraphConstructor {
         high_liq_tokens.write(_index, _high_liq_tokens);
         return ();
     }
-
 }
-
-

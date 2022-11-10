@@ -40,7 +40,7 @@ namespace ITenKPool {
     func token0() -> (token0: felt) {
     }
 
-    func get_reserves() -> (reserve0: Uint256, reserve1: Uint256, block_timestamp_last: felt) {
+    func getReserves() -> (reserve0: Uint256, reserve1: Uint256, block_timestamp_last: felt) {
     }
 }
 
