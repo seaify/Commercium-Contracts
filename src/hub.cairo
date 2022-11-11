@@ -14,8 +14,8 @@ from starkware.starknet.common.syscalls import (
 )
 
 from src.interfaces.i_trade_executor import ITradeExecutor
-from src.interfaces.i_erc20 import IERC20
 
+from openzeppelin.token.erc20.IERC20 import IERC20
 from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 from openzeppelin.security.safemath.library import SafeUint256

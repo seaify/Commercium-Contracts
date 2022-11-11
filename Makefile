@@ -5,7 +5,7 @@ build:
 	protostar build --cairo-path ./lib/cairo_contracts/src --disable-hint-validation
 
 setup:
-	protostar install OpenZeppelin/cairo-contracts@v0.5.0
+	protostar install
 	pip install cairo-toolkit
 
 format:
@@ -15,8 +15,6 @@ format-check:
 	poetry run cairo-format src/**/*.cairo -c
 
 gen-interfaces:
-	rm -rf interfaces
-	mkdir interfaces
 	cairo-toolkit generate-interface -p -d ./src/interfaces
 
 clean:

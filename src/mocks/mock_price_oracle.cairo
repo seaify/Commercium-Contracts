@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+
 struct Price {
     value: felt,
     decimals: felt,

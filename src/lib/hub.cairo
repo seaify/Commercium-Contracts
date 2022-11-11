@@ -1,8 +1,6 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
-from openzeppelin.security.safemath.library import SafeUint256
 from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.math import assert_not_equal
 from starkware.cairo.common.bool import TRUE, FALSE
@@ -10,9 +8,12 @@ from starkware.starknet.common.syscalls import get_contract_address, get_caller_
 
 from src.interfaces.i_solver import ISolver
 from src.interfaces.i_solver_registry import ISolverRegistry
-from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_trade_executor import ITradeExecutor
 from src.lib.utils import Router, Path
+
+from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
+from openzeppelin.security.safemath.library import SafeUint256
+from openzeppelin.token.erc20.IERC20 import IERC20
 
 const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984;
 const simulate_multi_swap_selector = 1310124106700095074905752334807922719347974895149925748802193060450827293357;

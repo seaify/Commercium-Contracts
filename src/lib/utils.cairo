@@ -33,7 +33,7 @@ struct Path {
 }
 
 namespace Utils {
-    func not_equal{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func not_equal{}(
         x: felt, y: felt
     ) -> (z: felt) {
         if (x != y) {
@@ -43,7 +43,7 @@ namespace Utils {
         }
     }
 
-    func felt_fmul{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func felt_fmul{range_check_ptr}(
         x: felt, y: felt, _base: felt
     ) -> (z: felt) {
         tempvar mul_res = x * y;
@@ -51,7 +51,7 @@ namespace Utils {
         return (division,);
     }
 
-    func felt_fdiv{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func felt_fdiv{range_check_ptr}(
         x: felt, y: felt, _base: felt
     ) -> (z: felt) {
         tempvar mul_res = x * _base;
@@ -59,7 +59,7 @@ namespace Utils {
         return (division,);
     }
 
-    func fmul{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func fmul{range_check_ptr}(
         x: Uint256, y: Uint256, _base: Uint256
     ) -> (z: Uint256) {
         let (mul_res: Uint256, _) = uint256_mul(x, y);
@@ -67,7 +67,7 @@ namespace Utils {
         return (division,);
     }
 
-    func fdiv{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func fdiv{range_check_ptr}(
         x: Uint256, y: Uint256, _base: Uint256
     ) -> (z: Uint256) {
         let (mul_res: Uint256, _) = uint256_mul(x, _base);
