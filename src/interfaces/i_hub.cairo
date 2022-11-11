@@ -1,9 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
-
 from src.lib.utils import Router
-
 from src.lib.utils import Path
 
 @contract_interface

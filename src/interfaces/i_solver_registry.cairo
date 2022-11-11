@@ -11,6 +11,6 @@ namespace ISolverRegistry {
     func add_solver(_solver_address: felt) -> (id: felt) {
     }
 
-    func set_solver(_solver_index: felt, _solver_address: felt) {
+    func set_solver(_solver_id: felt, _solver_address: felt) {
     }
 }

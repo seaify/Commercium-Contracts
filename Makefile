@@ -6,12 +6,18 @@ build:
 
 setup:
 	protostar install OpenZeppelin/cairo-contracts@v0.5.0
+	pip install cairo-toolkit
 
 format:
 	poetry run cairo-format src/**/*.cairo -i
 
 format-check:
 	poetry run cairo-format src/**/*.cairo -c
+
+gen-interfaces:
+	rm -rf interfaces
+	mkdir interfaces
+	cairo-toolkit generate-interface -p -d ./src/interfaces
 
 clean:
 	rm -rf build

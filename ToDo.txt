@@ -1,6 +1,14 @@
 --Splitter V3--
 1. Build algo
 
+--Commenting--
+-Lots and lots of commenting
+
+--StatsPage--
+1. Dummy Data
+2. Index Hub events (requires new deployment)
+3. Build front-end
+
 --Indexing--
 1. Setup Node
 2. Learn and apply Apibara
@@ -8,11 +16,6 @@
 --Dijkstra--
 1. MaxHeap lib
 2. Build algo
-
---StatsPage--
-1. Prerequesit: Indexing
-2. Index Hub trads (requires new deployment)
-3. Build front-end
 
 --Learn Rust--
 1. Finish Docs

@@ -11,6 +11,14 @@ from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.lib.utils import Router, Path, Utils
 from src.lib.constants import BASE
 
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                             //
+//                      Very simple algorithm that divides trades among different exchanges according                          //
+//           to a certain heuristic. This version is adapted to the testnet environment, where prices are very differnt        //
+//           from exchange to exchange. This should eventually be replaced with something like gradient decent (if viable).    //
+//                                                                                                                             //
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const THRESHOLD = 5000000000000000;  // 5e15 / 0.5%
 
 @storage_var

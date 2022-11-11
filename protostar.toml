@@ -33,6 +33,9 @@ single_swap_solver = [
 heuristic_splitter = [
     "./src/solvers/heuristic_splitterV2.cairo",
 ]
+heuristic_splitter_V3 = [
+    "./src/solvers/heuristic_splitterV3.cairo",
+]
 
 ["protostar.shared_command_configs"]
 cairo_path = ["./lib/cairo_contracts/src", "src"]

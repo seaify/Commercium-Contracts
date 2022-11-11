@@ -5,15 +5,21 @@
 Install the requirements (LINUX):
 
 ```bash
-# install poetry if you don't have it already
-# curl -sSL https://install.python-poetry.org | python3 -
+#Install Protostar
+#curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
 make setup
 ```
 
-## Build
+## Compile Contracts
 
 ```bash
 make build
+```
+
+## Generate Interfaces
+
+```bash
+make gen-interfaces
 ```
 
 ## Test

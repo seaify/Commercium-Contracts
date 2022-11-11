@@ -1,8 +1,8 @@
 %lang starknet
 
-from starkware.cairo.common.uint256 import Uint256
 from src.lib.router_aggregator import Feed
-from src.lib.utils import Router, Liquidity
+from src.lib.utils import Router
+from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace IRouterAggregator {
@@ -15,13 +15,39 @@ namespace IRouterAggregator {
     func get_router_index_len() -> (len: felt) {
     }
 
+    func get_amount_from_provided_routers(
+        _routers_len: felt,
+        _routers: Router*,
+        _token_in: felt,
+        _token_out: felt,
+        _amount_in: Uint256,
+        _amounts_out_len: felt,
+        _amounts_out: Uint256*,
+    ) {
+    }
+
     func get_single_best_router(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (
+        amount_out: Uint256, router: Router
+    ) {
+    }
+
+    func get_single_best_top_router(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (
         amount_out: Uint256, router: Router
     ) {
     }
 
     func get_all_routers_and_amounts(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (
         amounts_out_len: felt, amounts_out: Uint256*, routers_len: felt, routers: Router*
+    ) {
+    }
+
+    func get_all_routers_and_reserves(_token_a: felt, _token_b: felt) -> (
+        reserves_a_len: felt,
+        reserves_a: felt*,
+        reserves_b_len: felt,
+        reserves_b: felt*,
+        routers_len: felt,
+        routers: Router*,
     ) {
     }
 
@@ -40,6 +66,15 @@ namespace IRouterAggregator {
     }
 
     func remove_router(_index: felt) {
+    }
+
+    func add_top_router(_router_address: felt, _router_type: felt) {
+    }
+
+    func update_top_router(_router_address: felt, _router_type: felt, id: felt) {
+    }
+
+    func remove_top_router(_index: felt) {
     }
 
     func set_global_price(_token: felt, _key: felt, _oracle_address: felt) {
