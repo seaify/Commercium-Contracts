@@ -52,9 +52,9 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     // Allocate arrs
     let (amounts: felt*) = alloc();
-    let (cull_1_routers: Router*) = alloc();
-    let (cull_1_amounts_out: Uint256*) = alloc();
-    let (cull_2_amounts_out: Uint256*) = alloc();
+    let (below_average_routers: Router*) = alloc();
+    let (below_average_amounts_out: Uint256*) = alloc();
+    let (smaller_selection_amounts_out: Uint256*) = alloc();
     let (final_routers: Router*) = alloc();
     let (final_amounts_out: Uint256*) = alloc();
     let (path: Path*) = alloc();
@@ -75,32 +75,32 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     // Keep above average liquid exchanges
     let (average: Uint256) = average_amounts(reserves_a_len, reserves_a);
-    let (cull_1_routers_len: felt) = kick_below_average(
-        average, routers_len, cull_1_routers, routers, cull_1_amounts_out, amounts_out, routers_len
+    let (below_average_routers_len: felt) = kick_below_average(
+        average, routers_len, below_average_routers, routers, below_average_amounts_out, amounts_out, routers_len
     );
 
     // Get amounts out
     IRouterAggregator.get_amount_from_provided_routers(
         router_aggregator_address,
-        cull_1_routers_len,
-        cull_1_routers,
+        below_average_routers_len,
+        below_average_routers,
         _token_in,
         _token_out,
         _amount_in,
-        cull_1_routers_len,
-        cull_2_amounts_out,
+        below_average_routers_len,
+        smaller_selection_amounts_out,
     );
 
     // Keep exchanges whose price does not deviate to strongly from the best one
-    let highest_val: Uint256 = highest_amount(cull_1_routers_len, cull_2_amounts_out, Uint256(0,0));
+    let highest_val: Uint256 = highest_amount(below_average_routers_len, smaller_selection_amounts_out, Uint256(0,0));
     let (final_routers_len: felt) = kick_below_threshold(
         highest_val,
-        routers_len,
+        below_average_routers_len,
         final_routers,
         routers,
         final_amounts_out,
-        cull_2_amounts_out,
-        routers_len,
+        smaller_selection_amounts_out,
+        below_average_routers_len,
     );
 
     // Divide trade amount among remaining DEXes and estimate amount

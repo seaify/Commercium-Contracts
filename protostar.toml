@@ -1,50 +1,25 @@
-["protostar.config"]
-protostar_version = "v0.5.0"
+[project]
+protostar-version = "0.7.0"
+lib-path = "lib"
+cairo-path = ["./lib/cairo_contracts/src/", "src"]
 
-["protostar.project"]
-libs_path = "lib"
+[contracts]
+hub = ["src/hub.cairo"]
+router-aggregator = ["src/router_aggregators/router_aggregator.cairo"]
+router-aggregator_proxy = ["src/router_aggregators/router_proxy.cairo"]
+solver-registry = ["src/solver_registry.cairo"]
+trade-executor = ["src/trade_executor.cairo"]
+solver = ["src/solvers/solver.cairo"]
+spf-olver = ["src/solvers/spf_solver.cairo"]
+single-swap-solver = ["src/solvers/single_swap_solver.cairo"]
+heuristic-splitter = ["src/solvers/heuristic_splitterV2.cairo"]
+heuristic-splitter_V3 = ["src/solvers/heuristic_splitterV3.cairo"]
 
-["protostar.contracts"]
-
-hub = [
-    "./src/hub.cairo",
-]
-router_aggregator = [
-    "./src/router_aggregators/router_aggregator.cairo",
-]
-router_aggregator_proxy = [
-    "./src/router_aggregators/router_proxy.cairo",
-]
-solver_registry = [
-    "./src/solver_registry.cairo",
-]
-trade_executor = [
-    "./src/trade_executor.cairo",
-]
-solver = [
-    "./src/solvers/solver.cairo",
-]
-spf_solver = [
-    "./src/solvers/spf_solver.cairo",
-]
-single_swap_solver = [
-    "./src/solvers/single_swap_solver.cairo",
-]
-heuristic_splitter = [
-    "./src/solvers/heuristic_splitterV2.cairo",
-]
-heuristic_splitter_V3 = [
-    "./src/solvers/heuristic_splitterV3.cairo",
-]
-
-["protostar.shared_command_configs"]
-cairo_path = ["./lib/cairo_contracts/src", "src"]
-
-["protostar.test"]
+[test]
 target = ["tests"]
 
-[profile.devnet.protostar.deploy]
-gateway-url="http://127.0.0.1:5050/"
+[profile.devnet.deploy]
+gateway-url = "http://127.0.0.1:5050/"
 
-[profile.testnet.protostar.deploy]
-network="alpha-goerli"
+[profile.testnet.deploy]
+network = "alpha-goerli"
