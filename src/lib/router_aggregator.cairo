@@ -177,8 +177,8 @@ namespace RouterAggregator {
         _token_out: felt,
         _reserves_a: Uint256*,
         _reserves_b: Uint256*,
-        _routers: Router*,
         _routers_len: felt,
+        _routers: Router*,
     ) {
         alloc_locals;
 
@@ -187,19 +187,29 @@ namespace RouterAggregator {
         }
 
         // Get router
-        let (router: Router) = routers.read(_routers_len - 1);
+        let (local router: Router) = routers.read(_routers_len - 1);
 
         // Add rounter to routers arr
         assert _routers[0] = router;
 
-        let (reserve_a: Uint256, reserve_b: Uint256) = get_router_reserves(
+        %{
+            print("Router Address: ", ids.router.address)
+        %}
+
+        let (local reserve_a: Uint256, local reserve_b: Uint256) = get_router_reserves(
             _token_in, _token_out, router
         );
+        %{
+            print("Reserve_A: ", ids.reserve_a.low)
+        %}
+        %{
+            print("Reserve_B: ", ids.reserve_b.low)
+        %}
         assert _reserves_a[0] = reserve_a;
         assert _reserves_b[0] = reserve_b;
 
         all_routers_and_reserves(
-            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers + 2, _routers_len - 1
+            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers_len - 1, _routers + 2
         );
 
         return ();
@@ -324,18 +334,24 @@ namespace RouterAggregator {
     ) -> (reserve_a: Uint256, reserve_b: Uint256) {
         alloc_locals;
         if (_router.type == JediSwap) {
-            let (factory_address) = IJediRouter.factory(_router.address);
+            let (local factory_address) = IJediRouter.factory(_router.address);
+            %{
+                print("factory_address", ids.factory_address)
+            %}
             let (pair_address) = IJediFactory.get_pair(factory_address, _token_a, _token_b);
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
-            let (reserve_a: Uint256, reserve_b: Uint256, _) = IJediPool.get_reserves(pair_address);
+            let (reserve_a: Uint256, reserve_b: Uint256) = IJediPool.get_reserves(pair_address);
             return (reserve_a, reserve_b);
         }
         if (_router.type == AlphaRoad) {
             let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
             let (pair_address: felt) = IAlphaFactory.getPool(factory_address, _token_a, _token_b);
             if (pair_address == 0) {
+                %{
+                    print("ALPHA PAIR IS ZERO")
+                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(
@@ -347,6 +363,9 @@ namespace RouterAggregator {
             let (factory_address) = ISithRouter.factory(_router.address);
             let (pair_address) = ISithFactory.pairFor(factory_address, _token_a, _token_b, 0);
             if (pair_address == 0) {
+                %{
+                    print("SITH PAIR IS ZERO")
+                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_token_0, reserve_token_1) = ISithRouter.getReserves(
@@ -360,6 +379,9 @@ namespace RouterAggregator {
             let (pair_address) = ITenKFactory.getPair(factory_address, _token_a, _token_b);
             // let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_a,_token_b);
             if (pair_address == 0) {
+                %{
+                    print("TENK PAIR IS ZERO")
+                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_a, reserve_b, _) = ITenKPool.getReserves(pair_address);

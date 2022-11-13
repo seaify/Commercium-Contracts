@@ -27,9 +27,9 @@ from src.interfaces.i_spf_solver import ISpfSolver
 from src.interfaces.i_solver_registry import ISolverRegistry
 from src.interfaces.i_empiric_oracle import IEmpiricOracle
 from src.interfaces.i_erc20 import IERC20
-from src.interfaces.i_router import IJediRouter, ISithRouter, IAlphaRouter
+from src.interfaces.i_router import IJediRouter, ISithRouter, IAlphaRouter, ITenKRouter
 from src.interfaces.i_hub import IHub
-from src.interfaces.i_pool import IAlphaPool
+from src.interfaces.i_pool import IAlphaPool, ITenKPool, IJediPool, ISithPool
 from src.lib.utils import Router, Path
 
 const Vertices = 6;
@@ -226,7 +226,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %}
     local solver3_address: felt;
     %{
-        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV2.cairo", [ids.router_aggregator_proxy_address]).contract_address 
+        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV3.cairo", [ids.router_aggregator_proxy_address]).contract_address 
         ids.solver3_address = context.solver3_address
     %}
 
@@ -501,8 +501,31 @@ func create_jedi_router{syscall_ptr: felt*, range_check_ptr}(
     alloc_locals;
 
     local router_address: felt;
-    // We deploy contract and put its address into a local variable. Second argument is calldata array
     %{ ids.router_address = deploy_contract("./src/mocks/mock_jedi_router.cairo", []).contract_address %}
+
+    local shitcoin1_eth_pair: felt;
+    %{ ids.shitcoin1_eth_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local shitcoin1_dai_pair: felt;
+    %{ ids.shitcoin1_dai_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local eth_usdt_pair: felt;
+    %{ ids.eth_usdt_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local eth_usdc_pair: felt;
+    %{ ids.eth_usdc_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local eth_dai_pair: felt;
+    %{ ids.eth_dai_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local usdt_usdc_pair: felt;
+    %{ ids.usdt_usdc_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local usdt_dai_pair: felt;
+    %{ ids.usdt_dai_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
+
+    local usdc_dai_pair: felt;
+    %{ ids.usdc_dai_pair = deploy_contract("./src/mocks/mock_jedi_pair.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge
@@ -511,18 +534,38 @@ func create_jedi_router{syscall_ptr: felt*, range_check_ptr}(
     // USDC = 1$
     // shitcoin2 = 10$
 
+
+    //CONFIGURE ROUTER AND PAIRS
+    IJediRouter.set_pair(router_address, shitcoin1, ETH, shitcoin1_eth_pair);
+    IJediRouter.set_pair(router_address, shitcoin1, DAI, shitcoin1_dai_pair);
+    IJediRouter.set_pair(router_address, ETH, USDT, eth_usdt_pair);
+    IJediRouter.set_pair(router_address, ETH, USDC, eth_usdc_pair);
+    IJediRouter.set_pair(router_address, ETH, DAI, eth_dai_pair);
+    IJediRouter.set_pair(router_address, USDT, USDC, usdt_usdc_pair);
+    IJediRouter.set_pair(router_address, USDT, DAI, usdt_dai_pair);
+    IJediRouter.set_pair(router_address, USDC, DAI, usdc_dai_pair);
+
+    IJediPool.set_token0(shitcoin1_eth_pair,shitcoin1);
+    IJediPool.set_token0(shitcoin1_dai_pair,shitcoin1);
+    IJediPool.set_token0(eth_usdt_pair,ETH);
+    IJediPool.set_token0(eth_usdc_pair,ETH);
+    IJediPool.set_token0(eth_dai_pair,ETH);
+    IJediPool.set_token0(usdt_usdc_pair,USDT);
+    IJediPool.set_token0(usdt_dai_pair,USDT);
+    IJediPool.set_token0(usdc_dai_pair,USDC);
+
     // Set Reserves
-    IJediRouter.set_reserves(router_address, shitcoin1, ETH, Uint256(10000 * base, 0), Uint256(100 * base, 0));  // 100,000
-    IJediRouter.set_reserves(router_address, shitcoin1, DAI, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediPool.set_reserves(shitcoin1_eth_pair, Uint256(10000 * base, 0), Uint256(100 * base, 0));  // 100,000
+    IJediPool.set_reserves(shitcoin1_dai_pair, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJediRouter.set_reserves(router_address, ETH, USDT, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
-    IJediRouter.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
-    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(10 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    IJediPool.set_reserves(eth_usdt_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    IJediPool.set_reserves(eth_usdc_pair, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
+    IJediPool.set_reserves(eth_dai_pair, Uint256(10 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    IJediPool.set_reserves(usdt_usdc_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    IJediPool.set_reserves(usdt_dai_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
 
-    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    IJediPool.set_reserves(usdc_dai_pair, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin1) %}
@@ -610,7 +653,6 @@ func create_alpha_router{syscall_ptr: felt*, range_check_ptr}(
     IAlphaPool.set_token0(dai_usdt_pair,DAI);
     IAlphaPool.set_token0(usdc_usdt_pair,USDC);
 
-
     //1: ETH 2: DAI
     IAlphaPool.set_reserves(eth_dai_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
 
@@ -655,8 +697,19 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     alloc_locals;
 
     local router_address: felt;
-    // We deploy contract and put its address into a local variable. Second argument is calldata array
     %{ ids.router_address = deploy_contract("./src/mocks/mock_sith_router.cairo", []).contract_address %}
+
+    local eth_dai_pair: felt;
+    %{ ids.eth_dai_pair = deploy_contract("./src/mocks/mock_sith_pair.cairo", []).contract_address %}
+
+    local usdt_usdc_pair: felt;
+    %{ ids.usdt_usdc_pair = deploy_contract("./src/mocks/mock_sith_pair.cairo", []).contract_address %}
+
+    local usdt_dai_pair: felt;
+    %{ ids.usdt_dai_pair = deploy_contract("./src/mocks/mock_sith_pair.cairo", []).contract_address %}
+
+    local usdc_dai_pair: felt;
+    %{ ids.usdc_dai_pair = deploy_contract("./src/mocks/mock_sith_pair.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge
@@ -665,12 +718,23 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     // USDC = 1$
     // shitcoin2 = 10$
 
-    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
+    //CONFIGURE ROUTER AND PAIRS
+    ISithRouter.set_pair(router_address, ETH, DAI, eth_dai_pair);
+    ISithRouter.set_pair(router_address, USDT, USDC, usdt_usdc_pair);
+    ISithRouter.set_pair(router_address, USDT, DAI, usdt_dai_pair);
+    ISithRouter.set_pair(router_address, USDC, DAI, usdc_dai_pair);
 
-    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    ISithPool.set_token0(eth_dai_pair,ETH);
+    ISithPool.set_token0(usdt_usdc_pair,USDT);
+    ISithPool.set_token0(usdt_dai_pair,USDT);
+    ISithPool.set_token0(usdc_dai_pair,USDC);
 
-    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    ISithPool.set_reserves(eth_dai_pair, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
+
+    ISithPool.set_reserves(usdt_usdc_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    ISithPool.set_reserves(usdt_dai_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+
+    ISithPool.set_reserves(usdc_dai_pair, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
@@ -705,8 +769,31 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     alloc_locals;
 
     local router_address: felt;
-    // We deploy contract and put its address into a local variable. Second argument is calldata array
     %{ ids.router_address = deploy_contract("./src/mocks/mock_TenK_router.cairo", []).contract_address %}
+
+    local shitcoin1_usdt_pair: felt;
+    %{ ids.shitcoin1_usdt_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local eth_usdc_pair: felt;
+    %{ ids.eth_usdc_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+    
+    local eth_dai_pair: felt;
+    %{ ids.eth_dai_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local usdt_usdc_pair: felt;
+    %{ ids.usdt_usdc_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local usdt_dai_pair: felt;
+    %{ ids.usdt_dai_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local usdc_dai_pair: felt;
+    %{ ids.usdc_dai_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local shitcoin2_dai_pair: felt;
+    %{ ids.shitcoin2_dai_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
+
+    local shitcoin2_usdt_pair: felt;
+    %{ ids.shitcoin2_usdt_pair = deploy_contract("./src/mocks/mock_TenK_pair.cairo", []).contract_address %}
 
     // shitcoin1 = 10$
     // ETH = 1000$ ....sadge
@@ -715,18 +802,38 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     // USDC = 1$
     // shitcoin2 = 10$
 
-    IJediRouter.set_reserves(router_address, shitcoin1, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJediRouter.set_reserves(router_address, ETH, USDC, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
-    IJediRouter.set_reserves(router_address, ETH, DAI, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    //CONFIGURE ROUTER AND PAIRS
+    ITenKRouter.set_pair(router_address, shitcoin1, USDT, shitcoin1_usdt_pair);
+    ITenKRouter.set_pair(router_address, ETH, USDC, eth_usdc_pair);
+    ITenKRouter.set_pair(router_address, ETH, DAI, eth_dai_pair);
+    ITenKRouter.set_pair(router_address, USDT, USDC, usdt_usdc_pair);
+    ITenKRouter.set_pair(router_address, USDT, DAI, usdt_dai_pair);
+    ITenKRouter.set_pair(router_address, USDC, DAI, usdc_dai_pair);
+    ITenKRouter.set_pair(router_address, shitcoin2, DAI, shitcoin2_dai_pair);
+    ITenKRouter.set_pair(router_address, shitcoin2, USDT, shitcoin2_usdt_pair);
 
-    IJediRouter.set_reserves(router_address, USDT, USDC, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
-    IJediRouter.set_reserves(router_address, USDT, DAI, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+    ITenKPool.set_token0(shitcoin1_usdt_pair,shitcoin1);
+    ITenKPool.set_token0(eth_usdc_pair,ETH);
+    ITenKPool.set_token0(eth_dai_pair,ETH);
+    ITenKPool.set_token0(usdt_usdc_pair,USDT);
+    ITenKPool.set_token0(usdt_dai_pair,USDT);
+    ITenKPool.set_token0(usdc_dai_pair,USDC);
+    ITenKPool.set_token0(shitcoin2_dai_pair,shitcoin2);
+    ITenKPool.set_token0(shitcoin2_usdt_pair,shitcoin2);
 
-    IJediRouter.set_reserves(router_address, USDC, DAI, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+    ITenKPool.set_reserves(shitcoin1_usdt_pair, shitcoin1, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
-    IJediRouter.set_reserves(router_address, shitcoin2, DAI, Uint256(10000 * base, 0), Uint256(100000 * base, 0));  // 100,000
-    IJediRouter.set_reserves(router_address, shitcoin2, USDT, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
+    ITenKPool.set_reserves(eth_usdc_pair, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
+    ITenKPool.set_reserves(eth_dai_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+
+    ITenKPool.set_reserves(usdt_usdc_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
+    ITenKPool.set_reserves(usdt_dai_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
+
+    ITenKPool.set_reserves(usdc_dai_pair, Uint256(80000 * small_base, 0), Uint256(80000 * base, 0));  // 80,000
+
+    ITenKPool.set_reserves(shitcoin2_dai_pair, Uint256(10000 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    ITenKPool.set_reserves(shitcoin2_usdt_pair, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.shitcoin2) %}

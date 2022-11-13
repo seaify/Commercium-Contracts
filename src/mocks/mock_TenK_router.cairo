@@ -11,6 +11,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc
 
 from src.interfaces.i_erc20 import IERC20
+from src.interfaces.i_pool import ITenKPool
 
 struct Pair {
     token_1: felt,
@@ -28,6 +29,19 @@ func reserves(pair: Pair) -> (reserves: Reserves) {
 
 @storage_var
 func factory_address() -> (address: felt) {
+}
+
+@storage_var
+func pairs(pair: Pair) -> (pair_address: felt) {
+}
+
+@external
+func set_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _token1: felt, _token2: felt, _pair_address: felt
+) {
+    pairs.write(Pair(_token1, _token2), _pair_address);
+    pairs.write(Pair(_token2, _token1), _pair_address);
+    return ();
 }
 
 @view
@@ -134,11 +148,16 @@ func getPair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token1: felt, token2: felt
 ) -> (pair: felt) {
     // We missuse the reserves amounts to check if the pair exists
-    let (reserves1: Uint256, _) = get_reserves(token1, token2);
-    if (reserves1.low == 0) {
+
+    let (pair_address) = pairs.read(Pair(token1, token2));
+    if (pair_address == 0) {
         return (0,);
     }
-    // This address also acts as the pair contract
-    let (address_this) = get_contract_address();
-    return (address_this,);
+
+    let (token_reserve_1: Uint256, _, _) = ITenKPool.getReserves(pair_address);
+
+    if (token_reserve_1.low == 0) {
+        return (0,);
+    }
+    return (pair_address,);
 }

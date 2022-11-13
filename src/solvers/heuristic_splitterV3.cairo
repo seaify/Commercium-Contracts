@@ -1,7 +1,13 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub, uint256_le, uint256_unsigned_div_rem
+from starkware.cairo.common.uint256 import (
+    Uint256,
+    uint256_add,
+    uint256_sub,
+    uint256_le,
+    uint256_unsigned_div_rem,
+)
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.alloc import alloc
@@ -60,6 +66,10 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (path: Path*) = alloc();
     let (amounts_out: Uint256*) = alloc();
 
+    %{
+        print("CHECKPOINT 1")
+    %}
+
     // Get reserves of all exchanges
     let (router_aggregator_address) = router_aggregator.read();
     let (
@@ -73,11 +83,25 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         router_aggregator_address, _token_in, _token_out
     );
 
+    %{
+        print("CHECKPOINT 2")
+    %}
+
     // Keep above average liquid exchanges
     let (average: Uint256) = average_amounts(reserves_a_len, reserves_a);
     let (below_average_routers_len: felt) = kick_below_average(
-        average, routers_len, below_average_routers, routers, below_average_amounts_out, amounts_out, routers_len
+        average,
+        routers_len,
+        below_average_routers,
+        routers,
+        below_average_amounts_out,
+        amounts_out,
+        routers_len,
     );
+
+    %{
+        print("CHECKPOINT 3")
+    %}
 
     // Get amounts out
     IRouterAggregator.get_amount_from_provided_routers(
@@ -91,8 +115,14 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         smaller_selection_amounts_out,
     );
 
+    %{
+        print("CHECKPOINT 4")
+    %}
+
     // Keep exchanges whose price does not deviate to strongly from the best one
-    let highest_val: Uint256 = highest_amount(below_average_routers_len, smaller_selection_amounts_out, Uint256(0,0));
+    let highest_val: Uint256 = highest_amount(
+        below_average_routers_len, smaller_selection_amounts_out, Uint256(0, 0)
+    );
     let (final_routers_len: felt) = kick_below_threshold(
         highest_val,
         below_average_routers_len,
@@ -102,6 +132,10 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         smaller_selection_amounts_out,
         below_average_routers_len,
     );
+
+    %{
+        print("CHECKPOINT 5")
+    %}
 
     // Divide trade amount among remaining DEXes and estimate amount
     let (final_sum: Uint256) = sum_amounts(final_routers_len, final_amounts_out);
@@ -218,7 +252,7 @@ func kick_below_threshold{range_check_ptr}(
 
     // Determine if router return amount deviates by more the THRESHOLD%
     let (difference) = uint256_sub(_highest_val, _amounts_out[0]);
-    let (deviance) = Utils.fdiv(difference, _highest_val, Uint256(BASE,0));
+    let (deviance) = Utils.fdiv(difference, _highest_val, Uint256(BASE, 0));
     let is_le = is_le_felt(THRESHOLD, deviance.low);
 
     // If TRUE, kick router

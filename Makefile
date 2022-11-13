@@ -1,12 +1,16 @@
 .PHONY: build test coverage
 
-build:
-	$(MAKE) clean
-	protostar build --cairo-path ./lib/cairo_contracts/src --disable-hint-validation
 
 setup:
 	protostar install
 	pip install cairo-toolkit
+
+build:
+	$(MAKE) clean
+	protostar build --cairo-path ./lib/cairo_contracts/src --disable-hint-validation
+
+test:
+	protostar test ./tests --disable-hint-validation
 
 format:
 	poetry run cairo-format src/**/*.cairo -i

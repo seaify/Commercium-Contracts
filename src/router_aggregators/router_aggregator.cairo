@@ -170,7 +170,7 @@ func get_all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 
     // Fill amounts and router arrs
     RouterAggregator.all_routers_and_reserves(
-        _token_a, _token_b, reserves_a, reserves_b, routers, routers_len
+        _token_a, _token_b, reserves_a, reserves_b, routers_len, routers
     );
 
     return (routers_len, reserves_a, routers_len, reserves_b, routers_len, routers);

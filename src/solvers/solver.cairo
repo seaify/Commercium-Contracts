@@ -6,7 +6,6 @@ from starkware.cairo.common.alloc import alloc
 
 from src.lib.utils import Router, Path
 
-// This should be a const, but easier like this for testing
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt) {
 }

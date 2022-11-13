@@ -1,8 +1,15 @@
 --Splitter V3--
 1. Build algo
 
+--GradientDescent--
+1. Build algo
+
+--Drawing Gate Image--
+1. Draw the Image
+2. Maybe Fiver/Tami help
+
 --Commenting--
--Lots and lots of commenting
+1.Lots and lots of commenting
 
 --StatsPage--
 1. Dummy Data
@@ -12,6 +19,9 @@
 --Indexing--
 1. Setup Node
 2. Learn and apply Apibara
+
+--BiasedSolver--
+1. Requires GradientDescent (Easiest way)
 
 --Dijkstra--
 1. MaxHeap lib

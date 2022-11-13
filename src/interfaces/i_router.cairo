@@ -58,6 +58,9 @@ namespace IJediRouter {
 
     func factory() -> (address: felt) {
     }
+
+    func set_pair(_token1: felt, _token2: felt, _pair_address: felt) {
+    }
 }
 
 @contract_interface
@@ -162,6 +165,12 @@ namespace ISithRouter {
 
     func factory() -> (address: felt) {
     }
+
+    func set_reserves(_token_in: felt, _token_out: felt, _reserve_1: Uint256, _reserve_2: Uint256) {
+    }
+
+    func set_pair(_token1: felt, _token2: felt, _pair_address: felt) {
+    }
 }
 
 @contract_interface
@@ -182,6 +191,9 @@ namespace ITenKRouter {
     }
 
     func factory() -> (address: felt) {
+    }
+
+    func set_pair(_token1: felt, _token2: felt, _pair_address: felt) {
     }
 }
 
