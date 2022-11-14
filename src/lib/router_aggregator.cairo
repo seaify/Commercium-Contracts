@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.math_cmp import is_le_felt
 from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.alloc import alloc
 
@@ -189,9 +190,6 @@ namespace RouterAggregator {
         // Get router
         let (local router: Router) = routers.read(_routers_len - 1);
 
-        // Add rounter to routers arr
-        assert _routers[0] = router;
-
         %{
             print("Router Address: ", ids.router.address)
         %}
@@ -205,6 +203,18 @@ namespace RouterAggregator {
         %{
             print("Reserve_B: ", ids.reserve_b.low)
         %}
+
+        //If either of the reserves are 0, we don't return that router
+        let is_reserve_a_zero = is_le_felt(reserve_a.low,0);
+        let is_reserve_b_zero = is_le_felt(reserve_b.low,0);
+        if (is_reserve_a_zero+is_reserve_b_zero != 0) {
+            all_routers_and_reserves(
+                _token_in, _token_out, _reserves_a, _reserves_b, _routers_len - 1, _routers
+            );
+            return ();
+        }
+
+        assert _routers[0] = router;
         assert _reserves_a[0] = reserve_a;
         assert _reserves_b[0] = reserve_b;
 

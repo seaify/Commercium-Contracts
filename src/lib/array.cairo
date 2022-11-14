@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from src.lib.utils import Utils
 
 namespace Array {
     // Updates one specific entry of an array

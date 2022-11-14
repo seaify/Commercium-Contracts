@@ -196,7 +196,7 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     // We only have 8 decimals atm
     if (decimals == 8) {
-        let (transformed_price) = Utils.felt_fmul(price, BASE, BASE_8);
+        let transformed_price = Utils.felt_fmul(price, BASE, BASE_8);
         tempvar final_price = Uint256(transformed_price, 0);
         return (final_price, decimals);
     } else {

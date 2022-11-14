@@ -14,6 +14,7 @@ spf-olver = ["src/solvers/spf_solver.cairo"]
 single-swap-solver = ["src/solvers/single_swap_solver.cairo"]
 heuristic-splitter = ["src/solvers/heuristic_splitterV2.cairo"]
 heuristic-splitter_V3 = ["src/solvers/heuristic_splitterV3.cairo"]
+graddesc_solver = ["src/solvers/graddesc_solver.cairo"]
 
 [test]
 target = ["tests"]
