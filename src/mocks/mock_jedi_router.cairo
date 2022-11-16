@@ -74,7 +74,9 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     alloc_locals;
 
     let (local amounts: Uint256*) = alloc();
-    let (reserve_1: Uint256, reserve_2: Uint256) = get_reserves(path[0], path[1]);
+
+    let (pair_address) = pairs.read(Pair(path[0],path[1]));
+    let (reserve_1: Uint256, reserve_2: Uint256) = IJediPool.get_reserves(pair_address);
 
     if (reserve_1.low == 0) {
         local token1 = path[0];

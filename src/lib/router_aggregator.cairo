@@ -166,13 +166,13 @@ namespace RouterAggregator {
     }
 
     // @notice for a given token pair, get all reserves and router for each DEX
-    // @param token_a - The address of token A
-    // @param token_b - The address of token B
-    // @param reserves
-    // @param _reserves_a - An empty array of token_a reserves, that will be filled by this function
-    // @param _reserves_b - An empty array of token_b reserves, that will be filled by this function
-    // @param router - The address and router type of a DEX router
-    // @param routers_len - The number of routers to iterate through
+    // @param _token_in - The address of token A
+    // @param _token_out - The address of token B
+    // @param _reserves_a - An empty array of _token_in reserves, that will be filled by this function
+    // @param _reserves_b - An empty array of _token_out reserves, that will be filled by this function
+    // @param _routers_len - The number of routers to iterate through
+    // @param _router - The address and router type of a DEX router
+    // @param _kick_counter - Used to count the number of Routers/DEXes that are excluded (as they have 0 reserves)
     func all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _token_in: felt,
         _token_out: felt,
@@ -180,11 +180,12 @@ namespace RouterAggregator {
         _reserves_b: Uint256*,
         _routers_len: felt,
         _routers: Router*,
-    ) {
+        _router_counter: felt
+    ) -> felt {
         alloc_locals;
 
         if (0 == _routers_len) {
-            return ();
+            return (_router_counter);
         }
 
         // Get router
@@ -208,21 +209,21 @@ namespace RouterAggregator {
         let is_reserve_a_zero = is_le_felt(reserve_a.low,0);
         let is_reserve_b_zero = is_le_felt(reserve_b.low,0);
         if (is_reserve_a_zero+is_reserve_b_zero != 0) {
-            all_routers_and_reserves(
-                _token_in, _token_out, _reserves_a, _reserves_b, _routers_len - 1, _routers
+            let final_router_len = all_routers_and_reserves(
+                _token_in, _token_out, _reserves_a, _reserves_b, _routers_len - 1, _routers, _router_counter
             );
-            return ();
+            return (final_router_len);
         }
 
         assert _routers[0] = router;
         assert _reserves_a[0] = reserve_a;
         assert _reserves_b[0] = reserve_b;
 
-        all_routers_and_reserves(
-            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers_len - 1, _routers + 2
+        let final_router_len = all_routers_and_reserves(
+            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers_len - 1, _routers + 2, _router_counter+1
         );
 
-        return ();
+        return (final_router_len);
     }
 
     func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -347,12 +348,18 @@ namespace RouterAggregator {
             let (local factory_address) = IJediRouter.factory(_router.address);
             %{
                 print("factory_address", ids.factory_address)
+                print("Token a: ", ids._token_a)
+                print("Token b: ", ids._token_b)
             %}
             let (pair_address) = IJediFactory.get_pair(factory_address, _token_a, _token_b);
+            %{
+                print("Pair Address: ", ids.pair_address)
+            %}
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_a: Uint256, reserve_b: Uint256) = IJediPool.get_reserves(pair_address);
+            
             return (reserve_a, reserve_b);
         }
         if (_router.type == AlphaRoad) {

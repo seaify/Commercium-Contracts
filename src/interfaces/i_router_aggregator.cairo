@@ -43,9 +43,9 @@ namespace IRouterAggregator {
 
     func get_all_routers_and_reserves(_token_a: felt, _token_b: felt) -> (
         reserves_a_len: felt,
-        reserves_a: felt*,
+        reserves_a: Uint256*,
         reserves_b_len: felt,
-        reserves_b: felt*,
+        reserves_b: Uint256*,
         routers_len: felt,
         routers: Router*,
     ) {

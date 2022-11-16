@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// @author FreshPizza
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -21,10 +23,13 @@ from src.lib.router_aggregator import (
     top_router_index_len,
 )
 
-//
-// Views
-//
+////////////////////////
+//       Views        //
+////////////////////////
 
+// @notice Returns address of a price oracle for the provided token
+// @param _token - address of the token that one wants the price feed of
+// @return feed - The oracle address and Emperic price feed key belonging to the provided token-USD pair
 @view
 func get_price_feed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token: felt
@@ -33,6 +38,10 @@ func get_price_feed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     return (feed,);
 }
 
+// @notice provided the router address and type for a given router ID
+// @param _index - The ID of the router to fetch
+// @return router_address - The address of the router contract
+// @return router_type - The type of the returned router (see lib/constants)
 @view
 func get_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) -> (
     router_address: felt, router_type: felt
@@ -42,6 +51,8 @@ func get_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return (router.address, router.type);
 }
 
+// @notice get the number of saved routers
+// @return len - The number of registered routers
 @view
 func get_router_index_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     len: felt
@@ -91,6 +102,12 @@ func get_amount_from_provided_routers{
     return ();
 }
 
+// @notice function to get the return amounts for a number of specified trades
+// @param _amount_in - The router types and router addresses of the DEX routers to utilize
+// @param _token_in - The address of the token to sell
+// @param _token_out - The address of the token to buy
+// @return amount_out - The amount of tokens returned by the best router
+// @return router - The best router address and type
 @view
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
@@ -107,6 +124,12 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     return (res_amount, res_router);
 }
 
+// @notice function to get the return amounts for a number of specified trades
+// @param _amount_in - The router types and router addresses of the DEX routers to utilize
+// @param _token_in - The address of the token to sell
+// @param _token_out - The address of the token to buy
+// @return amount_out - The amount of tokens returned by the best router
+// @return router - The best router address and type
 @view
 func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
@@ -169,14 +192,17 @@ func get_all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     let (routers_len: felt) = router_index_len.read();
 
     // Fill amounts and router arrs
-    RouterAggregator.all_routers_and_reserves(
-        _token_a, _token_b, reserves_a, reserves_b, routers_len, routers
+    let actual_router_len = RouterAggregator.all_routers_and_reserves(
+        _token_a, _token_b, reserves_a, reserves_b, routers_len, routers, _router_counter=0
     );
 
-    return (routers_len, reserves_a, routers_len, reserves_b, routers_len, routers);
+    return (actual_router_len, reserves_a, actual_router_len, reserves_b, actual_router_len, routers);
 }
 
-// Returns token price in USD
+// @notice For a given token, provide the price in USD
+// @param _token - 
+// @return price - 
+// @return decimals - 
 @view
 func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token: felt

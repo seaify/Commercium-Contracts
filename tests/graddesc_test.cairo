@@ -40,6 +40,17 @@ const base_8 = 100000000;
 const small_base = 1000000;  // 1e6
 const extra_base = 100000000000000000000;  // We use this to artificialy increase the weight of each edge, so that we can subtract the last edges without causeing underflows
 
+@contract_interface
+namespace IGraddesc {
+    func get_results(
+        _amount_in: Uint256, _token_in: felt, _token_out: felt
+    ) -> (
+        final_amounts_len: felt, final_amounts: felt*, amount_out: felt
+    ){
+    }
+}
+
+
 @external
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
@@ -157,221 +168,42 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %{ context.router_2_address = ids.router_2_address %}
     %{ context.router_3_address = ids.router_3_address %}
     %{ context.router_4_address = ids.router_4_address %}
-    %{ 
-        print("Jedi Router: ",ids.router_1_address) 
-        print("Sith Router: ",ids.router_2_address) 
-        print("TenK Router: ",ids.router_3_address) 
-        print("Alpha Router: ",ids.router_4_address) 
-        print("shitcoin1: ",ids.shitcoin1) 
-        print("shitcoin2: ",ids.shitcoin2) 
-        print("USDC: ",ids.USDC) 
-        print("ETH: ",ids.ETH) 
-        print("USDT: ",ids.USDT) 
-        print("DAI: ",ids.DAI) 
-    %}
-
-    // Deploy Price Oracle
-    local mock_oracle_address: felt;
-    %{
-        context.mock_oracle_address = deploy_contract("./src/mocks/mock_price_oracle.cairo", []).contract_address 
-        ids.mock_oracle_address = context.mock_oracle_address
-    %}
-
-    // Set Global Prices for Mock ERC20s in Mock_Price_Feed
-    %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.mock_oracle_address) %}
-    // ETH/USD, key: 28556963469423460
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28556963469423460, 1000 * base_8, 8);
-    // USDC/USD, key: 8463218501920060260
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218501920060260, 1 * base_8, 8);
-    // USDT/USD, key: 8463218574934504292
-    IEmpiricOracle.set_token_price(mock_oracle_address, 8463218574934504292, 1 * base_8, 8);
-    // DAI/USD, key: 28254602066752356
-    IEmpiricOracle.set_token_price(mock_oracle_address, 28254602066752356, 1 * base_8, 8);
-    // Shitcoin1/USD, key: 99234898239
-    IEmpiricOracle.set_token_price(mock_oracle_address, 99234898239, 10 * base_8, 8);
-    // Shitcoin2/USD, key: 23674728373
-    IEmpiricOracle.set_token_price(mock_oracle_address, 23674728373, 10 * base_8, 8);
-    %{ stop_prank_callable() %}
+    %{ print("Jedi Router: ",ids.router_1_address) %}
+    %{ print("Sith Router: ",ids.router_2_address) %}
+    %{ print("TenK Router: ",ids.router_3_address) %}
+    %{ print("Alpha Router: ",ids.router_4_address) %}
 
     // Add newly created routers to router aggregator
     %{ stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=ids.router_aggregator_proxy_address) %}
-    IRouterAggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
-    IRouterAggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
-    IRouterAggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
-    IRouterAggregator.add_router(router_aggregator_proxy_address, router_4_address, AlphaRoad);
-
-    // Set Price feeds at the Router
-    IRouterAggregator.set_global_price(
-        router_aggregator_proxy_address, ETH, 28556963469423460, mock_oracle_address
-    );
-    IRouterAggregator.set_global_price(
-        router_aggregator_proxy_address, USDC, 8463218501920060260, mock_oracle_address
-    );
-    //IRouterAggregator.set_global_price(
-    //    router_aggregator_proxy_address, USDT, 8463218574934504292, mock_oracle_address
-    //);
-    IRouterAggregator.set_global_price(
-        router_aggregator_proxy_address, DAI, 28254602066752356, mock_oracle_address
-    );
-    //IRouterAggregator.set_global_price(
-    //    router_aggregator_proxy_address, shitcoin1, 99234898239, mock_oracle_address
-    //);
-    //IRouterAggregator.set_global_price(
-    //    router_aggregator_proxy_address, shitcoin2, 23674728373, mock_oracle_address
-    //);
+        IRouterAggregator.add_router(router_aggregator_proxy_address, router_1_address, JediSwap);
+        IRouterAggregator.add_router(router_aggregator_proxy_address, router_2_address, SithSwap);
+        IRouterAggregator.add_router(router_aggregator_proxy_address, router_3_address, TenK);
+        IRouterAggregator.add_router(router_aggregator_proxy_address, router_4_address, AlphaRoad);
     %{ stop_prank_callable() %}
 
     // Deploy Solvers
     local solver1_address: felt;
     %{
-        context.solver1_address = deploy_contract("./src/solvers/single_swap_solver.cairo", [ids.router_aggregator_proxy_address]).contract_address 
+        context.solver1_address = deploy_contract("./src/solvers/graddesc_solver.cairo", [ids.router_aggregator_proxy_address]).contract_address 
         ids.solver1_address = context.solver1_address
     %}
-    local solver2_address: felt;
-    %{
-        context.solver2_address = deploy_contract("./src/solvers/spf_solver.cairo", [ids.public_key_0,ids.router_aggregator_proxy_address]).contract_address 
-        ids.solver2_address = context.solver2_address
-    %}
-    local solver3_address: felt;
-    %{
-        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV3.cairo", [ids.router_aggregator_proxy_address]).contract_address 
-        ids.solver3_address = context.solver3_address
-    %}
-
-    // Configure SPF
-    // Set high Liq tokens for spf_solver
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver2_address) %}
-    ISpfSolver.set_high_liq_tokens(solver2_address, 0, ETH);
-    ISpfSolver.set_high_liq_tokens(solver2_address, 1, DAI);
-    //ISpfSolver.set_high_liq_tokens(solver2_address, 2, USDT);
-    ISpfSolver.set_high_liq_tokens(solver2_address, 2, USDC);
-    %{ stop_prank_callable() %}
 
     // Add solver to solver_registry
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.solver_registry_address) %}
     ISolverRegistry.set_solver(solver_registry_address, 1, solver1_address);
-    ISolverRegistry.set_solver(solver_registry_address, 2, solver2_address);
-    ISolverRegistry.set_solver(solver_registry_address, 3, solver3_address);
     %{ stop_prank_callable() %}
 
     return ();
 }
-
-//@external
-func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-
-    local public_key_0;
-    %{ ids.public_key_0 = context.public_key_0 %}
-
-    local hub_address;
-    %{ ids.hub_address = context.hub_address %}
-
-    local ETH;
-    %{ ids.ETH = context.ETH %}
-    local DAI;
-    %{ ids.DAI = context.DAI %}
-    local USDC;
-    %{ ids.USDC = context.USDC %}
-    local USDT;
-    %{ ids.USDT = context.USDT %}
-
-    // SET TOKENS TO TRADE
-    local token_to_sell = ETH;
-    local token_to_buy = DAI;
-
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
-
-    let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 1);
-    %{ print("Get_out amount: ",ids._amount_out.low) %}
-
-    // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.token_to_sell) %}
-    IERC20.approve(token_to_sell, hub_address, amount_to_trade);
-    %{ stop_prank_callable() %}
-
-    // Execute Solver via Hub
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
-        hub_address,
-        _amount_in=amount_to_trade,
-        _min_amount_out=_amount_out,
-        _token_in=token_to_sell,
-        _token_out=token_to_buy,
-        _to=public_key_0,
-        _solver_id=1,
-    );
-    %{ stop_prank_callable() %}
-
-    %{ print("received_amount: ",ids.received_amount.low) %}
-    return ();
-}
-
-//@external
-func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-
-    local public_key_0;
-    %{ ids.public_key_0 = context.public_key_0 %}
-
-    local hub_address;
-    %{ ids.hub_address = context.hub_address %}
-
-    local ETH;
-    %{ ids.ETH = context.ETH %}
-    local DAI;
-    %{ ids.DAI = context.DAI %}
-    local USDC;
-    %{ ids.USDC = context.USDC %}
-    local USDT;
-    %{ ids.USDT = context.USDT %}
-    local shitcoin1;
-    %{ ids.shitcoin1 = context.shitcoin1 %}
-    local shitcoin2;
-    %{ ids.shitcoin2 = context.shitcoin2 %}
-
-    // SET TOKENS TO TRADE
-    local token_to_sell = ETH;
-    local token_to_buy = DAI;
-
-    // SET AMOUNTS TO TRADE
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
-
-    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 2);
-    %{ print("Get_out amount: ",ids.amount_out.low) %}
-
-    // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.token_to_sell) %}
-    IERC20.approve(token_to_sell, hub_address, amount_to_trade);
-    %{ stop_prank_callable() %}
-
-    // Execute Solver via Hub
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
-        hub_address,
-        _amount_in=amount_to_trade,
-        _min_amount_out=amount_out,
-        _token_in=token_to_sell,
-        _token_out=token_to_buy,
-        _to=public_key_0,
-        _solver_id=2,
-    );
-    %{ stop_prank_callable() %}
-
-    %{ print("received_amount: ",ids.received_amount.low) %}
-
-    return ();
-}
-
 @external
-func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_graddesc{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     local public_key_0;
     %{ ids.public_key_0 = context.public_key_0 %}
 
-    local hub_address;
-    %{ ids.hub_address = context.hub_address %}
+    local solver1_address;
+    %{ ids.solver1_address = context.solver1_address %}
 
     local ETH;
     %{ ids.ETH = context.ETH %}
@@ -384,115 +216,8 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, USDC, 3);
-    %{ print("Get_out amount: ",ids.amount_out.low) %}
-
-    // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
-    %{ stop_prank_callable() %}
-
-    // Execute Solver via Hub
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.swap_exact_tokens_for_tokens_with_solver(
-        hub_address,
-        _amount_in=amount_to_trade,
-        _min_amount_out=amount_out,
-        _token_in=ETH,
-        _token_out=USDC,
-        _to=public_key_0,
-        _solver_id=3,
-    );
-    %{ stop_prank_callable() %}
-
-    %{ print("received_amount: ",ids.received_amount.low) %}
-
-    return ();
-}
-
-//@external
-func test_swap_with_path{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-
-    local public_key_0;
-    %{ ids.public_key_0 = context.public_key_0 %}
-
-    local hub_address;
-    %{ ids.hub_address = context.hub_address %}
-
-    local ETH;
-    %{ ids.ETH = context.ETH %}
-    local DAI;
-    %{ ids.DAI = context.DAI %}
-    local USDC;
-    %{ ids.USDC = context.USDC %}
-    local USDT;
-    %{ ids.USDT = context.USDT %}
-    local shitcoin1;
-    %{ ids.shitcoin1 = context.shitcoin1 %}
-    local shitcoin2;
-    %{ ids.shitcoin2 = context.shitcoin2 %}
-
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
-
-    let (
-        routers_len: felt,
-        routers: Router*,
-        path_len: felt,
-        path: Path*,
-        amounts_len: felt,
-        amounts: felt*,
-        amount_out: Uint256
-    ) = IHub.get_amount_and_path_with_solver(hub_address, amount_to_trade, ETH, DAI, 2);
-    
-    return ();
-}
-
-//@external
-func test_view_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-
-    local public_key_0;
-    %{ ids.public_key_0 = context.public_key_0 %}
-
-    local hub_address;
-    %{ ids.hub_address = context.hub_address %}
-
-    local ETH;
-    %{ ids.ETH = context.ETH %}
-    local DAI;
-    %{ ids.DAI = context.DAI %}
-    local USDC;
-    %{ ids.USDC = context.USDC %}
-    local USDT;
-    %{ ids.USDT = context.USDT %}
-    local shitcoin1;
-    %{ ids.shitcoin1 = context.shitcoin1 %}
-    local shitcoin2;
-    %{ ids.shitcoin2 = context.shitcoin2 %}
-
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
-    local expected_min_return: Uint256 = Uint256(1 * base, 0);
-
-    // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
-    %{ stop_prank_callable() %}
-
-    // Get amount out
-    // Using custom interface
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    let (received_amount: Uint256) = IHub.get_amount_out_with_solver(
-        hub_address, _amount_in=amount_to_trade, _token_in=ETH, _token_out=USDC, _solver_id=1
-    );
-
-    // Using uni conform interface
-    let (return_amount: Uint256) = IHub.get_amount_out(
-        hub_address, amount_to_trade, ETH, DAI
-    );
-    %{ stop_prank_callable() %}
-
-    %{ print("received_amount: ",ids.return_amount.low) %}
+    let (final_amounts_len: felt, final_amounts: felt*, amount_out: felt) = IGraddesc.get_results(solver1_address, amount_to_trade, ETH, USDC);
+    %{ print("Get_out amount: ",ids.amount_out) %}
 
     return ();
 }
@@ -809,7 +534,6 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     // USDT = 1$
     // USDC = 1$
     // shitcoin2 = 10$
-
 
     //CONFIGURE ROUTER AND PAIRS
     ITenKRouter.set_pair(router_address, shitcoin1, USDT, shitcoin1_usdt_pair);

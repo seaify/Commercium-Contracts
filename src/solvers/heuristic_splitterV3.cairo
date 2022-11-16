@@ -43,6 +43,13 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return ();
 }
 
+// @notice Find the optimal trading path using the SPF algorithm
+// @param _amount_in - Number of tokens to be sold
+// @param _token_in - Address of the token to be sold
+// @param _token_out - Address of the token to be bougth
+// @return routers - Array of routers that are used in the trading path
+// @return path - Array of token pairs that are used in the trading path
+// @return amounts - Array of token amount that are used in the trading path
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
@@ -95,7 +102,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         below_average_routers,
         routers,
         below_average_amounts_out,
-        amounts_out,
+        reserves_a,
         routers_len,
     );
 
@@ -205,7 +212,16 @@ func kick_below_average{range_check_ptr}(
         return (_routers_len,);
     }
 
+    %{
+        print("CHECKPOINT 2.1")
+    %}
+
+
     let (is_le) = uint256_le(_average, _amounts_out[0]);
+
+    %{
+        print("CHECKPOINT 2.2")
+    %}
 
     // If TRUE, kick router
     if (is_le == TRUE) {

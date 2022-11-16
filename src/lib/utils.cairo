@@ -67,9 +67,9 @@ namespace Utils {
     }
 
     // Copied from: https://github.com/NethermindEth/warp/blob/develop/warplib/maths/pow2.cairo
-    func pow2(i) -> (res: felt) {
+    func pow2(i) -> felt {
         let (data_address) = get_label_location(data);
-        return ([data_address + i],);
+        return ([data_address + i]);
 
         data:
         dw 0x1;
