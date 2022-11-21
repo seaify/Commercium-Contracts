@@ -20,10 +20,8 @@ namespace IRouterAggregator {
         _routers: Router*,
         _token_in: felt,
         _token_out: felt,
-        _amount_in: Uint256,
-        _amounts_out_len: felt,
-        _amounts_out: Uint256*,
-    ) {
+        _amount_in: Uint256
+    ) -> (_amounts_out_len: felt, _amounts_out: Uint256*,) {
     }
 
     func get_single_best_router(_amount_in: Uint256, _token_in: felt, _token_out: felt) -> (

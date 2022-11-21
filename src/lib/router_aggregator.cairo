@@ -13,7 +13,7 @@ from src.interfaces.i_router import (
     IStarkRouter,
 )
 from src.interfaces.i_factory import IAlphaFactory, IJediFactory, ISithFactory, ITenKFactory
-from src.interfaces.i_pool import IAlphaPool, IStarkPool, IJediPool, ITenKPool
+from src.interfaces.i_pool import IAlphaPool, IStarkPool, IJediPool, ITenKPool, ISithPool
 from src.lib.utils import Router
 from src.lib.constants import JediSwap, SithSwap, AlphaRoad, TenK, StarkSwap, TenKFactory
 
@@ -165,6 +165,41 @@ namespace RouterAggregator {
         return ();
     }
 
+    func amounts_from_provided_routers{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(
+        _routers_len: felt,
+        _routers: Router*,
+        _token_in: felt,
+        _token_out: felt,
+        _amount_in: Uint256,
+        _amounts_out_len: felt,
+        _amounts_out: Uint256*
+    ) {
+
+        if (_routers_len == 0) {
+            return ();
+        }
+
+        let (amount: Uint256) = get_router_amount(
+            _amount_in, _token_in, _token_out, _routers[0]
+        );
+
+        assert _amounts_out[0] = amount;
+
+        amounts_from_provided_routers(
+            _routers_len - 1,
+            _routers + 2,
+            _token_in,
+            _token_out,
+            _amount_in,
+            _amounts_out_len,
+            _amounts_out + 2,
+        );
+
+        return ();
+    }
+
     // @notice for a given token pair, get all reserves and router for each DEX
     // @param _token_in - The address of token A
     // @param _token_out - The address of token B
@@ -191,19 +226,9 @@ namespace RouterAggregator {
         // Get router
         let (local router: Router) = routers.read(_routers_len - 1);
 
-        %{
-            print("Router Address: ", ids.router.address)
-        %}
-
         let (local reserve_a: Uint256, local reserve_b: Uint256) = get_router_reserves(
             _token_in, _token_out, router
         );
-        %{
-            print("Reserve_A: ", ids.reserve_a.low)
-        %}
-        %{
-            print("Reserve_B: ", ids.reserve_b.low)
-        %}
 
         //If either of the reserves are 0, we don't return that router
         let is_reserve_a_zero = is_le_felt(reserve_a.low,0);
@@ -346,15 +371,7 @@ namespace RouterAggregator {
         alloc_locals;
         if (_router.type == JediSwap) {
             let (local factory_address) = IJediRouter.factory(_router.address);
-            %{
-                print("factory_address", ids.factory_address)
-                print("Token a: ", ids._token_a)
-                print("Token b: ", ids._token_b)
-            %}
             let (pair_address) = IJediFactory.get_pair(factory_address, _token_a, _token_b);
-            %{
-                print("Pair Address: ", ids.pair_address)
-            %}
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
@@ -366,9 +383,6 @@ namespace RouterAggregator {
             let (factory_address: felt) = IAlphaRouter.getFactory(_router.address);
             let (pair_address: felt) = IAlphaFactory.getPool(factory_address, _token_a, _token_b);
             if (pair_address == 0) {
-                %{
-                    print("ALPHA PAIR IS ZERO")
-                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_token_0: Uint256, reserve_token_1: Uint256) = IAlphaPool.getReserves(
@@ -380,14 +394,9 @@ namespace RouterAggregator {
             let (factory_address) = ISithRouter.factory(_router.address);
             let (pair_address) = ISithFactory.pairFor(factory_address, _token_a, _token_b, 0);
             if (pair_address == 0) {
-                %{
-                    print("SITH PAIR IS ZERO")
-                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
-            let (reserve_token_0, reserve_token_1) = ISithRouter.getReserves(
-                _router.address, token_a=_token_a, token_b=_token_b, stable=0
-            );
+            let (reserve_token_0, reserve_token_1) = ISithPool.getReserves(pair_address);
             return (reserve_token_0, reserve_token_1);
         }
         if (_router.type == TenK) {
@@ -396,9 +405,6 @@ namespace RouterAggregator {
             let (pair_address) = ITenKFactory.getPair(factory_address, _token_a, _token_b);
             // let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_a,_token_b);
             if (pair_address == 0) {
-                %{
-                    print("TENK PAIR IS ZERO")
-                %}
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_a, reserve_b, _) = ITenKPool.getReserves(pair_address);

@@ -307,7 +307,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return ();
 }
 
-//@external
+@external
 func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -335,7 +335,7 @@ func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     local token_to_buy = DAI;
 
     // SET AMOUNTS TO TRADE
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(10 * base, 0);
 
     let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 2);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
@@ -382,14 +382,19 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     local USDT;
     %{ ids.USDT = context.USDT %}
 
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+    // SET TOKENS TO TRADE
+    local token_to_sell = ETH;
+    local token_to_buy = DAI;
 
-    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, ETH, USDC, 3);
+    // SET AMOUNTS TO TRADE
+    local amount_to_trade: Uint256 = Uint256(10 * base, 0);
+
+    let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 3);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
 
     // Allow hub to take tokens
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.approve(ETH, hub_address, amount_to_trade);
+    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.token_to_sell) %}
+    IERC20.approve(token_to_sell, hub_address, amount_to_trade);
     %{ stop_prank_callable() %}
 
     // Execute Solver via Hub
@@ -398,8 +403,8 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
         hub_address,
         _amount_in=amount_to_trade,
         _min_amount_out=amount_out,
-        _token_in=ETH,
-        _token_out=USDC,
+        _token_in=token_to_sell,
+        _token_out=token_to_buy,
         _to=public_key_0,
         _solver_id=3,
     );

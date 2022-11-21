@@ -206,11 +206,15 @@ namespace Hub {
             path_len: felt,
             path: Path*,
             amounts_len: felt,
-            amounts: felt*,
+            local amounts: felt*,
         ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out);
 
         // Get trade executor class hash
         let (trade_executor_hash) = Hub_trade_executor.read();
+
+        %{
+            print("Amounts to trade: ", ids.amounts_len)
+        %}
 
         // Delegate Call: Execute transactions
         ITradeExecutor.library_call_multi_swap(

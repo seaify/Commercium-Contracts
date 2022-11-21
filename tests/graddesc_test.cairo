@@ -216,7 +216,7 @@ func test_graddesc{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 
     local amount_to_trade: Uint256 = Uint256(2 * base, 0);
 
-    let (final_amounts_len: felt, final_amounts: felt*, amount_out: felt) = IGraddesc.get_results(solver1_address, amount_to_trade, ETH, USDC);
+    let (final_amounts_len: felt, final_amounts: felt*, amount_out: felt) = IGraddesc.get_results(solver1_address, amount_to_trade, ETH, DAI);
     %{ print("Get_out amount: ",ids.amount_out) %}
 
     return ();
@@ -534,6 +534,7 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     // USDT = 1$
     // USDC = 1$
     // shitcoin2 = 10$
+
 
     //CONFIGURE ROUTER AND PAIRS
     ITenKRouter.set_pair(router_address, shitcoin1, USDT, shitcoin1_usdt_pair);

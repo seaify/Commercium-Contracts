@@ -51,19 +51,43 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         reserves_a: Uint256*,
         reserves_b_len: felt,
         reserves_b: Uint256*,
-        routers_len: felt,
+        local routers_len: felt,
         routers: Router*,
     ) = IRouterAggregator.get_all_routers_and_reserves(router_aggregator_address,_token_in, _token_out);
+
+
+    local tester1 = reserves_b[0].low;
+    local tester2 = reserves_b[1].low;
+    local tester3 = reserves_b[2].low;
+    local tester4 = reserves_b[3].low;
+    %{
+        print("Reserve1: ", ids.tester1)
+        print("Reserve2: ", ids.tester2)
+        print("Reserve3: ", ids.tester3)
+        print("Reserve4: ", ids.tester4)
+    %}
+
+    local router1 = routers[0].address;
+    local router2 = routers[1].address;
+    local router3 = routers[2].address;
+    local router4 = routers[3].address;
+    %{
+        print("Router1: ", ids.router1)
+        print("Router2: ", ids.router2)
+        print("Router3: ", ids.router3)
+        print("Router4: ", ids.router4)
+    %}
 
     // Pre-Calc
     let (pre_calcs: PreCalc*) = alloc(); 
     set_pre_calculations(pre_calcs,reserves_a,reserves_b,reserves_a_len);
 
     // Set starting weights
-    let (init_amount,_) = unsigned_div_rem(_amount_in.low,routers_len);
+    let (local init_amount,_) = unsigned_div_rem(_amount_in.low,routers_len);
     init_amounts(routers_len, amounts, init_amount);
 
     %{
+        print("Number of DEXes: ", ids.routers_len)
         print("Initial starting weight/amount: ", ids.init_amount)
     %}
 
@@ -166,6 +190,15 @@ func objective_func{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _pre_calcs: PreCalc, _amount_in: felt, _router_type: felt 
 ) -> felt {
+    alloc_locals;
+    local tester1 = _pre_calcs.feed_reserves_1;
+    local tester2 = _pre_calcs.feed_reserves_2;
+
+    %{
+        print("feed_reserves_1: ", ids.tester1)
+        print("feed_reserves_2: ", ids.tester2)
+        print("_amount_in: ", ids._amount_in)
+    %}
 
     //ToDo Check what can be pre-computed (e.g. reserve_1 * 1000)
     if (_router_type == 0){
@@ -220,17 +253,24 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func set_pre_calculations{range_check_ptr}(
     _pre_calcs: PreCalc*,_reserves_1: Uint256*,_reserves_2: Uint256*,_reserves_len: felt
     ){
-
+    alloc_locals;
     if(_reserves_len == 0){
         return();
     }
 
     let feed_reserves_1 = 1000 * _reserves_1[0].low;
-    let feed_reserves_2 = 997*_reserves_2[0].low;
+    let feed_reserves_2 = 997 * _reserves_2[0].low;
+
+    local router1 = feed_reserves_2;
+    local router2 = _reserves_2[0].low;
+    %{
+        print("_reserves_2[0].low: ", ids.router2)
+        print("feed_reserves_2: ", ids.router1)
+    %}
 
     assert _pre_calcs[0] = PreCalc(feed_reserves_1,feed_reserves_2,feed_reserves_1*feed_reserves_2);
 
-    set_pre_calculations(_pre_calcs + 3,_reserves_1 + 1,_reserves_2 + 1,_reserves_len - 1);
+    set_pre_calculations(_pre_calcs + 3,_reserves_1 + 2,_reserves_2 + 2,_reserves_len - 1);
     return();
 }
 

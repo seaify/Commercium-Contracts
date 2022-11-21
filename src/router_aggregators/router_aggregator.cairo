@@ -23,6 +23,14 @@ from src.lib.router_aggregator import (
     top_router_index_len,
 )
 
+// ///////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                  The implementation of the Router Aggregator Contract.                   //
+//   Includes interfaces of all DEX routers. Allows for simple querying of amounts/reserves //
+//             of said DEXes as well as some other utility functions for solvers.           //                                      //
+//                                                                                          //
+// ///////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////
 //       Views        //
 ////////////////////////
@@ -61,12 +69,12 @@ func get_router_index_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     return (len,);
 }
 
-// @notice function to get the return amounts for a number of specified trades
+// @notice function to get the return amounts for a number of specified trades and routers
 // @param _routers - The router types and router addresses of the DEX routers to utilize
 // @param _token_in - The address of the token to sell
 // @param _token_out - The address of the token to buy
 // @param _amount_in - The amount of token_in to sell
-// @param _amount_out - An array of amounts of token_out that would be received for each given trade
+// @return _amount_out - An array of amounts of token_out that would be received for each given trade
 @view
 func get_amount_from_provided_routers{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
@@ -75,34 +83,18 @@ func get_amount_from_provided_routers{
     _routers: Router*,
     _token_in: felt,
     _token_out: felt,
-    _amount_in: Uint256,
-    _amounts_out_len: felt,
-    _amounts_out: Uint256*,
-) {
-    if (_routers_len == 0) {
-        return ();
-    }
+    _amount_in: Uint256
+) -> (_amounts_out_len: felt, _amounts_out: Uint256*) {
+    alloc_locals;
 
-    let (amount: Uint256) = RouterAggregator.get_router_amount(
-        _amount_in, _token_in, _token_out, _routers[0]
-    );
+    let (local _amounts_out: Uint256*) = alloc();
 
-    assert _amounts_out[0] = amount;
+    RouterAggregator.amounts_from_provided_routers(_routers_len,_routers,_token_in,_token_out,_amount_in,_routers_len,_amounts_out);
 
-    get_amount_from_provided_routers(
-        _routers_len - 1,
-        _routers + 2,
-        _token_in,
-        _token_out,
-        _amount_in,
-        _amounts_out_len,
-        _amounts_out + 2,
-    );
-
-    return ();
+    return (_routers_len,_amounts_out);
 }
 
-// @notice function to get the return amounts for a number of specified trades
+// @notice For a given token trade return the best return amount and router known to the aggregator
 // @param _amount_in - The router types and router addresses of the DEX routers to utilize
 // @param _token_in - The address of the token to sell
 // @param _token_out - The address of the token to buy
@@ -124,7 +116,7 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     return (res_amount, res_router);
 }
 
-// @notice function to get the return amounts for a number of specified trades
+// @notice For a given token trade return the best return amount and router from a saved list of high liquidity DEXes
 // @param _amount_in - The router types and router addresses of the DEX routers to utilize
 // @param _token_in - The address of the token to sell
 // @param _token_out - The address of the token to buy
@@ -146,6 +138,12 @@ func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     return (res_amount, res_router);
 }
 
+// @notice For a given token trade return all routers that have liquidity for that pair as well as the expected return amounts
+// @param _amount_in - The router types and router addresses of the DEX routers to utilize
+// @param _token_in - The address of the token to sell
+// @param _token_out - The address of the token to buy
+// @return amounts_out - An array of token amounts returned by all routers with liquidity for the given pair
+// @return routers - An array of addresses and types of all routers with liquidity for the given pair
 @view
 func get_all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
@@ -200,9 +198,9 @@ func get_all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 }
 
 // @notice For a given token, provide the price in USD
-// @param _token - 
-// @return price - 
-// @return decimals - 
+// @param _token - Address of token to get the USD price for
+// @return price - USD token price scaled to 1e18
+// @return decimals - Number of decimals for the provided price (should always be scaled by the router to 1e18)
 @view
 func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token: felt
@@ -231,6 +229,12 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     }
 }
 
+// @notice Provides a unified weight value for a give token pair to be used by certain algorithms
+// @dev This function is made for very specific algorithms (see spf solver) and provides little utility for more general algorithms.
+// @param _amount_in_usd - USD value of the assets to be sold
+// @param _amount_out - number of assets received
+// @param _token_out - address of the token being bought
+// @return weight - The normailized weight value for the received amount
 @view
 func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in_usd: Uint256, _amount_out: Uint256, _token_out: felt
@@ -249,10 +253,14 @@ func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return (route_cost.low,);
 }
 
-//
-// Admin
-//
+////////////////////////
+//       Admin        //
+////////////////////////
 
+// @notice Add a router to the router aggregator
+// @dev put a router on the top of the list and increase the router list length
+// @param _router_address - Address of the router to be added
+// @param _router_type - The type of the router to be added (see lib/consts)
 @external
 func add_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _router_address: felt, _router_type: felt

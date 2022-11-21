@@ -90,20 +90,12 @@ func __default__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 ) -> (retdata_size: felt, retdata: felt*) {
     let (class_hash) = Proxy.get_implementation_hash();
 
-    %{
-        print("BEFORE DEFAULT ENTRY")
-    %}
-
     let (retdata_size: felt, retdata: felt*) = library_call(
         class_hash=class_hash,
         function_selector=selector,
         calldata_size=calldata_size,
         calldata=calldata,
     );
-
-    %{
-        print("AFTER DEFAULT ENTRY")
-    %}
 
     return (retdata_size=retdata_size, retdata=retdata);
 }

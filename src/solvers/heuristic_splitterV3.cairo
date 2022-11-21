@@ -5,7 +5,7 @@ from starkware.cairo.common.uint256 import (
     Uint256,
     uint256_add,
     uint256_sub,
-    uint256_le,
+    uint256_lt,
     uint256_unsigned_div_rem,
 )
 from starkware.cairo.common.math import unsigned_div_rem
@@ -32,7 +32,7 @@ func router_aggregator() -> (router_aggregator_address: felt) {
 }
 
 // ///////////////////////////
-//       Constructor       //
+//       Constructor        //
 // ///////////////////////////
 
 @constructor
@@ -67,15 +67,10 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (amounts: felt*) = alloc();
     let (below_average_routers: Router*) = alloc();
     let (below_average_amounts_out: Uint256*) = alloc();
-    let (smaller_selection_amounts_out: Uint256*) = alloc();
     let (final_routers: Router*) = alloc();
     let (final_amounts_out: Uint256*) = alloc();
     let (path: Path*) = alloc();
     let (amounts_out: Uint256*) = alloc();
-
-    %{
-        print("CHECKPOINT 1")
-    %}
 
     // Get reserves of all exchanges
     let (router_aggregator_address) = router_aggregator.read();
@@ -90,12 +85,9 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         router_aggregator_address, _token_in, _token_out
     );
 
-    %{
-        print("CHECKPOINT 2")
-    %}
-
     // Keep above average liquid exchanges
     let (average: Uint256) = average_amounts(reserves_a_len, reserves_a);
+
     let (below_average_routers_len: felt) = kick_below_average(
         average,
         routers_len,
@@ -105,49 +97,41 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         reserves_a,
         routers_len,
     );
-
-    %{
-        print("CHECKPOINT 3")
-    %}
-
+    
     // Get amounts out
-    IRouterAggregator.get_amount_from_provided_routers(
+    let (smaller_selection_amounts_out_len: felt, smaller_selection_amounts_out: Uint256*) = IRouterAggregator.get_amount_from_provided_routers(
         router_aggregator_address,
-        below_average_routers_len,
-        below_average_routers,
-        _token_in,
-        _token_out,
-        _amount_in,
-        below_average_routers_len,
-        smaller_selection_amounts_out,
+        _routers_len=below_average_routers_len,
+        _routers=below_average_routers,
+        _token_in=_token_in,
+        _token_out=_token_out,
+        _amount_in=_amount_in
     );
-
-    %{
-        print("CHECKPOINT 4")
-    %}
 
     // Keep exchanges whose price does not deviate to strongly from the best one
     let highest_val: Uint256 = highest_amount(
-        below_average_routers_len, smaller_selection_amounts_out, Uint256(0, 0)
+        smaller_selection_amounts_out_len, smaller_selection_amounts_out, Uint256(0, 0)
     );
-    let (final_routers_len: felt) = kick_below_threshold(
+    let (local final_routers_len: felt) = kick_below_threshold(
         highest_val,
-        below_average_routers_len,
+        smaller_selection_amounts_out_len,
         final_routers,
         routers,
         final_amounts_out,
         smaller_selection_amounts_out,
-        below_average_routers_len,
+        smaller_selection_amounts_out_len,
     );
-
-    %{
-        print("CHECKPOINT 5")
-    %}
 
     // Divide trade amount among remaining DEXes and estimate amount
     let (final_sum: Uint256) = sum_amounts(final_routers_len, final_amounts_out);
     set_amounts(final_sum.low, final_routers_len, final_amounts_out, amounts);
     set_path(final_routers_len, path, _token_in, _token_out);
+
+    // Get the estimated return amount
+    //ITradeExecutor.Simulate
+
+    // If splitting up trades yields worse result then just trading on the best one, choose the best one
+    
 
     return (
         routers_len=final_routers_len,
@@ -186,7 +170,7 @@ func highest_amount{range_check_ptr}(
         return (_highest_amount);
     }
 
-    let (is_le) = uint256_le(_highest_amount, _amounts[0]);
+    let (is_le) = uint256_lt(_highest_amount, _amounts[0]);
 
     if (is_le == TRUE) {
         let final_amount = highest_amount(_amounts_len - 1, _amounts + 2, _amounts[0]);
@@ -212,16 +196,7 @@ func kick_below_average{range_check_ptr}(
         return (_routers_len,);
     }
 
-    %{
-        print("CHECKPOINT 2.1")
-    %}
-
-
-    let (is_le) = uint256_le(_average, _amounts_out[0]);
-
-    %{
-        print("CHECKPOINT 2.2")
-    %}
+    let (is_le) = uint256_lt(_average, _amounts_out[0]);
 
     // If TRUE, kick router
     if (is_le == TRUE) {
