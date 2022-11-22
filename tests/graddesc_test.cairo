@@ -558,7 +558,7 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     ITenKPool.set_reserves(shitcoin1_usdt_pair, Uint256(1000 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
     ITenKPool.set_reserves(eth_usdc_pair, Uint256(10 * base, 0), Uint256(10000 * small_base, 0));  // 10,000
-    ITenKPool.set_reserves(eth_dai_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
+    ITenKPool.set_reserves(eth_dai_pair, Uint256(10 * base, 0), Uint256(10000 * base, 0));  // 10,000
 
     ITenKPool.set_reserves(usdt_usdc_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
     ITenKPool.set_reserves(usdt_dai_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
@@ -578,7 +578,7 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
     IERC20.transfer(ETH, router_address, Uint256(10 * base, 0));
-    IERC20.transfer(ETH, router_address, Uint256(100 * base, 0));
+    IERC20.transfer(ETH, router_address, Uint256(10 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
     IERC20.transfer(USDC, router_address, Uint256(10000 * small_base, 0));
@@ -592,7 +592,7 @@ func create_TenK_router{syscall_ptr: felt*, range_check_ptr}(
     IERC20.transfer(USDT, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
-    IERC20.transfer(DAI, router_address, Uint256(100000 * base, 0));
+    IERC20.transfer(DAI, router_address, Uint256(10000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(100000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(80000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(90000 * base, 0));

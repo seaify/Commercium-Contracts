@@ -273,31 +273,43 @@ func add_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return ();
 }
 
+// @notice Update an existing router entry
+// @dev The provided id has to be lower then the current number of registered routers
+// @param _router_address - Address of the router to be added
+// @param _router_type - The type of the router to be added (see lib/consts)
+// @param _id - The router_id to be mapped to the new router
 @external
 func update_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router_address: felt, _router_type: felt, id: felt
+    _router_address: felt, _router_type: felt, _id: felt
 ) {
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
-    let is_under_len = is_le_felt(id, router_len);
+    let is_under_len = is_le_felt(_id, router_len);
     assert is_under_len = 1;
-    routers.write(id, Router(_router_address, _router_type));
+    routers.write(_id, Router(_router_address, _router_type));
     // EMIT ADD EVENT
     return ();
 }
 
+// @notice Remove an existing router entry
+// @dev The last entry will be poped written at the location of the provided entry id
+// @param _id - id of the router to be removed
 @external
-func remove_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_index: felt) {
+func remove_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_id: felt) {
     Ownable.assert_only_owner();
     let (router_len) = router_index_len.read();
     let (last_router: Router) = routers.read(router_len);
-    routers.write(_index, last_router);
+    routers.write(_id, last_router);
     routers.write(router_len, Router(0, 0));
     router_index_len.write(router_len - 1);
     // EMIT REMOVE EVENT
     return ();
 }
 
+// @notice Add a high liquidity (top) router to the router aggregator
+// @dev put a router on the top of the list and increase the router list length
+// @param _router_address - Address of the router to be added
+// @param _router_type - The type of the router to be added (see lib/consts)
 @external
 func add_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _router_address: felt, _router_type: felt
@@ -310,6 +322,11 @@ func add_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     return ();
 }
 
+// @notice Update an existing high liquidity (top) router entry
+// @dev The provided id has to be lower then the current number of registered routers
+// @param _router_address - Address of the router to be added
+// @param _router_type - The type of the router to be added (see lib/consts)
+// @param _id - The router_id to be mapped to the new router
 @external
 func update_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _router_address: felt, _router_type: felt, id: felt
@@ -323,6 +340,9 @@ func update_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+// @notice Remove an existing high liquidity (top) router entry
+// @dev The last entry will be poped written at the location of the provided entry id
+// @param _id - id of the router to be removed
 @external
 func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _index: felt
@@ -337,6 +357,10 @@ func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+// @notice Store an Emperic USD price oracle for a provided token address 
+// @param _token - Token address that the oracle will be mapped to
+// @param _key - Epheric key of the _token-USD price oracle
+// @param _oracle_address - The contract address of the Emperic oracle
 @external
 func set_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token: felt, _key: felt, _oracle_address: felt

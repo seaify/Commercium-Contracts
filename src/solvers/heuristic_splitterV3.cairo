@@ -14,6 +14,8 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math_cmp import is_le_felt
 
 from src.interfaces.i_router_aggregator import IRouterAggregator
+from src.interfaces.i_trade_executor import ITradeExecutor
+from src.interfaces.i_hub import IHub
 from src.lib.utils import Router, Path, Utils
 from src.lib.constants import BASE
 
@@ -31,15 +33,25 @@ const THRESHOLD = 5000000000000000;  // 5e15 / 0.5%
 func router_aggregator() -> (router_aggregator_address: felt) {
 }
 
+@storage_var
+func trade_executor() -> (trade_executor_hash: felt) {
+}
+
+@storage_var
+func hub() -> (hub_address: felt) {
+}
+
 // ///////////////////////////
 //       Constructor        //
 // ///////////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _router_aggregator: felt
+    _router_aggregator: felt, _trade_executor_hash: felt, _hub_address: felt
 ) {
     router_aggregator.write(_router_aggregator);
+    trade_executor.write(_trade_executor_hash);
+    hub.write(_hub_address);
     return ();
 }
 
@@ -109,8 +121,8 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     );
 
     // Keep exchanges whose price does not deviate to strongly from the best one
-    let highest_val: Uint256 = highest_amount(
-        smaller_selection_amounts_out_len, smaller_selection_amounts_out, Uint256(0, 0)
+    let (highest_val: Uint256, best_price_router_id: felt) = highest_amount(
+        smaller_selection_amounts_out_len, smaller_selection_amounts_out, Uint256(0, 0), _router_id=0, _counter=0
     );
     let (local final_routers_len: felt) = kick_below_threshold(
         highest_val,
@@ -127,20 +139,69 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     set_amounts(final_sum.low, final_routers_len, final_amounts_out, amounts);
     set_path(final_routers_len, path, _token_in, _token_out);
 
-    // Get the estimated return amount
-    //ITradeExecutor.Simulate
+    // Get the estimated return amount by splitting trades among best DEXes
+    let (trade_executor_hash) = trade_executor.read();
+    let (splitter_amount_out: Uint256) = ITradeExecutor.library_call_simulate_multi_swap(
+        trade_executor_hash,
+        final_routers_len,
+        final_routers,
+        final_routers_len,
+        path,
+        final_routers_len,
+        amounts,
+        _amount_in,
+    );
+
+    // Get the estimated return amount by trading on the DEX with the best price
+    let (hub_address) = hub.read();
+    let (
+        _,
+        single_router: Router*,
+        _,
+        single_path: Path*,
+        _,
+        single_amount: felt*,
+        single_swap_amount_out: Uint256,
+    ) = IHub.get_amount_and_path_with_solver(
+        hub_address,
+        _amount_in=_amount_in, 
+        _token_in=_token_in,
+        _token_out=_token_out,
+        _solver_id=1
+    );
+
+    local tester1 = single_swap_amount_out.low;
+    local tester2 = splitter_amount_out.low;
+    %{
+        print("Single amount out: ", ids.tester1)
+        print("Split amount out: ", ids.tester2)
+    %}
+
+    let (is_splitter_better) = uint256_lt(single_swap_amount_out,splitter_amount_out);
+
+    if (is_splitter_better == 1) {
+        return (
+            routers_len=final_routers_len,
+            routers=final_routers,
+            path_len=final_routers_len,
+            path=path,
+            amounts_len=final_routers_len,
+            amounts=amounts,
+        );
+    }else{
+        return (
+            routers_len=1,
+            routers=single_router,
+            path_len=1,
+            path=single_path,
+            amounts_len=1,
+            amounts=single_amount,
+        );
+    }
 
     // If splitting up trades yields worse result then just trading on the best one, choose the best one
     
-
-    return (
-        routers_len=final_routers_len,
-        routers=final_routers,
-        path_len=final_routers_len,
-        path=path,
-        amounts_len=final_routers_len,
-        amounts=amounts,
-    );
+    
 }
 
 // ///////////////////////////
@@ -164,20 +225,20 @@ func average_amounts{range_check_ptr}(_amounts_len: felt, _amounts: Uint256*) ->
 }
 
 func highest_amount{range_check_ptr}(
-    _amounts_len: felt, _amounts: Uint256*, _highest_amount: Uint256
-) -> Uint256 {
+    _amounts_len: felt, _amounts: Uint256*, _highest_amount: Uint256, _router_id: felt, _counter: felt
+) -> (highest_amount: Uint256, _router_id: felt) {
     if (_amounts_len == 0) {
-        return (_highest_amount);
+        return (_highest_amount, _router_id);
     }
 
     let (is_le) = uint256_lt(_highest_amount, _amounts[0]);
 
     if (is_le == TRUE) {
-        let final_amount = highest_amount(_amounts_len - 1, _amounts + 2, _amounts[0]);
-        return (final_amount);
+        let (final_amount,final_id) = highest_amount(_amounts_len - 1, _amounts + 2, _amounts[0], _counter, _counter+1);
+        return (final_amount,final_id);
     } else {
-        let final_amount = highest_amount(_amounts_len - 1, _amounts + 2, _highest_amount);
-        return (final_amount);
+        let (final_amount,final_id) = highest_amount(_amounts_len - 1, _amounts + 2, _highest_amount, _router_id, _counter+1);
+        return (final_amount,final_id);
     }
 }
 

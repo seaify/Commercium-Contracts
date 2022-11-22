@@ -234,7 +234,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %}
     local solver3_address: felt;
     %{
-        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV3.cairo", [ids.router_aggregator_proxy_address]).contract_address 
+        context.solver3_address = deploy_contract("./src/solvers/heuristic_splitterV3.cairo", [ids.router_aggregator_proxy_address, ids.executioner_hash, ids.hub_address]).contract_address 
         ids.solver3_address = context.solver3_address
     %}
 
@@ -307,7 +307,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return ();
 }
 
-@external
+//@external
 func test_spf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
