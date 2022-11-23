@@ -34,6 +34,7 @@ struct Path {
 }
 
 namespace Utils {
+
     func not_equal{}(x: felt, y: felt) -> (z: felt) {
         if (x != y) {
             return (1,);

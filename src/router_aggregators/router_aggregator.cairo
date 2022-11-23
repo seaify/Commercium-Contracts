@@ -104,13 +104,16 @@ func get_amount_from_provided_routers{
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amount_out: Uint256, router: Router) {
+
+    let (router_len) = router_index_len.read();
+
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_router(
         _amount_in,
         _token_in,
         _token_out,
         _best_amount=Uint256(0, 0),
         _router=Router(0, 0),
-        _counter=0,
+        _router_len=router_len,
     );
 
     return (res_amount, res_router);
@@ -126,13 +129,16 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amount_out: Uint256, router: Router) {
+
+    let (router_len) = router_index_len.read();
+
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_top_router(
         _amount_in,
         _token_in,
         _token_out,
         _best_amount=Uint256(0, 0),
         _router=Router(0, 0),
-        _counter=0,
+        _router_len=router_len,
     );
 
     return (res_amount, res_router);

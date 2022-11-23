@@ -60,6 +60,9 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (pre_calcs: PreCalc*) = alloc(); 
     set_pre_calculations(pre_calcs,reserves_a,reserves_b,reserves_a_len);
 
+    //Truncate number to stay in bounds for math
+    //let (amount_in,_) = unsigned_div_rem(_amount_in.low,BASE);
+
     // Set starting weights
     let (local init_amount,_) = unsigned_div_rem(_amount_in.low,routers_len);
     init_amounts(routers_len, amounts, init_amount);
@@ -123,7 +126,13 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     //Determine new trade amounts
     let inverseNorm = calc_inverse_norm(_amounts_len, gradients);
+    %{
+        print("CHECKPOINT 2.1")
+    %}
     let delta_factor = Utils.felt_fmul(inverseNorm,_step_size,BASE);
+    %{
+        print("CHECKPOINT 2.2")
+    %}
     let (local new_amounts: felt*) = alloc();
     clac_new_amounts(delta_factor,_amounts_len,_amounts,new_amounts);
 
@@ -251,21 +260,26 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
         print("CHECKPOINT 1.12 pre_calc.gradient_nominator: ", ids.tester2)
     %}
 
-    let (gradient_part_1,_) = unsigned_div_rem(pre_calc.gradient_nominator,denominator_1);
+    local gradient_part_1 = Utils.felt_fdiv(pre_calc.gradient_nominator,denominator_1,BASE);
 
     %{
+        print("ids.gradient_part_1", ids.gradient_part_1)
         print("CHECKPOINT 1.13")
     %}
 
     let (denominator_2) = pow(997*_amounts[_router_index] + pre_calc.feed_reserves_1,2);
+    let (local small_denominator_2,_) = unsigned_div_rem(denominator_2,BASE);
 
     %{
+        print("small_denominator_2", ids.small_denominator_2)
+        print("ids.tester2", ids.tester2)
         print("CHECKPOINT 1.14")
     %}
 
-    let (gradient_part_2,_) = unsigned_div_rem(pre_calc.gradient_nominator,denominator_2);
+    let local gradient_part_2 = Utils.felt_fdiv(pre_calc.gradient_nominator,small_denominator_2);
 
     %{
+        print("ids.gradient_part_2", ids.gradient_part_2)
         print("CHECKPOINT 1.11")
     %}
     
@@ -282,8 +296,8 @@ func set_pre_calculations{range_check_ptr}(
         return();
     }
 
-    let feed_reserves_1 = 1000 * _reserves_1[0].low;
-    let feed_reserves_2 = 997 * _reserves_2[0].low;
+    let (feed_reserves_1,_) = unsigned_div_rem(1000 * _reserves_1[0].low, BASE);
+    let (feed_reserves_2,_) = unsigned_div_rem(997 * _reserves_2[0].low, BASE);
 
     local router1 = feed_reserves_2;
     local router2 = _reserves_2[0].low;
@@ -339,7 +353,8 @@ func calc_denominator{range_check_ptr}(
         %{
             print("WE POWED")
         %}
-        return(result);
+        let (small_result,_) = unsigned_div_rem(result,BASE);
+        return(small_result);
     }
 
     %{
@@ -365,15 +380,44 @@ func clac_new_amounts{range_check_ptr}(
 func calc_inverse_norm{range_check_ptr}(
     _gradients_len: felt, _gradients: felt*
 ) -> felt{
+    alloc_locals;
+
+    %{
+        print("CHECKPOINT 2.11")
+    %}
 
     let (new_gradients: felt*) = alloc();
     pow_gradients(_gradients_len,_gradients,new_gradients);
 
+    local tester3 = _gradients[0];
+    local tester4 = new_gradients[0];
+    %{
+        print("_gradients: ", ids.tester3)
+        print("new_gradients", ids.tester4)
+        print("CHECKPOINT 2.12")
+    %}
+
     let sum = sum_gradients(_gradients_len,_gradients,sum=0);
 
+    %{
+        print("CHECKPOINT 2.13")
+    %}
+
     let norm = sqrt(sum);
+
+    local tester1 = norm;
+    local tester2 = sum;
+    %{
+        print("norm: ", ids.tester1)
+        print("sum", ids.tester2)
+        print("CHECKPOINT 2.14")
+    %}
     
     let inverseNorm = Utils.felt_fdiv(BASE,norm,BASE);
+
+    %{
+        print("CHECKPOINT 2.15")
+    %}
 
     return(inverseNorm);
 }

@@ -257,7 +257,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-//@external
+@external
 func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -280,7 +280,7 @@ func test_single_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     local token_to_sell = ETH;
     local token_to_buy = DAI;
 
-    local amount_to_trade: Uint256 = Uint256(2 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(1 * base, 0);
 
     let (_amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 1);
     %{ print("Get_out amount: ",ids._amount_out.low) %}
@@ -387,7 +387,7 @@ func test_heuristic_splitter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     local token_to_buy = DAI;
 
     // SET AMOUNTS TO TRADE
-    local amount_to_trade: Uint256 = Uint256(10 * base, 0);
+    local amount_to_trade: Uint256 = Uint256(1 * base, 0);
 
     let (amount_out: Uint256) = IHub.get_amount_out_with_solver(hub_address, amount_to_trade, token_to_sell, token_to_buy, 3);
     %{ print("Get_out amount: ",ids.amount_out.low) %}
@@ -742,7 +742,7 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     ISithPool.set_token0(usdt_dai_pair,USDT);
     ISithPool.set_token0(usdc_dai_pair,USDC);
 
-    ISithPool.set_reserves(eth_dai_pair, Uint256(1000 * base, 0), Uint256(1000000 * base, 0));  // 1,000,000
+    ISithPool.set_reserves(eth_dai_pair, Uint256(100 * base, 0), Uint256(100000 * base, 0));  // 100,000
 
     ISithPool.set_reserves(usdt_usdc_pair, Uint256(80000 * base, 0), Uint256(80000 * small_base, 0));  // 80,000
     ISithPool.set_reserves(usdt_dai_pair, Uint256(90000 * base, 0), Uint256(90000 * base, 0));  // 90,000
@@ -751,7 +751,7 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
 
     // Transfer tokens to router
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.ETH) %}
-    IERC20.transfer(ETH, router_address, Uint256(1000 * base, 0));
+    IERC20.transfer(ETH, router_address, Uint256(100 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.USDC) %}
     IERC20.transfer(USDC, router_address, Uint256(80000 * small_base, 0));
@@ -762,7 +762,7 @@ func create_sith_router{syscall_ptr: felt*, range_check_ptr}(
     IERC20.transfer(USDT, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.DAI) %}
-    IERC20.transfer(DAI, router_address, Uint256(1000000 * base, 0));
+    IERC20.transfer(DAI, router_address, Uint256(100000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(80000 * base, 0));
     IERC20.transfer(DAI, router_address, Uint256(90000 * base, 0));
     %{ stop_prank_callable() %}
