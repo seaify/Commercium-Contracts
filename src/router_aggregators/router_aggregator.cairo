@@ -31,9 +31,9 @@ from src.lib.router_aggregator import (
 //                                                                                          //
 // ///////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////
+// //////////////////////
 //       Views        //
-////////////////////////
+// //////////////////////
 
 // @notice Returns address of a price oracle for the provided token
 // @param _token - address of the token that one wants the price feed of
@@ -79,19 +79,17 @@ func get_router_index_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 func get_amount_from_provided_routers{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }(
-    _routers_len: felt,
-    _routers: Router*,
-    _token_in: felt,
-    _token_out: felt,
-    _amount_in: Uint256
+    _routers_len: felt, _routers: Router*, _token_in: felt, _token_out: felt, _amount_in: Uint256
 ) -> (_amounts_out_len: felt, _amounts_out: Uint256*) {
     alloc_locals;
 
     let (local _amounts_out: Uint256*) = alloc();
 
-    RouterAggregator.amounts_from_provided_routers(_routers_len,_routers,_token_in,_token_out,_amount_in,_routers_len,_amounts_out);
+    RouterAggregator.amounts_from_provided_routers(
+        _routers_len, _routers, _token_in, _token_out, _amount_in, _routers_len, _amounts_out
+    );
 
-    return (_routers_len,_amounts_out);
+    return (_routers_len, _amounts_out);
 }
 
 // @notice For a given token trade return the best return amount and router known to the aggregator
@@ -104,7 +102,6 @@ func get_amount_from_provided_routers{
 func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amount_out: Uint256, router: Router) {
-
     let (router_len) = router_index_len.read();
 
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_router(
@@ -129,7 +126,6 @@ func get_single_best_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 func get_single_best_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
 ) -> (amount_out: Uint256, router: Router) {
-
     let (router_len) = router_index_len.read();
 
     let (res_amount: Uint256, res_router) = RouterAggregator.find_best_top_router(
@@ -200,7 +196,9 @@ func get_all_routers_and_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
         _token_a, _token_b, reserves_a, reserves_b, routers_len, routers, _router_counter=0
     );
 
-    return (actual_router_len, reserves_a, actual_router_len, reserves_b, actual_router_len, routers);
+    return (
+        actual_router_len, reserves_a, actual_router_len, reserves_b, actual_router_len, routers
+    );
 }
 
 // @notice For a given token, provide the price in USD
@@ -259,9 +257,9 @@ func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return (route_cost.low,);
 }
 
-////////////////////////
+// //////////////////////
 //       Admin        //
-////////////////////////
+// //////////////////////
 
 // @notice Add a router to the router aggregator
 // @dev put a router on the top of the list and increase the router list length
@@ -363,7 +361,7 @@ func remove_top_router{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
-// @notice Store an Emperic USD price oracle for a provided token address 
+// @notice Store an Emperic USD price oracle for a provided token address
 // @param _token - Token address that the oracle will be mapped to
 // @param _key - Epheric key of the _token-USD price oracle
 // @param _oracle_address - The contract address of the Emperic oracle

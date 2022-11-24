@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// @author FreshPizza
+
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -22,9 +25,9 @@ struct Feed {
     address: felt,
 }
 
-//
-// Storage
-//
+// //////////////////////////
+//        Storage         //
+// //////////////////////////
 
 @storage_var
 func price_feed(token: felt) -> (feed: Feed) {
@@ -47,7 +50,6 @@ func top_router_index_len() -> (len: felt) {
 }
 
 namespace RouterAggregator {
-
     // @notice Fetch the best single DEX router for a given trade
     // @param _amount_in - The amount of _token_in to be sold
     // @param _token_in - The address of the token to be sold
@@ -70,7 +72,7 @@ namespace RouterAggregator {
         }
 
         // Get routers
-        let (router: Router) = routers.read(_router_len-1);
+        let (router: Router) = routers.read(_router_len - 1);
 
         local best_amount: Uint256;
         local best_router: Router;
@@ -115,7 +117,7 @@ namespace RouterAggregator {
         }
 
         // Get routers
-        let (router: Router) = top_routers.read(_router_len-1);
+        let (router: Router) = top_routers.read(_router_len - 1);
 
         local best_amount: Uint256;
         local best_router: Router;
@@ -138,6 +140,13 @@ namespace RouterAggregator {
         return (res_amount, res_router);
     }
 
+    // @notice Fetch the return amounts for every router registered with the aggregator
+    // @param _amount_in - The amount of _token_in to be sold
+    // @param _token_in - The address of the token to be sold
+    // @param _token_out - The address of token to be bought
+    // @param _amounts - An empty array of received token amounts that will be filled by this function
+    // @param _routers - An empty array of routers that will be filled by this function
+    // @param _routers_len - Number of routers registered with the aggregator, is used for iteration within the function
     func all_routers_and_amounts{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256,
         _token_in: felt,
@@ -168,6 +177,12 @@ namespace RouterAggregator {
         return ();
     }
 
+    // @notice Fetch the return amounts for a provided number of routers
+    // @param _routers - An array of routers for which to fetch the return amounts
+    // @param _token_in - The address of the token to be sold
+    // @param _token_out - The address of token to be bought
+    // @param _amount_in - The amount of _token_in to be sold
+    // @param _amounts_out - An empty array of return amounts that will be filled by this function
     func amounts_from_provided_routers{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(
@@ -177,16 +192,13 @@ namespace RouterAggregator {
         _token_out: felt,
         _amount_in: Uint256,
         _amounts_out_len: felt,
-        _amounts_out: Uint256*
+        _amounts_out: Uint256*,
     ) {
-
         if (_routers_len == 0) {
             return ();
         }
 
-        let (amount: Uint256) = get_router_amount(
-            _amount_in, _token_in, _token_out, _routers[0]
-        );
+        let (amount: Uint256) = get_router_amount(_amount_in, _token_in, _token_out, _routers[0]);
 
         assert _amounts_out[0] = amount;
 
@@ -218,7 +230,7 @@ namespace RouterAggregator {
         _reserves_b: Uint256*,
         _routers_len: felt,
         _routers: Router*,
-        _router_counter: felt
+        _router_counter: felt,
     ) -> felt {
         alloc_locals;
 
@@ -233,12 +245,18 @@ namespace RouterAggregator {
             _token_in, _token_out, router
         );
 
-        //If either of the reserves are 0, we don't return that router
-        let is_reserve_a_zero = is_le_felt(reserve_a.low,0);
-        let is_reserve_b_zero = is_le_felt(reserve_b.low,0);
-        if (is_reserve_a_zero+is_reserve_b_zero != 0) {
+        // If either of the reserves are 0, we don't return that router
+        let is_reserve_a_zero = is_le_felt(reserve_a.low, 0);
+        let is_reserve_b_zero = is_le_felt(reserve_b.low, 0);
+        if (is_reserve_a_zero + is_reserve_b_zero != 0) {
             let final_router_len = all_routers_and_reserves(
-                _token_in, _token_out, _reserves_a, _reserves_b, _routers_len - 1, _routers, _router_counter
+                _token_in,
+                _token_out,
+                _reserves_a,
+                _reserves_b,
+                _routers_len - 1,
+                _routers,
+                _router_counter,
             );
             return (final_router_len);
         }
@@ -248,12 +266,24 @@ namespace RouterAggregator {
         assert _reserves_b[0] = reserve_b;
 
         let final_router_len = all_routers_and_reserves(
-            _token_in, _token_out, _reserves_a + 2, _reserves_b + 2, _routers_len - 1, _routers + 2, _router_counter+1
+            _token_in,
+            _token_out,
+            _reserves_a + 2,
+            _reserves_b + 2,
+            _routers_len - 1,
+            _routers + 2,
+            _router_counter + 1,
         );
 
         return (final_router_len);
     }
 
+    // @notice Fetch the number of tokens recieved for a specifc trade using a specified router/DEX
+    // @param _amount_in - The amount of tokens to be sold
+    // @param _token_in - The address of the token to be sold
+    // @param _token_out - The address of the token to be bought
+    // @param _router - The router to get the return amount from
+    // @return amount_out - The amount of _token_out received for selling token_in
     func get_router_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256, _token_in: felt, _token_out: felt, _router: Router
     ) -> (amount_out: Uint256) {
@@ -379,7 +409,7 @@ namespace RouterAggregator {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_a: Uint256, reserve_b: Uint256) = IJediPool.get_reserves(pair_address);
-            
+
             return (reserve_a, reserve_b);
         }
         if (_router.type == AlphaRoad) {

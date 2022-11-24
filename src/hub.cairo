@@ -33,7 +33,7 @@ from src.lib.hub import Hub, Hub_trade_executor
 /////////////////////////
 
 @event
-func swap_executed(solver_used: felt, amount_traded: Uint256) {
+func swap_executed(solver_used: felt, amount_traded: Uint256, token_sold: felt) {
 }
 
 /////////////////////////////
@@ -219,7 +219,7 @@ func swap_exact_tokens_for_tokens{
         _token_in, _token_out, _amount_in, _amount_out_min, _to, 1
     );
     // Log swap
-    swap_executed.emit(solver_used=0, amount_traded=_amount_in);
+    swap_executed.emit(solver_used=0, amount_traded=_amount_in, token_sold=_token_in);
 
     return (received_amount,);
 }
@@ -249,6 +249,8 @@ func swap_exact_tokens_for_tokens_with_solver{
     let (received_amount: Uint256) = Hub.swap_with_solver(
         _token_in, _token_out, _amount_in, _min_amount_out, _to, _solver_id
     );
+    // Log swap
+    swap_executed.emit(solver_used=_solver_id, amount_traded=_amount_in, token_sold=_token_in);
     return (received_amount,);
 }
 

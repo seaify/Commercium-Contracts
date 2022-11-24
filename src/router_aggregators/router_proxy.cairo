@@ -14,9 +14,9 @@ from openzeppelin.access.ownable.library import Ownable
 //                                                            //
 // /////////////////////////////////////////////////////////////
 
-////////////////////////
+// //////////////////////
 //       Views        //
-////////////////////////
+// //////////////////////
 
 // @notice get the implemented contract hash
 // @return implementation - The implementation contract hash
@@ -36,9 +36,9 @@ func get_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return (admin,);
 }
 
-////////////////////////
+// //////////////////////
 //     Constructor    //
-////////////////////////
+// //////////////////////
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -52,9 +52,9 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return ();
 }
 
-//////////////////
+// ////////////////
 //     Admin    //
-//////////////////
+// ////////////////
 
 // @notice set the implementation contract class hash for this proxy
 // @param _new_implementation - The class hash of the implementation
@@ -70,17 +70,15 @@ func set_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 // @notice Set the contract owner/admin
 // @param _new_admin - The address of the owner/admin
 @external
-func _set_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _new_admin: felt
-) {
+func _set_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_new_admin: felt) {
     Proxy.assert_only_admin();
     Proxy._set_admin(_new_admin);
     return ();
 }
 
-//////////////////////////////
+// ////////////////////////////
 //     Fallback function    //
-//////////////////////////////
+// ////////////////////////////
 
 @external
 @raw_input

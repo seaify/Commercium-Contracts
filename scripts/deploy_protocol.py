@@ -4,6 +4,7 @@ from starknet_py.contract import Contract
 from starknet_py.net.models import StarknetChainId
 from starkware.crypto.signature.signature import private_to_stark_key
 from starknet_py.net.gateway_client import GatewayClient
+from utils import deployContract
 import asyncio
 from pathlib import Path
 
@@ -48,77 +49,55 @@ contractAddresses = {
 async def deployContracts():
 
     if contractAddresses["hub"] == 0 :
+
+        print("---------------------------------")
+        print("--- Deploying Entire Protocol ---")
+        print("---------------------------------")
+        print(".")
+        print(".")
+        print(".")
+
         # Deploy Hub
         print("Deploying Hub")
-        compiled = Path("./build/", "hub.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("Hub Address: ",contract.address)
-        contractAddresses["hub"] = contract.address
+        compiled_contract = Path("./build/", "hub.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address])
+        print("Hub Address: ",contract_address)
+        contractAddresses["hub"] = contract_address
 
         # Deploy Solver Registry
         print("Deploying Solver Registry")
-        compiled = Path("./build/", "solver_registry.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("Solver Registry Address: ",contract.address)
-        contractAddresses["solver_registry"] = contract.address
+        compiled_contract = Path("./build/", "solver_registry.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address])
+        print("Solver Registry Address: ",contract_address)
+        contractAddresses["solver_registry"] = contract_address
 
         # Deploy Router Aggregator
         print("Deploying Router Aggregator")
-        compiled = Path("./build/", "router_aggregator_proxy.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[router_aggregator_contract_hash,account_address,account_address]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("Router Aggregator Address: ",contract.address)
-        contractAddresses["router_aggregator"] = contract.address 
+        compiled_contract = Path("./build/", "router_aggregator_proxy.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[router_aggregator_contract_hash,account_address,account_address])
+        print("Router Aggregator Address: ",contract_address)
+        contractAddresses["router_aggregator"] = contract_address
 
         # Deploy Single Swap Solver
         print("Deploying Single Swap Solver")
-        compiled = Path("./build/", "single_swap_solver.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[contractAddresses["router_aggregator"]]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("Single Swap Solver Address: ",contract.address)
-        contractAddresses["sigle_swap_solver"] = contract.address
+        compiled_contract = Path("./build/", "single_swap_solver.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
+        print("Single Swap Solver Address: ",contract_address)
+        contractAddresses["sigle_swap_solver"] = contract_address
 
         # Deploy SPF Solver
         print("Deploying SPF Solver")
-        compiled = Path("./build/", "spf_solver.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[account_address,contractAddresses["router_aggregator"]]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("SPF Solver Address: ",contract.address)
-        contractAddresses["spf_solver"] = contract.address
+        compiled_contract = Path("./build/", "spf_solver.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address,contractAddresses["router_aggregator"]])
+        print("SPF Solver Address: ",contract_address)
+        contractAddresses["spf_solver"] = contract_address
 
         # Deploy Heuristic Splitter Solver
         print("Deploying Heuristic Splitter Solver")
-        compiled = Path("./build/", "heuristic_splitter.json").read_text("utf-8")
-        deployment_result = await Contract.deploy(
-            client, compiled_contract=compiled, constructor_args=[contractAddresses["router_aggregator"]]
-        )
-        print("Waiting for acceptance...")
-        await deployment_result.wait_for_acceptance()
-        contract = deployment_result.deployed_contract
-        print("Heuristic Splitter Address: ",contract.address)
-        contractAddresses["heuristic_splitter"] = contract.address
+        compiled_contract = Path("./build/", "heuristic_splitter.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
+        print("Heuristic Splitter Address: ",contract_address)
+        contractAddresses["heuristic_splitter"] = contract_address
     
     ##########################
     #                        #

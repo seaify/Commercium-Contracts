@@ -4,7 +4,6 @@ lib-path = "lib"
 cairo-path = ["./lib/cairo_contracts/src/", "src"]
 
 [contracts]
-graddesc_solver = ["src/solvers/graddesc_solver.cairo"]
 hub = ["src/hub.cairo"]
 router-aggregator = ["src/router_aggregators/router_aggregator.cairo"]
 router-aggregator_proxy = ["src/router_aggregators/router_proxy.cairo"]

@@ -95,8 +95,7 @@ func getAmountsOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token_in: felt, _token_out: felt
 ) -> (reserve1: Uint256, reserve2: Uint256) {
-
-    let (pair_address) = pairs.read(Pair(_token_in,_token_out));
+    let (pair_address) = pairs.read(Pair(_token_in, _token_out));
     let (reserve_1: Uint256, reserve_2: Uint256) = ISithPool.getReserves(pair_address);
 
     return (reserve_1, reserve_2);

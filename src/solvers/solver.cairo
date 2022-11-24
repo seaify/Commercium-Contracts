@@ -8,11 +8,11 @@ from starkware.cairo.common.alloc import alloc
 
 from src.lib.utils import Router, Path
 
-//////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////
 //                                                          //
 //   Base template for creating Commercium conform solvers  //
-//                                                          // 
-//////////////////////////////////////////////////////////////
+//                                                          //
+// ////////////////////////////////////////////////////////////
 
 @storage_var
 func router_aggregator() -> (router_aggregator_address: felt) {

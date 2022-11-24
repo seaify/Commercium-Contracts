@@ -75,7 +75,8 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 
     let (local amounts: Uint256*) = alloc();
 
-    let (pair_address) = pairs.read(Pair(path[0],path[1]));
+    let (pair_address) = pairs.read(Pair(path[0], path[1]));
+
     let (reserve_1: Uint256, reserve_2: Uint256) = IJediPool.get_reserves(pair_address);
 
     if (reserve_1.low == 0) {
@@ -103,10 +104,11 @@ func get_amounts_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _token_in: felt, _token_out: felt
 ) -> (reserve1: Uint256, reserve2: Uint256) {
-    
-    let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
+    let (pair_address) = pairs.read(Pair(_token_in, _token_out));
 
-    return (token_reserves.reserve_1, token_reserves.reserve_2);
+    let (reserve_1: Uint256, reserve_2: Uint256) = IJediPool.get_reserves(pair_address);
+
+    return (reserve_1, reserve_2);
 }
 
 @view
@@ -166,7 +168,7 @@ func get_pair{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         return (0,);
     }
 
-    let (token_reserve_1: Uint256,_) = IJediPool.get_reserves(pair_address);
+    let (token_reserve_1: Uint256, _) = IJediPool.get_reserves(pair_address);
 
     if (token_reserve_1.low == 0) {
         return (0,);

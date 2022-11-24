@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// @author FreshPizza
+
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -18,9 +21,9 @@ from openzeppelin.token.erc20.IERC20 import IERC20
 const multi_call_selector = 558079996720636069421427664524843719962060853116440040296815770714276714984;
 const simulate_multi_swap_selector = 1310124106700095074905752334807922719347974895149925748802193060450827293357;
 
-//
-// Storage
-//
+// //////////////////////////
+//        Storage         //
+// //////////////////////////
 
 @storage_var
 func Hub_trade_executor() -> (trade_executor_address: felt) {
@@ -31,10 +34,12 @@ func Hub_solver_registry() -> (registry_address: felt) {
 }
 
 namespace Hub {
-    //
-    // Views
-    //
+    // ////////////////////////
+    //  Don't Effect State  //
+    // ////////////////////////
 
+    // @notice Fetch the address of the solver registry contract
+    // @return _solver_registry - Address of the solver registry
     func solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         solver_registry: felt
     ) {
@@ -42,6 +47,8 @@ namespace Hub {
         return (solver_registry,);
     }
 
+    // @notice Fetch the contract hash of the trade executor logic
+    // @return trade_executor - contract hash of the trade_executor
     func trade_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         trade_executor: felt
     ) {
@@ -49,6 +56,12 @@ namespace Hub {
         return (trade_executor,);
     }
 
+    // @notice Fetch the return amount of a specified solver
+    // @param _amount_in - Amount of tokens to sell
+    // @param _token_in - Address of the token to be sold
+    // @param _token_out - Address of the token to be bought
+    // @param _solver_id - ID of the solver to be used
+    // @return amount_out - The amount of _token_out that where bought
     func get_solver_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt
     ) -> (amount_out: Uint256) {
@@ -87,6 +100,12 @@ namespace Hub {
         return (amount_out,);
     }
 
+    // @notice
+    // @param _amount_in -
+    // @param _token_in -
+    // @param _token_out -
+    // @param _solver_id -
+    // @return amount_out -
     func get_multiple_solver_amounts{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(
@@ -165,9 +184,9 @@ namespace Hub {
         return (routers_len, routers, path_len, path, amounts_len, amounts, amount_out);
     }
 
-    //
-    // Externals
-    //
+    // //////////////////
+    //  Effect State  //
+    // //////////////////
 
     func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _token_in: felt,
@@ -183,7 +202,7 @@ namespace Hub {
 
         // Get Solver address that will be used
         let (solver_registry) = Hub.solver_registry();
-        let (local solver_address) = ISolverRegistry.get_solver(solver_registry, _solver_id);
+        let (solver_address) = ISolverRegistry.get_solver(solver_registry, _solver_id);
         with_attr error_message("solver ID invalid") {
             assert_not_equal(solver_address, FALSE);
         }
@@ -206,15 +225,11 @@ namespace Hub {
             path_len: felt,
             path: Path*,
             amounts_len: felt,
-            local amounts: felt*,
+            amounts: felt*,
         ) = ISolver.get_results(solver_address, _amount_in, _token_in, _token_out);
 
         // Get trade executor class hash
         let (trade_executor_hash) = Hub_trade_executor.read();
-
-        %{
-            print("Amounts to trade: ", ids.amounts_len)
-        %}
 
         // Delegate Call: Execute transactions
         ITradeExecutor.library_call_multi_swap(
