@@ -27,3 +27,6 @@ clean:
 
 lint:
 	amarna ./src/kakarot -o lint.sarif -rules unused-imports,dead-store,unknown-decorator,unused-arguments
+
+deploy-protocol:
+	python ./scripts/deploy_protocol.py

@@ -6,8 +6,9 @@ authors = []
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.10"
 cairo-lang = "^0.10.1"
+starknet-py = "^0.10.1a0"
 
 [tool.poetry.group.dev.dependencies]
 cairo-coverage = "^0.1.4"

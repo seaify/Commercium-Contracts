@@ -24,20 +24,21 @@ execution_contract_hash = int("0x03d451a4e2c1eb46424daed0d51d066c7c6b4360ee3e9fe
 router_aggregator_contract_hash = int("0x029facf61d340fa7ae41dc4512fc9d211616a441d42ebe5b0ef0fa4c32197143",16)
 
 #Setup Admin Account
-private_key = Path("./.secret")
+private_key = int(Path("./.secret").read_text("utf-8"))
 account_address = int("0x0000e6624768FB9550B82f667B8E3F7DB4A1E9548F173cDF1c9131497430EB7f",16)
 public_key = private_to_stark_key(private_key)
-client = AccountClient(address=public_key, client=GatewayClient(net="testnet"), key_pair=public_key, chain=StarknetChainId.TESTNET)
+signer_key_pair = KeyPair(private_key,public_key)
+client = AccountClient(address=account_address, client=GatewayClient(net="testnet"), key_pair=signer_key_pair, chain=StarknetChainId.TESTNET, supported_tx_version=1)
 
 hubABI = Path("./build/", "hub_abi.json").read_text("utf-8")
 
 contractAddresses = {
-                    "hub": int("0x017ab62c44865039b22ea344b2a6c449838f3c735d627f5ba9f6fc824120269f",16),
-                    "solver_registry": int("0x04f1c8c1686ae5407c871753082e6dc9a2586a6d585bfc757db0481fb0f3a1f3",16),
-                    "router_aggregator": int("0x022bc8ab391f4f31e1a67506fd279272da0fd13041dea9ca98414f6719eaff37",16),
-                    "single_swap_solver": int("0x0127c973e386aa39098a14925d41ff7e2ba98aa098e2bb13604c83cd92e2c17f",16),
-                    "spf_solver": int("0x05be7131d2131b7d1e79c200c6fc3957338588a3e2a5dac08f62ac1de2c39f6f",16),
-                    "heuristic_splitter": int("0x000da18653c320d0fd70224efd3353caa36f645890b3a896f310269ff90bfda4",16)
+                    "hub": int("0x0",16),
+                    "solver_registry": int("0x0",16),
+                    "router_aggregator": int("0x0",16),
+                    "single_swap_solver": int("0x0",16),
+                    "spf_solver": int("0x0",16),
+                    "heuristic_splitter": int("0x0",16)
                     }
                     
 #######################
