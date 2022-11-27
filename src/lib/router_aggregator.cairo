@@ -347,9 +347,9 @@ namespace RouterAggregator {
         }
         if (_router.type == TenK) {
             // Surely that will change in the future
-            let (factory_address) = ITenKRouter.factory(_router.address);
-            let (pair_address) = ITenKFactory.getPair(factory_address, _token_in, _token_out);
-            // let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_in,_token_out);
+            // let (factory_address) = ITenKRouter.factory(_router.address);
+            // let (pair_address) = ITenKFactory.getPair(factory_address, _token_in, _token_out);
+            let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_in,_token_out);
             if (pair_address == 0) {
                 return (Uint256(0, 0),);
             }
@@ -408,7 +408,7 @@ namespace RouterAggregator {
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
-            let (reserve_a: Uint256, reserve_b: Uint256) = IJediPool.get_reserves(pair_address);
+            let (reserve_a: Uint256, reserve_b: Uint256,_) = IJediPool.get_reserves(pair_address);
 
             return (reserve_a, reserve_b);
         }
@@ -429,19 +429,19 @@ namespace RouterAggregator {
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
-            let (reserve_token_0, reserve_token_1) = ISithPool.getReserves(pair_address);
+            let (reserve_token_0, reserve_token_1, _) = ISithPool.getReserves(pair_address);
             return (reserve_token_0, reserve_token_1);
         }
         if (_router.type == TenK) {
             // Surely that will change in the future
-            let (factory_address) = ITenKRouter.factory(_router.address);
-            let (pair_address) = ITenKFactory.getPair(factory_address, _token_a, _token_b);
-            // let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_a,_token_b);
+            // let (factory_address) = ITenKRouter.factory(_router.address);
+            // let (pair_address) = ITenKFactory.getPair(factory_address, _token_a, _token_b);
+            let (pair_address) = ITenKFactory.getPair(TenKFactory,_token_a,_token_b);
             if (pair_address == 0) {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
-            let (reserve_a, reserve_b, _) = ITenKPool.getReserves(pair_address);
-            return (reserve_a, reserve_b);
+            let (reserve_a_felt, reserve_b_felt, _) = ITenKPool.getReserves(pair_address);
+            return (Uint256(reserve_a_felt,0), Uint256(reserve_b_felt,0));
         }
         if (_router.type == StarkSwap) {
             // let (pair_address) = IStarkRouter.getPair(_router.address,_token_in,_token_out);

@@ -22,7 +22,7 @@ namespace IJediPool {
     func token0() -> (token0: felt) {
     }
 
-    func get_reserves() -> (reserve0: Uint256, reserve1: Uint256) {
+    func get_reserves() -> (reserve0: Uint256, reserve1: Uint256, block_timestamp_last: felt) {
     }
 
     func set_token0(token0_address) {
@@ -40,7 +40,7 @@ namespace ISithPool {
     func set_token0(token0_address) {
     }
 
-    func getReserves() -> (reserve_token_0: Uint256, reserve_token_1: Uint256) {
+    func getReserves() -> (reserve_token_0: Uint256, reserve_token_1: Uint256, block_timestamp_last: felt) {
     }
 
     func set_reserves(_reserve_1: Uint256, _reserve_2: Uint256) {
@@ -52,7 +52,7 @@ namespace ITenKPool {
     func token0() -> (token0: felt) {
     }
 
-    func getReserves() -> (reserve0: Uint256, reserve1: Uint256, block_timestamp_last: felt) {
+    func getReserves() -> (reserve0: felt, reserve1: felt, block_timestamp_last: felt) {
     }
 
     func set_token0(token0_address) {

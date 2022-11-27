@@ -45,8 +45,8 @@ func getToken0{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @view
 func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    reserve1: Uint256, reserve2: Uint256
+    reserve1: Uint256, reserve2: Uint256, block_timestamp_last: felt
 ) {
     let (current_reserves: Reserves) = reserves.read();
-    return (current_reserves.reserve_1, current_reserves.reserve_2);
+    return (current_reserves.reserve_1, current_reserves.reserve_2, 0);
 }

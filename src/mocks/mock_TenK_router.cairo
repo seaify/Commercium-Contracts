@@ -93,11 +93,11 @@ func get_reserves{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     _token_in: felt, _token_out: felt
 ) -> (reserve1: Uint256, reserve2: Uint256) {
     let (pair_address) = pairs.read(Pair(_token_in, _token_out));
-    let (reserve_1: Uint256, reserve_2: Uint256, _) = ITenKPool.getReserves(pair_address);
+    let (reserve_1: felt, reserve_2: felt, _) = ITenKPool.getReserves(pair_address);
 
     let (token_reserves: Reserves) = reserves.read(Pair(_token_in, _token_out));
 
-    return (reserve_1, reserve_2);
+    return (Uint256(reserve_1,0), Uint256(reserve_2,0));
 }
 
 @view

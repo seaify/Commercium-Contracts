@@ -13,4 +13,4 @@ async def deployContract(client: AccountClient,compiled_contract: str, calldata)
     print("⏳ Waiting for deployment...")
     await deploy_result.wait_for_acceptance()
     contract = deploy_result.deployed_contract
-    return contract.address
+    return hex(contract.address)
