@@ -20,6 +20,12 @@ from src.interfaces.i_erc20 import IERC20
 from src.interfaces.i_router import (IJediRouter, IAlphaRouter, ISithRouter, ITenKRouter)
 const trade_deadline = 2644328911;  // Might want to increase this or make a parameter
 
+//Temporary event
+//Should mostly be made redundant by propper DEX event emissions
+@event
+func swap_exact_in(amount_in: felt, token_in: felt, dex: felt) {
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //                                                                                   //
 //   This contract holds the logic to perform trades on the different StarkNet AMMs  //
@@ -104,6 +110,9 @@ func multi_swap{
     let (trade_amount: Uint256) = Utils.fmul(init_amount, Uint256(_amounts[0], 0), Uint256(BASE, 0));
 
     _swap_exact_in(_routers[0], trade_amount, _path[0].token_in, _path[0].token_out, _receiver_address);
+    
+    // Log swap
+    swap_exact_in.emit(amount_in=trade_amount.low, token_in=_path[0].token_in, dex=_routers[0].address);
 
     multi_swap(
         _routers_len - 1,

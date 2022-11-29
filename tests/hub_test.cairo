@@ -73,11 +73,21 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %{ context.DAI = ids.DAI %}
     // %{ print("DAI Address: ",ids.DAI) %}
 
+    // Generate Executor Hash
+    local executioner_hash: felt;
+    %{
+        declared = declare("./src/trade_executor.cairo")
+        prepared = prepare(declared, [])
+        # constructor will be affected by prank
+        deploy(prepared)
+        ids.executioner_hash = prepared.class_hash
+    %}
+
     // Deploy Hub
     local hub_address: felt;
     %{
         declared = declare("./src/hub.cairo")
-        prepared = prepare(declared, [ids.public_key_0])
+        prepared = prepare(declared, [ids.public_key_0, ids.executioner_hash])
         stop_prank_callable = start_prank(ids.public_key_0, target_contract_address=prepared.contract_address)
         deploy(prepared)
         ids.hub_address = prepared.contract_address
@@ -100,21 +110,6 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Set solver_registry in Hub
     %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
     IHub.set_solver_registry(hub_address, solver_registry_address);
-    %{ stop_prank_callable() %}
-
-    // Generate Executor Hash
-    local executioner_hash: felt;
-    %{
-        declared = declare("./src/trade_executor.cairo")
-        prepared = prepare(declared, [])
-        # constructor will be affected by prank
-        deploy(prepared)
-        ids.executioner_hash = prepared.class_hash
-    %}
-
-    // Set Executor Hash
-    %{ stop_prank_callable = start_prank(ids.public_key_0,ids.hub_address) %}
-    IHub.set_executor(hub_address, executioner_hash);
     %{ stop_prank_callable() %}
 
     // Deploy Router Aggregator

@@ -20,7 +20,7 @@ SithSwapRouter = int("0x015b7bac6b05fcb24f33011fefb592bf0579dae1d1f2a7d6645dda49
 TenKRouter = int("0x00975910cd99bc56bd289eaaa5cee6cd557f0ddafdb2ce6ebea15b158eb2c664",16)
 StarkSwapFactory = 0 #0x
 AlphaRouter = int("0x04aec73f0611a9be0524e7ef21ab1679bdf9c97dc7d72614f15373d431226b6a",16)
-execution_contract_hash = int("0x679c88ea66a1865cb1bb4afd75a6c704b925cb0b4e1d4e9e98de60ae319f93c",16)
+execution_contract_hash = int("0x4919e548bfd37db237cf4223b407e710103f79ebee92d2baa7a733d28532597",16)
 router_aggregator_contract_hash = int("0x7fcaea53562b0f4dedd5240d6dbe82072d4611c2e45cdd0bde9e7ea386190fd",16)
 
 #Setup Admin Account
@@ -53,12 +53,12 @@ router_aggregator_abi = [
 ]
 
 contractAddresses = {
-                    "hub": int("0x65410a254f4b7fca524d9bd8f5bccb9a750ab9b385852049e73ca1cf6b1d9d8",16),
-                    "solver_registry": int("0xb01a21e9fd60a47eb24581074b7d3ded7655f919090f86dba62c2c9ac52d57",16),
-                    "router_aggregator": int("0x1055d61aaea11dd4b0e6d43c3488bec11858573d6aa5eea3fd1a076a0f4913f",16),
-                    "single_swap_solver": int("0x64b45c86de1b6593d0758764d35a1171a73ec2c33de4bfb98327b4f0f166909",16),
-                    "spf_solver": int("0x322a1f79faab8a3857147662dbe8c60b2d8a6a087079cdaf35f6cc6ae93c79f",16),
-                    "heuristic_splitter": int("0x4e1304fad2fd1ecbb5764225a6be6a1b645402da2fee499c0e3aaf6881cc9f6",16)
+                    "hub": int("0x25b5b9a349742379e756b137307b7f3a768e0eecfe875c7c92e6a5070f6ff1d",16),
+                    "solver_registry": int("0x03c9726d675877f2db7e838c92563bc3968f61b6b3191a5c942c23ecc0ecf320",16),
+                    "router_aggregator": int("0x3aafd1a0d88dda388a456505a257f0bd9090ef373d57d0dc064a4cee500584c",16),
+                    "single_swap_solver": int("0x589763fb3512c5c07b4e9f18b1e98dd6543e6fc6ae937fca59862dd3f045d7b",16),
+                    "spf_solver": int("0x3708fc7fc0c879ededd9642ae7aac3f0a5fe7584a9815cd9e2c1d4c5a4608e7",16),
+                    "heuristic_splitter": int("0x2b09acac144ac0be83807f07a7d908703b3fc1e8b227906a3090f4e2083ed6b",16)
                     }
                     
 #######################
@@ -78,7 +78,7 @@ async def deployContracts():
         print(".")
         print(".")
 
-        # Declare EVM Contract
+        # Declare Trade Executor Contract
         print("⏳ Declaring Executor Contract... ")
         declare_transaction = await client.sign_declare_transaction(
             compiled_contract=Path("./build/", "trade-executor.json").read_text("utf-8"), max_fee=int(1e16)
@@ -88,11 +88,20 @@ async def deployContracts():
         execution_contract_hash = resp.class_hash
         print("Executor Class Hash: ", hex(execution_contract_hash))
 
+        # Declare Router Aggregator Contract
+        print("⏳ Declaring Router Aggregator Contract... ")
+        declare_transaction = await client.sign_declare_transaction(
+            compiled_contract=Path("./build/", "router-aggregator.json").read_text("utf-8"), max_fee=int(1e16)
+        )
+        resp = await client.declare(transaction=declare_transaction)
+        await client.wait_for_tx(resp.transaction_hash)
+        router_aggregator_contract_hash = resp.class_hash
+        print("Executor Class Hash: ", hex(router_aggregator_contract_hash))
 
         # Deploy Hub
         print("Deploying Hub")
         compiled_contract = Path("./build/", "hub.json").read_text("utf-8")
-        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address])
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address,execution_contract_hash])
         print("Hub Address: ",contract_address)
         contractAddresses["hub"] = int(contract_address,16)
 
@@ -124,12 +133,12 @@ async def deployContracts():
         print("SPF Solver Address: ",contract_address)
         contractAddresses["spf_solver"] = int(contract_address,16)
 
-        # Deploy Heuristic Splitter Solver
-        print("Deploying Heuristic Splitter Solver")
-        compiled_contract = Path("./build/", "heuristic-splitter.json").read_text("utf-8")
-        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"],execution_contract_hash,contractAddresses["hub"]])
-        print("Heuristic Splitter Address: ",contract_address)
-        contractAddresses["heuristic_splitter"] = int(contract_address,16)
+    # Deploy Heuristic Splitter Solver
+    print("Deploying Heuristic Splitter Solver")
+    compiled_contract = Path("./build/", "heuristic-splitter.json").read_text("utf-8")
+    contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"],int("0x4919e548bfd37db237cf4223b407e710103f79ebee92d2baa7a733d28532597",16),contractAddresses["hub"]])
+    print("Heuristic Splitter Address: ",contract_address)
+    contractAddresses["heuristic_splitter"] = int(contract_address,16)
     
     ##########################
     #                        #
@@ -149,10 +158,6 @@ async def deployContracts():
     #Set Solver Registry
     invocation = await hubContract.functions["set_solver_registry"].invoke(solverRegistryContract.address,max_fee=50000000000000000000)
     print("Setting Solver Registry...")
-    await invocation.wait_for_acceptance()
-    #Set Trade Executioner
-    print("Setting TradeExecutioner Hash...")
-    invocation = await hubContract.functions["set_executor"].invoke(execution_contract_hash,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
 
     #Configure Router Aggregator

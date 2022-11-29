@@ -1,19 +1,9 @@
---Splitter V3--
-1. Build algo
-
 --MainnetForkTesting--
 1. Write new tests
 
 --Learn Rust--
-1. Finish Docs
+1. Finish Rustlings
 2. Build Graddesc to compare results
-
---Commenting--
-1.Lots and lots of commenting
-
---Drawing Gate Image--
-1. Draw the Image
-2. Maybe Fiver/Tami help
 
 --GradientDescent--
 1. Build algo
@@ -29,7 +19,3 @@
 
 --BiasedSolver--
 1. Requires GradientDescent (Easiest way)
-
---Dijkstra--
-1. MaxHeap lib
-2. Build algo

@@ -32,6 +32,8 @@ from src.lib.hub import Hub, Hub_trade_executor
 //       Events        //
 /////////////////////////
 
+//Temporary event
+//Should mostly be made redundant by propper DEX event emissions
 @event
 func swap_executed(solver_used: felt, amount_traded: Uint256, token_sold: felt) {
 }
@@ -43,7 +45,8 @@ func swap_executed(solver_used: felt, amount_traded: Uint256, token_sold: felt) 
 //@notice initialize the HUB contract
 //@param _owner - The initial owner of the Hub contract
 @constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt) {
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(_owner: felt, _execution_hash: felt) {
+    Hub_trade_executor.write(_execution_hash);
     Ownable.initializer(_owner);
     return ();
 }
@@ -338,13 +341,13 @@ func set_solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 // @notice Set the new execution logic for trades
-// @param _executor_hash - The class hash of the new transaction execution logic
+// @param _execution_hash - The class hash of the new transaction execution logic
 @external
 func set_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _executor_hash: felt
+    _execution_hash: felt
 ) {
     Ownable.assert_only_owner();
-    Hub_trade_executor.write(_executor_hash);
+    Hub_trade_executor.write(_execution_hash);
     return ();
 }
 

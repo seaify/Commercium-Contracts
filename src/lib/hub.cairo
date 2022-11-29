@@ -100,12 +100,12 @@ namespace Hub {
         return (amount_out,);
     }
 
-    // @notice
-    // @param _amount_in -
-    // @param _token_in -
-    // @param _token_out -
-    // @param _solver_id -
-    // @return amount_out -
+    // @notice This method allows to query multiple solver results at once
+    // @param _amount_in - Amount of _token_in to be sold
+    // @param _token_in - Address of the token to be sold
+    // @param _token_out - Address of the token to be bought
+    // @param _solver_ids - An array of the solver IDs to get the out amounts from 
+    // @param _amounts_out - An empty array of result amounts that will be filled by this method. 
     func get_multiple_solver_amounts{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(
@@ -138,6 +138,12 @@ namespace Hub {
         return ();
     }
 
+    // @notice This method allows to query multiple solver results at once
+    // @param _amount_in - Amount of _token_in to be sold
+    // @param _token_in - Address of the token to be sold
+    // @param _token_out - Address of the token to be bought
+    // @param _solver_ids - An array of the solver IDs to get the out amounts from 
+    // @param _amounts_out - An empty array of result amounts that will be filled by this method. 
     func get_solver_amount_and_path{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(_amount_in: Uint256, _token_in: felt, _token_out: felt, _solver_id: felt) -> (
@@ -188,6 +194,13 @@ namespace Hub {
     //  Effect State  //
     // //////////////////
 
+    // @notice Perform a swap with a specified solver
+    // @param _token_in - Address of the token to be sold
+    // @param _token_out - Address of the token to be bought
+    // @param _amount_in - Amount of _token_in to be sold
+    // @param _min_amount_out - Minimum amount of _token_out ot be sold
+    // @param _to - The receiver of the bought _token_in tokens
+    // @param _solver_id - The id of the solver to be used to perform the trade
     func swap_with_solver{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _token_in: felt,
         _token_out: felt,
@@ -263,6 +276,8 @@ namespace Hub {
         return (received_amount,);
     }
 
+    // @notice Store the address of the solver registry
+    // @param _new_registry - Address of the solver registry contract
     func set_solver_registry{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         _new_registry: felt
     ) -> () {
