@@ -39,7 +39,7 @@ contractAddresses = {
                     "router_aggregator": int("0x3aafd1a0d88dda388a456505a257f0bd9090ef373d57d0dc064a4cee500584c",16),
                     "single_swap_solver": int("0x589763fb3512c5c07b4e9f18b1e98dd6543e6fc6ae937fca59862dd3f045d7b",16),
                     "spf_solver": int("0x3708fc7fc0c879ededd9642ae7aac3f0a5fe7584a9815cd9e2c1d4c5a4608e7",16),
-                    "heuristic_splitter": int("0x0",16)
+                    "heuristic_splitter": int("0x2b09acac144ac0be83807f07a7d908703b3fc1e8b227906a3090f4e2083ed6b",16)
                     }
 
 erc20_abi = [
@@ -97,6 +97,43 @@ erc20_abi = [
     ],
     "stateMutability": "view"
   },
+  {
+    "name": "approve",
+    "type": "function",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "felt"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "res",
+        "type": "Uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "approve",
+    "type": "function",
+    "inputs": [
+      {
+        "name": "spender",
+        "type": "felt"
+      },
+      {
+        "name": "amount",
+        "type": "Uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "success",
+        "type": "felt"
+      }
+    ]
+  },
 ]
                     
 router_aggregator_abi = [
@@ -121,6 +158,434 @@ router_aggregator_abi = [
     }
 ]
 
+hub_abi = [
+    {
+        "members": [
+            {
+                "name": "low",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "high",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Uint256",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
+                "name": "address",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "type",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Router",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
+                "name": "token_in",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "token_out",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Path",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "data": [
+            {
+                "name": "previousOwner",
+                "type": "felt"
+            },
+            {
+                "name": "newOwner",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "data": [
+            {
+                "name": "solver_used",
+                "type": "felt"
+            },
+            {
+                "name": "amount_traded",
+                "type": "Uint256"
+            },
+            {
+                "name": "token_sold",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "swap_executed",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "felt"
+            },
+            {
+                "name": "_execution_hash",
+                "type": "felt"
+            }
+        ],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "solver_registry",
+        "outputs": [
+            {
+                "name": "solver_registry",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "trade_executor",
+        "outputs": [
+            {
+                "name": "trade_executor",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_amount_out_with_solver",
+        "outputs": [
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_amount_and_path_with_solver",
+        "outputs": [
+            {
+                "name": "routers_len",
+                "type": "felt"
+            },
+            {
+                "name": "routers",
+                "type": "Router*"
+            },
+            {
+                "name": "path_len",
+                "type": "felt"
+            },
+            {
+                "name": "path",
+                "type": "Path*"
+            },
+            {
+                "name": "amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts",
+                "type": "felt*"
+            },
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            }
+        ],
+        "name": "get_amount_out",
+        "outputs": [
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_ids_len",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_ids",
+                "type": "felt*"
+            }
+        ],
+        "name": "get_multiple_solver_amounts",
+        "outputs": [
+            {
+                "name": "amounts_out_len",
+                "type": "felt"
+            },
+            {
+                "name": "amounts_out",
+                "type": "Uint256*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_amount_out_min",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_to",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_exact_tokens_for_tokens",
+        "outputs": [
+            {
+                "name": "amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_min_amount_out",
+                "type": "Uint256"
+            },
+            {
+                "name": "_token_in",
+                "type": "felt"
+            },
+            {
+                "name": "_token_out",
+                "type": "felt"
+            },
+            {
+                "name": "_to",
+                "type": "felt"
+            },
+            {
+                "name": "_solver_id",
+                "type": "felt"
+            }
+        ],
+        "name": "swap_exact_tokens_for_tokens_with_solver",
+        "outputs": [
+            {
+                "name": "received_amount",
+                "type": "Uint256"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_routers_len",
+                "type": "felt"
+            },
+            {
+                "name": "_routers",
+                "type": "Router*"
+            },
+            {
+                "name": "_path_len",
+                "type": "felt"
+            },
+            {
+                "name": "_path",
+                "type": "Path*"
+            },
+            {
+                "name": "_amounts_len",
+                "type": "felt"
+            },
+            {
+                "name": "_amounts",
+                "type": "felt*"
+            },
+            {
+                "name": "_amount_in",
+                "type": "Uint256"
+            },
+            {
+                "name": "_min_amount_out",
+                "type": "Uint256"
+            }
+        ],
+        "name": "swap_with_path",
+        "outputs": [
+            {
+                "name": "received_amount",
+                "type": "Uint256"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_new_registry",
+                "type": "felt"
+            }
+        ],
+        "name": "set_solver_registry",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_execution_hash",
+                "type": "felt"
+            }
+        ],
+        "name": "set_executor",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_token_len",
+                "type": "felt"
+            },
+            {
+                "name": "_token",
+                "type": "felt*"
+            },
+            {
+                "name": "_token_amount_len",
+                "type": "felt"
+            },
+            {
+                "name": "_token_amount",
+                "type": "Uint256*"
+            }
+        ],
+        "name": "retrieve_tokens",
+        "outputs": [],
+        "type": "function"
+    }
+]
+
 #############################
 #                           #
 #     Integration Tests     #
@@ -128,8 +593,8 @@ router_aggregator_abi = [
 #############################
 
 async def fullTestSuite():
-    await deployContracts()
-    await testSolvers([0])
+    #await deployContracts()
+    await testSolvers([1])
 
 async def deployContracts():
 
@@ -183,7 +648,6 @@ async def deployContracts():
 
     # Deploy Single Swap Solver
     print("Deploying Single Swap Solver")
-    print("ROUTER AGGREGATOR CONTRACT",contractAddresses["router_aggregator"])
     compiled_contract = Path("./build/", "single-swap-solver.json").read_text("utf-8")
     contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
     print("Single Swap Solver Address: ",contract_address)
@@ -276,16 +740,38 @@ async def deployContracts():
 async def testSolvers(solvers: list):
 
     print("Testing Solvers...")
-    hubContract = await Contract.from_address(address=contractAddresses["hub"],client=client)
+    hubContract = Contract(address=contractAddresses["hub"], abi=hub_abi, client=client)
+    erc20Contract = Contract(address=ethAddress, abi=erc20_abi, client=client)
 
     print("Hub Address: ", hubContract.address)
     print("ETH Address: ", ethAddress)
     print("DAI Address: ", daiAddress)
     
-    (res,) = await hubContract.functions["solver_registry"].call()
+    #(res,) = await hubContract.functions["solver_registry"].call()
+    #print("Getting Amount out...")
     #(res,) = await hubContract.functions["get_amount_out"].call({"low": 1000000, "high":0},ethAddress,daiAddress)
-
-    print("Solver Registry: ",res)
+    
+    print("Approving trade...")
+    invocation = await erc20Contract.functions["approve"].invoke(hubContract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
+    print("Waiting for acceptance...")
+    await invocation.wait_for_acceptance()
+    print("Approving trade...")
+    invocation = await erc20Contract.functions["approve"].invoke(hubContract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
+    print("Waiting for acceptance...")
+    await invocation.wait_for_acceptance()
+    print("Approving trade...")
+    invocation = await erc20Contract.functions["approve"].invoke(hubContract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
+    print("Waiting for acceptance...")
+    await invocation.wait_for_acceptance()
+    print("Setting Registry...")
+    invocation = await hubContract.functions["set_solver_registry"].invoke(account_address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    
+    
+    #print("Performing trade...")
+    #invocation = await hubContract.functions["swap_exact_tokens_for_tokens"].invoke({"low": 1000000, "high":0},{"low": 0, "high":0},ethAddress,daiAddress,account_address,max_fee=50000000000000000000)
+    #print("Waiting for acceptance...")
+    #await invocation.wait_for_acceptance()
 
 #Deploy a Contract
 async def deployContract(client: AccountClient,compiled_contract: str, calldata) -> (str):

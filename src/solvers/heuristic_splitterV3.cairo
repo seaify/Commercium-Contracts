@@ -216,6 +216,28 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }
 }
 
+// ///////////////////////
+//         Admin        //
+// ///////////////////////
+
+@external
+func set_router_aggregator{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _router_aggregator: felt
+) {
+    //ToDo: Add ownership
+    router_aggregator.write(_router_aggregator);
+    return ();
+}
+    
+@external
+func set_trade_executor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _trade_executor: felt
+) {
+    //ToDo: Add ownership
+    trade_executor.write(_trade_executor);
+    return ();
+}
+
 // ///////////////////////////
 //         Internals        //
 // ///////////////////////////

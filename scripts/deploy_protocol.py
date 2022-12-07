@@ -55,10 +55,10 @@ router_aggregator_abi = [
 contractAddresses = {
                     "hub": int("0x25b5b9a349742379e756b137307b7f3a768e0eecfe875c7c92e6a5070f6ff1d",16),
                     "solver_registry": int("0x03c9726d675877f2db7e838c92563bc3968f61b6b3191a5c942c23ecc0ecf320",16),
-                    "router_aggregator": int("0x3aafd1a0d88dda388a456505a257f0bd9090ef373d57d0dc064a4cee500584c",16),
+                    "router_aggregator": int("0x03aafd1a0d88dda388a456505a257f0bd9090ef373d57d0dc064a4cee500584c",16),
                     "single_swap_solver": int("0x589763fb3512c5c07b4e9f18b1e98dd6543e6fc6ae937fca59862dd3f045d7b",16),
                     "spf_solver": int("0x3708fc7fc0c879ededd9642ae7aac3f0a5fe7584a9815cd9e2c1d4c5a4608e7",16),
-                    "heuristic_splitter": int("0x2b09acac144ac0be83807f07a7d908703b3fc1e8b227906a3090f4e2083ed6b",16)
+                    "heuristic_splitter": int("0x4f63aa1f930f5da32d7595f2acd80fc127f1a8c317e328dbae922cfa213fa6b",16)
                     }
                     
 #######################
@@ -96,7 +96,7 @@ async def deployContracts():
         resp = await client.declare(transaction=declare_transaction)
         await client.wait_for_tx(resp.transaction_hash)
         router_aggregator_contract_hash = resp.class_hash
-        print("Executor Class Hash: ", hex(router_aggregator_contract_hash))
+        print("Router Aggregator Class Hash: ", hex(router_aggregator_contract_hash))
 
         # Deploy Hub
         print("Deploying Hub")
@@ -133,12 +133,12 @@ async def deployContracts():
         print("SPF Solver Address: ",contract_address)
         contractAddresses["spf_solver"] = int(contract_address,16)
 
-    # Deploy Heuristic Splitter Solver
-    print("Deploying Heuristic Splitter Solver")
-    compiled_contract = Path("./build/", "heuristic-splitter.json").read_text("utf-8")
-    contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"],int("0x4919e548bfd37db237cf4223b407e710103f79ebee92d2baa7a733d28532597",16),contractAddresses["hub"]])
-    print("Heuristic Splitter Address: ",contract_address)
-    contractAddresses["heuristic_splitter"] = int(contract_address,16)
+        # Deploy Heuristic Splitter Solver
+        print("Deploying Heuristic Splitter Solver")
+        compiled_contract = Path("./build/", "heuristic-splitter.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"],int("0x4919e548bfd37db237cf4223b407e710103f79ebee92d2baa7a733d28532597",16),contractAddresses["hub"]])
+        print("Heuristic Splitter Address: ",contract_address)
+        contractAddresses["heuristic_splitter"] = int(contract_address,16)
     
     ##########################
     #                        #

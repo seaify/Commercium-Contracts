@@ -340,9 +340,12 @@ namespace RouterAggregator {
             if (pair_address == 0) {
                 return (Uint256(0, 0),);
             }
-            let (amount_out: Uint256, _) = ISithRouter.getAmountOut(
+            let (amount_out: Uint256, stable: felt) = ISithRouter.getAmountOut(
                 _router.address, _amount_in, _token_in, _token_out
             );
+            if (stable == 1) {
+                return (Uint256(0, 0),);
+            }
             return (amount_out,);
         }
         if (_router.type == TenK) {

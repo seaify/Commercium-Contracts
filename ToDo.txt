@@ -1,3 +1,9 @@
+--Fix Switch Balances Bug--
+
+--Get Real Token Prices for stats--
+
+--Utilize Local Node--
+
 --MainnetForkTesting--
 1. Write new tests
 
@@ -8,14 +14,8 @@
 --GradientDescent--
 1. Build algo
 
---StatsPage--
-1. Dummy Data
-2. Index Hub events (requires new deployment)
-3. Build front-end
-
---Indexing--
-1. Setup Node
-2. Learn and apply Apibara
-
 --BiasedSolver--
 1. Requires GradientDescent (Easiest way)
+
+--Review-Front-End-Rounding--
+1. Make sure no aggregious rounding is being done
