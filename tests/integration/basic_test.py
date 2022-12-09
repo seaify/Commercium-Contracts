@@ -1,11 +1,13 @@
 from starknet_py.contract import Contract
-from .deploy_contracts import deployContracts
+from deploy_contracts import deployContracts
 import asyncio
-from .global_info import (
+import pytest
+from global_info import (
     client,  
     ETH_Contract,
     DAI_Contract,
-    USDC_Contract
+    USDC_Contract,
+    account_address
 )
 
 #############################
@@ -14,46 +16,42 @@ from .global_info import (
 #                           #
 #############################
 
-async def fullTestSuite():
+async def test_full_protocol():
     protocol_contracts = await deployContracts()
-    await testSolvers(protocol_contracts)
+    await solvers_test(protocol_contracts,[1,2,3])
 
-async def testSolvers(protocol_contracts: dict[str,int]):
+async def solvers_test(protocol_contracts: dict[str,int], IDs: list[int]):
 
     print("Testing Solvers...")
     Hub_Contract = protocol_contracts["hub"]
+    eth_to_spend = 1000000000000
 
-    print("Hub Address: ", Hub_Contract.address)
-    print("ETH Address: ", ETH_Contract.address)
-    print("DAI Address: ", DAI_Contract.address)
-    
-    #(res,) = await hubContract.functions["solver_registry"].call()
-    #print("Getting Amount out...")
-    #(res,) = await hubContract.functions["get_amount_out"].call({"low": 1000000, "high":0},ethAddress,daiAddress)
-    
-    print("Approving trade...")
-    invocation = await ETH_Contract.functions["approve"].invoke(Hub_Contract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
-    print("Waiting for acceptance...")
-    await invocation.wait_for_acceptance()
-    
-    #print("Approving trade...")
-    #invocation = await erc20Contract.functions["approve"].invoke(hubContract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
-    #print("Waiting for acceptance...")
-    #await invocation.wait_for_acceptance()
-    #print("Approving trade...")
-    #invocation = await erc20Contract.functions["approve"].invoke(hubContract.address,{"low": 1000000, "high":0},max_fee=50000000000000000000)
-    #print("Waiting for acceptance...")
-    #await invocation.wait_for_acceptance()
-    #print("Setting Registry...")
-    #invocation = await hubContract.functions["set_solver_registry"].invoke(account_address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
-    
-    
-    #print("Performing trade...")
-    #invocation = await hubContract.functions["swap_exact_tokens_for_tokens"].invoke({"low": 1000000, "high":0},{"low": 0, "high":0},ethAddress,daiAddress,account_address,max_fee=50000000000000000000)
-    #print("Waiting for acceptance...")
-    #await invocation.wait_for_acceptance()
+    for id in IDs:
+        print("Solver ID: ", id)
+        
+        #Approve token transfer
+        invocation = await ETH_Contract.functions["approve"].invoke(Hub_Contract.address,{"low": eth_to_spend, "high":0},max_fee=50000000000000000000)
+        await invocation.wait_for_acceptance()
 
-asyncio.run(fullTestSuite())
+        (previous_dai_balance,) = await DAI_Contract.functions["balanceOf"].call(account_address)
+        (previous_eth_balance,) = await ETH_Contract.functions["balanceOf"].call(account_address)
+
+        #Getting the solver estimated amount
+        (received_dai_amount,) = await Hub_Contract.functions["get_amount_out_with_solver"].call({"low": eth_to_spend, "high":0},ETH_Contract.address,DAI_Contract.address,id)
+        
+        #Executing the swap
+        invocation = await Hub_Contract.functions["swap_exact_tokens_for_tokens"].invoke({"low": eth_to_spend, "high":0},{"low": 0, "high":0},ETH_Contract.address,DAI_Contract.address,account_address,max_fee=50000000000000000000)
+        await invocation.wait_for_acceptance()
+
+        #Get new Balance
+        (new_dai_balance,) = await DAI_Contract.functions["balanceOf"].call(account_address)
+        (new_eth_balance,) = await ETH_Contract.functions["balanceOf"].call(account_address)
+
+        #Make sure new balance are correct
+        assert new_dai_balance == previous_dai_balance + received_dai_amount, f"actual DAI balance: {new_dai_balance} expected DAI balance: {previous_dai_balance + received_dai_amount}"
+        assert new_eth_balance == previous_eth_balance - eth_to_spend, f"actual ETH balance: {new_eth_balance} expected ETH balance: {previous_eth_balance + eth_to_spend}"
+
+        print("✅")
 
 
+asyncio.run(test_full_protocol())

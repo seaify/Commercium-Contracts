@@ -14,16 +14,8 @@ const BASE_8 = 100000000;  // 1e8
 // ///////////////////
 
 // Once we have deploy scripts again, we should make this storage vars
-const JediSwap = 0;
-const AlphaRoad = 1;
-const SithSwap = 2;
-const TenK = 3;
-const StarkSwap = 4;
+const TenK = 0;
+const JediSwap = 1;
 
 // Factories
-const TenKFactory = 3058627768648483736188861640845691030038370042398279097723890937107886215944;  // 0x06c31f39524388c982045988de3788530605ed08b10389def2e7b1dd09d19308
-
-// @view
-// func read_felts{}()->(max_felt: felt, half_max: felt){
-//    return(MAX_FELT,HALF_MAX);
-// }
+const TenKFactory = 792675439340753442503309894392665475159403042210985696167998939160953653154;  // 0x01c0a36e26a8f822e0d81f20a5a562b16a8f8a3dfd99801367dd2aea8f1a87a2

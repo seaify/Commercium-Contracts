@@ -20,7 +20,7 @@ usdcAddress = int("0x053C91253BC9682c04929cA02ED00b3E423f6710D2ee7e0D5EBB06F3eCF
 ETH_USD_Key = 19514442401534788
 DAI_USD_Key = 19212080998863684
 USDC_USD_Key = 6148332971638477636
-EMPIRIC_ORACLE_ADDRESS = int("0x446812bac98c08190dee8967180f4e3cdcd1db9373ca269904acb17f67f7093",16)
+EMPIRIC_ORACLE_ADDRESS = int("0x0346c57f094d641ad94e43468628d8e9c574dcb2803ec372576ccc60a40be2c4",16)
 JediSwapRouter = int("0x041fd22b238fa21cfcf5dd45a8548974d8263b3a531a60388411c5e230f97023",16)
 TenKRouter = int("0x07a6f98c03379b9513ca84cca1373ff452a7462a3b61598f0af5bb27ad7f76d1",16)
 MySwap = int("0x07a6f98c03379b9513ca84cca1373ff452a7462a3b61598f0af5bb27ad7f76d1",16)
@@ -31,12 +31,6 @@ account_address = int("0x31cc6334a599584cdda006716992e7e60af6e3b03eda692b2719ca6
 public_key = private_to_stark_key(private_key)
 signer_key_pair = KeyPair(private_key,public_key)
 client = AccountClient(address=account_address, client=GatewayClient(net="http://127.0.0.1:5050/"), key_pair=signer_key_pair, chain=StarknetChainId.TESTNET, supported_tx_version=1)
-
-# Opening JSON file
-file = open('../../build/hub_abi.json')
-hub_abi = json.load(file)
-file.close()
-
 
 erc20_abi = erc20_abi = [
     {
@@ -132,14 +126,13 @@ erc20_abi = erc20_abi = [
   },
 ]
 
-file = open('../../build/hub_abi.json')
+file = open('./build/hub_abi.json')
 hub_abi = json.load(file)
 file.close()
 
-file = open('../../build/router-aggregator_abi.json')
+file = open('./build/router-aggregator_abi.json')
 router_aggregator_abi = json.load(file)
 file.close()
-
 
 ETH_Contract = Contract(address=ethAddress, abi=erc20_abi, client=client)
 DAI_Contract = Contract(address=daiAddress, abi=erc20_abi, client=client)

@@ -12,6 +12,12 @@ build:
 test:
 	protostar test ./tests --disable-hint-validation
 
+test-integration:
+	python ./tests/integration/basic_test.py
+
+mainnet-fork:
+	starknet-devnet --fork-network alpha-mainnet --seed 2492750914	
+
 format:
 	poetry run cairo-format src/**/*.cairo -i
 
