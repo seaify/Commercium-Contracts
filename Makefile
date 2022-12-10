@@ -16,7 +16,7 @@ test-integration:
 	python ./tests/integration/basic_test.py
 
 mainnet-fork:
-	starknet-devnet --fork-network alpha-mainnet --seed 2492750914	
+	starknet-devnet --fork-network alpha-mainnet --seed 2492750914	--gas-price 0
 
 format:
 	poetry run cairo-format src/**/*.cairo -i
