@@ -45,6 +45,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     let (router_aggregator_address) = router_aggregator.read();
 
+    // ARE WE DIFFERENTIATING BETWEEN INPUT AND OUTPUT RESERVES????
     let (
         reserves_a_len: felt,
         reserves_a: Uint256*,
@@ -64,6 +65,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // let (amount_in,_) = unsigned_div_rem(_amount_in.low,BASE);
 
     // Set starting weights
+    // THIS SHOULD BE BASE NOT AMOUNT_IN.LOW???
     let (local init_amount, _) = unsigned_div_rem(_amount_in.low, routers_len);
     init_amounts(routers_len, amounts, init_amount);
 
@@ -481,7 +483,7 @@ func add_two_arrays{range_check_ptr}(
 
 // x*997*reserve_2
 // _________________________
-// reserve_1 + 1000 + x*997
+// reserve_1 * 1000 + x*997
 
 // ((x*997)/(1000+x*997)) + ((y*997)/(1000+y*997)) + ((z*997)/(1000+z*997))
 
@@ -489,6 +491,16 @@ func add_two_arrays{range_check_ptr}(
 
 // ((x*998)/(1001+x*997)) + ((y*998)/(1001+y*997)) + ((z*998)/(1001+z*997)) + (((1-x-y-z)*998)/(1001+(1-x-y-z)*997))
 
-// 998998                           998998
+//                998998                           998998
 // _ ________________________________ +    ________________________
-//   (997*x + 997*y + 997*z -1998)^2          (997*x + 1001)^2
+//   (1998 - 997*x + 997*y + 997*z)^2          (997*x + 1001)^2
+
+// 998998 = (1001 * 998)
+
+// 1001 = 1000 * reserve_1 -> Based_reserve_1
+
+// 998 = reserve_2 * 997 -> Feed_reserve_2
+
+//           based_reserve * feed_reserve                         based_reserve * feed_reserve
+// _ ________________________________________________       +    ______________________________
+//   (fee+based_reserve - (Xfee*x + Yfee*y + Zfee*z))^2            (Xfee*x + based_reserve)^2

@@ -14,8 +14,8 @@ const BASE_8 = 100000000;  // 1e8
 // ///////////////////
 
 // Once we have deploy scripts again, we should make this storage vars
-const TenK = 0;
-const JediSwap = 1;
+const JediSwap = 0;
+const TenK = 1;
 
 // Factories
 const TenKFactory = 792675439340753442503309894392665475159403042210985696167998939160953653154;  // 0x01c0a36e26a8f822e0d81f20a5a562b16a8f8a3dfd99801367dd2aea8f1a87a2

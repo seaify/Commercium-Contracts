@@ -121,9 +121,9 @@ async def deployContracts():
     invocation = await routerAggregatorContract.functions["set_global_price"].invoke(USDC_Contract.address,USDC_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
     #Add Routers
-    invocation = await routerAggregatorContract.functions["add_router"].invoke(TenKRouter,0,max_fee=50000000000000000000)
+    invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,0,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()        
-    invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,1,max_fee=50000000000000000000)
+    invocation = await routerAggregatorContract.functions["add_router"].invoke(TenKRouter,1,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
 
     #Configure Solver Registry
