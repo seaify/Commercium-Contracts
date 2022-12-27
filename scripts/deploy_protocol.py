@@ -1,6 +1,7 @@
 from starknet_py.net.account.account_client import (AccountClient)
 from starknet_py.contract import Contract
 from pathlib import Path
+from asyncio import run
 
 from global_info import (
     client, 
@@ -18,10 +19,10 @@ from global_info import (
 )
 
 contractAddresses = {
-    "hub": int("0x0",16),
-    "solver_registry": int("0x0",16),
-    "router_aggregator": int("0x0",16),
-    "single_swap_solver": int("0x0",16)
+    "hub": int("0x779e5df31786a8b87c1e6bc4d0807ceee61bf2b5329df514f14e38745071eff",16),
+    "solver_registry": int("0x3cbb8fd8e8876d757f763b770588b04be10a376ea260ce353b76fc4fb7d22af",16),
+    "router_aggregator": int("0x492e90cc6e62927f8ee2cef59e0eb49749de5fe16ee64bd89e82aa0a920ecd8",16),
+    "single_swap_solver": int("0x2eb208f6c9cc33cb3fd6125c63301622121bf392880efb164e05196a467bffd",16)
 }
 
 
@@ -76,6 +77,7 @@ async def deployContracts():
     #   CONFIGURE CONTRACTS  #
     #                        #
     ##########################   
+    print("Configuring Contracts ...")
 
     hubContract = await Contract.from_address(address=contractAddresses["hub"],client=client)
     routerAggregatorContract = Contract(address=contractAddresses["router_aggregator"], abi=router_aggregator_abi, client=client)
@@ -140,3 +142,6 @@ async def deployContract(client: AccountClient,compiled_contract: str, calldata)
     await deploy_result.wait_for_acceptance()
     contract = deploy_result.deployed_contract
     return hex(contract.address)
+
+if __name__ == "__main__":
+    run(deployContracts())

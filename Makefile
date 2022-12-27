@@ -9,6 +9,10 @@ build:
 	$(MAKE) clean
 	protostar build --cairo-path ./lib/cairo_contracts/src --disable-hint-validation
 
+build-production:
+	$(MAKE) clean
+	protostar build --cairo-path ./lib/cairo_contracts/src
+
 test:
 	protostar test ./tests --disable-hint-validation
 
