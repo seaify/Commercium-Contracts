@@ -1,3 +1,6 @@
 build
 .secret
 .env
+
+/scripts/__pycache__
+/tests/integration/__pycache__
