@@ -328,8 +328,8 @@ namespace RouterAggregator {
     }
 
     // @notice for a given token pair and router, return the available token reserves
-    // @param token_a - The address of token A
-    // @param token_b - The address of token B
+    // @param token_a - The address of token A (Input Token)
+    // @param token_b - The address of token B (Output Token)
     // @param router - The address and router type of a DEX router
     // @return reserve_a - The amount of token_a that are available in the token pair
     // @return reserve_b - The amount of token_b that are available in the token pair
@@ -345,6 +345,12 @@ namespace RouterAggregator {
             }
             let (reserve_a: Uint256, reserve_b: Uint256,_) = IJediPool.get_reserves(pair_address);
 
+            //Ensure that reserves_a are the actual reserves of _token_a
+            let (token_a) = IJediPool.token0(pair_address);
+
+            if token_a == _token_b {
+                return (reserve_b, reserve_a);
+            }
             return (reserve_a, reserve_b);
         }
         if (_router.type == TenK) {
@@ -356,6 +362,14 @@ namespace RouterAggregator {
                 return (Uint256(0, 0), Uint256(0, 0));
             }
             let (reserve_a_felt, reserve_b_felt, _) = ITenKPool.getReserves(pair_address);
+
+            //Ensure that reserves_a are the actual reserves of _token_a
+            let (token_a) = ITenKPool.token0(pair_address);
+
+            if token_a == _token_b {
+                return (Uint256(reserve_b_felt,0),Uint256(reserve_a_felt,0));
+            }
+
             return (Uint256(reserve_a_felt,0), Uint256(reserve_b_felt,0));
         } else {
             with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {

@@ -13,12 +13,13 @@ from src.lib.constants import BASE
 from src.interfaces.i_router_aggregator import IRouterAggregator
 
 const STEP_SIZE = 100000000000000000;  // 0.1
-const MAX_STEP_REDUCTION = 3;
+const MAX_STEP_REDUCTION = 2;
+const STEP_DECREASE_FACTOR = 5;
 
 struct PreCalc {
-    feed_reserves_1: felt,  // fee_base * reserve_1
-    feed_reserves_2: felt,  // fee * reserve_2
-    gradient_nominator: felt,  // feed_reserves_1 * feed_reserves_2
+    feed_reserve: felt,  // fee * reserve_out
+    based_reserve: felt,  // fee_base * reserve_in
+    gradient_nominator: felt,  // feed_reserve * based_reserve
 }
 
 @storage_var
@@ -61,18 +62,9 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (pre_calcs: PreCalc*) = alloc();
     set_pre_calculations(pre_calcs, reserves_a, reserves_b, reserves_a_len);
 
-    // Truncate number to stay in bounds for math
-    // let (amount_in,_) = unsigned_div_rem(_amount_in.low,BASE);
-
     // Set starting weights
-    // THIS SHOULD BE BASE NOT AMOUNT_IN.LOW???
-    let (local init_amount, _) = unsigned_div_rem(_amount_in.low, routers_len);
+    let (init_amount, _) = unsigned_div_rem(_amount_in.low, routers_len);
     init_amounts(routers_len, amounts, init_amount);
-
-    %{
-        print("Number of DEXes: ", ids.routers_len)
-        print("Initial starting weight/amount: ", ids.init_amount)
-    %}
 
     // Get initial out_amount
     let new_out_amount = objective_func(
@@ -83,12 +75,25 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 
     // Run Gradient Descent
     let (final_amounts, amount_out) = gradient_descent(
-        pre_calcs, _amount_in.low, new_out_amount, routers_len, amounts, STEP_SIZE, _counter=0
+        pre_calcs, _amount_in.low, new_out_amount, routers_len, amounts, STEP_SIZE, MAX_STEP_REDUCTION,_counter=0
     );
 
     // Transform amounts to shares
-    // (In same step kick any share that is below a certain threshold e.g. 10%)
-    // amounts_to_shares(routers_len,shares,final_amounts,_amount_in);
+    // Kick any share that is below the KICK_THRESHOLD
+    for (index,weight) in weights.iter().enumerate(){
+        let percentage = (weight * BASE).floor_div(amount_in);
+        if percentage < KICK_THRESHOLD {
+            continue
+        }
+        percentages.push(percentage);
+        final_routers.push(router[index]);
+    }
+
+    amounts_to_percentages(routers_len,shares,final_amounts,_amount_in);
+
+    amounts_to_percentages{}(){
+    
+    }
 
     // From new legth -> greate new path and routers arr
 
@@ -107,6 +112,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     _amounts_len: felt,
     _amounts: felt*,
     _step_size: felt,
+    _decrease_step_counter: felt,
     _counter: felt,
 ) -> (_amounts: felt*, final_out_amount: felt) {
     alloc_locals;
@@ -116,37 +122,28 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         return (_amounts, _out_amount);
     }
 
-    %{ print("CHECKPOINT 1") %}
-
     // Calculate gradients resulting from new amounts
-    let (local gradients: felt*) = alloc();
+    // symbols is either + or -
+    // + = TRUE
+    // - = FALSE
+    let (local gradients: felt*, local symbols: felt*) = alloc();
     gradient(
         _pre_calcs=_pre_calcs,
         _amounts_len=_amounts_len,
         _amounts=_amounts,
         _gradients=gradients,
+        _symbols=symbols,
         _counter=0,
     );
 
-    %{ print("CHECKPOINT 2") %}
-
     // Determine new trade amounts
-    let inverseNorm = calc_inverse_norm(_amounts_len, gradients);
-    %{ print("CHECKPOINT 2.1") %}
-    let delta_factor = Utils.felt_fmul(inverseNorm, _step_size, BASE);
-    %{ print("CHECKPOINT 2.2") %}
+    let inverse_norm = calc_inverse_norm(_input_amount,_amounts_len, gradients);
     let (local new_amounts: felt*) = alloc();
-    clac_new_amounts(delta_factor, _amounts_len, _amounts, new_amounts);
+    calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, _amounts);
 
-    %{ print("CHECKPOINT 3") %}
-
-    // Check that single amounts are not > total_amount or < 0
-    let are_borders_crossed = check_borders(_amounts_len, new_amounts, _input_amount, 0);
-    if (are_borders_crossed == TRUE) {
-        return (_amounts, _out_amount);
-    }
-
-    %{ print("CHECKPOINT 4") %}
+    // Determine last router amount
+    let last_amount_value = missing_weight(_input_amount,_amounts_len,new_amounts);
+    assert _amounts[_amounts_len - 1] = last_amount_value
 
     // Calculate new output amounts resulting from new trade amounts
     let new_out_amount = objective_func(
@@ -156,19 +153,27 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         _total_received_token_amount=0,
     );
 
-    %{ print("CHECKPOINT 5") %}
-
     // Check if new amount is more efficient
     let is_new_amount_more = is_le_felt(_out_amount, new_out_amount);
     // If less efficient, redoo with last result and smaller stepsize
     if (new_out_amount == FALSE) {
-        // if stepsize_reductions == 0:
-        return (_amounts, _out_amount);
-        // end
-
-        // let (new_stepsize,_) = unsigned_div_rem(stepsize,2)
-        // let(xx, yy, amountOutt) = findWeights(x,y,0,arr,new_stepsize,stepsize_reductions-1,amountOut,counter+1,amountToBuy)
-        // return(xx, yy, amountOutt);
+        if (_decrease_step_counter != 0) {
+            new_step_size = felt_div_rem(_step_size,STEP_DECREASE_FACTOR);
+            let (final_amounts, final_out_amount) = gradient_descent(
+                _pre_calcs,
+                _input_amount,
+                _out_amount,
+                _amounts_len,
+                _amounts,
+                new_step_size,
+                _decrease_step_counter - 1,
+                _counter + 1,
+            );
+            return (final_amounts, final_out_amount);
+        }else{
+            return (_amounts, _out_amount);
+        }
+    // If more efficient, continue with new amounts
     } else {
         let (final_amounts, final_out_amount) = gradient_descent(
             _pre_calcs,
@@ -177,6 +182,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
             _amounts_len,
             new_amounts,
             _step_size,
+            _decrease_step_counter,
             _counter + 1,
         );
         return (final_amounts, final_out_amount);
@@ -206,13 +212,13 @@ func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     _pre_calcs: PreCalc, _amount_in: felt, _router_type: felt
 ) -> felt {
     alloc_locals;
-    local tester1 = _pre_calcs.feed_reserves_1;
-    local tester2 = _pre_calcs.feed_reserves_2;
+    local tester1 = _pre_calcs.feed_reserve;
+    local tester2 = _pre_calcs.based_reserve;
 
     // ToDo Check what can be pre-computed (e.g. reserve_1 * 1000)
     if (_router_type == 0) {
-        let numerator = _amount_in * _pre_calcs.feed_reserves_2;
-        let denominator = _pre_calcs.feed_reserves_1 + (_amount_in * 997);
+        let numerator = _amount_in * _pre_calcs.feed_reserve;
+        let denominator = _pre_calcs.based_reserve + (_amount_in * 997);
         let (amount_out, _) = unsigned_div_rem(numerator, denominator);
         return (amount_out);
     }
@@ -224,70 +230,55 @@ func get_amount_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 func gradient{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _pre_calcs: PreCalc*, _amounts_len: felt, _amounts: felt*, _gradients: felt*, _counter: felt
+    _pre_calcs: PreCalc*, _amounts_len: felt, _amounts: felt*, _gradients: felt*, _symbols: felt*, _counter: felt
 ) {
     if (_counter == _amounts_len) {
         return ();
     }
 
-    %{ print("CHECKPOINT 1.1") %}
-
-    let new_gradient = gradient_x(_pre_calcs[0], _amounts_len, _amounts, _counter);
+    let (new_gradient: felt, symbol: felt) = gradient_x(_pre_calcs[0], _amounts_len, _amounts, _counter);
     assert _gradients[0] = new_gradient;
+    assert _symbols[0] = symbol;
 
-    %{ print("CHECKPOINT 1.2") %}
-
-    gradient(_pre_calcs + 3, _amounts_len, _amounts, _gradients + 1, _counter + 1);
+    gradient(_pre_calcs + 3, _amounts_len, _amounts, _gradients + 1, symbol + 1, _counter + 1);
 
     return ();
 }
 
+func missing_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _sub_amount: felt, _new_amounts_len: felt, _new_amounts: felt*
+) -> felt {
+    if (_new_amounts_len == 0)  {
+        return sub_amount;
+    }
+    sub_amount = _sub_amount - _new_amounts[0]
+    return missing_weight(sub_amount, _new_amounts_len - 1, _new_amounts + 1);
+}
+
 func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     pre_calc: PreCalc, _amounts_len: felt, _amounts: felt*, _router_index: felt
-) -> felt {
+) -> (gradient: felt,negative: felt) {
     alloc_locals;
 
-    // 998998                           998998
-    // _ ________________________________ +    ________________________
-    //    (997*x + 997*y + 997*z -1998)^2          (997*x + 1001)^2
+    //     based_reserveX * feed_reserveX                    based_reserveLAST * feed_reserveLAST
+    // ___________________________________   _   ______________________________________________________________
+    //     (Xfee*x + based_reserveX)^2            (feeLAST + based_reserveLAST - (Xfee*x + Yfee*y + Zfee*z))^2
 
-    %{ print("CHECKPOINT 1.11, _amounts_len: ", ids._amounts_len) %}
+    // Right Side
+    let sum = sum_amounts_and_fees(_amounts_len, _amounts, 0); 
+    let denominator_right = pow(997 + pre_calc[_amounts_len-1].reserve_2 - sum,2);
+    local gradient_right = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_right, BASE);
 
-    let denominator_1 = calc_denominator(_amounts_len, _amounts, 0);
+    // Left Side
+    let (denominator_2) = pow(997 * _amounts[_router_index] + pre_calc[_router_index].based_reserve, 2);
+    let gradient_left = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_2, BASE);
 
-    local tester1 = denominator_1;
-    local tester2 = pre_calc.gradient_nominator;
-    %{
-        print("CHECKPOINT 1.12 denominator_1: ", ids.tester1)
-        print("CHECKPOINT 1.12 pre_calc.gradient_nominator: ", ids.tester2)
-    %}
-
-    local gradient_part_1 = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_1, BASE);
-
-    %{
-        print("ids.gradient_part_1", ids.gradient_part_1)
-        print("CHECKPOINT 1.13")
-    %}
-
-    let (denominator_2) = pow(997 * _amounts[_router_index] + pre_calc.feed_reserves_1, 2);
-    let (local small_denominator_2, _) = unsigned_div_rem(denominator_2, BASE);
-
-    %{
-        print("small_denominator_2", ids.small_denominator_2)
-        print("ids.tester2", ids.tester2)
-        print("CHECKPOINT 1.14")
-    %}
-
-    let local gradient_part_2 = Utils.felt_fdiv(pre_calc.gradient_nominator, small_denominator_2);
-
-    %{
-        print("ids.gradient_part_2", ids.gradient_part_2)
-        print("CHECKPOINT 1.11")
-    %}
-
-    let gradient = gradient_part_2 - gradient_part_1;
-
-    return (gradient);
+    // Preventing underflows, whilst continuing to use uint instead of int
+    if gradient_left > gradient_right {
+        return (gradient_left - gradient_right,TRUE);
+    }else{
+        return (gradient_right - gradient_left,FALSE);
+    }
 }
 
 func set_pre_calculations{range_check_ptr}(
@@ -298,17 +289,10 @@ func set_pre_calculations{range_check_ptr}(
         return ();
     }
 
-    let (feed_reserves_1, _) = unsigned_div_rem(1000 * _reserves_1[0].low, BASE);
-    let (feed_reserves_2, _) = unsigned_div_rem(997 * _reserves_2[0].low, BASE);
+    tempvar feed_reserve = 997 * _reserves_2[0].low;
+    tempvar based_reserve = 1000 * _reserves_1[0].low;
 
-    local router1 = feed_reserves_2;
-    local router2 = _reserves_2[0].low;
-    %{
-        print("_reserves_2[0].low: ", ids.router2)
-        print("feed_reserves_2: ", ids.router1)
-    %}
-
-    assert _pre_calcs[0] = PreCalc(feed_reserves_1, feed_reserves_2, feed_reserves_1 * feed_reserves_2);
+    assert _pre_calcs[0] = PreCalc(feed_reserve, based_reserve, feed_reserve * based_reserve);
 
     set_pre_calculations(_pre_calcs + 3, _reserves_1 + 2, _reserves_2 + 2, _reserves_len - 1);
     return ();
@@ -341,66 +325,65 @@ func init_amounts{range_check_ptr}(_amounts_len: felt, _amounts: felt*, _init_am
     return ();
 }
 
-func calc_denominator{range_check_ptr}(_amounts_len: felt, _amounts: felt*, _sum: felt) -> felt {
+func sum_amounts_and_fees{range_check_ptr}(_amounts_len: felt, _amounts: felt*, _sum: felt) -> felt {
     if (_amounts_len == 0) {
-        %{ print("FINAL SUM: ", ids._sum) %}
-        let (result) = pow(_sum - 1998, 2);
-        %{ print("WE POWED") %}
+        let (result) = pow(_sum, 2);
         let (small_result, _) = unsigned_div_rem(result, BASE);
         return (small_result);
     }
-
-    %{ print("SUM: ", ids._sum) %}
     let feed_amount = _amounts[0] * 997;
-    let denominator = calc_denominator(_amounts_len - 1, _amounts + 1, _sum + feed_amount);
+    let denominator = sum_amounts_and_fees(_amounts_len - 1, _amounts + 1, _sum + feed_amount);
     return (denominator);
 }
 
-func clac_new_amounts{range_check_ptr}(
-    _delta_factor: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*
+func calc_new_amounts{range_check_ptr}(
+    _gradients: felt*, _symbols: felt*, _inverse_norm: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*
 ) {
     alloc_locals;
-    let (local mul_amounts: felt*) = alloc();
-    fmul_array(_amounts_len, _amounts, mul_amounts, _delta_factor, BASE);
 
-    add_two_arrays(_amounts_len, _amounts, mul_amounts, _new_amounts);
+    // We skip the last one
+    if _amounts_len == 1 {
+        return();
+    }
+
+    // Calc delta
+    let new_gradient = felt_fmul(_inverse_norm, _gradients[0], BASE);
+    let delta_factor = felt_fmul(new_gradient, STEP_SIZE, BASE);
+
+    if _symbols[0] == TRUE {
+        // Fix upper bound
+        // Max possibel amount to be traded on one router is the input amount
+        if _input_amount < delta_factor + amounts[0]{
+            _new_amounts[0] = _input_amount;
+        }else{
+            _new_amounts[0] = amounts[0] + delta_factor;
+        }
+    }else{
+        // Fix lower bound to 0
+        if amounts[0] < delta_factor{
+            _new_amounts[0] = 0;
+        }else{
+            _new_amounts[0] = amounts[0] - delta_factor;
+        }
+    }
+
+    calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1);
 
     return ();
 }
 
-func calc_inverse_norm{range_check_ptr}(_gradients_len: felt, _gradients: felt*) -> felt {
+func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: felt, _gradients: felt*) -> felt {
     alloc_locals;
-
-    %{ print("CHECKPOINT 2.11") %}
 
     let (new_gradients: felt*) = alloc();
     pow_gradients(_gradients_len, _gradients, new_gradients);
 
-    local tester3 = _gradients[0];
-    local tester4 = new_gradients[0];
-    %{
-        print("_gradients: ", ids.tester3)
-        print("new_gradients", ids.tester4)
-        print("CHECKPOINT 2.12")
-    %}
-
     let sum = sum_gradients(_gradients_len, _gradients, sum=0);
 
-    %{ print("CHECKPOINT 2.13") %}
-
+    // Likely a big number issue here
     let norm = sqrt(sum);
 
-    local tester1 = norm;
-    local tester2 = sum;
-    %{
-        print("norm: ", ids.tester1)
-        print("sum", ids.tester2)
-        print("CHECKPOINT 2.14")
-    %}
-
-    let inverseNorm = Utils.felt_fdiv(BASE, norm, BASE);
-
-    %{ print("CHECKPOINT 2.15") %}
+    let inverseNorm = Utils.felt_fdiv(_input_amount, norm, BASE);
 
     return (inverseNorm);
 }
