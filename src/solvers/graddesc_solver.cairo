@@ -4,7 +4,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import FALSE, TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import unsigned_div_rem, sqrt
-from starkware.cairo.common.math_cmp import is_le_felt
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
 from starkware.cairo.common.uint256 import Uint256
 
@@ -15,6 +15,7 @@ from src.interfaces.i_router_aggregator import IRouterAggregator
 const STEP_SIZE = 100000000000000000;  // 0.1
 const MAX_STEP_REDUCTION = 2;
 const STEP_DECREASE_FACTOR = 5;
+const KICK_THRESHOLD = 80000000000000000; // 8%
 
 struct PreCalc {
     feed_reserve: felt,  // fee * reserve_out
@@ -37,16 +38,24 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 @view
 func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _amount_in: Uint256, _token_in: felt, _token_out: felt
-) -> (final_amounts_len: felt, final_amounts: felt*, amount_out: felt) {
+) -> (
+    routers_len: felt,
+    routers: Router*,
+    path_len: felt,
+    path: Path*,
+    amounts_len: felt,
+    amounts: felt*,
+) {
     alloc_locals;
 
     let (routers: Router*) = alloc();
-    let (path: Path*) = alloc();
     let (amounts: felt*) = alloc();
 
     let (router_aggregator_address) = router_aggregator.read();
+    
+    // Calculate minimum amount at which it is still viable to perform a trade at a DEX
+    let KICK_AMOUNT = Utils.felt_fmul(_amount_in.low,KICK_THRESHOLD,BASE);
 
-    // ARE WE DIFFERENTIATING BETWEEN INPUT AND OUTPUT RESERVES????
     let (
         reserves_a_len: felt,
         reserves_a: Uint256*,
@@ -78,27 +87,42 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         pre_calcs, _amount_in.low, new_out_amount, routers_len, amounts, STEP_SIZE, MAX_STEP_REDUCTION,_counter=0
     );
 
+    // Kick 0 amounts, calc sum and build output values
+    let (kicked_amounts: felt*) = alloc();
+    let (kicked_routers: Router*) = alloc();
+    let (path: Path*) = alloc();
+    // Needed for amounts to shares transformation
+    local amounts_sum: felt;
+    let kicked_len = kick_zeros_and_build_output(
+        _amounts_len=routers_len,
+        _amounts=final_amounts,
+        _routers=routers,
+        _kicked_routers=kicked_routers,
+        _kicked_amounts=kicked_amounts,
+        _path=path,
+        _token_in=_token_in,
+        _token_out=_token_out,
+        _amounts_sum=amounts_sum,
+        _counter=0
+    );
+
     // Transform amounts to shares
-    // Kick any share that is below the KICK_THRESHOLD
-    for (index,weight) in weights.iter().enumerate(){
-        let percentage = (weight * BASE).floor_div(amount_in);
-        if percentage < KICK_THRESHOLD {
-            continue
-        }
-        percentages.push(percentage);
-        final_routers.push(router[index]);
-    }
+    let (shares: felt*) = alloc();
+    amounts_to_shares(
+        _shares_len=kicked_len, 
+        _shares=shares, 
+        _amounts=kicked_amounts, 
+        _sum=amounts_sum
+    );
 
-    amounts_to_percentages(routers_len,shares,final_amounts,_amount_in);
-
-    amounts_to_percentages{}(){
-    
-    }
-
-    // From new legth -> greate new path and routers arr
-
-    // return (routers_len, routers, 1, path, routers_len, shares);
-    return (routers_len, final_amounts, amount_out);
+    return (
+        kicked_len,
+        kicked_routers,
+        kicked_len,
+        path,
+        kicked_len,
+        shares
+    );
 }
 
 // ////////////////////////
@@ -114,6 +138,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     _step_size: felt,
     _decrease_step_counter: felt,
     _counter: felt,
+    _KICK_AMOUNT: felt
 ) -> (_amounts: felt*, final_out_amount: felt) {
     alloc_locals;
 
@@ -139,11 +164,11 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // Determine new trade amounts
     let inverse_norm = calc_inverse_norm(_input_amount,_amounts_len, gradients);
     let (local new_amounts: felt*) = alloc();
-    calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, _amounts);
+    calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, _amounts, _input_amount, _KICK_AMOUNT);
 
     // Determine last router amount
     let last_amount_value = missing_weight(_input_amount,_amounts_len,new_amounts);
-    assert _amounts[_amounts_len - 1] = last_amount_value
+    assert _amounts[_amounts_len - 1] = last_amount_value;
 
     // Calculate new output amounts resulting from new trade amounts
     let new_out_amount = objective_func(
@@ -154,11 +179,11 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     );
 
     // Check if new amount is more efficient
-    let is_new_amount_more = is_le_felt(_out_amount, new_out_amount);
+    let is_new_amount_more = is_le(_out_amount, new_out_amount);
     // If less efficient, redoo with last result and smaller stepsize
     if (new_out_amount == FALSE) {
         if (_decrease_step_counter != 0) {
-            new_step_size = felt_div_rem(_step_size,STEP_DECREASE_FACTOR);
+            let (new_step_size,_) = unsigned_div_rem(_step_size,STEP_DECREASE_FACTOR);
             let (final_amounts, final_out_amount) = gradient_descent(
                 _pre_calcs,
                 _input_amount,
@@ -249,9 +274,9 @@ func missing_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     _sub_amount: felt, _new_amounts_len: felt, _new_amounts: felt*
 ) -> felt {
     if (_new_amounts_len == 0)  {
-        return sub_amount;
+        return _sub_amount;
     }
-    sub_amount = _sub_amount - _new_amounts[0]
+    let sub_amount = _sub_amount - _new_amounts[0];
     return missing_weight(sub_amount, _new_amounts_len - 1, _new_amounts + 1);
 }
 
@@ -274,7 +299,8 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     let gradient_left = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_2, BASE);
 
     // Preventing underflows, whilst continuing to use uint instead of int
-    if gradient_left > gradient_right {
+    let is_right_side_smaller = is_le(gradient_right,gradient_left);
+    if (is_right_side_smaller == TRUE) {
         return (gradient_left - gradient_right,TRUE);
     }else{
         return (gradient_right - gradient_left,FALSE);
@@ -298,17 +324,45 @@ func set_pre_calculations{range_check_ptr}(
     return ();
 }
 
-func shares_to_amounts{range_check_ptr}(
-    _shares_len: felt, _shares: felt*, _amounts: felt*, _input_amount: felt
+func kick_zeros_and_build_output{range_check_ptr}(
+    _amounts_len: felt, 
+    _amounts: felt*, 
+    _routers: felt*, 
+    _kicked_routers: felt*, 
+    _kicked_amounts: felt*, 
+    _path: Path*, 
+    _token_in: felt, 
+    _token_out: felt, 
+    _amounts_sum: felt, 
+    _counter: felt
+) -> felt {
+    if (_amounts_len == 0) {
+        return(_counter);
+    }
+
+    if (_amounts[0] != 0) {
+        assert _kicked_amounts[0] = _amounts[0];
+        assert _kicked_routers[0] = _routers[0];
+        assert _path[0] = Path(_token_in,_token_out);
+        kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers+1, _kicked_routers+1, _kicked_amounts+1, _path+2, _token_in, _token_out,  _amounts_sum + _amounts[0], _counter + 1);
+        return(_counter);
+    }else{
+        kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers, _kicked_routers, _kicked_amounts, _path, _token_in, _token_out, _amounts_sum, _counter);
+        return(_counter);
+    }
+}
+
+func amounts_to_shares{range_check_ptr}(
+    _shares_len: felt, _shares: felt*, _amounts: felt*, _sum: felt
 ) {
     if (_shares_len == 0) {
         return ();
     }
 
-    let amount = Utils.felt_fmul(_shares[0], _input_amount, BASE);
-    assert _amounts[0] = amount;
+    let share = Utils.felt_fmul(_amounts[0], _sum, BASE);
+    assert _shares[0] = share;
 
-    shares_to_amounts(_shares_len - 1, _shares + 1, _amounts, _input_amount);
+    amounts_to_shares(_shares_len - 1, _shares + 1, _amounts + 1, _sum);
 
     return ();
 }
@@ -337,37 +391,39 @@ func sum_amounts_and_fees{range_check_ptr}(_amounts_len: felt, _amounts: felt*, 
 }
 
 func calc_new_amounts{range_check_ptr}(
-    _gradients: felt*, _symbols: felt*, _inverse_norm: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*
+    _gradients: felt*, _symbols: felt*, _inverse_norm: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*, _input_amount: felt, _KICK_AMOUNT: felt
 ) {
     alloc_locals;
 
     // We skip the last one
-    if _amounts_len == 1 {
+    if (_amounts_len == 1) {
         return();
     }
 
     // Calc delta
-    let new_gradient = felt_fmul(_inverse_norm, _gradients[0], BASE);
-    let delta_factor = felt_fmul(new_gradient, STEP_SIZE, BASE);
+    let new_gradient = Utils.felt_fmul(_inverse_norm, _gradients[0], BASE);
+    let delta_factor = Utils.felt_fmul(new_gradient, STEP_SIZE, BASE);
 
-    if _symbols[0] == TRUE {
+    if (_symbols[0] == TRUE) {
         // Fix upper bound
         // Max possibel amount to be traded on one router is the input amount
-        if _input_amount < delta_factor + amounts[0]{
+        let is_input_amount_smaller = is_le(_input_amount,delta_factor + _amounts[0]);
+        if (is_input_amount_smaller == TRUE){
             _new_amounts[0] = _input_amount;
         }else{
-            _new_amounts[0] = amounts[0] + delta_factor;
+            _new_amounts[0] = _amounts[0] + delta_factor;
         }
     }else{
         // Fix lower bound to 0
-        if amounts[0] < delta_factor{
+        let is_new_amount_smaller = is_le(_amounts[0] - delta_factor,_KICK_AMOUNT);
+        if (is_new_amount_smaller == TRUE) {
             _new_amounts[0] = 0;
         }else{
-            _new_amounts[0] = amounts[0] - delta_factor;
+            _new_amounts[0] = _amounts[0] - delta_factor;
         }
     }
 
-    calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1);
+    calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
 
     return ();
 }
@@ -386,28 +442,6 @@ func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: fel
     let inverseNorm = Utils.felt_fdiv(_input_amount, norm, BASE);
 
     return (inverseNorm);
-}
-
-func check_borders{range_check_ptr}(
-    _amounts_len: felt, _amounts: felt*, _input_amount: felt, check_value: felt
-) -> felt {
-    if (_amounts_len == 0) {
-        return (FALSE);
-    }
-
-    // Only checking upward breach
-    let is_border_breached_upward = is_le_felt(_input_amount, _amounts[0]);
-
-    // Do something like this
-    // let is_border_breached_downward = is_le_felt(amounts[0],0);
-
-    if (is_border_breached_upward == TRUE) {
-        return (TRUE);
-    }
-
-    check_borders(_amounts_len - 1, _amounts + 1, _input_amount, 0);
-
-    return (FALSE);
 }
 
 func pow_gradients{range_check_ptr}(gradients_len: felt, gradients: felt*, new_gradients: felt*) {
@@ -464,7 +498,7 @@ func add_two_arrays{range_check_ptr}(
     return ();
 }
 
-// x*997*reserve_2
+//      x*997*reserve_2
 // _________________________
 // reserve_1 * 1000 + x*997
 
@@ -477,12 +511,6 @@ func add_two_arrays{range_check_ptr}(
 //                998998                           998998
 // _ ________________________________ +    ________________________
 //   (1998 - 997*x + 997*y + 997*z)^2          (997*x + 1001)^2
-
-// 998998 = (1001 * 998)
-
-// 1001 = 1000 * reserve_1 -> Based_reserve_1
-
-// 998 = reserve_2 * 997 -> Feed_reserve_2
 
 //           based_reserve * feed_reserve                         based_reserve * feed_reserve
 // _ ________________________________________________       +    ______________________________

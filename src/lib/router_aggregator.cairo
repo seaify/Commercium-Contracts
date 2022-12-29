@@ -348,7 +348,7 @@ namespace RouterAggregator {
             //Ensure that reserves_a are the actual reserves of _token_a
             let (token_a) = IJediPool.token0(pair_address);
 
-            if token_a == _token_b {
+            if (token_a == _token_b) {
                 return (reserve_b, reserve_a);
             }
             return (reserve_a, reserve_b);
@@ -366,7 +366,7 @@ namespace RouterAggregator {
             //Ensure that reserves_a are the actual reserves of _token_a
             let (token_a) = ITenKPool.token0(pair_address);
 
-            if token_a == _token_b {
+            if (token_a == _token_b) {
                 return (Uint256(reserve_b_felt,0),Uint256(reserve_a_felt,0));
             }
 
