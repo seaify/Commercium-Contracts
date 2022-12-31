@@ -149,76 +149,36 @@ func _swap_exact_in{
         _receiver_address: felt
     ) {
     if (_router.type == JediSwap) {
-        //Writing to storage is expensive, so we check current allowance level before re-approving transfer
-        let (this_address) = get_contract_address();
-        let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
-        if (is_below_threshold == TRUE) {
-            IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            IJediRouter.swap_exact_tokens_for_tokens(
-                _router.address, 
-                _amount_in, 
-                Uint256(0, 0), 
-                2, 
-                path, 
-                _receiver_address, 
-                trade_deadline
-            );
-            return ();
-        } else {
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            IJediRouter.swap_exact_tokens_for_tokens(
-                _router.address, 
-                _amount_in, 
-                Uint256(0, 0), 
-                2, 
-                path, 
-                _receiver_address, 
-                trade_deadline
-            );
-            return ();
-        }
+        IERC20.approve(_token_in, _router.address, _amount_in);
+        let (path: felt*) = alloc();
+        assert path[0] = _token_in;
+        assert path[1] = _token_out;
+        IJediRouter.swap_exact_tokens_for_tokens(
+            _router.address, 
+            _amount_in, 
+            Uint256(0, 0), 
+            2, 
+            path, 
+            _receiver_address, 
+            trade_deadline
+        );
+        return ();
     }
     if (_router.type == TenK) {
-        //Writing to storage is expensive, so we check current allowance level before re-approving transfer
-        let (this_address) = get_contract_address();
-        let (allowance) = IERC20.allowance(_token_in,this_address,_router.address);
-        let is_below_threshold = is_le_felt(allowance.low,HALF_MAX);
-        if (is_below_threshold == TRUE) {
-            IERC20.approve(_token_in, _router.address, Uint256(MAX_FELT,0));
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            ITenKRouter.swapExactTokensForTokens(
-                _router.address, 
-                _amount_in, 
-                Uint256(0, 0), 
-                2, 
-                path, 
-                _receiver_address, 
-                trade_deadline
-            );
-            return ();
-        } else {
-            let (path: felt*) = alloc();
-            assert path[0] = _token_in;
-            assert path[1] = _token_out;
-            ITenKRouter.swapExactTokensForTokens(
-                _router.address, 
-                _amount_in, 
-                Uint256(0, 0), 
-                2, 
-                path, 
-                _receiver_address, 
-                trade_deadline
-            );
-            return ();
-        }
+        IERC20.approve(_token_in, _router.address, _amount_in);
+        let (path: felt*) = alloc();
+        assert path[0] = _token_in;
+        assert path[1] = _token_out;
+        ITenKRouter.swapExactTokensForTokens(
+            _router.address, 
+            _amount_in, 
+            Uint256(0, 0), 
+            2, 
+            path, 
+            _receiver_address, 
+            trade_deadline
+        );
+        return ();
     } else {
         with_attr error_message("TRADE EXECUTIONER: Router type doesn't exist") {
             assert 1 = 2;

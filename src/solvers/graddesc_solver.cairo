@@ -66,6 +66,16 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     ) = IRouterAggregator.get_all_routers_and_reserves(
         router_aggregator_address, _token_in, _token_out
     );
+    local tester = reserves_a[0].low;
+    %{ print("Reserve 1 Amount InToken: ", ids.tester) %}
+    local tester1 = reserves_b[0].low;
+    %{ print("Reserve 1 Amount OutToken: ", ids.tester1) %}
+    
+    local tester2 = reserves_a[1].low;
+    %{ print("Reserve 2 Amount InToken: ", ids.tester2) %}
+    local tester3 = reserves_b[1].low;
+    %{ print("Reserve 2 Amount OutToken: ", ids.tester3) %}
+
 
     // Pre-Calc
     let (pre_calcs: PreCalc*) = alloc();
@@ -79,12 +89,11 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let new_out_amount = objective_func(
         pre_calcs, routers_len, amounts, _total_received_token_amount=0
     );
-
     %{ print("Initial out_amount: ", ids.new_out_amount) %}
 
     // Run Gradient Descent
     let (final_amounts, amount_out) = gradient_descent(
-        pre_calcs, _amount_in.low, new_out_amount, routers_len, amounts, STEP_SIZE, MAX_STEP_REDUCTION,_counter=0
+        pre_calcs, _amount_in.low, new_out_amount, routers_len, amounts, STEP_SIZE, MAX_STEP_REDUCTION,_counter=0,_KICK_AMOUNT=KICK_AMOUNT
     );
 
     // Kick 0 amounts, calc sum and build output values
@@ -151,7 +160,8 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // symbols is either + or -
     // + = TRUE
     // - = FALSE
-    let (local gradients: felt*, local symbols: felt*) = alloc();
+    let (local gradients: felt*) = alloc();
+    let (local symbols: felt*) = alloc();
     gradient(
         _pre_calcs=_pre_calcs,
         _amounts_len=_amounts_len,
@@ -160,6 +170,8 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         _symbols=symbols,
         _counter=0,
     );
+
+    %{ print("After Gradient") %}
 
     // Determine new trade amounts
     let inverse_norm = calc_inverse_norm(_input_amount,_amounts_len, gradients);
@@ -193,6 +205,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
                 new_step_size,
                 _decrease_step_counter - 1,
                 _counter + 1,
+                _KICK_AMOUNT,
             );
             return (final_amounts, final_out_amount);
         }else{
@@ -209,6 +222,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
             _step_size,
             _decrease_step_counter,
             _counter + 1,
+            _KICK_AMOUNT,
         );
         return (final_amounts, final_out_amount);
     }
@@ -261,11 +275,21 @@ func gradient{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         return ();
     }
 
-    let (new_gradient: felt, symbol: felt) = gradient_x(_pre_calcs[0], _amounts_len, _amounts, _counter);
+    let sum = sum_amounts_and_fees(_amounts_len, _amounts, 0);
+    %{ print("Sum: ", ids.sum) %}
+
+    let (new_gradient: felt, symbol: felt) = gradient_x(
+        _pre_calc_x=_pre_calcs[0], 
+        _pre_calc_last=_pre_calcs[_amounts_len-1], 
+        _amounts_len=_amounts_len, 
+        _amounts=_amounts, 
+        _router_index=_counter,
+        _sum=sum
+    );
     assert _gradients[0] = new_gradient;
     assert _symbols[0] = symbol;
 
-    gradient(_pre_calcs + 3, _amounts_len, _amounts, _gradients + 1, symbol + 1, _counter + 1);
+    gradient(_pre_calcs + 3, _amounts_len, _amounts, _gradients + 1, _symbols + 1, _counter + 1);
 
     return ();
 }
@@ -281,7 +305,7 @@ func missing_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    pre_calc: PreCalc, _amounts_len: felt, _amounts: felt*, _router_index: felt
+    _pre_calc_x: PreCalc, _pre_calc_last: PreCalc,_amounts_len: felt, _amounts: felt*, _router_index: felt, _sum: felt
 ) -> (gradient: felt,negative: felt) {
     alloc_locals;
 
@@ -289,14 +313,35 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     // ___________________________________   _   ______________________________________________________________
     //     (Xfee*x + based_reserveX)^2            (feeLAST + based_reserveLAST - (Xfee*x + Yfee*y + Zfee*z))^2
 
-    // Right Side
-    let sum = sum_amounts_and_fees(_amounts_len, _amounts, 0); 
-    let denominator_right = pow(997 + pre_calc[_amounts_len-1].reserve_2 - sum,2);
-    local gradient_right = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_right, BASE);
+    // Right Side 
+    let (denominator_right) = pow(997 + _pre_calc_last.based_reserve + _sum,2);
+    %{ print("_pre_calc_last.based_reserve: ", ids._pre_calc_last.based_reserve) %}
+    %{ print("_pre_calc_last.gradient_nominator: ", ids._pre_calc_last.gradient_nominator) %}
+    %{ print("_pre_calc_x.based_reserve: ", ids._pre_calc_x.based_reserve) %}
+    %{ print("_pre_calc_x.gradient_nominator: ", ids._pre_calc_x.gradient_nominator) %}
+    
+    local tester = denominator_right;
+    let (local division: felt,_) = unsigned_div_rem(denominator_right,BASE);
+    //%{ print("Division", ids.division) %}
+    let (local division2: felt,_) = unsigned_div_rem(_pre_calc_last.gradient_nominator,BASE);
+    //%{ print("Division2", ids.division2) %}
+    local gradient_right = Utils.felt_fdiv(division2, division, BASE);
+    //%{ print("gradient_right", ids.gradient_right) %}
+
+    %{ print("Calculated right side") %}
 
     // Left Side
-    let (denominator_2) = pow(997 * _amounts[_router_index] + pre_calc[_router_index].based_reserve, 2);
-    let gradient_left = Utils.felt_fdiv(pre_calc.gradient_nominator, denominator_2, BASE);
+    let (denominator_2) = pow(997 * _amounts[_router_index] + _pre_calc_x.based_reserve, 2);
+    let (local division3: felt,_) = unsigned_div_rem(denominator_2,BASE);
+    %{ print("Division3", ids.division3) %}
+    let (local division4: felt,_) = unsigned_div_rem(_pre_calc_x.gradient_nominator,BASE);
+    %{ print("Division4", ids.division4) %}
+    local gradient_left = Utils.felt_fdiv(division4, division3, BASE);
+
+
+    %{ print("--------------") %}
+    %{ print("gradient_left", ids.gradient_left) %}
+    %{ print("gradient_right", ids.gradient_right) %}
 
     // Preventing underflows, whilst continuing to use uint instead of int
     let is_right_side_smaller = is_le(gradient_right,gradient_left);
@@ -409,37 +454,45 @@ func calc_new_amounts{range_check_ptr}(
         // Max possibel amount to be traded on one router is the input amount
         let is_input_amount_smaller = is_le(_input_amount,delta_factor + _amounts[0]);
         if (is_input_amount_smaller == TRUE){
-            _new_amounts[0] = _input_amount;
+            assert _new_amounts[0] = _input_amount;
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            return ();
         }else{
-            _new_amounts[0] = _amounts[0] + delta_factor;
+            assert _new_amounts[0] = _amounts[0] + delta_factor;
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            return ();
         }
     }else{
         // Fix lower bound to 0
         let is_new_amount_smaller = is_le(_amounts[0] - delta_factor,_KICK_AMOUNT);
         if (is_new_amount_smaller == TRUE) {
-            _new_amounts[0] = 0;
+            assert _new_amounts[0] = 0;
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            return ();
         }else{
-            _new_amounts[0] = _amounts[0] - delta_factor;
+            assert _new_amounts[0] = _amounts[0] - delta_factor;
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            return ();
         }
     }
-
-    calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
-
-    return ();
 }
 
 func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: felt, _gradients: felt*) -> felt {
     alloc_locals;
 
     let (new_gradients: felt*) = alloc();
+
+    %{ print("Powing Gradients") %}
     pow_gradients(_gradients_len, _gradients, new_gradients);
+    %{ print("Summing Gradients") %}
 
     let sum = sum_gradients(_gradients_len, _gradients, sum=0);
-
+    %{ print("SQRTing Gradients") %}
     // Likely a big number issue here
     let norm = sqrt(sum);
 
     let inverseNorm = Utils.felt_fdiv(_input_amount, norm, BASE);
+    %{ print("inverseNorm Done") %}
 
     return (inverseNorm);
 }

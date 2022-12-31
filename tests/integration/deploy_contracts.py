@@ -79,11 +79,11 @@ async def deployContracts():
         contractAddresses["spf_solver"] = int(contract_address,16)
         print("✅ SPF Solver: ",contract_address)
 
-        # Deploy Heuristic Splitter Solver
-        compiled_contract = Path("./build/", "heuristic-splitter.json").read_text("utf-8")
-        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"],int("0x4919e548bfd37db237cf4223b407e710103f79ebee92d2baa7a733d28532597",16),contractAddresses["hub"]])
-        contractAddresses["heuristic_splitter"] = int(contract_address,16)
-        print("✅ Heuristic Solver: ",contract_address)
+        # Deploy Splitter Solver
+        compiled_contract = Path("./build/", "graddesc-solver.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
+        contractAddresses["graddesc_solver"] = int(contract_address,16)
+        print("✅ GradDesc Solver: ",contract_address)
     
     ##########################
     #                        #
@@ -96,7 +96,7 @@ async def deployContracts():
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
     spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
-    heurtisticSplitterContract = await Contract.from_address(contractAddresses["heuristic_splitter"],client)
+    gradDescSolverContract = await Contract.from_address(contractAddresses["graddesc_solver"],client)
 
     protocol_contracts = {
         "hub": hubContract,
@@ -104,7 +104,7 @@ async def deployContracts():
         "router_aggregator": routerAggregatorContract,
         "single_swap_solver": singleSwapSolverContract,
         "spf_solver": spfSolverContract,
-        "heuristic_splitter": heurtisticSplitterContract
+        "graddesc_solver": gradDescSolverContract
     }
 
     #Configure Hub
@@ -132,7 +132,7 @@ async def deployContracts():
     await invocation.wait_for_acceptance() 
     invocation = await solverRegistryContract.functions["set_solver"].invoke(2,spfSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
-    invocation = await solverRegistryContract.functions["set_solver"].invoke(3,heurtisticSplitterContract.address,max_fee=50000000000000000000)
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(3,gradDescSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()
 
     #Configure Solvers

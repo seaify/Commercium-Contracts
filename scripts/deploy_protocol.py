@@ -19,10 +19,10 @@ from global_info import (
 )
 
 contractAddresses = {
-    "hub": int("0x779e5df31786a8b87c1e6bc4d0807ceee61bf2b5329df514f14e38745071eff",16),
-    "solver_registry": int("0x3cbb8fd8e8876d757f763b770588b04be10a376ea260ce353b76fc4fb7d22af",16),
-    "router_aggregator": int("0x492e90cc6e62927f8ee2cef59e0eb49749de5fe16ee64bd89e82aa0a920ecd8",16),
-    "single_swap_solver": int("0x2eb208f6c9cc33cb3fd6125c63301622121bf392880efb164e05196a467bffd",16)
+    "hub": int("0x3c51eaee2f497d50531f1a70a6fe1bcb9f79c9f69d26a0b4319a682a77c03c8",16),
+    "solver_registry": int("0x4d8edc13563793804f7101015e3a10cee06c25654760159ea5ecba6371eb67e",16),
+    "router_aggregator": int("0x060aac7c99f9026e40b8d6575a4d5aa6eb5a1d662dac97f2e282a21767aaeb8a",16),
+    "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16)
 }
 
 
@@ -31,6 +31,9 @@ async def deployContracts():
     print("________DEPLOYING CONTRACTS___________")
 
     if contractAddresses["hub"] == 0 :
+
+
+        print("Declaring Contracts ... ")
 
         # Declare Trade Executor Contract
         declare_transaction = await client.sign_declare_transaction(

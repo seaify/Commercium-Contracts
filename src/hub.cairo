@@ -283,41 +283,16 @@ func swap_with_path{
 
     ReentrancyGuard.start();
 
-    // Get Caller Address
-    let (caller_address) = get_caller_address();
-
-    let (this_address) = get_contract_address();
-
-    let (original_balance: Uint256) = IERC20.balanceOf(
-        _path[_path_len - 1].token_out, this_address
+    let (received_amount: Uint256) = Hub.swap_with_path(
+        _routers_len=_routers_len,
+        _routers=_routers,
+        _path_len=_path_len,
+        _path=_path,
+        _amounts_len=_amounts_len,
+        _amounts=_amounts,
+        _amount_in=_amount_in,
+        _min_amount_out=_min_amount_out,
     );
-
-    // Delegate Call: Execute transactions
-    let (trade_executor_hash) = Hub_trade_executor.read();
-
-    // Execute Trades
-    ITradeExecutor.library_call_multi_swap(
-        trade_executor_hash,
-        _routers_len,
-        _routers,
-        _path_len,
-        _path,
-        _amounts_len,
-        _amounts,
-        this_address
-    );
-
-    // Get new Balance of out_token
-    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len - 1].token_out, this_address);
-    // ToDo: underlflow check
-    let (received_amount: Uint256) = SafeUint256.sub_le(new_amount, original_balance);
-
-    // Check that tokens received by solver at at least as much as the min_amount_out
-    let (min_amount_received) = uint256_le(_min_amount_out, received_amount);
-    assert min_amount_received = TRUE;
-
-    // Transfer _token_out back to caller
-    IERC20.transfer(_path[_path_len - 1].token_out, caller_address, received_amount);
 
     ReentrancyGuard.end();
 
