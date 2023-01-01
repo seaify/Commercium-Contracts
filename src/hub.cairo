@@ -280,7 +280,6 @@ func swap_with_path{
         _min_amount_out: Uint256,
     ) -> (received_amount: Uint256) {
     alloc_locals;
-
     ReentrancyGuard.start();
 
     let (received_amount: Uint256) = Hub.swap_with_path(
@@ -295,7 +294,6 @@ func swap_with_path{
     );
 
     ReentrancyGuard.end();
-
     return (received_amount,);
 }
 

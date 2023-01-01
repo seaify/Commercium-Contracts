@@ -277,70 +277,69 @@ namespace Hub {
     }
 
     // @notice Swap between two tokens by providing the exact routers and token address to be used. Aka the exat path to take.
-// @param _routers - An array of routers to be used for the trades
-// @param _path - An array of token pairs to trade
-// @param _amounts - An array of token amounts (in %) to sell
-// @param _amount_in - The initial token to sell
-// @param _min_amount_out - The minimum amount of tokens to receive (will be the path.token_out of the last item in the path array)
-// @return received_amount - The token return amounts for each solver
-@external
-func swap_with_path{
-        syscall_ptr: felt*, 
-        pedersen_ptr: HashBuiltin*, 
-        range_check_ptr
-    }(
-        _routers_len: felt,
-        _routers: Router*,
-        _path_len: felt,
-        _path: Path*,
-        _amounts_len: felt,
-        _amounts: felt*,
-        _amount_in: Uint256,
-        _min_amount_out: Uint256,
-    ) -> (received_amount: Uint256) {
-    alloc_locals;
+    // @param _routers - An array of routers to be used for the trades
+    // @param _path - An array of token pairs to trade
+    // @param _amounts - An array of token amounts (in %) to sell
+    // @param _amount_in - The initial token to sell
+    // @param _min_amount_out - The minimum amount of tokens to receive (will be the path.token_out of the last item in the path array)
+    // @return received_amount - The token return amounts for each solver
+    func swap_with_path{
+            syscall_ptr: felt*, 
+            pedersen_ptr: HashBuiltin*, 
+            range_check_ptr
+        }(
+            _routers_len: felt,
+            _routers: Router*,
+            _path_len: felt,
+            _path: Path*,
+            _amounts_len: felt,
+            _amounts: felt*,
+            _amount_in: Uint256,
+            _min_amount_out: Uint256,
+        ) -> (received_amount: Uint256) {
+        alloc_locals;
 
-    // Get Caller Address
-    let (caller_address) = get_caller_address();
+        // Get Caller Address
+        let (caller_address) = get_caller_address();
 
-    let (this_address) = get_contract_address();
+        let (this_address) = get_contract_address();
 
-    let (original_balance: Uint256) = IERC20.balanceOf(
-        _path[_path_len - 1].token_out, this_address
-    );
+        let (original_balance: Uint256) = IERC20.balanceOf(
+            _path[_path_len - 1].token_out, this_address
+        );
 
-    // Delegate Call: Execute transactions
-    let (trade_executor_hash) = Hub_trade_executor.read();
+        // Delegate Call: Execute transactions
+        let (trade_executor_hash) = Hub_trade_executor.read();
 
-    //Transfer assets from caller to hub (Storage write cost should be refunded, as the balance is return back to 0 after trade)
-    IERC20.transferFrom(_path[0].token_in, caller_address, this_address, _amount_in);
+        //Transfer assets from caller to hub (Storage write cost should be refunded, as the balance is return back to 0 after trade)
+        IERC20.transferFrom(_path[0].token_in, caller_address, this_address, _amount_in);
 
-    // Execute Trades
-    ITradeExecutor.library_call_multi_swap(
-        trade_executor_hash,
-        _routers_len,
-        _routers,
-        _path_len,
-        _path,
-        _amounts_len,
-        _amounts,
-        this_address
-    );
+        // Execute Trades
+        ITradeExecutor.library_call_multi_swap(
+            trade_executor_hash,
+            _routers_len,
+            _routers,
+            _path_len,
+            _path,
+            _amounts_len,
+            _amounts,
+            this_address
+        );
 
-    // Get new Balance of out_token
-    let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len - 1].token_out, this_address);
-    // ToDo: underlflow check
-    let (received_amount: Uint256) = SafeUint256.sub_le(new_amount, original_balance);
+        // Get new Balance of out_token
+        let (new_amount: Uint256) = IERC20.balanceOf(_path[_path_len - 1].token_out, this_address);
+        // ToDo: underlflow check
+        let (received_amount: Uint256) = SafeUint256.sub_le(new_amount, original_balance);
 
-    // Check that tokens received by solver at at least as much as the min_amount_out
-    let (min_amount_received) = uint256_le(_min_amount_out, received_amount);
-    assert min_amount_received = TRUE;
+        // Check that tokens received by solver at at least as much as the min_amount_out
+        let (min_amount_received) = uint256_le(_min_amount_out, received_amount);
+        assert min_amount_received = TRUE;
 
-    // Transfer _token_out back to caller
-    IERC20.transfer(_path[_path_len - 1].token_out, caller_address, received_amount);
+        // Transfer _token_out back to caller
+        IERC20.transfer(_path[_path_len - 1].token_out, caller_address, received_amount);
 
-    return (received_amount,);
-}
+        return (received_amount,);
+    }
 
     // @notice Store the address of the solver registry
     // @param _new_registry - Address of the solver registry contract
