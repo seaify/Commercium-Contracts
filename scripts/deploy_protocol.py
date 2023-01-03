@@ -22,8 +22,11 @@ contractAddresses = {
     "hub": int("0x3c51eaee2f497d50531f1a70a6fe1bcb9f79c9f69d26a0b4319a682a77c03c8",16),
     "solver_registry": int("0x4d8edc13563793804f7101015e3a10cee06c25654760159ea5ecba6371eb67e",16),
     "router_aggregator": int("0x060aac7c99f9026e40b8d6575a4d5aa6eb5a1d662dac97f2e282a21767aaeb8a",16),
-    "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16)
+    "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16),
+    "graddesc_solver": int("0x6b1dc332833fe3362a19fcc7577cdb525a4e64f11ff687bb150017e122916ca",16)
 }
+
+
 
 
 async def deployContracts():
@@ -74,6 +77,12 @@ async def deployContracts():
         contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
         contractAddresses["single_swap_solver"] = int(contract_address,16)
         print("✅ Single Swap Solver: ",contract_address)
+
+        # Deploy Graddesc Solver
+        compiled_contract = Path("./build/", "graddesc-solver.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
+        contractAddresses["graddesc_solver"] = int(contract_address,16)
+        print("✅ Gradient Descent Solver: ",contract_address)
     
     ##########################
     #                        #
@@ -86,6 +95,7 @@ async def deployContracts():
     routerAggregatorContract = Contract(address=contractAddresses["router_aggregator"], abi=router_aggregator_abi, client=client)
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
+    graddescSolverContract = await Contract.from_address(contractAddresses["graddesc_solver"],client)
 
     protocol_contracts = {
         "hub": hubContract,
@@ -117,8 +127,8 @@ async def deployContracts():
     #Add Single Swap Solver to Registry
     invocation = await solverRegistryContract.functions["set_solver"].invoke(1,singleSwapSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
-    #invocation = await solverRegistryContract.functions["set_solver"].invoke(2,spfSolverContract.address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance() 
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(2,graddescSolverContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance() 
     #invocation = await solverRegistryContract.functions["set_solver"].invoke(3,heurtisticSplitterContract.address,max_fee=50000000000000000000)
     #await invocation.wait_for_acceptance()
 

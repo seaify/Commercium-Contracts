@@ -12,8 +12,10 @@ from src.lib.utils import Utils, Router, Path
 from src.lib.constants import BASE
 from src.interfaces.i_router_aggregator import IRouterAggregator
 
-const STEP_SIZE = 100000000000000000;  // 0.1
-const MAX_STEP_REDUCTION = 2;
+
+const MAX_ITTERATIONS = 12;
+const STEP_SIZE = 50000000000000000;  // 0.1
+const MAX_STEP_REDUCTION = 3;
 const STEP_DECREASE_FACTOR = 5;
 const KICK_THRESHOLD = 80000000000000000; // 8%
 
@@ -67,14 +69,14 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         router_aggregator_address, _token_in, _token_out
     );
     local tester = reserves_a[0].low;
-    %{ print("Reserve 1 Amount InToken: ", ids.tester) %}
+    //%{ print("Reserve 1 Amount InToken: ", ids.tester) %}
     local tester1 = reserves_b[0].low;
-    %{ print("Reserve 1 Amount OutToken: ", ids.tester1) %}
+    //%{ print("Reserve 1 Amount OutToken: ", ids.tester1) %}
     
     local tester2 = reserves_a[1].low;
-    %{ print("Reserve 2 Amount InToken: ", ids.tester2) %}
+    //%{ print("Reserve 2 Amount InToken: ", ids.tester2) %}
     local tester3 = reserves_b[1].low;
-    %{ print("Reserve 2 Amount OutToken: ", ids.tester3) %}
+    //%{ print("Reserve 2 Amount OutToken: ", ids.tester3) %}
 
 
     // Pre-Calc
@@ -91,7 +93,6 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let new_out_amount = objective_func(
         pre_calcs, routers_len, amounts, _total_received_token_amount=0
     );
-    %{ print("Initial out_amount: ", ids.new_out_amount) %}
 
     // Run Gradient Descent
     let (final_amounts, amount_out) = gradient_descent(
@@ -103,8 +104,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     let (kicked_routers: Router*) = alloc();
     let (path: Path*) = alloc();
     // Needed for amounts to shares transformation
-    local amounts_sum: felt;
-    let kicked_len = kick_zeros_and_build_output(
+    let (kicked_len,amounts_sum) = kick_zeros_and_build_output(
         _amounts_len=routers_len,
         _amounts=final_amounts,
         _routers=routers,
@@ -113,7 +113,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         _path=path,
         _token_in=_token_in,
         _token_out=_token_out,
-        _amounts_sum=amounts_sum,
+        _amounts_sum=0,
         _counter=0
     );
 
@@ -155,7 +155,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     alloc_locals;
 
     // Max Iterations
-    if (_counter == 20) {
+    if (_counter == MAX_ITTERATIONS) {
         return (_amounts, _out_amount);
     }
 
@@ -175,16 +175,19 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         _last_pre_calc=_last_pre_calc
     );
 
-    %{ print("After Gradient") %}
+    //%{ print("After Gradient") %}
 
     // Determine new trade amounts
     let inverse_norm = calc_inverse_norm(_input_amount,_amounts_len-1, gradients);
     let (local new_amounts: felt*) = alloc();
-    calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, _amounts, _input_amount, _KICK_AMOUNT);
+    calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, new_amounts, _input_amount, _KICK_AMOUNT, _step_size);
+    //%{ print("After calc new amounts") %}
 
     // Determine last router amount
     let last_amount_value = missing_weight(_input_amount,_amounts_len,new_amounts);
-    assert _amounts[_amounts_len - 1] = last_amount_value;
+    assert new_amounts[_amounts_len - 1] = last_amount_value;
+    let weight1 = new_amounts[0];
+    let weight2 = new_amounts[1];
 
     // Calculate new output amounts resulting from new trade amounts
     let new_out_amount = objective_func(
@@ -197,7 +200,7 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // Check if new amount is more efficient
     let is_new_amount_more = is_le(_out_amount, new_out_amount);
     // If less efficient, redoo with last result and smaller stepsize
-    if (new_out_amount == FALSE) {
+    if (is_new_amount_more == FALSE) {
         if (_decrease_step_counter != 0) {
             let (new_step_size,_) = unsigned_div_rem(_step_size,STEP_DECREASE_FACTOR);
             let (final_amounts, final_out_amount) = gradient_descent(
@@ -282,7 +285,7 @@ func gradient{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     }
 
     let sum = sum_amounts_and_fees(_amounts_len, _amounts, 0);
-    %{ print("Sum: ", ids.sum) %}
+    //%{ print("Sum: ", ids.sum) %}
 
     let (new_gradient: felt, symbol: felt) = gradient_x(
         _pre_calc_x=_pre_calcs[0], 
@@ -303,7 +306,7 @@ func gradient{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func missing_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     _sub_amount: felt, _new_amounts_len: felt, _new_amounts: felt*
 ) -> felt {
-    if (_new_amounts_len == 0)  {
+    if (_new_amounts_len == 1)  {
         return _sub_amount;
     }
     let sub_amount = _sub_amount - _new_amounts[0];
@@ -320,29 +323,29 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     //     (Xfee*x + based_reserveX)^2            (feeLAST + based_reserveLAST - (Xfee*x + Yfee*y + Zfee*z))^2
 
 
-    %{ print("_pre_calc_last.based_reserve: ", ids._pre_calc_last.based_reserve) %}
-    %{ print("_pre_calc_last.gradient_nominator: ", ids._pre_calc_last.gradient_nominator) %}
-    %{ print("_pre_calc_x.based_reserve: ", ids._pre_calc_x.based_reserve) %}
-    %{ print("_pre_calc_x.gradient_nominator: ", ids._pre_calc_x.gradient_nominator) %}
+    //%{ print("_pre_calc_last.based_reserve: ", ids._pre_calc_last.based_reserve) %}
+    //%{ print("_pre_calc_last.gradient_nominator: ", ids._pre_calc_last.gradient_nominator) %}
+    //%{ print("_pre_calc_x.based_reserve: ", ids._pre_calc_x.based_reserve) %}
+    //%{ print("_pre_calc_x.gradient_nominator: ", ids._pre_calc_x.gradient_nominator) %}
 
     // Right Side 
     let (denominator_right) = pow(997 + _pre_calc_last.based_reserve + _sum,2);
-    %{ print("_sum", ids._sum) %}
+    //%{ print("_sum", ids._sum) %}
     local tester = denominator_right;
-    %{ print("powed denominator_right", ids.tester) %}
+    //%{ print("powed denominator_right", ids.tester) %}
     let (local division: felt,_) = unsigned_div_rem(denominator_right,BASE);
-    %{ print("Division", ids.division) %}
+    //%{ print("Division", ids.division) %}
     let (local division2: felt,_) = unsigned_div_rem(_pre_calc_last.gradient_nominator,BASE);
-    %{ print("Division2", ids.division2) %}
+    //%{ print("Division2", ids.division2) %}
     local gradient_right = Utils.felt_fdiv(division2, division, BASE);
     //%{ print("gradient_right", ids.gradient_right) %}
 
-    %{ print("Calculated right side") %}
+    //%{ print("Calculated right side") %}
 
     // Left Side
     let (denominator_2) = pow(997 * _amounts[_router_index] + _pre_calc_x.based_reserve, 2);
     local amount2 = _amounts[_router_index];
-    %{ print("_amounts[_router_index]: ", ids.amount2) %}
+    //%{ print("_amounts[_router_index]: ", ids.amount2) %}
     let (local division3: felt,_) = unsigned_div_rem(denominator_2,BASE);
     //%{ print("Division3", ids.division3) %}
     let (local division4: felt,_) = unsigned_div_rem(_pre_calc_x.gradient_nominator,BASE);
@@ -350,9 +353,9 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     local gradient_left = Utils.felt_fdiv(division4, division3, BASE);
 
 
-    %{ print("--------------") %}
-    %{ print("gradient_left", ids.gradient_left) %}
-    %{ print("gradient_right", ids.gradient_right) %}
+    //%{ print("--------------") %}
+    //%{ print("gradient_left", ids.gradient_left) %}
+    //%{ print("gradient_right", ids.gradient_right) %}
 
     // Preventing underflows, whilst continuing to use uint instead of int
     let is_right_side_smaller = is_le(gradient_right,gradient_left);
@@ -383,28 +386,28 @@ func set_pre_calculations{range_check_ptr}(
 func kick_zeros_and_build_output{range_check_ptr}(
     _amounts_len: felt, 
     _amounts: felt*, 
-    _routers: felt*, 
-    _kicked_routers: felt*, 
+    _routers: Router*, 
+    _kicked_routers: Router*, 
     _kicked_amounts: felt*, 
     _path: Path*, 
     _token_in: felt, 
     _token_out: felt, 
     _amounts_sum: felt, 
     _counter: felt
-) -> felt {
+) -> (kicked_len: felt, amounts_sum: felt) {
     if (_amounts_len == 0) {
-        return(_counter);
+        return(_counter, _amounts_sum);
     }
 
     if (_amounts[0] != 0) {
         assert _kicked_amounts[0] = _amounts[0];
         assert _kicked_routers[0] = _routers[0];
         assert _path[0] = Path(_token_in,_token_out);
-        kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers+1, _kicked_routers+1, _kicked_amounts+1, _path+2, _token_in, _token_out,  _amounts_sum + _amounts[0], _counter + 1);
-        return(_counter);
+        let (kicked_len, amounts_sum) = kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers+2, _kicked_routers+2, _kicked_amounts+1, _path+2, _token_in, _token_out,  _amounts_sum + _amounts[0], _counter + 1);
+        return(kicked_len, amounts_sum);
     }else{
-        kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers, _kicked_routers, _kicked_amounts, _path, _token_in, _token_out, _amounts_sum, _counter);
-        return(_counter);
+        let (kicked_len, amounts_sum) = kick_zeros_and_build_output(_amounts_len - 1, _amounts+1, _routers, _kicked_routers, _kicked_amounts, _path, _token_in, _token_out, _amounts_sum, _counter);
+        return(kicked_len, amounts_sum);
     }
 }
 
@@ -445,7 +448,7 @@ func sum_amounts_and_fees{range_check_ptr}(_amounts_len: felt, _amounts: felt*, 
 }
 
 func calc_new_amounts{range_check_ptr}(
-    _gradients: felt*, _symbols: felt*, _inverse_norm: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*, _input_amount: felt, _KICK_AMOUNT: felt
+    _gradients: felt*, _symbols: felt*, _inverse_norm: felt, _amounts_len: felt, _amounts: felt*, _new_amounts: felt*, _input_amount: felt, _KICK_AMOUNT: felt, _step_size: felt
 ) {
     alloc_locals;
 
@@ -456,7 +459,7 @@ func calc_new_amounts{range_check_ptr}(
 
     // Calc delta
     let new_gradient = Utils.felt_fmul(_inverse_norm, _gradients[0], BASE);
-    let delta_factor = Utils.felt_fmul(new_gradient, STEP_SIZE, BASE);
+    let delta_factor = Utils.felt_fmul(new_gradient, _step_size, BASE);
 
     if (_symbols[0] == TRUE) {
         // Fix upper bound
@@ -464,11 +467,11 @@ func calc_new_amounts{range_check_ptr}(
         let is_input_amount_smaller = is_le(_input_amount,delta_factor + _amounts[0]);
         if (is_input_amount_smaller == TRUE){
             assert _new_amounts[0] = _input_amount;
-            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT, _step_size);
             return ();
         }else{
             assert _new_amounts[0] = _amounts[0] + delta_factor;
-            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT, _step_size);
             return ();
         }
     }else{
@@ -476,11 +479,11 @@ func calc_new_amounts{range_check_ptr}(
         let is_new_amount_smaller = is_le(_amounts[0] - delta_factor,_KICK_AMOUNT);
         if (is_new_amount_smaller == TRUE) {
             assert _new_amounts[0] = 0;
-            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT, _step_size);
             return ();
         }else{
             assert _new_amounts[0] = _amounts[0] - delta_factor;
-            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT);
+            calc_new_amounts(_gradients + 1, _symbols + 1, _inverse_norm, _amounts_len - 1, _amounts + 1, _new_amounts + 1, _input_amount, _KICK_AMOUNT, _step_size);
             return ();
         }
     }
@@ -491,21 +494,21 @@ func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: fel
 
     let (new_gradients: felt*) = alloc();
 
-    %{ print("Powing Gradients") %}
+    //%{ print("Powing Gradients") %}
     pow_gradients(_gradients_len, _gradients, new_gradients);
-    %{ print("Summing Gradients") %}
+    //%{ print("Summing Gradients") %}
 
     let sum = sum_gradients(_gradients_len, new_gradients, sum=0);
-    %{ print("SQRTing Gradients") %}
+    //%{ print("SQRTing Gradients") %}
     // Likely a big number issue here
     let small_norm = sqrt(sum);
-    %{ print("small_norm: ", ids.small_norm) %}
+    //%{ print("small_norm: ", ids.small_norm) %}
 
     let norm = small_norm * 1000000000;
-    %{ print("norm: ", ids.norm) %}
+    //%{ print("norm: ", ids.norm) %}
 
     let inverseNorm = Utils.felt_fdiv(_input_amount, norm, BASE);
-    %{ print("inverseNorm Done") %}
+    //%{ print("inverseNorm Done") %}
 
     return (inverseNorm);
 }
@@ -515,11 +518,11 @@ func pow_gradients{range_check_ptr}(gradients_len: felt, gradients: felt*, new_g
         return ();
     }
     let to_div = gradients[0];
-    %{ print("diving: ",ids.to_div) %}
+    //%{ print("diving: ",ids.to_div) %}
     let (small_gradient,_) = unsigned_div_rem(gradients[0],1000000000);
-    %{ print("small_gradient: ",ids.small_gradient) %}
+    //%{ print("small_gradient: ",ids.small_gradient) %}
     let (powed_gradient) = pow(small_gradient, 2);
-    %{ print("powed_gradient: ",ids.powed_gradient) %}
+    //%{ print("powed_gradient: ",ids.powed_gradient) %}
     assert new_gradients[0] = powed_gradient;
 
     pow_gradients(gradients_len - 1, gradients + 1, new_gradients + 1);

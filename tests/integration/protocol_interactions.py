@@ -23,12 +23,16 @@ async def swap_with_solver(
             (received_dai_amount,) = await Hub_Contract.functions["get_amount_out_with_solver"].call({"low": spend_amount, "high":0},In_Token_Contract.address,Out_Token_Contract.address,solver_id)
 
             #Executing the swap
-            invocation = await Hub_Contract.functions["swap_exact_tokens_for_tokens"].invoke({"low": spend_amount, "high":0},{"low": 0, "high":0},In_Token_Contract.address,Out_Token_Contract.address,sender_address,max_fee=50000000000000000000)
+            invocation = await Hub_Contract.functions["swap_exact_tokens_for_tokens_with_solver"].invoke({"low": spend_amount, "high":0},{"low": 0, "high":0},In_Token_Contract.address,Out_Token_Contract.address,sender_address,solver_id,max_fee=50000000000000000000)
             await invocation.wait_for_acceptance()
 
             #Get new Balance
             (new_dai_balance,) = await Out_Token_Contract.functions["balanceOf"].call(sender_address)
             (new_eth_balance,) = await In_Token_Contract.functions["balanceOf"].call(sender_address)
+
+            print("previous_dai_balance: ",previous_dai_balance)
+            print("received_dai_amount: ",received_dai_amount)
+            print("new_dai_balance: ",new_dai_balance)
 
             #Make sure new balance are correct
             assert new_dai_balance == previous_dai_balance + received_dai_amount, f"actual DAI balance: {new_dai_balance} expected DAI balance: {previous_dai_balance + received_dai_amount}"
