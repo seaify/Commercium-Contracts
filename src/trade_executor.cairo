@@ -243,10 +243,12 @@ func _simulate_multi_swap{
 
     // Determine token amount to trade
     let (current_balance) = dict_read{dict_ptr=_token_balances}(_path[0].token_in);
+
     let trade_amount = Utils.felt_fmul(current_balance, _amounts[0], BASE);
 
     // Save new balance of token_in
     tempvar new_token_in_balance = current_balance - trade_amount;
+    
     dict_write{dict_ptr=_token_balances}(_path[0].token_in, new_token_in_balance);
 
     // Simulate individual swap

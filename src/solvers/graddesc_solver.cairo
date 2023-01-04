@@ -68,15 +68,6 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     ) = IRouterAggregator.get_all_routers_and_reserves(
         router_aggregator_address, _token_in, _token_out
     );
-    local tester = reserves_a[0].low;
-    //%{ print("Reserve 1 Amount InToken: ", ids.tester) %}
-    local tester1 = reserves_b[0].low;
-    //%{ print("Reserve 1 Amount OutToken: ", ids.tester1) %}
-    
-    local tester2 = reserves_a[1].low;
-    //%{ print("Reserve 2 Amount InToken: ", ids.tester2) %}
-    local tester3 = reserves_b[1].low;
-    //%{ print("Reserve 2 Amount OutToken: ", ids.tester3) %}
 
 
     // Pre-Calc
@@ -414,14 +405,16 @@ func kick_zeros_and_build_output{range_check_ptr}(
 func amounts_to_shares{range_check_ptr}(
     _shares_len: felt, _shares: felt*, _amounts: felt*, _sum: felt
 ) {
-    if (_shares_len == 0) {
+    if (_shares_len == 1) {
+        // The last share is always 100%
+        assert _shares[0] = BASE;
         return ();
     }
 
     let share = Utils.felt_fmul(_amounts[0], _sum, BASE);
     assert _shares[0] = share;
 
-    amounts_to_shares(_shares_len - 1, _shares + 1, _amounts + 1, _sum);
+    amounts_to_shares(_shares_len - 1, _shares + 1, _amounts + 1, _sum - share);
 
     return ();
 }

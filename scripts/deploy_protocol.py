@@ -23,10 +23,8 @@ contractAddresses = {
     "solver_registry": int("0x4d8edc13563793804f7101015e3a10cee06c25654760159ea5ecba6371eb67e",16),
     "router_aggregator": int("0x060aac7c99f9026e40b8d6575a4d5aa6eb5a1d662dac97f2e282a21767aaeb8a",16),
     "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16),
-    "graddesc_solver": int("0x6b1dc332833fe3362a19fcc7577cdb525a4e64f11ff687bb150017e122916ca",16)
+    "graddesc_solver": int("0x66ebf18a8ca564f79338e1d9825f72738a6e20fa4e44c4cabf1dfcd68198644",16)
 }
-
-
 
 
 async def deployContracts():
@@ -34,8 +32,7 @@ async def deployContracts():
     print("________DEPLOYING CONTRACTS___________")
 
     if contractAddresses["hub"] == 0 :
-
-
+        
         print("Declaring Contracts ... ")
 
         # Declare Trade Executor Contract

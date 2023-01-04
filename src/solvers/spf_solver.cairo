@@ -20,12 +20,12 @@ const EXTRA_BASE = BASE * 100;  // We use this to artificialy increase the weigh
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                              //
 //                      DEX aggregation algorithm that makes use of the Shortest Path Faster algorithm.                         //
-//           See here for alternate implementations: https://www.geeksforgeeks.org/shortest-path-faster-algorithm/              //
+//           See here for alternative implementations: https://www.geeksforgeeks.org/shortest-path-faster-algorithm/            //
 //                                                                                                                              //
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // ///////////////////////////
-//       Constructor       //
+//       Constructor        //
 // ///////////////////////////
 
 @constructor
