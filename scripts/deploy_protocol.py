@@ -23,13 +23,21 @@ contractAddresses = {
     "solver_registry": int("0x4d8edc13563793804f7101015e3a10cee06c25654760159ea5ecba6371eb67e",16),
     "router_aggregator": int("0x060aac7c99f9026e40b8d6575a4d5aa6eb5a1d662dac97f2e282a21767aaeb8a",16),
     "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16),
-    "graddesc_solver": int("0x66ebf18a8ca564f79338e1d9825f72738a6e20fa4e44c4cabf1dfcd68198644",16)
+    "graddesc_solver": int("0x66ebf18a8ca564f79338e1d9825f72738a6e20fa4e44c4cabf1dfcd68198644",16),
+    "spf_solver": int("0x3b75c61db56925781da2b7af0af5bedec529b2a635d8d34833e9ad8f27b17ac",16),
 }
 
 
 async def deployContracts():
 
     print("________DEPLOYING CONTRACTS___________")
+
+    compiled_contract = Path("./build/", "graddesc-solver.json").read_text("utf-8")
+    contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
+    contractAddresses["graddesc_solver"] = int(contract_address,16)
+    print("✅ Gradient Descent Solver: ",contract_address)
+
+    return()
 
     if contractAddresses["hub"] == 0 :
         
@@ -80,6 +88,12 @@ async def deployContracts():
         contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
         contractAddresses["graddesc_solver"] = int(contract_address,16)
         print("✅ Gradient Descent Solver: ",contract_address)
+
+        # Deploy SPF Solver
+        compiled_contract = Path("./build/", "spf-solver.json").read_text("utf-8")
+        contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[account_address,contractAddresses["router_aggregator"]])
+        contractAddresses["spf_solver"] = int(contract_address,16)
+        print("✅ SPF Solver: ",contract_address)
     
     ##########################
     #                        #
@@ -93,6 +107,7 @@ async def deployContracts():
     solverRegistryContract = await Contract.from_address(contractAddresses["solver_registry"],client)
     singleSwapSolverContract = await Contract.from_address(contractAddresses["single_swap_solver"],client)
     graddescSolverContract = await Contract.from_address(contractAddresses["graddesc_solver"],client)
+    spfSolverContract = await Contract.from_address(contractAddresses["spf_solver"],client)
 
     protocol_contracts = {
         "hub": hubContract,
@@ -108,12 +123,13 @@ async def deployContracts():
 
     #Configure Router Aggregator
     #Set Price Feeds
-    #invocation = await routerAggregatorContract.functions["set_global_price"].invoke(ETH_Contract.address,ETH_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
-    #invocation = await routerAggregatorContract.functions["set_global_price"].invoke(DAI_Contract.address,DAI_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
-    #invocation = await routerAggregatorContract.functions["set_global_price"].invoke(USDC_Contract.address,USDC_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(ETH_Contract.address,ETH_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(DAI_Contract.address,DAI_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await routerAggregatorContract.functions["set_global_price"].invoke(USDC_Contract.address,USDC_USD_Key,EMPIRIC_ORACLE_ADDRESS,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    
     #Add Routers
     invocation = await routerAggregatorContract.functions["add_router"].invoke(JediSwapRouter,0,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance()        
@@ -126,17 +142,17 @@ async def deployContracts():
     await invocation.wait_for_acceptance() 
     invocation = await solverRegistryContract.functions["set_solver"].invoke(2,graddescSolverContract.address,max_fee=50000000000000000000)
     await invocation.wait_for_acceptance() 
-    #invocation = await solverRegistryContract.functions["set_solver"].invoke(3,heurtisticSplitterContract.address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
+    invocation = await solverRegistryContract.functions["set_solver"].invoke(3,spfSolverContract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
 
     #Configure Solvers
     #Set high liq tokens for spf solver
-    #invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("0",ETH_Contract.address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
-    #invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("1",DAI_Contract.address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
-    #invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("2",USDC_Contract.address,max_fee=50000000000000000000)
-    #await invocation.wait_for_acceptance()
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("0",ETH_Contract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("1",DAI_Contract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
+    invocation = await spfSolverContract.functions["set_high_liq_tokens"].invoke("2",USDC_Contract.address,max_fee=50000000000000000000)
+    await invocation.wait_for_acceptance()
 
     print("✅ Configured Contracts")
 

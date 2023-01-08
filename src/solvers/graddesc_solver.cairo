@@ -106,7 +106,7 @@ func get_results{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         _token_out=_token_out,
         _amounts_sum=0,
         _counter=0
-    );
+    );    
 
     // Transform amounts to shares
     let (shares: felt*) = alloc();
@@ -319,8 +319,6 @@ func gradient_x{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     // Right Side 
     let (denominator_right) = pow(997 + _pre_calc_last.based_reserve + _sum,2);
     //%{ print("_sum", ids._sum) %}
-    local tester = denominator_right;
-    //%{ print("powed denominator_right", ids.tester) %}
     let (local division: felt,_) = unsigned_div_rem(denominator_right,BASE);
     //%{ print("Division", ids.division) %}
     let (local division2: felt,_) = unsigned_div_rem(_pre_calc_last.gradient_nominator,BASE);
@@ -408,10 +406,10 @@ func amounts_to_shares{range_check_ptr}(
         return ();
     }
 
-    let share = Utils.felt_fmul(_amounts[0], _sum, BASE);
+    let share = Utils.felt_fmul(_amounts[0], BASE, _sum);
     assert _shares[0] = share;
 
-    amounts_to_shares(_shares_len - 1, _shares + 1, _amounts + 1, _sum - share);
+    amounts_to_shares(_shares_len - 1, _shares + 1, _amounts + 1, _sum - _amounts[0]);
 
     return ();
 }
@@ -484,7 +482,8 @@ func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: fel
 
     let (new_gradients: felt*) = alloc();
 
-    pow_gradients(_gradients_len, _gradients, new_gradients);
+    let (local size_indicators: felt*) = alloc();
+    pow_gradients(_gradients_len, _gradients, new_gradients, size_indicators);
 
     let sum = sum_gradients(_gradients_len, new_gradients, sum=0);
     
@@ -498,19 +497,27 @@ func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: fel
     return (inverseNorm);
 }
 
-func pow_gradients{range_check_ptr}(gradients_len: felt, gradients: felt*, new_gradients: felt*) {
+func pow_gradients{range_check_ptr}(gradients_len: felt, gradients: felt*, new_gradients: felt*, size_indicators: felt*) {
     if (gradients_len == 0) {
         return ();
     }
-    let to_div = gradients[0];
 
-    let (small_gradient,_) = unsigned_div_rem(gradients[0],1000000000);
-    
-    let (powed_gradient) = pow(small_gradient, 2);
-    
-    assert new_gradients[0] = powed_gradient;
+    // Used my female intuition to figure out that this is the right amount
+    let needs_to_be_shrunk = is_le(1000000000000000000, gradients[0]);
 
-    pow_gradients(gradients_len - 1, gradients + 1, new_gradients + 1);
+    if (needs_to_be_shrunk == TRUE) {
+        let (small_gradient,_) = unsigned_div_rem(gradients[0],1000000000);    
+        let (powed_gradient) = pow(small_gradient, 2);
+        assert new_gradients[0] = powed_gradient;
+        assert size_indicators[0] = TRUE;
+        pow_gradients(gradients_len - 1, gradients + 1, new_gradients + 1,  size_indicators + 1);
+    }else{
+        let (powed_gradient) = pow(gradients[0], 2);
+        assert new_gradients[0] = powed_gradient;
+        assert size_indicators[0] = FALSE;
+        pow_gradients(gradients_len - 1, gradients + 1, new_gradients + 1, size_indicators + 1);
+    } 
+    
 
     return ();
 }
