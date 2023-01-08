@@ -52,11 +52,6 @@ namespace IRouterAggregator {
     func get_global_price(_token: felt) -> (price: Uint256, decimals: felt) {
     }
 
-    func get_weight(_amount_in_usd: Uint256, _amount_out: Uint256, _token_out: felt) -> (
-        weight: felt
-    ) {
-    }
-
     func add_router(_router_address: felt, _router_type: felt) {
     }
 

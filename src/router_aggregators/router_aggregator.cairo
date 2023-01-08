@@ -233,30 +233,6 @@ func get_global_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     }
 }
 
-// @notice Provides a unified weight value for a give token pair to be used by certain algorithms
-// @dev This function is made for very specific algorithms (see spf solver) and provides little utility for more general algorithms.
-// @param _amount_in_usd - USD value of the assets to be sold
-// @param _amount_out - number of assets received
-// @param _token_out - address of the token being bought
-// @return weight - The normailized weight value for the received amount
-@view
-func get_weight{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    _amount_in_usd: Uint256, _amount_out: Uint256, _token_out: felt
-) -> (weight: felt) {
-    alloc_locals;
-
-    // Transform Token Amount to USD Amount
-    // As of now all Empiric prices are scaled to 18 decimal places
-    let (price_out: Uint256, _) = get_global_price(_token_out);
-    let (value_out: Uint256) = Utils.fmul(_amount_out, price_out, Uint256(BASE, 0));
-
-    // Determine Weight
-    let (trade_cost) = uint256_sub(_amount_in_usd, value_out);
-    let (route_cost) = Utils.fdiv(trade_cost, _amount_in_usd, Uint256(BASE, 0));
-
-    return (route_cost.low,);
-}
-
 // //////////////////////
 //       Admin        //
 // //////////////////////

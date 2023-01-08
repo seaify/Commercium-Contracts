@@ -3,9 +3,10 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_eq
+from starkware.cairo.common.uint256 import Uint256, uint256_eq, uint256_le
+from starkware.cairo.common.bool import TRUE
 
-from src.lib.utils import Router
+from src.lib.utils import Router, Utils
 from src.interfaces.i_router_aggregator import IRouterAggregator
 from src.lib.constants import BASE
 
@@ -85,6 +86,7 @@ namespace GraphConstructor {
         _tokens: felt*,
         _src_len: felt,
         _src: Source*,
+        _prices: Uint256*,
         _edge_len: felt,
         _edge: Edge*,
         _dst_counter: felt,
@@ -115,10 +117,13 @@ namespace GraphConstructor {
             assert we_are_not_advancing = 0;
         } else {
             let (router_aggregator_address) = router_aggregator.read();
+            // Determine the number of amount_in tokens that represent the value of _amount_in_usd
+            let (src_amount_in: Uint256) = Utils.fdiv(_amount_in_usd,_prices[_src_counter],Uint256(BASE,0));
+            // Get the best router for the provided trade
             let (
                 local amount_out: Uint256, local router: Router
             ) = IRouterAggregator.get_single_best_router(
-                router_aggregator_address, _amount_in, _tokens[_src_counter], _tokens[_dst_counter]
+                router_aggregator_address, src_amount_in, _tokens[_src_counter], _tokens[_dst_counter]
             );
             let (amount_is_zero) = uint256_eq(amount_out, Uint256(0, 0));
             if (amount_is_zero == 1) {
@@ -128,9 +133,8 @@ namespace GraphConstructor {
                 tempvar range_check_ptr = range_check_ptr;
                 assert we_are_not_advancing = 1;
             } else {
-                let (local weight: felt) = IRouterAggregator.get_weight(
-                    router_aggregator_address, _amount_in_usd, amount_out, _tokens[_dst_counter]
-                );
+                // Calc the weight, which will be used to evaluated value lost by trading via this edge/router
+                let weight = get_weight(_amount_in_usd, amount_out, _prices[_dst_counter]);
                 if (_src_counter == 0) {
                     assert _edge[0] = Edge(_dst_counter, router, weight + EXTRA_BASE);
                 } else {
@@ -157,6 +161,7 @@ namespace GraphConstructor {
                     _tokens,
                     _src_len,
                     _src + 2,
+                    _prices,
                     0,
                     _edge,
                     _dst_counter=1,
@@ -175,6 +180,7 @@ namespace GraphConstructor {
                     _tokens,
                     _src_len,
                     _src + 2,
+                    _prices,
                     0,
                     _edge + 4,
                     _dst_counter=1,
@@ -196,6 +202,7 @@ namespace GraphConstructor {
                     _tokens,
                     _src_len,
                     _src,
+                    _prices,
                     _edge_len,
                     _edge,
                     _dst_counter=_dst_counter + 1,
@@ -214,6 +221,7 @@ namespace GraphConstructor {
                     _tokens,
                     _src_len,
                     _src,
+                    _prices,
                     _edge_len + 1,
                     _edge + 4,
                     _dst_counter=_dst_counter + 1,
@@ -268,6 +276,24 @@ namespace GraphConstructor {
             _token_in, _token_out, _tokens + 1, _liq_counter + 1, _counter + 1
         );
         return (total_vertices,);
+    }
+    
+    // @notice determine the weight of a an edge from the value that is received from trading that specific edge
+    // @param _amount_in_usd - USD value of token being sold
+    // @param _amount_out - Number of tokens received from the trade
+    // @param _out_token_usd - The USD value of a single out_token
+    func get_weight{syscall_ptr: felt*, range_check_ptr}(
+        _amount_in_usd: Uint256, _amount_out: Uint256, _out_token_usd: Uint256
+    ) -> felt {
+        let (value_out: Uint256) = Utils.fmul(_amount_out, _out_token_usd, Uint256(BASE, 0));
+        let (value_out_is_le) = uint256_le(_amount_in_usd,value_out);
+        if (value_out_is_le == TRUE) {
+            let (route_cost) = Utils.fdiv(value_out, _amount_in_usd, Uint256(BASE, 0));
+            return route_cost.low;
+        }else{
+            // We don't use negative weights atm, so min amount is 0
+            return 0;
+        }
     }
 
     // //////////////////////

@@ -2,8 +2,7 @@
 
 
 setup:
-	protostar install
-	pip install cairo-toolkit
+	poetry install
 
 build:
 	$(MAKE) clean

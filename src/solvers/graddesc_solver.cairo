@@ -166,13 +166,10 @@ func gradient_descent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
         _last_pre_calc=_last_pre_calc
     );
 
-    //%{ print("After Gradient") %}
-
     // Determine new trade amounts
     let inverse_norm = calc_inverse_norm(_input_amount,_amounts_len-1, gradients);
     let (local new_amounts: felt*) = alloc();
     calc_new_amounts(gradients, symbols, inverse_norm, _amounts_len, _amounts, new_amounts, _input_amount, _KICK_AMOUNT, _step_size);
-    //%{ print("After calc new amounts") %}
 
     // Determine last router amount
     let last_amount_value = missing_weight(_input_amount,_amounts_len,new_amounts);
@@ -487,21 +484,16 @@ func calc_inverse_norm{range_check_ptr}(_input_amount: felt, _gradients_len: fel
 
     let (new_gradients: felt*) = alloc();
 
-    //%{ print("Powing Gradients") %}
     pow_gradients(_gradients_len, _gradients, new_gradients);
-    //%{ print("Summing Gradients") %}
 
     let sum = sum_gradients(_gradients_len, new_gradients, sum=0);
-    //%{ print("SQRTing Gradients") %}
+    
     // Likely a big number issue here
     let small_norm = sqrt(sum);
-    //%{ print("small_norm: ", ids.small_norm) %}
 
     let norm = small_norm * 1000000000;
-    //%{ print("norm: ", ids.norm) %}
 
     let inverseNorm = Utils.felt_fdiv(_input_amount, norm, BASE);
-    //%{ print("inverseNorm Done") %}
 
     return (inverseNorm);
 }
@@ -511,11 +503,11 @@ func pow_gradients{range_check_ptr}(gradients_len: felt, gradients: felt*, new_g
         return ();
     }
     let to_div = gradients[0];
-    //%{ print("diving: ",ids.to_div) %}
+
     let (small_gradient,_) = unsigned_div_rem(gradients[0],1000000000);
-    //%{ print("small_gradient: ",ids.small_gradient) %}
+    
     let (powed_gradient) = pow(small_gradient, 2);
-    //%{ print("powed_gradient: ",ids.powed_gradient) %}
+    
     assert new_gradients[0] = powed_gradient;
 
     pow_gradients(gradients_len - 1, gradients + 1, new_gradients + 1);

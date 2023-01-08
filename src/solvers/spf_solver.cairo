@@ -63,16 +63,22 @@ func get_results{
     // Generate Vertices
     let (tokens: felt*) = alloc();
     assert tokens[0] = _token_in;
-    let (Vertices) = GraphConstructor.construct_vertices(
+    let (vertices_len) = GraphConstructor.construct_vertices(
         _token_in=_token_in, _token_out=_token_out, _tokens=tokens + 1, _liq_counter=0, _counter=2
     );
+
+    // get router aggregator address
+    let (router_aggregator_address) = router_aggregator.read();
+
+    // Fetch prices (USD) of all relevant tokens
+    let (prices: Uint256*) = alloc();
+    set_prices(vertices_len, tokens, prices, router_aggregator_address);
 
     // Declare Arrays that make up the Graph
     let (src: Source*) = alloc();
     let (edge: Edge*) = alloc();
 
     // transform input amount to USD amount (Used for determining edge weights)
-    let (router_aggregator_address) = router_aggregator.read();
     // Price is scaled by 1e18
     let (price: Uint256, _) = IRouterAggregator.get_global_price(
         router_aggregator_address, tokens[0]
@@ -83,10 +89,11 @@ func get_results{
     GraphConstructor.build_graph(
         _amount_in,
         amount_in_usd,
-        Vertices,
+        vertices_len,
         tokens,
-        Vertices,
+        vertices_len,
         src,
+        prices,
         _edge_len=0,
         _edge=edge,
         _dst_counter=1,
@@ -100,7 +107,7 @@ func get_results{
     let (is_in_queue: felt*) = alloc();
     let (queue: felt*) = alloc();
     init_arrays(
-        _distances_len=Vertices,
+        _distances_len=vertices_len,
         _distances=distances,
         _predecessors=predecessors,
         _is_in_queue=is_in_queue,
@@ -111,16 +118,16 @@ func get_results{
     // Run SPF algorithm
     // (Getting each tokens best predecessor)
     let (new_predecessors: felt*) = shortest_path_faster(
-        Vertices,
+        vertices_len,
         distances,
-        Vertices,
+        vertices_len,
         is_in_queue,
         1,
         queue,
-        Vertices,
+        vertices_len,
         src,
         edge,
-        Vertices,
+        vertices_len,
         predecessors,
     );
 
@@ -133,14 +140,14 @@ func get_results{
 
     // Determining the Final path we should be taking for the trade
     let (path: felt*) = alloc();
-    assert path[0] = new_predecessors[Vertices - 1];
+    assert path[0] = new_predecessors[vertices_len - 1];
     if (path[0] == 0) {
         assert token_ids[0] = 0;
-        assert token_ids[1] = Vertices - 1;
+        assert token_ids[1] = vertices_len - 1;
 
         set_routers_from_edge(1, src, edge, token_ids, routers);
 
-        assert final_tokens[0] = Path(tokens[0], tokens[Vertices - 1]);
+        assert final_tokens[0] = Path(tokens[0], tokens[vertices_len - 1]);
 
         return (
             routers_len=1,
@@ -155,12 +162,12 @@ func get_results{
     if (path[1] == 0) {
         assert token_ids[0] = 0;
         assert token_ids[1] = path[0];
-        assert token_ids[2] = Vertices - 1;
+        assert token_ids[2] = vertices_len - 1;
 
         set_routers_from_edge(2, src, edge, token_ids, routers);
 
         assert final_tokens[0] = Path(tokens[0], tokens[path[0]]);
-        assert final_tokens[1] = Path(tokens[path[0]], tokens[Vertices - 1]);
+        assert final_tokens[1] = Path(tokens[path[0]], tokens[vertices_len - 1]);
 
         assert amounts[1] = BASE;
 
@@ -178,13 +185,13 @@ func get_results{
         assert token_ids[0] = 0;
         assert token_ids[1] = path[1];
         assert token_ids[2] = path[0];
-        assert token_ids[3] = Vertices - 1;
+        assert token_ids[3] = vertices_len - 1;
 
         set_routers_from_edge(3, src, edge, token_ids, routers);
 
         assert final_tokens[0] = Path(tokens[0], tokens[path[1]]);
         assert final_tokens[1] = Path(tokens[path[1]], tokens[path[0]]);
-        assert final_tokens[2] = Path(tokens[path[0]], tokens[Vertices - 1]);
+        assert final_tokens[2] = Path(tokens[path[0]], tokens[vertices_len - 1]);
 
         assert amounts[1] = BASE;
         assert amounts[2] = BASE;
@@ -204,14 +211,14 @@ func get_results{
         assert token_ids[1] = path[2];
         assert token_ids[2] = path[1];
         assert token_ids[3] = path[0];
-        assert token_ids[4] = Vertices - 1;
+        assert token_ids[4] = vertices_len - 1;
 
         set_routers_from_edge(4, src, edge, token_ids, routers);
 
         assert final_tokens[0] = Path(tokens[0], tokens[path[2]]);
         assert final_tokens[1] = Path(tokens[path[2]], tokens[path[1]]);
         assert final_tokens[2] = Path(tokens[path[1]], tokens[path[0]]);
-        assert final_tokens[3] = Path(tokens[path[0]], tokens[Vertices - 1]);
+        assert final_tokens[3] = Path(tokens[path[0]], tokens[vertices_len - 1]);
 
         assert amounts[1] = BASE;
         assert amounts[2] = BASE;
@@ -633,6 +640,28 @@ func get_router_and_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
         get_router_and_address(_src, _edge, _tokens, _routers, _counter + 1);
         return ();
     }
+}
+
+// @notice fetch the price for each token from the router
+// @param _tokens - array of tokens that make up the vertices
+// @param _prices - An (empty) array of prices that we fill in this function
+func set_prices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    _tokens_len: felt,
+    _tokens: felt*,
+    _prices: Uint256*,
+    _router_aggregator_address: felt,
+) {
+    if (_tokens_len == 0) {
+        return ();
+    }
+
+    let (price_out: Uint256, _) = IRouterAggregator.get_global_price(_router_aggregator_address,_tokens[0]);
+    // If this isn't correct, we have bigger problems on the router/oracle side
+    assert _prices[0] = price_out;
+    
+    set_prices(_tokens_len - 1, _tokens, _prices + 2, _router_aggregator_address);
+
+    return();
 }
 
 // //////////////////////
