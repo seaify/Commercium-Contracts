@@ -23,21 +23,12 @@ contractAddresses = {
     "solver_registry": int("0x4d8edc13563793804f7101015e3a10cee06c25654760159ea5ecba6371eb67e",16),
     "router_aggregator": int("0x060aac7c99f9026e40b8d6575a4d5aa6eb5a1d662dac97f2e282a21767aaeb8a",16),
     "single_swap_solver": int("0x743d9c17636b66f1a70db84f18c6084be5ca54b56e2f88e327f27da2b787887",16),
-    "graddesc_solver": int("0x66ebf18a8ca564f79338e1d9825f72738a6e20fa4e44c4cabf1dfcd68198644",16),
+    "graddesc_solver": int("0x49c1f8637aa4919ba0a4613322989f40b66212bbd7b271767347b07104bae91",16),
     "spf_solver": int("0x3b75c61db56925781da2b7af0af5bedec529b2a635d8d34833e9ad8f27b17ac",16),
 }
 
 
 async def deployContracts():
-
-    print("________DEPLOYING CONTRACTS___________")
-
-    compiled_contract = Path("./build/", "graddesc-solver.json").read_text("utf-8")
-    contract_address = await deployContract(client=client,compiled_contract=compiled_contract,calldata=[contractAddresses["router_aggregator"]])
-    contractAddresses["graddesc_solver"] = int(contract_address,16)
-    print("✅ Gradient Descent Solver: ",contract_address)
-
-    return()
 
     if contractAddresses["hub"] == 0 :
         

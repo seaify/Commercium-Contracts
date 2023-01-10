@@ -397,6 +397,10 @@ func determine_distances{
 
     local is_dst_end = is_le_felt(_vertices - 1, _edge[0].dst);
 
+    local test_weight = _edge[0].weight;
+    %{
+        print("Weight: ",ids.test_weight)
+    %}
     if (is_dst_end == 1) {
         // Moving towards the goal token should always improve the distance
         assert new_distance = _current_distance - EXTRA_BASE + _edge[0].weight;
